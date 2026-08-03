@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>Universal Engineering Harness — Overview</title>
+  <style>
+    :root { --ink:#172033; --muted:#5e6c84; --paper:#f7f9fc; --card:#fff; --line:#d9e1ec; --accent:#3158d4; --accent-2:#0d8a70; --warn:#9a6100; --code:#202a44; }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:var(--paper); font:16px/1.6 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+    a { color:var(--accent); text-underline-offset:3px; }
+    a:focus-visible { outline:3px solid #ffb000; outline-offset:3px; border-radius:3px; }
+    code { padding:.12em .35em; border-radius:4px; color:#fff; background:var(--code); font: .9em ui-monospace,SFMono-Regular,Menlo,monospace; }
+    .shell { width:min(1180px, calc(100% - 32px)); margin:auto; }
+    header { color:#fff; background:linear-gradient(130deg,#172a66,#3158d4 60%,#0d8a70); padding:56px 0 42px; }
+    header h1 { max-width:850px; margin:0 0 12px; font-size:clamp(2rem,5vw,3.8rem); line-height:1.1; letter-spacing:-.04em; }
+    header p { max-width:760px; margin:0; font-size:1.12rem; }
+    .meta { display:flex; flex-wrap:wrap; gap:8px; margin-top:24px; }
+    .tag { display:inline-block; padding:4px 10px; border:1px solid #bbcbff; border-radius:999px; background:#ffffff1c; font-size:.86rem; }
+    nav { position:sticky; top:0; z-index:3; background:#fffffff2; border-bottom:1px solid var(--line); backdrop-filter:blur(8px); }
+    nav ul { display:flex; gap:18px; overflow:auto; list-style:none; padding:10px 0; margin:0; white-space:nowrap; }
+    nav a { color:var(--ink); font-size:.88rem; font-weight:650; text-decoration:none; }
+    main { padding:34px 0 64px; }
+    section { margin:0 0 40px; scroll-margin-top:58px; }
+    h2 { margin:0 0 14px; font-size:1.55rem; letter-spacing:-.02em; }
+    h3 { margin:20px 0 8px; font-size:1.08rem; }
+    .lead { font-size:1.12rem; color:#30405d; }
+    .grid { display:grid; grid-template-columns:repeat(12,1fr); gap:16px; }
+    .card { grid-column:span 4; padding:20px; border:1px solid var(--line); border-radius:12px; background:var(--card); box-shadow:0 1px 2px #1720330a; }
+    .card.wide { grid-column:span 8; }
+    .card.full { grid-column:1/-1; }
+    .card p:last-child, .card ul:last-child { margin-bottom:0; }
+    .eyebrow { margin:0 0 5px; color:var(--accent); font-size:.8rem; font-weight:800; letter-spacing:.08em; text-transform:uppercase; }
+    .evidence { display:inline-block; padding:2px 7px; border-radius:4px; font-size:.75rem; font-weight:700; }
+    .observed { color:#075d4b; background:#d9f6ed; }.inferred { color:#6c4800; background:#fff0c6; }.assumed { color:#63449a; background:#eee5ff; }
+    .flow { overflow:auto; padding:4px; }
+    .flow svg { display:block; min-width:860px; width:100%; height:auto; }
+    .flow text { font:600 14px system-ui,sans-serif; fill:#172033; }
+    .flow .small { font:500 12px system-ui,sans-serif; fill:#52627b; }
+    .timeline { display:grid; grid-template-columns:repeat(5, minmax(140px,1fr)); gap:10px; padding:0; list-style:none; }
+    .timeline li { position:relative; padding:15px; border-radius:10px; background:#eaf0ff; }
+    .timeline strong { display:block; font-size:.9rem; }.timeline span { color:var(--muted); font-size:.82rem; }
+    table { width:100%; border-collapse:collapse; background:var(--card); font-size:.9rem; }
+    th,td { padding:12px; text-align:left; vertical-align:top; border:1px solid var(--line); }
+    th { background:#eef3fa; font-weight:750; }
+    .note { padding:15px 18px; border-left:4px solid var(--warn); background:#fff7df; border-radius:4px; }
+    .ok { border-left-color:var(--accent-2); background:#e9fbf5; }
+    footer { padding:24px 0 42px; color:var(--muted); font-size:.9rem; border-top:1px solid var(--line); }
+    @media (max-width:800px) { .card,.card.wide { grid-column:1/-1; } .timeline { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+    @media (prefers-color-scheme:dark) { :root { --ink:#e6ebf4; --muted:#b2bdd0; --paper:#111827; --card:#172033; --line:#34425c; --code:#0d1322; } nav { background:#172033ed; } nav a,.lead { color:var(--ink); } th { background:#202c44; } .timeline li { background:#202e4b; } .note { background:#473810; } .ok { background:#123d35; } .observed { color:#0b6; background:#103e34; }.inferred { color:#ffd56a; background:#4a3a11; }.assumed { color:#d7bbff; background:#35264f; } }
+    @media print { nav { position:static; } header { padding:28px 0; } .card { break-inside:avoid; box-shadow:none; } body { background:#fff; } }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="shell">
+      <p class="eyebrow" style="color:#dce5ff">Current-state reference</p>
+      <h1>Universal Engineering Harness</h1>
+      <p>Codex와 Claude에서 재사용할 수 있도록 설계한, 증거 기반·문서 우선·점진적 스킬 로딩 방식의 소프트웨어 개발 하네스입니다.</p>
+      <div class="meta" aria-label="문서 메타데이터">
+        <span class="tag">상태: draft</span><span class="tag">형식: living reference</span><span class="tag">대상: 개발자·하네스 유지보수자</span><span class="tag">생성: 2026-08-03</span><span class="tag">기준 커밋: 4f4260a</span>
+      </div>
+    </div>
+  </header>
+  <nav aria-label="문서 목차"><div class="shell"><ul>
+    <li><a href="#why">왜 필요한가</a></li><li><a href="#architecture">구조</a></li><li><a href="#traceability">추적성</a></li><li><a href="#sequence">시퀀스</a></li><li><a href="#gates">게이트</a></li><li><a href="#skills">스킬</a></li><li><a href="#upgrade">업그레이드</a></li><li><a href="#usage">사용법</a></li><li><a href="#sources">출처</a></li>
+  </ul></div></nav>
+  <main class="shell">
+    <section id="why">
+      <p class="eyebrow">1. Why <span class="evidence observed">관찰됨</span></p>
+      <h2>세션이 바뀌어도 의도와 설계 근거가 사라지지 않게 한다</h2>
+      <p class="lead">이 하네스는 요청을 먼저 분류하고, 필요한 스킬만 읽고, 요구사항에서 테스트와 문서까지의 연결을 남기는 공통 작업 방식입니다. 대화의 기억이나 특정 프로젝트 경로·클라우드·패키지에 의존하지 않는 것을 목표로 합니다.</p>
+      <div class="grid">
+        <article class="card"><h3>목표</h3><p>Greenfield·Brownfield·Hybrid 작업을 증거와 승인으로 구분하고, 작은 변경도 추적 가능한 산출물로 남깁니다.</p></article>
+        <article class="card"><h3>비목표</h3><p>모든 작업에 과도한 문서나 다중 에이전트를 강제하지 않습니다. 명확하고 가역적인 작은 작업은 가볍게 진행합니다.</p></article>
+        <article class="card"><h3>핵심 태도</h3><p>관찰된 사실, 추론, 가정을 분리합니다. 제품 가치나 권한이 필요한 결정은 사용자의 확인 없이 확정하지 않습니다.</p></article>
+      </div>
+    </section>
+
+    <section id="architecture">
+      <p class="eyebrow">2. Architecture <span class="evidence observed">관찰됨</span></p>
+      <h2>안전 규칙에서 플랫폼 어댑터까지, 아래 계층만 의존한다</h2>
+      <div class="card full flow">
+        <svg viewBox="0 0 1120 350" role="img" aria-labelledby="arch-title arch-desc">
+          <title id="arch-title">하네스의 8개 계층</title><desc id="arch-desc">안전과 권한, 이식 가능한 계약, 라우터, 워크플로, 전문 스킬, 선택적 위임, 플랫폼 어댑터, 검증과 거버넌스가 아래에서 위로 쌓인다.</desc>
+          <g fill="#fff" stroke="#8ca7df" stroke-width="2">
+            <rect x="50" y="280" width="1020" height="45" rx="9"/><rect x="50" y="240" width="1020" height="35" rx="9"/><rect x="50" y="200" width="1020" height="35" rx="9"/><rect x="50" y="160" width="1020" height="35" rx="9"/><rect x="50" y="120" width="1020" height="35" rx="9"/><rect x="50" y="80" width="1020" height="35" rx="9"/><rect x="50" y="40" width="1020" height="35" rx="9"/><rect x="50" y="0" width="1020" height="35" rx="9"/>
+          </g>
+          <g><text x="68" y="23">L7 · Fixtures, observability, governance, release tooling</text><text x="68" y="63">L6 · Codex / Claude platform adapters</text><text x="68" y="103">L5 · Optional Deep-mode delegates and evaluator</text><text x="68" y="143">L4 · Specialist skills, progressively loaded and wrapped</text><text x="68" y="183">L3 · Workflow recipes: intake, Greenfield, Brownfield, documents</text><text x="68" y="223">L2 · Router and state machine</text><text x="68" y="263">L1 · Portable contracts: JSON state, events, manifests, traceability</text><text x="68" y="308">L0 · Safety, authority, least-privilege guards</text></g>
+        </svg>
+      </div>
+      <div class="grid">
+        <article class="card wide"><h3>결정적 해석과 점진적 로딩</h3><p>Router는 처음에는 승인된 스킬의 메타데이터만 읽습니다. 선택된 스킬과 그 스킬이 명시한 자료만 이어서 읽으며, 해상도 순서는 <code>project_reviewed → shared_reviewed → core_fallback</code>입니다.</p></article>
+        <article class="card"><h3>격리 원칙</h3><p><code>incoming/</code>은 내려받은 후보의 격리 장소입니다. 활성 경로는 <code>skills/</code>와 Registry뿐이며, 격리 후보는 자동 실행하지 않습니다.</p></article>
+      </div>
+    </section>
+
+    <section id="traceability">
+      <p class="eyebrow">3. Traceability <span class="evidence observed">관찰됨</span></p>
+      <h2>요구에서 실행·검증·문서까지 연결한다</h2>
+      <div class="card full"><p style="font-size:1.05rem"><code>PRD/SRS</code> → external entity/interface → <code>UC</code> → <code>FA</code> → <code>QA/QAS</code> → <code>HLD</code> → <code>ADR</code> → <code>LLD</code> → views/diagrams → code/tests/operations</p><p>여기서 <strong>FA</strong>는 Functional Architecture, <strong>QA</strong>는 Quality Attribute, <strong>QAS</strong>는 측정 가능한 Quality Attribute Scenario를 뜻합니다. 테스트 활동의 QA와 품질속성 QA는 문맥상 구분합니다.</p></div>
+      <div class="note"><strong>아키텍처 게이트:</strong> 소프트웨어 관련 요청은 사용자가 문서를 언급하지 않아도 <code>docs/architecture/</code>를 확인합니다. 없거나 오래됐으면 코드 기반 초안을 만들 수 있지만, UC·FA·QA·외부 인터페이스·모듈 경계의 중요한 결정은 사용자 확인이 필요합니다.</div>
+    </section>
+
+    <section id="sequence">
+      <p class="eyebrow">4. Sequence <span class="evidence observed">관찰됨</span></p>
+      <h2>모든 요청은 분류부터, 구현은 근거와 승인 이후에</h2>
+      <ol class="timeline" aria-label="표준 작업 시퀀스">
+        <li><strong>1. Intake</strong><span>범위·상태·필드·행동·위험·깊이 분류</span></li><li><strong>2. Clarification</strong><span>가치·권한·제약의 불명확성을 사용자에게 질의</span></li><li><strong>3. Discovery</strong><span>현재 동작·문서·계약·테스트 근거 수집</span></li><li><strong>4. Architecture</strong><span>PRD/SRS~LLD와 뷰/다이어그램 기준선 확인</span></li><li><strong>5. Impact</strong><span>변경 영향과 회귀 범위 확인</span></li><li><strong>6. Assembly</strong><span>최소 스킬·깊이·전문가 역할 구성</span></li><li><strong>7. Deliberation</strong><span>증거 중심 합의, 최대 3라운드 후 사용자 승격</span></li><li><strong>8. Design</strong><span>ADR·작업 단위·수락 기준·테스트 계획</span></li><li><strong>9. Execution</strong><span>작고 응집된 단위로 구현·문서 동기화</span></li><li><strong>10. Verify / Handoff</strong><span>검증 근거·잔여 위험·재개 가능한 인계</span></li>
+      </ol>
+      <table><thead><tr><th>프로젝트 상태</th><th>기본 경로</th><th>수정 전 필수 확인</th></tr></thead><tbody>
+        <tr><td>Greenfield</td><td>아키텍처 기준선 → 요구·QAS·ADR·작업 계획</td><td>목표, 사용자, 범위, 품질 시나리오</td></tr>
+        <tr><td>Brownfield</td><td>아키텍처 기준선 → 영향 분석 → 설계/구현</td><td>현재 동작, UC, 계약, 모듈, 테스트, 문서, 회귀 범위</td></tr>
+        <tr><td>Hybrid</td><td>기존 영향 분석과 신규 능력 계획을 의존 순서로 분리</td><td><code>extend</code> / <code>new</code> / <code>mixed</code> 근거</td></tr>
+        <tr><td>Unknown</td><td>읽기 전용 Discovery 후 재분류</td><td>기준선 확보 전 물질적 수정 금지</td></tr>
+      </tbody></table>
+    </section>
+
+    <section id="gates">
+      <p class="eyebrow">5. Gates <span class="evidence observed">관찰됨</span></p>
+      <h2>멈춰야 할 때는 명시적으로 멈춘다</h2>
+      <div class="grid">
+        <article class="card"><h3>의도·명확성</h3><p>목표, 성공 조건, 제약, 대상, 방향이 중요한 수준으로 불명확하면 질문합니다.</p></article>
+        <article class="card"><h3>권한·행동</h3><p>배포, 데이터 변경, 비용, 자격증명, 외부 발행, 파괴적 동작은 범위가 있는 명시적 승인이 필요합니다.</p></article>
+        <article class="card"><h3>아키텍처·영향</h3><p>소프트웨어 변경 전 아키텍처 기준선과 Brownfield 영향/회귀 기록을 확인합니다.</p></article>
+        <article class="card"><h3>문서 공백</h3><p>필요 문서가 없으면 목적·대상·위치가 분명할 때 최소 문서를 만들고, 아니면 용도를 묻습니다.</p></article>
+        <article class="card"><h3>검증·완료</h3><p>검증하지 않은 완료는 완료가 아닙니다. 미실행 검사는 통과로 표시하지 않고 잔여 위험을 남깁니다.</p></article>
+        <article class="card"><h3>다중 에이전트</h3><p>독립된 전문성 또는 병렬 증거가 실제로 도움이 될 때만 사용합니다. 최종 책임은 Router에 남습니다.</p></article>
+      </div>
+    </section>
+
+    <section id="skills">
+      <p class="eyebrow">6. Active skills <span class="evidence observed">관찰됨</span></p>
+      <h2>현재 승인된 8개 코어 스킬</h2>
+      <table><thead><tr><th>스킬</th><th>역할과 입구</th><th>변경/네트워크</th><th>플랫폼</th></tr></thead><tbody>
+        <tr><td><a href="../../skills/intake-and-route/SKILL.md">intake-and-route</a></td><td>모든 요청의 첫 분류·질의·경로 선택</td><td>none / none</td><td>Codex, Claude</td></tr>
+        <tr><td><a href="../../skills/architecture-baseline-and-design/SKILL.md">architecture-baseline-and-design</a></td><td>소프트웨어 작업의 PRD/SRS, UC, FA, QA/QAS, HLD/LLD, 뷰/다이어그램 기준선</td><td>workspace / none</td><td>Codex, Claude</td></tr>
+        <tr><td><a href="../../skills/greenfield-planning/SKILL.md">greenfield-planning</a></td><td>새 능력을 요구·품질·ADR·작업·테스트 계획으로 전개</td><td>none / none</td><td>Codex, Claude</td></tr>
+        <tr><td><a href="../../skills/brownfield-impact-analysis/SKILL.md">brownfield-impact-analysis</a></td><td>기존 동작과 변경·회귀 영향을 증거로 지도화</td><td>none / none</td><td>Codex, Claude</td></tr>
+        <tr><td><a href="../../skills/document-purpose/SKILL.md">document-purpose</a></td><td>문서의 목적·독자·권위·수명·상세도 결정</td><td>workspace / none</td><td>Codex, Claude</td></tr>
+        <tr><td><a href="../../skills/verify-and-handoff/SKILL.md">verify-and-handoff</a></td><td>수락 기준 검증, 추적성·문서 동기화, 인계</td><td>workspace / none</td><td>Codex, Claude</td></tr>
+        <tr><td><a href="../../skills/harness-upgrade-analysis/SKILL.md">harness-upgrade-analysis</a></td><td>하네스 변경 전 plan/·Registry·스킬 영향 분석; 분석 중 수정 금지</td><td>none / none</td><td>Codex, Claude</td></tr>
+        <tr><td><a href="../../skills/harness-overview-html/SKILL.md">harness-overview-html</a></td><td>이 문서처럼 자기완결형·접근 가능한 현재 상태 HTML 생성</td><td>workspace / none</td><td>Codex, Claude</td></tr>
+      </tbody></table>
+    </section>
+
+    <section id="upgrade">
+      <p class="eyebrow">7. Upgrade path <span class="evidence observed">관찰됨</span></p>
+      <h2>하네스 자체를 바꿀 때는 먼저 현재 설계를 보존 대상으로 삼는다</h2>
+      <div class="card full"><p><code>intake → harness-upgrade-analysis → user approval → implementation → verification → harness-overview-html → handoff</code></p><ol><li><code>plan/</code> 전체와 활성 Registry를 기준선으로 읽습니다.</li><li>관련 파일을 <code>unchanged</code>, <code>patch</code>, <code>extend</code>, <code>wrapper</code>, <code>replace</code>, <code>deprecate</code>, <code>new</code>으로 분류합니다.</li><li>기존 게이트·시퀀스·전환 계약을 기본으로 보존하고, 물질적 변경은 사용자 승인 후에만 적용합니다.</li><li>Fixture·호환성·롤백 계획을 검증하고 Registry와 plan을 함께 동기화합니다.</li><li>이 HTML을 재생성해 사람용 설명을 최신 기준선에 맞춥니다.</li></ol></div>
+    </section>
+
+    <section id="usage">
+      <p class="eyebrow">8. Use and resume <span class="evidence observed">관찰됨</span></p>
+      <h2>개발자는 목표를 말하고, 하네스는 필요한 결정을 다시 묻는다</h2>
+      <div class="grid"><article class="card wide"><h3>권장 요청 형식</h3><p><code>Goal</code>: 바꾸거나 이해할 것 · <code>Context</code>: 신규/기존 프로젝트와 관련 경로 · <code>Success</code>: 완료 판단 · <code>Constraints</code>: 호환성/기술/보안/범위 · <code>Output</code>: 코드·테스트·설계·문서</p><h3>재개</h3><p>대상 프로젝트의 <code>.agents/state/TASK-&lt;id&gt;/</code> 아래 <code>state.json</code>, <code>events.ndjson</code>, <code>handoff.md</code>, <code>artifacts.json</code>을 기준으로 다음 세션에서 재개합니다.</p></article><article class="card"><h3>상태</h3><p><code>active</code>, <code>waiting_user</code>, <code>blocked</code>, <code>failed</code>, <code>cancelled</code>, <code>complete</code></p><p>사용자 답변이 필요한 상태는 침묵으로 승인되지 않습니다.</p></article></div>
+    </section>
+
+    <section id="sources">
+      <p class="eyebrow">9. Sources and unresolved items</p>
+      <h2>이 페이지는 계획의 파생물이며, 권위 원천은 Markdown과 Registry다</h2>
+      <div class="note ok"><strong>출처 <span class="evidence observed">관찰됨</span>:</strong> <a href="../../plan/README.md">plan/README.md</a>, <a href="../../plan/00-operating-model.md">00 operating model</a>, <a href="../../plan/02-implementation-guide.md">02 implementation guide</a>, <a href="../../plan/03-contracts-and-fixtures.md">03 contracts and fixtures</a>, <a href="../../plan/04-user-guide.md">04 user guide</a>, <a href="../../plan/06-platform-adapters.md">06 platform adapters</a>, <a href="../../plan/07-skill-governance.md">07 skill governance</a>, <a href="../../registry/active-skills.json">active-skills.json</a>. Registry 기준일은 2026-08-03입니다.</div>
+      <h3>현재 확인된 공백·가정</h3>
+      <ul>
+        <li><span class="evidence observed">관찰됨</span> 이 Repository에는 아직 <code>adapters/</code>, <code>scripts/</code>, 실행 가능한 fixture runner, 영속 task-state 구현이 없습니다. 계획에는 있지만 구현 상태를 이 문서가 완료로 주장하지 않습니다.</li>
+        <li><span class="evidence observed">관찰됨</span> <code>docs/architecture/</code>는 이 하네스 Repository에 없습니다. 이는 하네스 자체의 아키텍처 문서가 아니라, 향후 대상 프로젝트가 제공하는 아키텍처 기준선 위치입니다.</li>
+        <li><span class="evidence inferred">추론</span> 이 페이지의 독자는 제한된 에이전트 경험을 가진 개발자와 유지보수자입니다. 사용자의 문서 우선 요구와 사용자 가이드의 대상 설명에서 도출했습니다.</li>
+        <li><span class="evidence assumed">가정</span> Repository 소유자가 이 문서의 초안 소유자이며, 팀 승인 전까지 권위 상태는 <code>draft</code>입니다.</li>
+      </ul>
+    </section>
+  </main>
+  <footer><div class="shell">문서 목적: <strong>inform</strong> · 유형: <strong>reference</strong> · 민감도: <strong>internal</strong> · 검토 트리거: plan, 활성 스킬, Registry, 어댑터, 게이트, 시퀀스, 계약 또는 fixture 변경. 이 HTML은 외부 리소스나 런타임 의존성을 사용하지 않습니다.</div></footer>
+</body>
+</html>
