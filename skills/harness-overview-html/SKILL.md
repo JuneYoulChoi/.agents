@@ -36,11 +36,14 @@ audience, purpose, authority, lifetime, detail level, and output location.
 Read all of the following before drafting:
 
 1. `plan/README.md`, then all `plan/*.md` files;
-2. `registry/active-skills.json` and every active skill entry's metadata;
+2. `registry/active-skills.json`, `registry/adapter-manifest.json`, and every
+   active skill entry's metadata;
 3. full `SKILL.md` bodies for the active skills (the overview must explain
    their responsibilities and routes);
-4. adapters, validators, fixtures, task-state, and existing overview files if
-   they exist.
+4. adapter templates, bootstrap configuration/schema, validators, fixtures,
+   task-state, existing source-repository `AGENTS.md`/`CLAUDE.md` entrypoints,
+   and existing overview files if they exist. Target-local rendered wrappers
+   are inspected only when the target project is explicitly in scope.
 
 Record paths, revision/date, and whether each statement is `observed`,
 `inferred`, or `assumed`. Mark missing, stale, and conflicting sources
@@ -67,12 +70,16 @@ Use this order so the page has a clear beginning, middle, and end:
    documentation gap, mutation, verification, and handoff conditions.
 7. **Skills and registry** — active skill name, purpose, entry condition, next
    transition, mutation/network policy, and platform coverage.
-8. **Upgrade path** — baseline read, impact plan, user approval, implementation,
+8. **Bootstrap and enforcement** — canonical Codex/Claude templates, rendered
+   root wrappers, `harness.json` pins, target-root resolution, state
+   containment, conflict/no-overwrite policy, transaction rollback, byte limit,
+   hook/manual/unsupported capability, and the safe read-only fallback.
+9. **Upgrade path** — baseline read, impact plan, user approval, implementation,
    validation, registry/plan synchronization, and overview refresh.
-9. **How to use and resume** — what a user submits, how to answer decisions,
+10. **How to use and resume** — what a user submits, how to answer decisions,
    where artifacts live, and how status/transition records resume a session.
-10. **Sources and unresolved items** — provenance, generated timestamp,
-    stale/missing documents, assumptions, and decisions still required.
+11. **Sources and unresolved items** — provenance, generated timestamp,
+   stale/missing documents, assumptions, and decisions still required.
 
 ## 3. Generate a safe, portable artifact
 

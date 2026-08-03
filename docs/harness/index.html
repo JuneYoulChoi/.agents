@@ -60,12 +60,12 @@
       <h1>Universal Engineering Harness</h1>
       <p>Codex와 Claude에서 재사용할 수 있도록 설계한, 증거 기반·문서 우선·점진적 스킬 로딩 방식의 소프트웨어 개발 하네스입니다.</p>
       <div class="meta" aria-label="문서 메타데이터">
-        <span class="tag">상태: draft</span><span class="tag">형식: living reference</span><span class="tag">대상: 개발자·하네스 유지보수자</span><span class="tag">생성: 2026-08-03</span><span class="tag">기준 커밋: 4f4260a</span>
+        <span class="tag">상태: draft</span><span class="tag">형식: living reference</span><span class="tag">대상: 개발자·하네스 유지보수자</span><span class="tag">생성: 2026-08-03</span><span class="tag">기준: working tree (pending commit)</span>
       </div>
     </div>
   </header>
   <nav aria-label="문서 목차"><div class="shell"><ul>
-    <li><a href="#why">왜 필요한가</a></li><li><a href="#architecture">구조</a></li><li><a href="#traceability">추적성</a></li><li><a href="#sequence">시퀀스</a></li><li><a href="#gates">게이트</a></li><li><a href="#skills">스킬</a></li><li><a href="#upgrade">업그레이드</a></li><li><a href="#usage">사용법</a></li><li><a href="#sources">출처</a></li>
+    <li><a href="#why">왜 필요한가</a></li><li><a href="#architecture">구조</a></li><li><a href="#traceability">추적성</a></li><li><a href="#sequence">시퀀스</a></li><li><a href="#gates">게이트</a></li><li><a href="#bootstrap">부트스트랩</a></li><li><a href="#skills">스킬</a></li><li><a href="#upgrade">업그레이드</a></li><li><a href="#usage">사용법</a></li><li><a href="#sources">출처</a></li>
   </ul></div></nav>
   <main class="shell">
     <section id="why">
@@ -131,8 +131,20 @@
       </div>
     </section>
 
+    <section id="bootstrap">
+      <p class="eyebrow">6. Bootstrap and enforcement <span class="evidence observed">관찰됨</span></p>
+      <h2>플랫폼 파일은 얇게, 정책은 공유 계약과 상태가 소유한다</h2>
+      <div class="grid">
+        <article class="card"><h3>Canonical templates</h3><p><a href="../../adapters/codex/AGENTS.md.tmpl">Codex AGENTS.md.tmpl</a>와 <a href="../../adapters/claude/CLAUDE.md.tmpl">Claude CLAUDE.md.tmpl</a>가 유일한 부트스트랩 원천입니다. 대상 프로젝트에는 얇은 관리 파일만 렌더링합니다.</p></article>
+        <article class="card"><h3>Project boundary</h3><p><a href="../../templates/harness.json.example">harness.json</a>이 핀된 소스·템플릿·Registry·상태 루트·어댑터를 기록합니다. Git 루트는 경로 힌트일 뿐 Greenfield/Brownfield 판정이 아닙니다.</p></article>
+        <article class="card"><h3>Safe fallback</h3><p><code>hook</code>, <code>manual</code>, <code>unsupported</code>를 명시합니다. <code>manual</code>은 신선한 manual guard/action 기록이 있을 때만 상태 저장과 제한적 가역 workspace 변경을 허용하고, <code>unsupported</code>는 ephemeral/read-only입니다. 모든 모드에서 고위험·외부·파괴적 작업은 멈춥니다. 스킬·문서가 없거나 의도가 불명확하면 탐색적 확장인지 사용자 방향을 따를지 먼저 묻습니다.</p></article>
+        <article class="card wide"><h3>Install and upgrade</h3><p>명시적 target root를 우선하고, 모호한 저장소·중첩 루트·탈출 경로를 거부합니다. 복사가 기본이며 동일 해시는 멱등입니다. 사용자 파일이나 편집된 관리 파일은 덮어쓰지 않고 충돌을 보고합니다. 설치는 lock·원자적 트랜잭션·롤백 기록을 가지며 UTF-8 LF 정규화 후 32KiB를 넘거나 placeholder가 남으면 실패합니다.</p></article>
+        <article class="card"><h3>State</h3><p>작업 상태는 대상 프로젝트의 <code>.agents/state/&lt;task-id&gt;/</code>에만 둡니다. 공유 하네스 소스와 대상 런타임 상태를 혼동하지 않습니다.</p></article>
+      </div>
+    </section>
+
     <section id="skills">
-      <p class="eyebrow">6. Active skills <span class="evidence observed">관찰됨</span></p>
+      <p class="eyebrow">7. Active skills <span class="evidence observed">관찰됨</span></p>
       <h2>현재 승인된 8개 코어 스킬</h2>
       <table><thead><tr><th>스킬</th><th>역할과 입구</th><th>변경/네트워크</th><th>플랫폼</th></tr></thead><tbody>
         <tr><td><a href="../../skills/intake-and-route/SKILL.md">intake-and-route</a></td><td>모든 요청의 첫 분류·질의·경로 선택</td><td>none / none</td><td>Codex, Claude</td></tr>
@@ -147,24 +159,27 @@
     </section>
 
     <section id="upgrade">
-      <p class="eyebrow">7. Upgrade path <span class="evidence observed">관찰됨</span></p>
+      <p class="eyebrow">8. Upgrade path <span class="evidence observed">관찰됨</span></p>
       <h2>하네스 자체를 바꿀 때는 먼저 현재 설계를 보존 대상으로 삼는다</h2>
       <div class="card full"><p><code>intake → harness-upgrade-analysis → user approval → implementation → verification → harness-overview-html → handoff</code></p><ol><li><code>plan/</code> 전체와 활성 Registry를 기준선으로 읽습니다.</li><li>관련 파일을 <code>unchanged</code>, <code>patch</code>, <code>extend</code>, <code>wrapper</code>, <code>replace</code>, <code>deprecate</code>, <code>new</code>으로 분류합니다.</li><li>기존 게이트·시퀀스·전환 계약을 기본으로 보존하고, 물질적 변경은 사용자 승인 후에만 적용합니다.</li><li>Fixture·호환성·롤백 계획을 검증하고 Registry와 plan을 함께 동기화합니다.</li><li>이 HTML을 재생성해 사람용 설명을 최신 기준선에 맞춥니다.</li></ol></div>
     </section>
 
     <section id="usage">
-      <p class="eyebrow">8. Use and resume <span class="evidence observed">관찰됨</span></p>
+      <p class="eyebrow">9. Use and resume <span class="evidence observed">관찰됨</span></p>
       <h2>개발자는 목표를 말하고, 하네스는 필요한 결정을 다시 묻는다</h2>
       <div class="grid"><article class="card wide"><h3>권장 요청 형식</h3><p><code>Goal</code>: 바꾸거나 이해할 것 · <code>Context</code>: 신규/기존 프로젝트와 관련 경로 · <code>Success</code>: 완료 판단 · <code>Constraints</code>: 호환성/기술/보안/범위 · <code>Output</code>: 코드·테스트·설계·문서</p><h3>재개</h3><p>대상 프로젝트의 <code>.agents/state/TASK-&lt;id&gt;/</code> 아래 <code>state.json</code>, <code>events.ndjson</code>, <code>handoff.md</code>, <code>artifacts.json</code>을 기준으로 다음 세션에서 재개합니다.</p></article><article class="card"><h3>상태</h3><p><code>active</code>, <code>waiting_user</code>, <code>blocked</code>, <code>failed</code>, <code>cancelled</code>, <code>complete</code></p><p>사용자 답변이 필요한 상태는 침묵으로 승인되지 않습니다.</p></article></div>
     </section>
 
     <section id="sources">
-      <p class="eyebrow">9. Sources and unresolved items</p>
+      <p class="eyebrow">10. Sources and unresolved items</p>
       <h2>이 페이지는 계획의 파생물이며, 권위 원천은 Markdown과 Registry다</h2>
-      <div class="note ok"><strong>출처 <span class="evidence observed">관찰됨</span>:</strong> <a href="../../plan/README.md">plan/README.md</a>, <a href="../../plan/00-operating-model.md">00 operating model</a>, <a href="../../plan/02-implementation-guide.md">02 implementation guide</a>, <a href="../../plan/03-contracts-and-fixtures.md">03 contracts and fixtures</a>, <a href="../../plan/04-user-guide.md">04 user guide</a>, <a href="../../plan/06-platform-adapters.md">06 platform adapters</a>, <a href="../../plan/07-skill-governance.md">07 skill governance</a>, <a href="../../registry/active-skills.json">active-skills.json</a>. Registry 기준일은 2026-08-03입니다.</div>
+      <div class="note ok"><strong>출처 <span class="evidence observed">관찰됨</span>:</strong> <a href="../../plan/README.md">plan/README.md</a>, <a href="../../plan/00-operating-model.md">00 operating model</a>, <a href="../../plan/02-implementation-guide.md">02 implementation guide</a>, <a href="../../plan/03-contracts-and-fixtures.md">03 contracts and fixtures</a>, <a href="../../plan/04-user-guide.md">04 user guide</a>, <a href="../../plan/06-platform-adapters.md">06 platform adapters</a>, <a href="../../plan/07-skill-governance.md">07 skill governance</a>, <a href="../../registry/active-skills.json">active-skills.json</a>, <a href="../../registry/adapter-manifest.json">adapter-manifest.json</a>, <a href="../../templates/harness.json.example">harness.json.example</a>, <a href="../../templates/harness.schema.json">harness.schema.json</a>, <a href="../../adapters/codex/AGENTS.md.tmpl">Codex template</a>, <a href="../../adapters/claude/CLAUDE.md.tmpl">Claude template</a>, <a href="../../AGENTS.md">source AGENTS.md</a>, <a href="../../CLAUDE.md">source CLAUDE.md</a>. Registry 기준일은 2026-08-03입니다.</div>
       <h3>현재 확인된 공백·가정</h3>
       <ul>
-        <li><span class="evidence observed">관찰됨</span> 이 Repository에는 아직 <code>adapters/</code>, <code>scripts/</code>, 실행 가능한 fixture runner, 영속 task-state 구현이 없습니다. 계획에는 있지만 구현 상태를 이 문서가 완료로 주장하지 않습니다.</li>
+        <li><span class="evidence observed">관찰됨</span> Canonical adapter templates와 bootstrap schema/example은 추가됐지만, 실제 installer, Router, 실행 가능한 fixture runner, 영속 task-state 구현은 아직 없습니다. 계획에는 있지만 구현 상태를 이 문서가 완료로 주장하지 않습니다.</li>
+        <li><span class="evidence observed">관찰됨</span> 샌드박스에 따라 hook 자동 강제가 불가능할 수 있으므로 현재 문서는 `manual`/`unsupported` 안전 fallback을 우선합니다. 자동 enforcement를 주장하려면 B-001~B-009 fixture를 통과해야 합니다.</li>
+        <li><span class="evidence observed">관찰됨</span> `harness.json.example`은 `PIN_REQUIRED`와 해시 sentinel을 포함한 비설치용 예시입니다. 실제 대상 프로젝트에는 고정된 source/template/registry revision과 64자리 SHA-256을 렌더링해야 합니다.</li>
+        <li><span class="evidence observed">관찰됨</span> <code>registry/adapter-manifest.json</code>도 현재는 pre-activation provenance 계약이며, 실제 source-tree/template hash pin은 bootstrap 구현 단계에서 채워야 합니다.</li>
         <li><span class="evidence observed">관찰됨</span> <code>docs/architecture/</code>는 이 하네스 Repository에 없습니다. 이는 하네스 자체의 아키텍처 문서가 아니라, 향후 대상 프로젝트가 제공하는 아키텍처 기준선 위치입니다.</li>
         <li><span class="evidence inferred">추론</span> 이 페이지의 독자는 제한된 에이전트 경험을 가진 개발자와 유지보수자입니다. 사용자의 문서 우선 요구와 사용자 가이드의 대상 설명에서 도출했습니다.</li>
         <li><span class="evidence assumed">가정</span> Repository 소유자가 이 문서의 초안 소유자이며, 팀 승인 전까지 권위 상태는 <code>draft</code>입니다.</li>

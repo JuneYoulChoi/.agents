@@ -1,0 +1,194 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:universal-engineering-harness:harness-config:v1",
+  "title": "Universal Engineering Harness project configuration",
+  "type": "object",
+  "additionalProperties": false,
+  "patternProperties": {
+    "^x-[a-z0-9-]+$": {}
+  },
+  "required": [
+    "schema_version",
+    "protocol_version",
+    "target_root_mode",
+    "harness_root_mode",
+    "harness_source",
+    "templates",
+    "adapters",
+    "state_root",
+    "registry",
+    "adapter_mapping",
+    "enforcement",
+    "bootstrap"
+  ],
+  "properties": {
+    "schema_version": {"type": "integer", "const": 1},
+    "protocol_version": {"type": "integer", "const": 1},
+    "target_root_mode": {"type": "string", "enum": ["explicit", "resolved"]},
+    "harness_root_mode": {"type": "string", "const": "separate"},
+    "harness_source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "locator", "ref", "revision", "sha256"],
+      "properties": {
+        "kind": {"type": "string", "const": "local_or_bundled"},
+        "locator": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"},
+        "ref": {"type": "string", "minLength": 1},
+        "revision": {"type": "string", "pattern": "^(?!PIN_REQUIRED$).+"},
+        "sha256": {"type": "string", "pattern": "^[A-Fa-f0-9]{64}$"}
+      }
+    },
+    "templates": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "path", "sha256"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^(codex|claude)\\.bootstrap$"},
+          "path": {"type": "string", "pattern": "^(?!/)(?![A-Za-z]:)(?!.*\\.\\.)(?!.*\\\\).+$"},
+          "sha256": {"type": "string", "pattern": "^[A-Fa-f0-9]{64}$"}
+        }
+      }
+    },
+    "adapters": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "string", "enum": ["codex", "claude"]},
+      "uniqueItems": true
+    },
+    "state_root": {"type": "string", "pattern": "^\\.agents/state(?:/[^/\\\\]+)*$"},
+    "registry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["resolution_order", "sources"],
+      "properties": {
+        "resolution_order": {
+          "type": "array",
+          "items": {"type": "string", "enum": ["project_reviewed", "shared_reviewed", "core_fallback"]},
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 2,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["scope", "path", "revision", "sha256"],
+            "properties": {
+              "scope": {"type": "string", "enum": ["project_reviewed", "shared_reviewed"]},
+              "path": {"type": "string", "pattern": "^(?!/)(?![A-Za-z]:)(?!.*\\.\\.)(?!.*\\\\).+$"},
+              "revision": {"type": "string", "pattern": "^(?!PIN_REQUIRED$).+"},
+              "sha256": {"type": "string", "pattern": "^[A-Fa-f0-9]{64}$"}
+            }
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "adapter_mapping": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["codex", "claude"],
+      "properties": {
+        "codex": {"$ref": "#/$defs/adapterMapping"},
+        "claude": {"$ref": "#/$defs/adapterMapping"}
+      }
+    },
+    "enforcement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "capability_probe", "manual_guard"],
+      "properties": {
+        "mode": {"type": "string", "enum": ["hook", "manual", "unsupported"]},
+        "capability_probe": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["status", "evidence_id", "at"],
+          "properties": {
+            "status": {"type": "string", "enum": ["recorded", "stale", "failed"]},
+            "evidence_id": {"type": "string", "minLength": 1},
+            "at": {"type": "string", "minLength": 1}
+          }
+        },
+        "manual_guard": {
+          "oneOf": [
+            {"type": "null"},
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["approval_id", "action_id", "actor", "at", "expires_at", "allowed_paths", "allowed_actions", "before_state", "after_state", "rollback_plan", "verifier"],
+              "properties": {
+                "approval_id": {"type": "string", "minLength": 1},
+                "action_id": {"type": "string", "minLength": 1},
+                "actor": {"type": "string", "minLength": 1},
+                "at": {"type": "string", "minLength": 1},
+                "expires_at": {"type": "string", "minLength": 1},
+                "allowed_paths": {"type": "array", "minItems": 1, "items": {"type": "string", "pattern": "^(?!/)(?![A-Za-z]:)(?!.*\\.\\.)(?!.*\\\\).+$"}},
+                "allowed_actions": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+                "before_state": {"type": "string", "minLength": 1},
+                "after_state": {"type": "string", "minLength": 1},
+                "rollback_plan": {"type": "string", "minLength": 1},
+                "verifier": {"type": "string", "minLength": 1}
+              }
+            }
+          ]
+        }
+      }
+      ,"allOf": [
+        {
+          "if": {"properties": {"mode": {"const": "unsupported"}}},
+          "then": {"properties": {"manual_guard": {"type": "null"}}}
+        },
+        {
+          "if": {"properties": {"mode": {"const": "hook"}}},
+          "then": {
+            "properties": {
+              "manual_guard": {"type": "null"},
+              "capability_probe": {"properties": {"status": {"const": "recorded"}}}
+            }
+          }
+        }
+      ]
+    },
+    "bootstrap": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["managed_files", "line_endings", "max_bytes", "file_hashes", "config_hash"],
+      "properties": {
+        "managed_files": {
+          "type": "array",
+          "items": {"type": "string", "enum": ["AGENTS.md", "CLAUDE.md"]},
+          "minItems": 2,
+          "maxItems": 2,
+          "uniqueItems": true
+        },
+        "line_endings": {"type": "string", "const": "LF"},
+        "max_bytes": {"type": "integer", "const": 32768},
+        "file_hashes": {
+          "type": "object",
+          "propertyNames": {"enum": ["AGENTS.md", "CLAUDE.md"]},
+          "required": ["AGENTS.md", "CLAUDE.md"],
+          "additionalProperties": {"type": "string", "pattern": "^[A-Fa-f0-9]{64}$"}
+        },
+        "config_hash": {"type": "string", "pattern": "^[A-Fa-f0-9]{64}$"}
+      }
+    }
+  },
+  "$defs": {
+    "adapterMapping": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["loader", "scope", "skill_root", "fallback"],
+      "properties": {
+        "loader": {"type": "string", "minLength": 1},
+        "scope": {"type": "string", "enum": ["harness_source", "target_project"]},
+        "skill_root": {"type": "string", "pattern": "^(?!/)(?![A-Za-z]:)(?!.*\\.\\.)(?!.*\\\\).+$"},
+        "fallback": {"type": "string", "const": "core_procedure"}
+      }
+    }
+  }
+}

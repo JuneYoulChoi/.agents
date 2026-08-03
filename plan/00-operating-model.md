@@ -163,6 +163,15 @@ single Router, read-only discovery, and validator scripts. Delegation, external
 MCP actions, and autonomous mutation are optional later phases rather than
 prerequisites for a working harness.
 
+The bootstrap is a thin entrypoint, not the enforcement engine. Shared platform
+templates live under `adapters/`; a target project receives managed root
+`AGENTS.md`/`CLAUDE.md` wrappers plus `.agents/harness.json`. Automatic MUST
+guarantees require the Router, state store, validators, and an adapter
+capability probe. When those are unavailable, read-only intake and discovery
+may continue, but material mutation and high-risk actions are blocked or
+require a recorded manual guard. Git-root discovery is a path heuristic and
+never determines Greenfield/Brownfield state.
+
 For every software-related task, `architecture-baseline-and-design` is a
 mandatory checkpoint. It reads `docs/architecture/`, establishes or drafts the
 PRD/SRS/UC/FA/QA/HLD/LLD/view/diagram baseline, and then transitions to the
@@ -175,12 +184,12 @@ Requests that change this harness itself use a control-plane path after intake:
 
 ```text
 intake -> harness-upgrade-analysis (read-only baseline and impact plan)
-       -> user approval -> implementation -> verification
+       -> user approval -> bootstrap/adapter implementation -> verification
        -> harness-overview-html (refresh human-readable overview) -> handoff
 ```
 
-`harness-upgrade-analysis` reads all of `plan/` first, then the active registry
-and only the relevant skill bodies. It classifies each affected path as
+`harness-upgrade-analysis` reads all of `plan/` first, then the active registry,
+adapter/template manifest, and only the relevant skill bodies. It classifies each affected path as
 `unchanged`, `patch`, `extend`, `wrapper`, `replace`, `deprecate`, or `new`,
 and cannot mutate files. Existing concepts, sequences, gates, and transition
 contracts remain preserved unless an approved change record explicitly replaces

@@ -1,0 +1,40 @@
+# Universal Engineering Harness — Claude project bootstrap
+
+This managed file is a thin entrypoint. The shared harness source and project
+configuration are pinned by `.agents/harness.json`; do not copy the full plan
+into this file or infer Greenfield/Brownfield state from the Git root.
+
+Before material work:
+
+1. Resolve the explicit target root and read `.agents/harness.json`. If the
+   source, registry, template hash, or enforcement capability is missing or
+   stale, allow read-only diagnostics only and stop mutation.
+2. Run the pinned `intake-and-route` procedure. Classify session scope,
+   project state, fields, action, risk, depth, evidence, and user decisions.
+3. If the request changes this harness, run `harness-upgrade-analysis` next;
+   the harness plan is its architecture baseline. If it also changes a target
+   software project, add that project's architecture gate.
+4. For other software work, inspect `docs/architecture/` with
+   `architecture-baseline-and-design`; establish or confirm PRD/SRS, external
+   entities/interfaces, UC, FA, QA/QAS, HLD, LLD, ADRs, views, and diagrams
+   before impact or implementation.
+5. For Brownfield or Hybrid work, run `brownfield-impact-analysis` before
+   editing and preserve existing UC/FA/QA and regression behavior.
+6. For harness changes, obtain approval before applying only the bounded plan.
+   Never resolve `incoming`, deprecated,
+   unverified, or integrity-failed skills.
+7. Keep task state under the configured `state_root` (default
+   `.agents/state/<task-id>/`); ask about material
+   ambiguity rather than silently choosing a product direction. If a skill or
+   document is missing, ask whether to explore alternatives or follow a user-
+   supplied concept/direction.
+8. Before completion run `verify-and-handoff`, update affected documents and
+   traceability, and report checks, assumptions, waivers, and residual risk.
+
+The bootstrap cannot enforce MUST rules by itself. Follow the configured
+`hook`, `manual`, or `unsupported` enforcement mode. In `manual` mode, task
+state and a limited reversible workspace edit require a non-expired manual
+guard with an approval/action record, exact paths, pre/post state, verifier,
+and rollback. `unsupported` is ephemeral/read-only and cannot claim resume;
+external, destructive, high-risk, approval-bypassing, and unsafe state actions
+remain blocked.

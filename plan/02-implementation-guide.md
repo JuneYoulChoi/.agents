@@ -74,6 +74,24 @@ The library repository (this repository) contains reusable source:
   scripts/              standard-library validators and fixture runner
 ```
 
+The registry includes `active-skills.json` and the adapter/template provenance
+record `adapter-manifest.json`. Their source/tree pins are placeholders until
+the bootstrap implementation computes deterministic manifests; placeholders
+are not eligible for automatic routing.
+
+Bootstrap source is kept in one place per platform so a rendered project
+wrapper never becomes a second policy authority:
+
+```text
+.agents/
+  adapters/
+    codex/AGENTS.md.tmpl
+    claude/CLAUDE.md.tmpl
+  templates/
+    harness.json.example
+    harness.schema.json
+```
+
 When the library is used by a target project, project state is kept in the
 target project and not mixed into the library repository:
 
@@ -85,14 +103,46 @@ target-project/
       events.ndjson
       handoff.md
       artifacts.json
-    overrides/           optional project taxonomy/source-of-truth rules
+    harness.json        pinned source, adapter, registry, and enforcement
+    overrides/           optional, reviewed rules (not loaded by bootstrap MVP)
+  AGENTS.md              rendered Codex wrapper (managed, thin)
+  CLAUDE.md              rendered Claude wrapper (managed, thin)
 ```
 
-The adapter MAY symlink or copy approved `skills/`, but it MUST NOT expose
-`incoming/`. State files containing sensitive evidence stay outside Git or are
-redacted according to the project policy. The default state directory is
-`<target-project>/.agents/state/`; a user-level directory is the fallback for
-tasks that cannot be stored in the repository.
+The installer first accepts an explicit `target_root`; it may use the nearest
+Git root only when it is the unique nearest root and no explicit root conflicts;
+otherwise it asks. An explicit target must already be an existing directory,
+and the current directory must be inside it. Git command errors are not treated
+as “no Git”; they block resolution. It canonicalizes symlinks and rejects a
+target outside the selected root, an accidental selection of the shared
+harness root (identified by its pinned source fingerprint/marker), or a
+source/target collision. Git-root discovery is only a path heuristic and never
+decides Greenfield/Brownfield.
+
+Installation is a copy by default. A same-hash managed file is idempotent; an
+unknown or edited root instruction/config file is preserved and produces a
+conflict that requires an explicit upgrade. Wrapper, config, and managed hashes
+are written as one atomic transaction with a lock and rollback record. The
+installer never truncates a file: rendered UTF-8 content is normalized to LF,
+checked against the 32 KiB per-file limit, and rejected if placeholders remain.
+Symlinks are allowed only when explicitly approved, contained, and hash-pinned.
+
+The adapter MUST NOT expose `incoming/`. The default state directory is
+target-local. A user-level fallback is disabled for the bootstrap MVP; a future
+fallback must be an explicit, approved mode with a recorded alternate-root
+fingerprint and redaction policy. State files containing sensitive
+evidence stay outside Git or are redacted according to project policy. The
+default state directory is `<target-project>/.agents/state/`. A `hook`,
+`manual`, or `unsupported` enforcement capability is recorded in `harness.json`;
+`manual` permits task-state writes and limited reversible workspace edits only
+with a valid manual guard, while `unsupported` is ephemeral/read-only and does
+not claim cross-session persistence. External, destructive, high-risk,
+approval-bypassing, and unsafe state operations remain blocked.
+
+Project `overrides/` are not implicitly trusted or loaded in the bootstrap MVP.
+A later release may add a relative, realpath-contained, schema-versioned,
+hash-pinned override manifest; until then, an override is ignored or blocks
+routing rather than weakening core rules.
 
 ## Stage contracts
 
@@ -123,25 +173,34 @@ The first Router may be implemented as a command or as a skill-backed prompt,
 but it MUST follow this order:
 
 ```text
-1. Load only global rules, registry metadata, and existing task state.
-2. Create task_id/run_id; append an intake_started event.
-3. Classify session_scope, project_state, fields, action, risk, depth.
-4. If a material decision is missing, write question.json and enter waiting_user.
-5. If software-related, run discovery and the architecture baseline gate before
+1. Resolve target_root and load only the pinned bootstrap/config, registry
+   metadata, and existing task state.
+2. Probe adapter enforcement. If `manual` has no valid manual guard, or the
+   capability is `unsupported`, create only an ephemeral run/intake summary;
+   do not write task state/events and keep the route read-only until a safe
+   guard is recorded. A valid `hook` or `manual_guard` permits the durable
+   state contract.
+3. Create task_id/run_id and append `intake_started` only when the state-write
+   condition from step 2 passes.
+4. Classify session_scope, project_state, fields, action, risk, depth.
+5. If a material decision is missing, write question.json and enter waiting_user.
+6. If software-related, run discovery and the architecture baseline gate before
    impact, design, or mutation.
-6. Choose the smallest depth and smallest compatible skill set.
-7. If a skill is unavailable, use the core fallback or ask the user.
-8. Run the current stage; validate its output contract.
-9. Append an event and evaluate the transition guard.
-10. Repeat until handoff, blocked, failed, cancelled, or waiting_user.
+7. Choose the smallest depth and smallest compatible skill set.
+8. If a skill is unavailable, use the core fallback or ask the user.
+9. Run the current stage; validate its output contract.
+10. Append an event and evaluate the transition guard.
+11. Repeat until handoff, blocked, failed, cancelled, or waiting_user.
 ```
 
-For a harness-maintenance request, replace step 5 with:
+For a harness-maintenance request, keep steps 1–5 (including clarification),
+then use this branch:
 
 ```text
-5. Run `harness-upgrade-analysis` against all `plan/` files and the active
-   registry; stop before mutation at approval or clarification.
-6. After approval, apply the bounded change, run its fixtures, refresh the
+6. Run `harness-upgrade-analysis` against all `plan/` files, the active
+   registry, adapters, templates, and bootstrap configuration; stop before
+   mutation at approval or clarification.
+7. After approval, apply the bounded change, run its fixtures, refresh the
    optional HTML overview, and continue through verification and handoff.
 ```
 

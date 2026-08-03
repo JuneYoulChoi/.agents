@@ -11,6 +11,12 @@ refresh the self-contained human guide (default: `docs/harness/index.html`).
 The plan remains authoritative; the HTML is a derived view and never replaces
 the Markdown contracts.
 
+Platform startup is an adapter concern. Canonical templates live under
+`adapters/codex/` and `adapters/claude/`; a target project receives thin,
+managed root instruction files and `.agents/harness.json`. The target config
+pins source/template revisions, registry order, state containment, and
+enforcement capability. It is not task state and cannot grant skill trust.
+
 ## For an implementer
 
 1. [00-operating-model.md](00-operating-model.md) — purpose, rules, sequence.

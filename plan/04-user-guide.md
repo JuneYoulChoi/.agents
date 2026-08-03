@@ -33,11 +33,13 @@ Risk/depth: medium / standard
 Next: inspect current endpoint and tests
 ```
 
-For every software-related request, the harness also checks the architecture
-baseline in `docs/architecture/` even when the user did not mention it. If the
-baseline is missing or stale, the harness may produce a code-derived draft and
-ask the user to confirm UC, FA, QA, external-interface, or module boundaries
-before material implementation.
+For every target-software request, the harness also checks the architecture
+baseline in `docs/architecture/` even when the user did not mention it. A
+harness-maintenance request uses all of `plan/` as its architecture baseline;
+an overview-only request does not invent a target project's architecture gate.
+If a target baseline is missing or stale, the harness may produce a code-derived
+draft and ask the user to confirm UC, FA, QA, external-interface, or module
+boundaries before material implementation.
 
 If a decision is needed, the user receives facts, options, recommendation, and
 safe default. Answer with a choice or correct the assumptions. Silence is not
@@ -77,6 +79,38 @@ with an existing document owner.
 
 The overview is a derived guide. The Markdown files in `plan/` and the active
 registry remain authoritative.
+
+## First-time project bootstrap
+
+The shared harness keeps its platform templates in
+`.agents/adapters/codex/AGENTS.md.tmpl` and
+`.agents/adapters/claude/CLAUDE.md.tmpl`. A target project receives thin,
+managed root wrappers and `<project>/.agents/harness.json`; task state remains
+under `<project>/.agents/state/`. The installer should be given an explicit
+target root that already exists. If omitted, it may use the unique nearest
+canonical Git root; it may use the current directory only when Git reports no
+repository. A Git error, conflicting root, or source/target collision blocks
+installation. Git-root detection does not decide whether the project is
+Greenfield or Brownfield.
+
+The normal install is a copy. Re-running with the same managed hashes is safe.
+An existing unknown or user-edited `AGENTS.md`, `CLAUDE.md`, or
+`harness.json` is never silently overwritten; review the reported diff and
+request an explicit upgrade. Installation is a recorded, atomic change and
+can be rolled back without discarding user edits. The configuration contains
+portable source locator/revisions, template and registry hashes, adapter
+mappings, state root, registry order, enforcement probe/guard, and a canonical
+self-excluded config hash, but no secrets or absolute machine paths.
+`harness.json.example` contains `PIN_REQUIRED` sentinels and is not installable
+until real revisions and 64-hex hashes are rendered.
+
+When the adapter reports `manual` enforcement, the harness can classify,
+persist task state, and perform a limited reversible workspace change only with
+an unexpired manual guard and action record. `unsupported` is ephemeral and
+read-only: it cannot claim cross-session resume. All modes pause or block
+external/destructive/high-risk actions, approval bypasses, and unsafe state
+writes. This limitation is shown in the intake summary and handoff rather than
+being presented as automatic enforcement.
 
 ## Worked example: Brownfield feature
 
@@ -171,6 +205,10 @@ say `Cancel TASK-<id> because <reason>`.
   owns the decision.
 - If a tool is missing, allow the core fallback or provide the tool explicitly;
   do not claim the check ran.
+- If a skill or source document is missing, the harness asks whether to explore
+  alternatives or follow your chosen concept/direction before making a material
+  assumption. It may create a missing document only after purpose, audience,
+  owner, and location are confirmed.
 - If an external or destructive action is proposed, confirm its exact target,
   environment, scope, and rollback before approving.
 - If the Router misunderstood the project state, correct it; the correction is

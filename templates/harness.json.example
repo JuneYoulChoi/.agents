@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "protocol_version": 1,
+  "target_root_mode": "explicit",
+  "harness_root_mode": "separate",
+  "harness_source": {
+    "kind": "local_or_bundled",
+    "locator": "shared-harness",
+    "ref": "shared-harness",
+    "revision": "PIN_REQUIRED",
+    "sha256": "PIN_REQUIRED"
+  },
+  "templates": [
+    {
+      "id": "codex.bootstrap",
+      "path": "adapters/codex/AGENTS.md.tmpl",
+      "sha256": "PIN_REQUIRED"
+    },
+    {
+      "id": "claude.bootstrap",
+      "path": "adapters/claude/CLAUDE.md.tmpl",
+      "sha256": "PIN_REQUIRED"
+    }
+  ],
+  "adapters": ["codex", "claude"],
+  "state_root": ".agents/state",
+  "registry": {
+    "resolution_order": ["project_reviewed", "shared_reviewed", "core_fallback"],
+    "sources": [
+      {
+        "scope": "project_reviewed",
+        "path": ".agents/registry/project-skills.json",
+        "revision": "PIN_REQUIRED",
+        "sha256": "PIN_REQUIRED"
+      },
+      {
+        "scope": "shared_reviewed",
+        "path": "registry/active-skills.json",
+        "revision": "PIN_REQUIRED",
+        "sha256": "PIN_REQUIRED"
+      }
+    ]
+  },
+  "adapter_mapping": {
+    "codex": {
+      "loader": "native_instruction_scope",
+      "scope": "harness_source",
+      "skill_root": "skills",
+      "fallback": "core_procedure"
+    },
+    "claude": {
+      "loader": "native_or_plugin",
+      "scope": "target_project",
+      "skill_root": ".claude/skills",
+      "fallback": "core_procedure"
+    }
+  },
+  "enforcement": {
+    "mode": "manual",
+    "capability_probe": {
+      "status": "recorded",
+      "evidence_id": "EVD-BOOTSTRAP-PROBE",
+      "at": "2026-08-03T00:00:00Z"
+    },
+    "manual_guard": null
+  },
+  "bootstrap": {
+    "managed_files": ["AGENTS.md", "CLAUDE.md"],
+    "line_endings": "LF",
+    "max_bytes": 32768,
+    "file_hashes": {
+      "AGENTS.md": "PIN_REQUIRED",
+      "CLAUDE.md": "PIN_REQUIRED"
+    },
+    "config_hash": "PIN_REQUIRED"
+  }
+}

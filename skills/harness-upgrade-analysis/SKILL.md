@@ -36,11 +36,18 @@ Read in this order, progressively:
 1. `plan/README.md`, then every `plan/*.md` file. Treat this set as the
    normative statement of requirements, concept, direction, sequence, gates,
    contracts, and implementation phases.
-2. `registry/active-skills.json` and any referenced registry/taxonomy files.
+2. `registry/active-skills.json`, `registry/adapter-manifest.json`, and any
+   referenced registry/taxonomy files.
 3. Active skill metadata (`SKILL.md` frontmatter and `agents/openai.yaml`) for
    all entries; read full bodies only for skills affected by the request and
    their immediate route neighbors.
 4. Platform adapter, fixture, validator, and task-state files when present.
+
+When the request concerns startup or cross-session enforcement, also inspect
+the platform bootstrap files (`AGENTS.md`, `CLAUDE.md`), adapter templates,
+and the target `harness.json` configuration if present. Distinguish the
+instruction-discovery root from the project target root and from the shared
+harness source root.
 
 Record the observed revision/date and paths read. Label every conclusion as
 `observed`, `inferred`, or `assumed`. If `plan/` is missing, contradictory, or
@@ -67,6 +74,69 @@ compatibility. Use `replace` only when the current contract cannot satisfy the
 approved requirement; explain migration and rollback. A path that is merely
 reviewed remains `unchanged`.
 
+## Bootstrap and adapter placement contract
+
+Use one authoritative template per platform:
+
+```text
+.agents/adapters/codex/AGENTS.md.tmpl
+.agents/adapters/claude/CLAUDE.md.tmpl
+```
+
+Render thin wrappers into each target project's root:
+
+```text
+<target-root>/AGENTS.md
+<target-root>/CLAUDE.md
+<target-root>/.agents/harness.json
+```
+
+The shared template is the source; rendered files are project-local managed
+artifacts. Keep wrappers small and refer to the pinned harness source through
+`harness.json`; do not copy the full plan into the prompt. The optional global
+Codex file (`~/.codex/AGENTS.md`) is for personal defaults only and must not
+contain project paths, task state, credentials, or product decisions.
+The shared repository's root `AGENTS.md`/`CLAUDE.md` are a separately marked
+self-hosted source-entrypoint exception; they are not target wrappers and must
+not be treated as a second rendered template.
+
+Resolve the target in this order: explicit `target_root`, then one unambiguous
+nearest Git root, then the current directory only when no Git root exists. A
+symlink is canonicalized before resolution. An explicit target must exist and
+contain the current directory. A nested repository is valid when it is the
+unique nearest root; stop only for conflicting explicit/discovered roots,
+multiple equally-near roots, Git command errors, an outside current directory,
+or a source/target collision. Git-root presence is only a path heuristic; it
+does not classify Greenfield or Brownfield state. Never select the shared
+harness repository as a target by accident.
+
+The configuration is portable and versioned. It records a local/bundled source
+locator/ref and revision/hash, template/protocol version, adapter mappings,
+project state root, ordered registry sources/revisions/hashes, enforcement probe
+and optional manual guard, and managed-file/config hashes. It must not grant
+skill trust or bypass the active registry. Store canonical target/harness-root
+fingerprints and selected adapter at runtime, not absolute machine paths in
+committed config. Missing/stale approved project sources may fall through;
+malformed, tampered, unverified, or failed-integrity sources fail closed.
+
+Default installation is a copy, not a symlink. Same managed hashes are
+idempotent. Unknown or user-edited `AGENTS.md`, `CLAUDE.md`, or
+`.agents/harness.json` files are never overwritten; report a conflict and ask
+for an explicit upgrade. Apply wrapper, config, and managed metadata as one
+transaction with a lock and rollback record. Preserve user edits during
+rollback. Validate rendered UTF-8 bytes after line-ending normalization and
+fail if any bootstrap file exceeds 32 KiB; never truncate or leave unresolved
+placeholders.
+
+Prompt files alone cannot enforce MUST rules. Record the adapter enforcement
+level as `hook`, `manual`, or `unsupported`. `manual` permits durable state and
+limited reversible workspace mutation only with a fresh manual guard/action
+record; `unsupported` is ephemeral/read-only and cannot claim resume. All modes
+block external, destructive, high-risk, approval-bypassing, or unsafe state
+actions. Validate source-relative paths, realpath containment, symlink/permission
+policy, LF-normalized UTF-8 bytes (32 KiB hard cap), canonical self-excluded
+config hash, and reject patch markers or unresolved placeholders.
+
 ## 3. Produce the upgrade plan
 
 Return this YAML record before any implementation begins:
@@ -80,6 +150,13 @@ upgrade:
     registry_revision: ''
     skill_revision: ''
     evidence: []
+  bootstrap:
+    target_root: ''
+    harness_root: ''
+    instruction_files: []
+    config_path: ''
+    template_revision: ''
+    enforcement: hook | manual | unsupported | not_applicable
   preserved: []
   affected:
     - path: ''

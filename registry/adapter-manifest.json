@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "manifest_id": "adapter-template-manifest-v1",
+  "source_revision": "PENDING_PIN_BEFORE_BOOTSTRAP",
+  "source_tree_sha256": "PENDING_PIN_BEFORE_BOOTSTRAP",
+  "templates": [
+    {
+      "id": "codex.bootstrap",
+      "platform": "codex",
+      "path": "adapters/codex/AGENTS.md.tmpl",
+      "rendered_name": "AGENTS.md",
+      "version": "0.1.0",
+      "sha256": "PENDING_PIN_BEFORE_BOOTSTRAP",
+      "max_bytes": 32768
+    },
+    {
+      "id": "claude.bootstrap",
+      "platform": "claude",
+      "path": "adapters/claude/CLAUDE.md.tmpl",
+      "rendered_name": "CLAUDE.md",
+      "version": "0.1.0",
+      "sha256": "PENDING_PIN_BEFORE_BOOTSTRAP",
+      "max_bytes": 32768
+    }
+  ],
+  "self_hosted_entrypoints": ["AGENTS.md", "CLAUDE.md"],
+  "source_manifest_excludes": [
+    ".git",
+    "incoming",
+    "state",
+    ".DS_Store",
+    "registry/active-skills.json",
+    "registry/adapter-manifest.json"
+  ],
+  "hash_semantics": {
+    "source_tree": "sorted relative approved-source paths plus normalized file SHA-256; excludes source manifests above",
+    "adapter_manifest": "canonical JSON UTF-8 with source_tree_sha256 and template sha256 sentinel fields excluded",
+    "active_registry": "canonical JSON UTF-8 with integrity_policy.manifest_sha256 sentinel excluded"
+  },
+  "policy": {
+    "line_endings": "LF",
+    "copy_default": true,
+    "no_silent_overwrite": true,
+    "transactional_install": true
+  }
+}

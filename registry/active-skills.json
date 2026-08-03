@@ -1,6 +1,14 @@
 {
   "schema_version": 1,
   "generated_at": "2026-08-03",
+  "integrity_policy": {
+    "core_entries": "harness_source_tree_manifest",
+    "adapter_manifest": "registry/adapter-manifest.json",
+    "manifest_revision": "PENDING_PIN_BEFORE_BOOTSTRAP",
+    "manifest_sha256": "PENDING_PIN_BEFORE_BOOTSTRAP",
+    "manifest_hash_scope": "canonical active-skills.json excluding integrity_policy.manifest_sha256",
+    "excluded_paths": [".git", "incoming", "state", ".DS_Store", "docs/.DS_Store", "registry/active-skills.json", "registry/adapter-manifest.json"]
+  },
   "resolution_order": ["project_reviewed", "shared_reviewed", "core_fallback"],
   "skills": [
     {
