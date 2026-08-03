@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-03",
+  "resolution_order": ["project_reviewed", "shared_reviewed", "core_fallback"],
+  "skills": [
+    {
+      "id": "core.intake-and-route",
+      "version": "0.1.0",
+      "entry": "skills/intake-and-route/SKILL.md",
+      "trust": "approved",
+      "capabilities": ["classification", "clarification", "routing"],
+      "network_access": "none",
+      "data_access": "workspace",
+      "mutation": "none",
+      "platforms": ["codex", "claude"]
+    },
+    {
+      "id": "core.greenfield-planning",
+      "version": "0.1.0",
+      "entry": "skills/greenfield-planning/SKILL.md",
+      "trust": "approved",
+      "capabilities": ["requirements", "architecture", "delivery_planning"],
+      "network_access": "none",
+      "data_access": "workspace",
+      "mutation": "none",
+      "platforms": ["codex", "claude"]
+    },
+    {
+      "id": "core.architecture-baseline-and-design",
+      "version": "0.1.0",
+      "entry": "skills/architecture-baseline-and-design/SKILL.md",
+      "trust": "approved",
+      "capabilities": ["architecture_baseline", "hld", "lld", "views", "diagrams", "architecture_sync"],
+      "network_access": "none",
+      "data_access": "workspace",
+      "mutation": "workspace",
+      "platforms": ["codex", "claude"]
+    },
+    {
+      "id": "core.brownfield-impact-analysis",
+      "version": "0.1.0",
+      "entry": "skills/brownfield-impact-analysis/SKILL.md",
+      "trust": "approved",
+      "capabilities": ["baseline", "impact_analysis", "regression_planning"],
+      "network_access": "none",
+      "data_access": "workspace",
+      "mutation": "none",
+      "platforms": ["codex", "claude"]
+    },
+    {
+      "id": "core.document-purpose",
+      "version": "0.1.0",
+      "entry": "skills/document-purpose/SKILL.md",
+      "trust": "approved",
+      "capabilities": ["document_classification", "document_planning"],
+      "network_access": "none",
+      "data_access": "workspace",
+      "mutation": "workspace",
+      "platforms": ["codex", "claude"]
+    },
+    {
+      "id": "core.verify-and-handoff",
+      "version": "0.1.0",
+      "entry": "skills/verify-and-handoff/SKILL.md",
+      "trust": "approved",
+      "capabilities": ["verification", "traceability", "handoff"],
+      "network_access": "none",
+      "data_access": "workspace",
+      "mutation": "workspace",
+      "platforms": ["codex", "claude"]
+    },
+    {
+      "id": "core.harness-upgrade-analysis",
+      "version": "0.1.0",
+      "entry": "skills/harness-upgrade-analysis/SKILL.md",
+      "trust": "approved",
+      "capabilities": ["harness_baseline", "upgrade_impact", "change_planning", "compatibility_analysis"],
+      "network_access": "none",
+      "data_access": "workspace",
+      "mutation": "none",
+      "platforms": ["codex", "claude"]
+    },
+    {
+      "id": "core.harness-overview-html",
+      "version": "0.1.0",
+      "entry": "skills/harness-overview-html/SKILL.md",
+      "trust": "approved",
+      "capabilities": ["harness_documentation", "html_generation", "provenance", "accessibility_review"],
+      "network_access": "none",
+      "data_access": "workspace",
+      "mutation": "workspace",
+      "platforms": ["codex", "claude"]
+    }
+  ]
+}

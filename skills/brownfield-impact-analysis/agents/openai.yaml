@@ -1,0 +1,4 @@
+interface:
+  display_name: "Brownfield Impact"
+  short_description: "Assess change impact before editing existing software."
+  default_prompt: "Use $brownfield-impact-analysis to assess this change before editing code."

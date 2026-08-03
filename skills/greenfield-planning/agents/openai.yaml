@@ -1,0 +1,4 @@
+interface:
+  display_name: "Greenfield Planning"
+  short_description: "Turn a new software idea into a traceable delivery plan."
+  default_prompt: "Use $greenfield-planning to turn this new software idea into a traceable delivery plan."

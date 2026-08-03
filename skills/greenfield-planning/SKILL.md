@@ -1,0 +1,80 @@
+---
+name: greenfield-planning
+description: Convert a new software idea, product capability, service, API, UI, or system into a traceable and testable delivery plan. Use after intake identifies Greenfield work or a new capability whose goal, users, scope, and constraints need requirements, quality scenarios, architecture decisions, tasks, tests, and documentation planning before implementation.
+---
+
+# Greenfield Planning
+
+Use this skill after `$intake-and-route`. Do not use it to skip impact analysis
+for an existing system; route Hybrid work through Brownfield impact first.
+
+## Entry gate
+
+Require an intake record and an architecture record from
+`$architecture-baseline-and-design`. If the architecture baseline is missing,
+stale, conflicted, or has unconfirmed material UC/FA/QA/module boundaries,
+return to that skill or `$intake-and-route`; do not silently design around the
+gap.
+
+## 1. Confirm the product boundary
+
+Record goal, target users, success criteria, constraints, excluded scope, and
+the desired outcome. Ask the user when concept, priority, audience, acceptance
+trade-off, or authority is material and unresolved. Label proposals as
+proposals, not confirmed requirements.
+
+## 2. Define the smallest useful requirements set
+
+Create stable IDs and a concise trace:
+
+```text
+GOAL -> REQ/FR -> NFR/QAS -> ADR -> TASK -> TEST -> DOC
+```
+
+Write functional requirements as observable outcomes. For important quality
+attributes, use a scenario with context, stimulus, expected response, and a
+measurable response measure. Do not create an ADR for a trivial, reversible
+choice; create one for material architecture, data, integration, security, or
+public-contract decisions.
+
+## 3. Design before implementation
+
+Choose the minimum architecture that satisfies the requirements. State system
+boundaries, major components, data/API contracts, failure behavior, security
+and privacy constraints, operational needs, and alternatives considered.
+
+When a decision needs independent expertise, request focused review rather
+than a generic debate. Preserve dissent and escalate unresolved material
+product choices to the user.
+
+## 4. Build an executable delivery plan
+
+Split work into coherent slices. Every slice needs a goal, acceptance criteria,
+implementation boundary, verification command or method, and documentation
+effect. Prefer end-to-end vertical slices over technology-layer-only tasks.
+
+Use this minimum output:
+
+```yaml
+goal: GOAL-001
+requirements: [REQ-001]
+quality_scenarios: [QAS-001]
+decisions: [ADR-001]
+tasks:
+  - id: TASK-001
+    outcome: ''
+    acceptance: []
+    verifies: []
+    document_effect: create | update | none
+open_points: []
+transition:
+  next_stage: execution | clarification
+  next_skill: ''
+```
+
+## 5. Guard implementation
+
+Do not begin material implementation until the current slice has acceptance
+criteria and a verification plan. If new evidence changes scope, return to
+requirements or design. For a document-only outcome, route to
+`$document-purpose`; for completion, route to `$verify-and-handoff`.

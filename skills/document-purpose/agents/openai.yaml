@@ -1,0 +1,4 @@
+interface:
+  display_name: "Document Purpose"
+  short_description: "Classify document intent and draft the right artifact."
+  default_prompt: "Use $document-purpose to classify this document request and draft the right artifact."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Harness Upgrade Analysis"
+  short_description: "Plan safe changes to skills and workflows."
+  default_prompt: "Use $harness-upgrade-analysis to assess this harness change and create an upgrade plan."

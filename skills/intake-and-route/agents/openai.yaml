@@ -1,0 +1,4 @@
+interface:
+  display_name: "Intake and Route"
+  short_description: "Classify requests and choose the next safe workflow."
+  default_prompt: "Use $intake-and-route to classify this request and select the next safe workflow."

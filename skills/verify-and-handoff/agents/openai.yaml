@@ -1,0 +1,4 @@
+interface:
+  display_name: "Verify and Handoff"
+  short_description: "Verify acceptance evidence and prepare a durable task handoff."
+  default_prompt: "Use $verify-and-handoff to verify this task and write a clear handoff."

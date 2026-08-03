@@ -1,0 +1,4 @@
+interface:
+  display_name: "Harness Overview HTML"
+  short_description: "Publish the harness design as a self-contained HTML overview."
+  default_prompt: "Use $harness-overview-html to publish the current harness as a self-contained HTML overview."
