@@ -1,7 +1,7 @@
 # Industry patterns assessed for this harness
 
-Checked on 2026-08-03; configuration-management inputs were reviewed on
-2026-08-17. These are design inputs, not runtime dependencies.
+Checked on 2026-08-03; configuration-management and technology-ecosystem inputs
+were reviewed on 2026-08-17. These are design inputs, not runtime dependencies.
 
 | Pattern | Evidence | Apply here |
 | --- | --- | --- |
@@ -12,7 +12,8 @@ Checked on 2026-08-03; configuration-management inputs were reviewed on
 | Incremental features plus durable handoff artifacts across sessions | [Anthropic effective long-running harnesses](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents) | Maintain task state, progress/handoff record, feature/acceptance list, and runnable verification instructions. |
 | DAG/workflow rather than unrestricted agent chatter | [AWS multi-agent workflow and graph patterns](https://aws.amazon.com/blogs/machine-learning/multi-agent-collaboration-patterns-with-strands-agents-and-amazon-nova/) | Model stages and transition conditions explicitly; parallelize only independent branches and converge through a synthesizer. |
 | Observability, governance, and human-in-the-loop for consequential actions | [AWS enterprise agentic AI guidance](https://docs.aws.amazon.com/prescriptive-guidance/latest/govern-architect-agentic-ai/enterprise-architecture.html) | Record decisions, evidence, tool/action scope, verification, and user approvals; gate destructive/external activity. |
-| Externalized, environment-independent application configuration | [The Twelve-Factor App: Config](https://12factor.net/config) and the reviewed [configuration-management skill](https://www.skills.sh/aj-geddes/useful-ai-prompts/configuration-management) | Add a language-neutral configuration contract with typed validation, explicit precedence, secret separation, and progressively loaded C++/Rust/Java/Python references. |
+| Externalized, environment-independent application configuration | [The Twelve-Factor App: Config](https://12factor.net/config) and the reviewed [configuration-management skill](https://www.skills.sh/aj-geddes/useful-ai-prompts/configuration-management) | Add a language-neutral configuration contract with typed validation, explicit precedence, secret separation, and progressively loaded C++/Rust/Java/Python/TypeScript/JavaScript/Go/Shell references plus HTML/CSS public-artifact boundaries. |
+| Capability-first technology selection and version-matched ecosystem guidance | Official documentation for [ROS 2](https://docs.ros.org/en/ros2_documentation/rolling/Concepts.html), [Node.js](https://nodejs.org/docs/latest/api/), [React](https://react.dev/), [gRPC](https://grpc.io/docs/), [Isaac Lab](https://isaac-sim.github.io/IsaacLab/), [Docker](https://docs.docker.com/), [Isaac Sim](https://docs.isaacsim.omniverse.nvidia.com/), [MoveIt 2](https://moveit.picknik.ai/), [Kubernetes](https://kubernetes.io/docs/concepts/), [Modbus](https://www.modbus.org/modbus-specifications), and [colcon](https://colcon.readthedocs.io/) | Add a product-neutral `TECH-*` decision layer, then progressively load one approved ecosystem engineering skill and only the changed implementation-language profiles. Treat official/versioned contracts as authority and popularity as advisory. |
 
 ## Deliberate adaptations
 
@@ -55,9 +56,11 @@ the running harness automatically.
 | Durable state and handoff | Work spans sessions, agents, or material decisions | Tiny, reversible work; keep only the minimal task note |
 | Human approval gate | Action is external, privileged, costly, destructive, irreversible, or sensitive | Reversible in-scope investigation or workspace change under existing authority |
 
-## Additional acceptance criteria for the harness itself
+## Future broad-activation quality goals
 
-The harness is ready for broad activation only when it can demonstrate:
+These remain useful manual quality goals for a future autonomous/broad
+activation, but they are not separate executable fixture families in the
+current bounded reference suite:
 
 1. A small, clear, reversible fixture completes without delegation or an
    unnecessary clarification turn, while preserving its interpretation and
@@ -75,6 +78,6 @@ The harness is ready for broad activation only when it can demonstrate:
 7. An unauthorized deploy, secret access, destructive command, or external
    publication fixture is refused, logged, and converted to an approval request.
 
-The complete fixture definitions, expected states, and pass/fail assertions are
-in [03-contracts-and-fixtures.md](03-contracts-and-fixtures.md). The ordinary
+The selected executable fixture definitions and pass/fail assertions are in
+[03-contracts-and-fixtures.md](03-contracts-and-fixtures.md). The ordinary
 developer interaction model is in [04-user-guide.md](04-user-guide.md).

@@ -48,16 +48,27 @@ skill.
 
 ## Reference implementation and dependency boundary
 
-The reference implementation is a local, file-based harness using Python 3.11+
-standard-library scripts only. It does not require a server, database, network,
-third-party package, cloud account, or MCP server. JSON is the canonical machine
+The Core is runtime- and language-independent. JSON is the canonical machine
 format; NDJSON is the append-only event format. Markdown is the human-facing
-format. YAML examples in other plan files are explanatory only.
+format. YAML examples in other plan files are explanatory only. An adapter may
+implement the contracts in C++, Rust, Go, Java, Shell, a platform-native
+runtime, or another suitable language without changing routing semantics.
 
-If a platform can perform the Router and persistence itself, its adapter may
-replace the Python scripts, but it MUST produce the same JSON state, event, and
-fixture results. If Python is unavailable, a manual adapter may follow the same
-contracts, but it is not considered an automated implementation.
+The optional standard-library reference runtime consists of
+`harness_router.py`, `harness_validator.py`, `harness_state.py`,
+`harness_runner.py`, `harness_bootstrap.py`, and `fixture_runner.py`. It does
+not require a server, database, network, third-party package, cloud account, or
+MCP server, and it imposes no Python dependency on a target project. A native
+adapter is equally automated when it accepts the same structured input, emits
+the same observable result, and passes the same fixtures. The fixture runner
+accepts replaceable Router and Bootstrap commands; Python is an example
+provider, not the policy authority.
+
+Natural-language interpretation remains a Codex/Claude adapter responsibility.
+The adapter applies `intake-and-route`, writes the small validated intake JSON,
+and passes it to the deterministic runtime. The Core does not implement a
+second NLP classifier, arbitrary rule language, plugin executor, or general
+workflow engine.
 
 ## Directory contract
 
@@ -71,13 +82,53 @@ The library repository (this repository) contains reusable source:
   registry/             provenance, manifest index, and promotion records
   adapters/             Codex and Claude entrypoints
   templates/            copyable state, decision, action, and handoff files
-  scripts/              standard-library validators and fixture runner
+  scripts/              optional Router, runner, state, validator, bootstrap, fixtures
+  fixtures/             portable input/expected-result integration scenarios
+  tests/                focused reference-runtime unit/regression checks
 ```
 
-The registry includes `active-skills.json` and the adapter/template provenance
-record `adapter-manifest.json`. Their source/tree pins are placeholders until
-the bootstrap implementation computes deterministic manifests; placeholders
-are not eligible for automatic routing.
+The registry includes `active-skills.json`, the compact `routing-gates.json`
+layer/placement manifest, and the adapter/template provenance record
+`adapter-manifest.json`. The reference installer computes target-local source,
+template, registry, managed-file, and canonical config hashes at install time.
+Shared manifest sentinels remain a promotion-time concern and are never treated
+as valid pins by a target installation.
+
+## Reference runtime use
+
+The target must be an existing directory separate from the shared harness
+source. Install both thin platform wrappers and choose the default adapter:
+
+```sh
+python3 -B scripts/harness_bootstrap.py install \
+  --target-root /path/to/project --adapter codex
+```
+
+Codex or Claude then applies the intake skill and writes an object conforming
+to `templates/intake.json.example`. Durable starts require a recorded hook or
+valid task-scoped manual guard:
+
+```sh
+python3 -B scripts/harness_validator.py intake --input /path/to/intake.json
+python3 -B scripts/harness_runner.py start \
+  --target-root /path/to/project --task-id TASK-001 \
+  --intake /path/to/intake.json --adapter codex \
+  --harness-revision <pinned-revision>
+```
+
+The Runner returns exactly one `next` skill with its reviewed source path and
+expected result shape. The adapter loads that skill, performs it, and submits
+the result with optimistic revision control:
+
+```sh
+python3 -B scripts/harness_runner.py submit \
+  --target-root /path/to/project --task-id TASK-001 \
+  --expected-revision 1 --result /path/to/skill-result.json
+```
+
+`next`/`status` reconstruct the current step from target-local state. The
+Runner never executes `SKILL.md` as shell code; the platform agent performs the
+instruction and the Runner only orders and validates transitions.
 
 Bootstrap source is kept in one place per platform so a rendered project
 wrapper never becomes a second policy authority:
@@ -121,9 +172,11 @@ decides Greenfield/Brownfield.
 
 Installation is a copy by default. A same-hash managed file is idempotent; an
 unknown or edited root instruction/config file is preserved and produces a
-conflict that requires an explicit upgrade. Wrapper, config, and managed hashes
-are written as one atomic transaction with a lock and rollback record. The
-installer never truncates a file: rendered UTF-8 content is normalized to LF,
+conflict that requires an explicit upgrade. An exclusively created journal acts
+as the transaction lock; each wrapper/config write uses atomic replacement.
+A caught failure rolls back only unchanged files created by that transaction,
+while an interrupted-process journal blocks the next run for explicit review.
+The installer never truncates an existing file: rendered UTF-8 content is normalized to LF,
 checked against the 32 KiB per-file limit, and rejected if placeholders remain.
 Symlinks are allowed only when explicitly approved, contained, and hash-pinned.
 
@@ -186,14 +239,63 @@ but it MUST follow this order:
 5. If a material decision is missing, write question.json and enter waiting_user.
 6. If software-related, run discovery and the architecture baseline gate before
    impact, design, or mutation.
-7. Choose the smallest depth and smallest compatible skill set. When the
-   baseline exposes configuration candidates, select the common configuration
-   skill and only the detected language reference.
+7. Evaluate the `G0`–`G7` routing gates from
+   `registry/routing-gates.json`. Each gate accepts all current relevant inputs
+   and may emit multiple branches, but load only activated skill bodies. Choose
+   the smallest depth and smallest compatible set. When a technology is named
+   or detected, select `technology-selection-and-integration` to record its
+   purpose, kind, status, compatibility, and integration graph; load only
+   selected ecosystem skills. For changed authored code, select
+   `language-engineering` and only its detected language profiles. When the
+   baseline exposes configuration candidates, also select the common
+   configuration skill and only its configuration-specific language reference.
 8. If a skill is unavailable, use the core fallback or ask the user.
-9. Run the current stage; validate its output contract.
-10. Append an event and evaluate the transition guard.
-11. Repeat until handoff, blocked, failed, cancelled, or waiting_user.
+9. Run the current stage; validate its output and gate-result contracts.
+10. Append events, topologically join all required branch outputs, and evaluate
+    the transition guard.
+11. If verification or new evidence emits backward feedback, reopen the nearest
+    responsible gate, invalidate only dependent descendants, and recompute that
+    subgraph. Otherwise repeat forward until handoff, blocked, failed,
+    cancelled, or waiting_user.
 ```
+
+### Gate evaluation and backward feedback algorithm
+
+The routing taxonomy is hierarchical, but evaluation is a deterministic
+multi-input/multi-output DAG. Do not implement a general expression language,
+trainable weights, or probabilistic skill activation. For each gate:
+
+1. collect referenced inputs from the current immutable state revision;
+2. evaluate only `all_of`, `any_of`, and `none_of` predicates;
+3. record every branch as `activated`, `candidate`, `suppressed`, or `blocked`
+   with evidence and a reason;
+4. load activated skill bodies and resources only;
+5. emit typed artifacts and the next gate candidates;
+6. join only when every required predecessor is valid; optional independent
+   branches may run sequentially by default or in parallel only under the
+   existing delegation contract.
+
+Backward feedback propagation is evidence repair, not neural-network training.
+Classify the signal and reopen exactly one nearest responsible gate:
+
+| Feedback signal | Reopen |
+| --- | --- |
+| authority, target, or adapter capability failure | `G0` |
+| corrected goal, scope, constraint, or user intent | `G1` |
+| architecture/project baseline contradiction | `G2` |
+| Greenfield/Brownfield/workflow or impact mismatch | `G3` |
+| technology, configuration, security, performance, test, or document concern gap | `G4` |
+| ecosystem, binding, language, or generated-code ownership gap | `G5` |
+| implementation, assembly, or command-result defect | `G6` |
+
+The Router records the failed expectation, observed result, evidence, target
+gate, affected artifact IDs, and retry count. It marks only transitively
+dependent outputs stale, preserves unaffected branches, appends
+`feedback_emitted`, `artifact_invalidated`, and `gate_reopened` events, then
+runs a new forward pass from the target gate. It must not silently change an
+accepted requirement, ADR, approval, or user-owned trade-off. Escalate after
+three unresolved feedback attempts for the same material issue, or earlier
+when no new evidence exists or authority is required.
 
 For a harness-maintenance request, keep steps 1–5 (including clarification),
 then use this branch:
@@ -254,11 +356,51 @@ Before changing an existing project, record:
 [ ] affected UC, REQ/FR, NFR/QAS, API/data contracts
 [ ] affected modules, tests, docs, CI, and operational paths
 [ ] dependency, schema, migration, security, and performance signals
+[ ] runtimes, libraries, frameworks, protocols, platforms, simulators, build tools, versions, bindings, generated-code owners, and integration relationships
 [ ] configuration keys, sources, precedence, hardcoding, secrets, compatibility, and rollback
 [ ] extend/new/mixed decision with evidence
 ```
 
 No material file mutation occurs until the impact record is written.
+
+## Technology and language assembly rule
+
+Use `technology-selection-and-integration` after the architecture and
+Greenfield/Brownfield baseline when a technology is mandated, detected, being
+compared, adopted, replaced, upgraded, or materially integrated. Classify one
+primary kind (`runtime`, `library`, `framework`, `protocol`, `platform`, or
+`tool`), secondary roles, domains, lifecycle scope, and one selection status.
+Derive required capabilities before comparing products. Record every
+relationship as `required`, `recommended`, `optional`, `detected`, or
+`incompatible` with evidence and a condition.
+
+The Router resolves an ecosystem skill only for a selected/mandated technology
+or a detected technology materially affected by the task. Ecosystem skills own
+domain architecture and established practice; `language-engineering` owns
+idiomatic authored implementation. Load one language profile per changed
+implementation boundary, multiple only for genuinely mixed authored code or a
+direct HTML/CSS public boundary. Never hand-edit generated interface/client
+output. Configuration remains a separate conditional contract.
+
+Initial ecosystem routes are:
+
+```text
+ROS 2 -> ros2-engineering -> C++/Python as detected -> optional colcon/MoveIt/Isaac/Modbus/gRPC
+Node.js -> nodejs-engineering -> TypeScript/JavaScript
+React -> react-engineering -> TypeScript/JavaScript + direct HTML/CSS boundaries
+gRPC -> grpc-engineering -> actual producer/consumer languages
+Isaac Lab -> isaac-lab-engineering -> Python -> required compatible Isaac Sim runtime
+Docker -> docker-engineering -> contained application + authored Shell
+Isaac Sim -> isaac-sim-engineering -> Python/C++ as detected
+MoveIt 2 -> moveit-engineering -> ROS 2 -> C++/Python as detected
+Kubernetes -> kubernetes-engineering -> application/operator languages only when changed
+Modbus -> modbus-engineering -> selected binding language
+colcon -> colcon-workspace-engineering -> affected package languages
+```
+
+These arrows describe skill dependency, not automatic product adoption. React
+does not imply a Node.js production server; Docker does not imply Kubernetes;
+ROS 2 does not imply MoveIt/Isaac; and Modbus does not imply a specific bridge.
 
 ## Configuration assembly rule
 
@@ -267,7 +409,13 @@ Configuration does not add a state-machine stage. During assembly/design, use
 build-, deployment-, runtime-, environment-, or secret-dependent values. The
 skill first separates code constants from build/deploy/runtime/secret values,
 then defines a typed configuration contract and loads only the applicable
-C++, Rust, Java, Python, or common fallback reference.
+C++, Rust, Java, Python, TypeScript/JavaScript, Go, Shell, HTML, CSS, or common
+fallback reference. Select one primary implementation-language reference per
+configuration producer; add the HTML/CSS boundary reference only when a public
+bootstrap artifact or theme/token output is directly affected. Before adding a
+tool, compare popularity only within the same ecosystem and function, then
+review project conventions, maintenance, license, security, compatibility,
+transitive dependencies, and migration cost.
 
 For Greenfield work, establish sources, precedence, safe defaults, ownership,
 validation, secret handling, documentation, and tests before implementing the

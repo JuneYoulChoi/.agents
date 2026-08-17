@@ -10,6 +10,13 @@ record an override in `.agents/overrides/` before routing work.
 | run | One attempt to progress a task; a resumed task may have multiple runs |
 | stage | One named state-machine step such as `impact` or `verification` |
 | Router | The accountable coordinator that classifies, selects, transitions, and reports |
+| layered gated skill graph | The `G0`–`G7` deterministic routing DAG that evaluates tree-classified evidence and may activate several skill branches |
+| gate | One routing layer that consumes multiple evidence/artifact inputs and emits activated, candidate, suppressed, or blocked branches plus typed outputs |
+| activation | Evidence-backed selection of a branch whose approved skill body may be loaded |
+| suppression | An explicit decision not to activate a candidate or adjacent branch, with reason and evidence |
+| forward pass | Ordered evaluation from guard through verification, joining required predecessor outputs |
+| backward feedback propagation | Bounded repair that reopens the nearest responsible gate, invalidates only dependent descendants, and starts a new forward revision; it is not learned-weight training |
+| forward revision | Immutable version of one gate-network evaluation pass for a task |
 | skill | A progressively loaded procedure with instructions/resources and a result contract |
 | agent/delegate | A bounded worker invoked for independent analysis or mutation |
 | evaluator | A reviewer that checks a pinned acceptance contract independently |
@@ -34,6 +41,13 @@ record an override in `.agents/overrides/` before routing work.
 | NFR | Non-functional requirement, such as latency, availability, privacy, or security |
 | configuration candidate | A value examined for classification as a code constant, build-time, deploy-time, runtime, or secret setting; it is not automatically externalized |
 | configuration contract | The typed keys, sources, precedence, validation, ownership, compatibility, redaction, tests, and documentation governing application settings |
+| technology ecosystem | A runtime, library, framework, protocol, platform, simulator, middleware, build tool, or orchestration system with its own architecture and engineering rules |
+| primary technology kind | Exactly one deterministic classification: runtime, library, framework, protocol, platform, or tool |
+| ecosystem engineering skill | An approved skill containing professional architecture, structure, rule, anti-pattern, integration, and verification practices for one technology ecosystem |
+| technology status | required_by_user, detected_existing, candidate, selected, rejected, not_applicable, or prohibited |
+| technology relationship | A required, recommended, optional, detected, or incompatible integration edge with condition and evidence |
+| implementation profile | The `IMPL-*` record connecting a module and ecosystem binding to exactly the changed authored language profiles, toolchain, ownership, and verification |
+| generated code | Tool-owned output regenerated from an authoritative schema/model; it is not hand-edited as ordinary source |
 | QAS | Quality-attribute scenario: stimulus, context, response, and measurable response measure |
 | QA | Quality assurance/testing activity; do not use it as a quality-attribute abbreviation |
 | source of truth | The artifact that wins when project evidence conflicts; default hierarchy is in the implementation guide |

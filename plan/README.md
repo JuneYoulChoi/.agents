@@ -17,6 +17,18 @@ managed root instruction files and `.agents/harness.json`. The target config
 pins source/template revisions, registry order, state containment, and
 enforcement capability. It is not task state and cannot grant skill trust.
 
+Skill selection uses the deterministic `G0`–`G7` manifest in
+`registry/routing-gates.json`: the taxonomy is hierarchical, gates accept and
+emit multiple branches, and bounded backward feedback reopens only the nearest
+responsible gate. This is an explainable routing graph, not a trained neural
+model.
+
+An optional, dependency-free reference Router, fixed-stage Runner, target-local
+State store, Validator, conflict-safe Bootstrap installer, and replaceable
+fixture driver live in `scripts/`; executable scenarios live in `fixtures/`
+and focused runtime checks in `tests/`. Their JSON protocol is portable and
+does not make Python a target-project or adapter requirement.
+
 ## For an implementer
 
 1. [00-operating-model.md](00-operating-model.md) — purpose, rules, sequence.

@@ -31,7 +31,7 @@ reviewed and adapted skills may be promoted to `skills/`.
    external actions, deployment, data mutation, cost, credential access, or
    destructive operations.
 6. **Keep traceability.** For material work maintain
-   `GOAL -> REQ/FR -> NFR/QAS -> ADR -> CONFIG -> TASK -> TEST -> DOC` as
+   `GOAL -> REQ/FR -> NFR/QAS -> ADR -> TECH -> IMPL -> CONFIG -> TASK -> TEST -> DOC` as
    applicable.
 7. **Detect and repair documentation gaps.** If a required document is absent
    or stale, create/update the smallest fit-for-purpose record when purpose and
@@ -84,6 +84,36 @@ and `handoff`. Their inputs, outputs, guards, fallbacks, and examples are define
 in [02-implementation-guide.md](02-implementation-guide.md) and the machine
 contracts in [03-contracts-and-fixtures.md](03-contracts-and-fixtures.md).
 
+### Layered gated skill graph
+
+The lifecycle above remains the durable state machine. Skill selection within
+it uses a smaller `G0`–`G7` layered gated graph defined by
+`registry/routing-gates.json`:
+
+```text
+G0 guard -> G1 intake -> G2 baseline -> G3 workflow
+         -> G4 concern -> G5 specialist -> G6 assembly/execution
+         -> G7 verification/handoff
+```
+
+The classification taxonomy is a tree, but a request may activate several
+branches. Each gate therefore accepts multiple evidence/artifact inputs and may
+emit multiple activated skills, candidates, suppressions, blockers, questions,
+and output artifacts. The Router evaluates only `all_of`, `any_of`, and
+`none_of` conditions, records the evidence for every activation or suppression,
+and loads only activated skill bodies. There are no learned weights, hidden
+scores, or runtime training; the neural-network analogy describes layered
+multi-input/multi-output gating, not an opaque machine-learning model.
+
+The forward pass evaluates gates in order and topologically joins their
+outputs. A backward feedback propagation pass occurs when verification, new
+evidence, a user correction, or a capability change invalidates an earlier
+output. The Router targets the nearest responsible gate, marks only dependent
+downstream artifacts stale, appends an event, and recomputes only the affected
+descendants. It never rewrites user intent or accepted decisions as if they
+were trainable parameters. Three feedback attempts without new resolving
+evidence, or any material authority/value decision, escalates to the user.
+
 ### 1. Intake and classification
 
 Classify every request across these axes:
@@ -92,7 +122,7 @@ Classify every request across these axes:
 classification:
   session_scope: software_engineering | software_related | general_information | decision_support | creative | non_engineering
   project_state: greenfield | brownfield | hybrid | unknown | not_applicable
-  fields: [idea, requirements, architecture, ui_ux, frontend, backend, api, database, data, ai_ml, security, privacy, configuration, implementation, testing, documentation, performance, devops_release, operations, research, compliance]
+  fields: [idea, requirements, architecture, ui_ux, frontend, backend, api, database, data, ai_ml, robotics, simulation, industrial_integration, technology_selection, security, privacy, configuration, implementation, testing, documentation, performance, devops_release, operations, research, compliance]
   field_registry: registry/taxonomy.json
   action: investigate | define | plan | design | implement | change | verify | review | document | approve | handoff
   risk: low | medium | high
@@ -155,6 +185,13 @@ Each invoked skill must yield: classification changes, evidence, artifacts,
 assumptions/open points, validation requirements, and a `transition` to the
 next decision.
 
+Workflow assembly is the forward pass through `G3`–`G6`. One primary workflow
+may produce several conditional concern and specialist branches. For example,
+a Brownfield ROS 2 C++ API change may activate Brownfield impact, technology,
+ROS 2, C++, configuration, testing, and documentation while explicitly
+suppressing MoveIt, Isaac, or Kubernetes when their trigger evidence is absent.
+Branch count alone never raises depth or authorizes parallel agents.
+
 The portable core defines a versioned skill manifest: `id`, `version`,
 capabilities, inputs, outputs, required resources, dependencies, compatibility,
 trust status, and transition contract. Platform adapters translate that core to
@@ -192,6 +229,25 @@ environment-specific values, workflow assembly selects
 `configuration-and-environment-management`. The skill classifies code/build/
 deploy/runtime/secret values, preserves language and framework conventions,
 and loads only the matching language reference.
+
+Technology selection and ecosystem engineering are also conditional assembly
+concerns, not lifecycle stages. A runtime, library, framework, protocol,
+platform, simulator, middleware, or build/orchestration tool is first recorded
+as `required_by_user`, `detected_existing`, or `candidate`; mention, popularity,
+or installation does not make it selected. `technology-selection-and-integration`
+maps UC/FA/QAS capabilities to one primary technology kind, secondary roles,
+version/binding compatibility, alternatives, and an integration graph. Material
+adoption or replacement requires an ADR and authority.
+
+Only selected or materially affected ecosystems load their professional
+engineering skills. The initial set covers ROS 2, Node.js, React, gRPC, Isaac
+Lab, Docker, Isaac Sim, MoveIt, Kubernetes, Modbus, and colcon. Each ecosystem
+skill defines widely used architecture, structure, rules, anti-patterns,
+configuration surfaces, language bindings, and verification. It then invokes
+`language-engineering` only for changed authored C, C++, C#, Rust, Go, Java,
+Python, JavaScript, TypeScript, HTML, CSS, or Shell boundaries. Generated code
+remains owned by its schema/toolchain. This preserves progressive disclosure
+and prevents an adjacent technology from being inferred automatically.
 
 ### Harness-maintenance path
 
@@ -360,3 +416,11 @@ before multi-agent mutation is enabled.
 7. Run all fixtures and cross-platform invariants. Promote only after the
    measurable exit criteria in [03-contracts-and-fixtures.md](03-contracts-and-fixtures.md)
    pass; keep a rollback path to the single-Router MVP.
+
+The current reference subset implements a deterministic Router, fixed-stage
+Runner, target-local atomic State store, contract Validator, separate-root
+Bootstrap installer, thin Codex/Claude wrapper bridge, and the bounded fixture
+families selected in the machine contract. Natural-language intake and actual
+`SKILL.md` performance remain platform-agent responsibilities. Native lifecycle
+hooks, autonomous external actions, arbitrary workflow plugins, and a full
+Cartesian environment matrix are intentionally outside this subset.

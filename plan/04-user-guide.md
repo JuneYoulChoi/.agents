@@ -41,18 +41,87 @@ If a target baseline is missing or stale, the harness may produce a code-derived
 draft and ask the user to confirm UC, FA, QA, external-interface, or module
 boundaries before material implementation.
 
+When a request names or touches ROS 2, Node.js, React, gRPC, Isaac Lab, Docker,
+Isaac Sim, MoveIt, Kubernetes, Modbus, colcon, or another ecosystem, the harness
+does not activate every adjacent technology. It first records whether each one
+is mandated, already present, only a candidate, selected, rejected, or not
+applicable. It derives required capabilities from UC/FA/QA, checks version and
+binding compatibility, records integration relationships and material ADRs,
+then loads only the affected professional engineering skill.
+
+Those ecosystem skills contain the widely used architecture, structure,
+design rules, anti-patterns, configuration surfaces, testing, debugging,
+performance, security, and Brownfield migration practices for that technology.
+For actual code, the harness additionally loads only the changed implementation
+language profiles: C, C++, C#, Rust, Go, Java, Python, JavaScript, TypeScript,
+HTML, CSS, or Shell. Generated interface/client code remains generator-owned.
+Examples do not choose a language or platform on the user's behalf.
+
 When software contains IPs, hosts, ports, URLs, paths, timeouts, retries, pool
 sizes, feature flags, credentials, profiles, environment variables, or config
 files, the harness also checks whether they are code constants, build settings,
 deploy/runtime settings, or secrets. It externalizes only justified values,
 keeps existing project conventions where safe, and loads the matching C++,
-Rust, Java, Python, or common guidance. The user is asked when a default,
+Rust, Java, Python, TypeScript/JavaScript, Go, Shell, HTML, CSS, or common
+guidance. HTML and CSS guidance covers only public client bootstrap values and
+theme/design-token boundaries; it never treats a browser artifact as a secret
+store. Tool popularity is compared only within one ecosystem and function and
+does not automatically approve a dependency. The user is asked when a default,
 precedence, compatibility window, or secret source is a product/operations
 decision.
 
 If a decision is needed, the user receives facts, options, recommendation, and
 safe default. Answer with a choice or correct the assumptions. Silence is not
 treated as approval for a material decision.
+
+### How a complex request selects several skills
+
+The classification categories form a tree, but routing uses layered gates. One
+request can therefore activate several evidence-backed branches without
+loading every skill. The user-facing summary shows activated and important
+suppressed branches with reasons. For example, a Brownfield ROS 2 C++ request
+that adds gRPC, a configurable port, Docker packaging, tests, and documentation
+activates those exact concerns; it suppresses MoveIt, Isaac, Kubernetes, or
+colcon unless their own project evidence requires them.
+
+If a later check fails, the Router sends a bounded feedback signal to the
+nearest responsible gate and reruns only the affected descendants. A bad port
+validation returns to the configuration concern; a changed UC returns to the
+architecture baseline; a permission loss returns to the global guard. This is
+called backward feedback propagation. It never silently changes the user's
+goal, accepted decision, or approval, and three unresolved attempts escalate
+instead of looping.
+
+Harness maintainers can check this routing behavior with the fixture runner.
+A fixture is a saved example request plus its expected gates and outputs; it
+tests the harness, not the application being developed. From the harness root,
+`python3 -B scripts/fixture_runner.py` runs the optional reference provider.
+Another adapter can be tested through `--adapter-command`, so ordinary target
+projects do not need Python.
+
+### Reference runtime for a target project
+
+The optional reference provider installs only thin wrappers and portable
+configuration into an existing target that is separate from the shared harness
+source:
+
+```sh
+python3 -B scripts/harness_bootstrap.py install \
+  --target-root /path/to/project --adapter codex
+```
+
+Codex or Claude performs the natural-language intake; users do not author the
+JSON by hand. The adapter validates that intake and starts a task with
+`harness_runner.py`. The Runner returns one reviewed `next` skill, retains the
+goal, success criteria, classification, architecture-first order, artifacts,
+and evidence in `<project>/.agents/state/<task-id>/`, and advances only after a
+matching revisioned result is submitted. `status` or `next` reconstructs the
+same step in a later session.
+
+An unreadable or copied task state is preserved and rejected; the runtime does
+not guess a repair. This is a small fail-safe for interrupted writes or manual
+edits, not an autonomous recovery system. A valid hook or task-scoped manual
+guard is required before durable state or material execution.
 
 ## Common user commands
 
@@ -195,7 +264,10 @@ The final response must state:
 - which requirements and acceptance criteria were addressed;
 - tests/checks run and their results;
 - documents updated or intentionally not created;
+- selected/detected technologies, compatibility and integration decisions, and the ecosystem rules applied when changed;
+- implementation languages/bindings, generated-code ownership, and language checks when code changed;
 - configuration sources, precedence, validation, and secret handling when changed;
+- activated and materially suppressed routing branches, plus any backward feedback and recomputed artifacts;
 - assumptions, waivers, and residual risks;
 - the next action, if any.
 
@@ -208,6 +280,10 @@ If a session ends unexpectedly, start a new session in the same project and say
 `handoff.md`. If state is corrupt, it preserves the original, reports the
 repair path, and does not guess a new state. If you want to abandon the task,
 say `Cancel TASK-<id> because <reason>`.
+
+Gate results are immutable history. A resumed run continues from the latest
+forward revision and pending feedback record rather than relying on the prior
+conversation or recomputing unaffected branches.
 
 ## Safe answers to common questions
 

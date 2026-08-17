@@ -106,8 +106,54 @@ body concise and put large references/scripts in named resources. It MUST NOT
 assume a project-specific path, cloud account, secret, or framework unless the
 manifest declares that requirement.
 
+`registry/routing-gates.json` assigns active skills to one primary `G0`–`G7`
+gate. The manifest is deliberately small: it defines gate inputs/outputs,
+approved skill placement, deterministic forward edges, and bounded feedback
+targets. Do not add a general rule language, learned weights, environment-
+specific constants, or a skill for every possible combination. The Router
+loads a body only after activation and records suppression for materially
+plausible adjacent skills. A gate or skill update that changes predecessor,
+join, feedback, or invalidation behavior requires F-017 coverage.
+
+Skills emit typed results; they do not directly retrain or rewrite routing
+policy. New evidence may produce a backward feedback record, but only the
+Router may reopen a gate and it must preserve immutable prior results and
+unaffected branches. A recurring material failure is escalated after the
+bounded retry budget rather than encoded as an implicit preference.
+
 Cross-language skills keep one language-neutral contract in `SKILL.md` and
 load only the detected ecosystem reference. A reference may describe an
-established C++, Rust, Java, Python, or framework mechanism, but it cannot make
-that dependency mandatory, bypass project conventions, or skip dependency,
-license, security, compatibility, and approval review.
+established C++, Rust, Java, Python, TypeScript/JavaScript, Go, Shell, HTML,
+CSS, or framework mechanism, but it cannot make that dependency mandatory,
+bypass project conventions, or skip dependency, license, security,
+compatibility, and approval review. HTML and CSS are public artifact boundaries,
+not secret-bearing runtime configuration languages.
+
+Technology ecosystem skills use one approved `SKILL.md` per ecosystem and keep
+detailed, version-sensitive practice in directly linked references. They MUST
+require intake, architecture, and Greenfield/Brownfield evidence; define
+professional architecture/structure/rules/anti-patterns; declare language and
+adjacent-skill relationships; separate authored from generated code; expose
+configuration surfaces; require ecosystem-specific verification and documents;
+and return a transition. They MUST NOT infer an adjacent product (for example
+Docker to Kubernetes or ROS 2 to MoveIt), install a dependency, or treat a CLI
+probe as adoption authority.
+
+`technology-selection-and-integration` owns product-neutral classification,
+capability mapping, selection status, compatibility, relationship graph, and
+ADR/approval routing. `language-engineering` owns idiomatic implementation
+profiles for changed authored boundaries. An ecosystem skill may override a
+generic language recommendation only where an official binding/lifecycle/
+serialization/real-time contract requires it; the conflict and evidence remain
+recorded. Detailed references are reviewed against version-matched official
+specifications/documentation first, then official examples and maintained
+project conventions, then reviewed widely adopted community practice.
+
+Popularity evidence is advisory and role-specific. Record the source URL,
+metric type, measurement window, review date, count or rank, applicability,
+owner, and revisit trigger. Compare only candidates serving the same function
+inside the same ecosystem; npm downloads, Homebrew installs, Go importer counts,
+GitHub stars, and catalog ranks are not interchangeable. A maintained, safe,
+compatible project convention wins unless an approved decision documents why a
+change is needed. A popularity result never grants dependency, network, or
+execution authority.

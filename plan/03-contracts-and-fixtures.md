@@ -37,7 +37,7 @@ Minimal `state.json`:
     "action": "change",
     "risk": "medium",
     "depth": "standard",
-    "confidence": 0.92,
+    "confidence": "high",
     "evidence_ids": ["EVD-001"]
   },
   "intent": {
@@ -45,6 +45,24 @@ Minimal `state.json`:
     "success_criteria": ["Existing clients remain compatible"],
     "constraints": [],
     "confirmed_by_user": true
+  },
+  "gate_network": {
+    "model": "layered_gated_skill_graph",
+    "forward_revision": 1,
+    "evaluated_gate_ids": ["G0", "G1", "G2", "G3"],
+    "active_skill_ids": ["core.brownfield-impact-analysis"],
+    "pending_feedback_ids": []
+  },
+  "execution": {
+    "queue": ["core.brownfield-impact-analysis", "core.verify-and-handoff"],
+    "cursor": 0,
+    "skill_stages": {
+      "core.brownfield-impact-analysis": "impact",
+      "core.verify-and-handoff": "verification"
+    },
+    "results": [],
+    "artifact_ids": [],
+    "evidence_ids": []
   },
   "pending_question": null,
   "open_issue_ids": ["ISSUE-001"],
@@ -83,6 +101,16 @@ The validator MUST enforce these invariants:
 11. A state read requires matching target-root and harness-root fingerprints,
     source revision, and selected adapter. A mismatch is `blocked` or `failed`
     and is never merged into the current task.
+12. A gate result references one immutable input revision and records a reason
+    and evidence for every activated, candidate, suppressed, or blocked branch.
+13. Forward gate edges are acyclic. A backward feedback signal creates a new
+    forward revision; it never mutates a prior gate result in place.
+14. Reopening a gate marks only transitively dependent artifacts stale and
+    preserves independent valid branches. An accepted requirement, ADR,
+    approval, or user decision changes only through its own authorized event.
+15. Three unresolved feedback attempts for one material issue require
+    `waiting_user`, `blocked`, or an authorized defer/waiver; the Router cannot
+    loop indefinitely.
 
 ## Event contract
 
@@ -111,9 +139,11 @@ Every line of `events.ndjson` is one JSON object:
 
 Supported event types are `task_created`, `classification_recorded`,
 `question_asked`, `question_answered`, `evidence_added`, `artifact_written`,
-`skill_selected`, `delegate_started`, `delegate_finished`, `action_requested`,
-`action_approved`, `action_executed`, `validation_recorded`,
-`state_transition`, `handoff_written`, `task_cancelled`, and `error_recorded`.
+`skill_selected`, `gate_evaluated`, `feedback_emitted`,
+`artifact_invalidated`, `gate_reopened`, `delegate_started`,
+`delegate_finished`, `action_requested`, `action_approved`, `action_executed`,
+`skill_result_recorded`, `validation_recorded`, `state_transition`, `handoff_written`,
+`task_cancelled`, and `error_recorded`.
 
 ## Skill manifest contract
 
@@ -170,6 +200,87 @@ license, complete skill reading, dependency review, and a reviewer record.
 `status` is one of `completed`, `not_applicable`, `blocked`, or `failed`.
 Failed or blocked results must include an error and recovery action. A skill
 cannot mark the whole task complete.
+
+## Gate result contract
+
+Every `G0`–`G7` evaluation produces one immutable result. The taxonomy may be a
+tree, but one result can activate several branches:
+
+```json
+{
+  "gate_result_id": "GATE-005",
+  "schema_version": 1,
+  "gate_id": "G5",
+  "forward_revision": 2,
+  "input_state_revision": 11,
+  "input_artifact_ids": ["TECH-001", "IMPACT-001"],
+  "activated": ["core.ros2-engineering", "core.grpc-engineering", "core.language-engineering"],
+  "candidates": [],
+  "suppressed": [
+    {"skill_id": "core.moveit-engineering", "reason": "motion_planning_not_in_scope", "evidence_ids": ["EVD-040"]}
+  ],
+  "blocked": [],
+  "questions": [],
+  "output_artifact_ids": ["IMPL-001"],
+  "evidence_ids": ["EVD-040", "EVD-041"],
+  "status": "passed"
+}
+```
+
+`status` is `passed`, `waiting_user`, `blocked`, or `failed`. Every branch must
+appear in at most one activation state. `activated` entries must resolve through
+the approved registry and satisfy predecessor gates; `incoming`, deprecated,
+failed-integrity, adjacent-but-unevidenced, or cyclic dependencies are rejected.
+The Router loads only activated skill bodies. Numeric confidence may describe
+classification evidence but never acts as an undocumented learned weight.
+
+### Reference Router transport
+
+The executable reference provider accepts a JSON object using
+`schema_version`, `request_id`, `target`, `scope`, `project_state`, `action`,
+`enforcement_mode`, architecture status, fields, languages, technologies,
+configuration candidates, evidence, artifacts, and optional feedback. It emits
+one JSON object with status, forward revision, `G0`–`G7` evaluation results,
+activated and suppressed skills, feedback results, and event projections.
+This projection is not a replacement for the durable task-state/event store;
+an adapter enriches accepted projections with the IDs, input revisions, locks,
+and timestamps required by the persistent contracts above.
+
+The file transport is deliberately small: a conforming adapter accepts
+`--input <path> --output <path>`. The reference fixture runner injects any such
+command with `--adapter-command`, so the Core does not depend on Python or a
+specific executable layout.
+
+## Backward feedback contract
+
+Verification, a user correction, new evidence, or capability loss may emit a
+bounded signal to the nearest responsible gate:
+
+```json
+{
+  "feedback_id": "FDB-001",
+  "schema_version": 1,
+  "source_gate": "G7",
+  "target_gate": "G4",
+  "kind": "technology_configuration_or_cross_cutting_gap",
+  "issue_id": "ISSUE-020",
+  "expected": "Configured port is validated before startup",
+  "actual": "Invalid port reached the runtime binder",
+  "evidence_ids": ["EVD-090"],
+  "invalidated_artifact_ids": ["CONFIG-001", "IMPL-001", "TEST-020"],
+  "preserved_artifact_ids": ["INTENT-001", "ARCH-001", "IMPACT-001"],
+  "attempt": 1,
+  "requires_user": false,
+  "next_forward_revision": 3
+}
+```
+
+Allowed targets and signal kinds are defined in
+`registry/routing-gates.json`. A signal invalidates descendants through typed
+trace links, not file-name guessing. It cannot alter user intent, an accepted
+decision, approval, or unrelated branch. If the nearest cause is uncertain,
+the Router records candidates and returns to discovery or asks the user rather
+than broadcasting feedback to every gate.
 
 ## Issue ledger and deliberation contract
 
@@ -269,8 +380,9 @@ risk. `not_run` is never equivalent to `passed`.
 
 ## Traceability contract
 
-Use typed IDs: `GOAL-*`, `REQ-*`, `FR-*`, `NFR-*`, `QAS-*`, `ADR-*`, `TASK-*`,
-`CONFIG-*`, `CODE-*`, `TEST-*`, `DOC-*`, and `EVD-*`. Relations are:
+Use typed IDs: `GOAL-*`, `REQ-*`, `FR-*`, `NFR-*`, `QAS-*`, `ADR-*`, `TECH-*`,
+`IMPL-*`, `TASK-*`, `CONFIG-*`, `CODE-*`, `TEST-*`, `DOC-*`, and `EVD-*`.
+Relations are:
 
 ```text
 defines, refines, constrains, decides, implements, verifies, documents,
@@ -282,6 +394,78 @@ no verification, and documents that claim a changed API without an API
 artifact. Light work may use a compact `TASK -> TEST` link; standard and deep
 work require all applicable links and an explicit waiver for omitted entities.
 
+## Technology artifact contract
+
+Use a `TECH-*` artifact when a material task selects, mandates, detects,
+replaces, upgrades, rejects, prohibits, or integrates a technology ecosystem:
+
+```json
+{
+  "technology_id": "TECH-001",
+  "name": "ros2",
+  "primary_kind": "platform",
+  "secondary_roles": ["middleware", "framework"],
+  "domains": ["robotics"],
+  "lifecycle_scope": ["build", "runtime", "integration", "operate"],
+  "selection_status": "selected",
+  "purpose": "robot component communication",
+  "required_capabilities": ["publish_subscribe", "request_response", "long_running_action"],
+  "project_evidence": ["EVD-TECH-001"],
+  "version_policy": "project pinned distribution and support window",
+  "compatibility": {"os": [], "architecture": [], "language": [], "runtime": [], "gpu_driver": [], "middleware_protocol": []},
+  "relationships": [{"to": "TECH-002", "type": "optional", "condition": "motion planning in scope", "rationale": "REQ-010", "evidence_ids": ["EVD-TECH-002"]}],
+  "ecosystem_skills": ["ros2-engineering"],
+  "language_bindings": ["rclcpp"],
+  "configuration_surfaces": ["ROS_DOMAIN_ID", "RMW_IMPLEMENTATION"],
+  "alternatives": [],
+  "decision_id": "ADR-010",
+  "verification_profiles": ["TEST-TECH-001"],
+  "documentation_effects": ["DOC-ARCH-001"],
+  "open_issue_ids": []
+}
+```
+
+Allowed primary kinds are `runtime`, `library`, `framework`, `protocol`,
+`platform`, and `tool`. Allowed selection statuses are `required_by_user`,
+`detected_existing`, `candidate`, `selected`, `rejected`, `not_applicable`, and
+`prohibited`. Allowed relationship types are `required`, `recommended`,
+`optional`, `detected`, and `incompatible`. A selected material technology
+requires purpose, evidence, version/binding compatibility, verification, and an
+ADR/approval when adoption or replacement changes architecture/dependencies.
+
+## Implementation-language artifact contract
+
+Use an `IMPL-*` artifact for every materially changed authored implementation
+boundary governed by an ecosystem skill:
+
+```json
+{
+  "implementation_id": "IMPL-001",
+  "module": "robot_controller",
+  "ecosystem_skills": ["ros2-engineering"],
+  "language": "cpp",
+  "language_version": "project detected",
+  "binding": "rclcpp",
+  "profile_loaded": "language-engineering/references/cpp.md",
+  "authored_paths": ["src/controller"],
+  "generated_paths": ["build/generated_interfaces"],
+  "build_toolchain": ["cmake", "colcon"],
+  "conventions": ["project formatter and warning policy"],
+  "error_model": "project result/exception policy",
+  "ownership_and_lifecycle": "node and executor owned",
+  "concurrency_model": "callback groups recorded",
+  "configuration_ids": ["CONFIG-001"],
+  "verification_ids": ["TEST-IMPL-001"],
+  "document_ids": ["DOC-LLD-001"],
+  "open_issue_ids": []
+}
+```
+
+The validator requires exactly the profiles for changed authored boundaries,
+rejects hand-edited generated paths, and reports an ecosystem/binding/language
+combination unsupported by the selected version. Project conventions remain
+the Brownfield default unless a reviewed migration is approved.
+
 ## Configuration artifact contract
 
 Use a `CONFIG-*` artifact when a task externalizes, changes, migrates, or
@@ -292,6 +476,9 @@ materially relies on application configuration:
   "configuration_id": "CONFIG-001",
   "status": "confirmed",
   "language": "rust",
+  "boundary_contexts": [],
+  "references_loaded": ["references/rust.md"],
+  "tool_selection_evidence": [],
   "candidates": [
     {"name": "listener_port", "kind": "runtime", "evidence_ids": ["EVD-030"]}
   ],
@@ -324,7 +511,10 @@ Allowed `kind` values are `code_constant`, `build_time`, `deploy_time`,
 `runtime`, and `secret`. A material setting requires evidence, type, owner,
 source/precedence, validation, tests, and documentation. Secret entries never
 contain the value. Brownfield key removal requires a compatibility/deprecation
-record and rollback.
+record and rollback. `language` is the primary implementation context;
+`boundary_contexts` lists only directly affected HTML/CSS public artifacts.
+`references_loaded` and any `tool_selection_evidence` make progressive loading
+and dependency rationale auditable.
 
 ## Document metadata contract
 
@@ -428,11 +618,14 @@ non-executable by default, and preserve safe permissions on upgrade.
 
 Bootstrap installation is an authorized mutation. Before `.agents/` exists,
 the explicit user bootstrap request or a user-level transaction journal is the
-approval evidence; the installer creates a lock/journal, then atomically
-commits wrappers, config, and hashes with recovery after interruption. Same-
-hash managed files are idempotent. Unknown or edited files are preserved and
-cause an explicit conflict/upgrade request; rollback never discards those
-edits. Copy is the default; a symlink is accepted only if explicitly approved,
+approval evidence. The installer exclusively creates a journal that acts as a
+lock and atomically replaces each new wrapper/config file; a multi-file rename
+is not claimed. A caught failure removes only unchanged files created by that
+transaction. A crash leaves the journal and any partial files in place so the
+next run fails closed for explicit review. Same-hash managed files are
+idempotent. Unknown or edited files are preserved and cause an explicit
+conflict/upgrade request; rollback never discards those edits. Copy is the
+default; a symlink is accepted only if explicitly approved,
 contained, and hash-pinned.
 
 `hook` means deterministic capability checks are available. `manual` means
@@ -463,47 +656,46 @@ resolved over the network.
 
 ## Executable fixture suite
 
-The fixture runner creates a temporary project, runs the Router in a controlled
-mode, and checks state, events, artifacts, and forbidden actions. A fixture
-passes only when every assertion passes.
+The fixture runner creates isolated input/output files, runs the Router adapter
+in a controlled mode, and checks state projections, events, artifacts, and
+forbidden actions. A fixture passes only when every assertion passes. The
+current reference invocation is:
 
-| ID | Input | Required result |
-| --- | --- | --- |
-| F-001 | clear one-line reversible fix | no delegate, no question, `complete`, validation recorded |
-| F-002 | ambiguous product feature | `waiting_user`, bounded question, no mutation |
-| F-003 | Brownfield API change | baseline and impact before edit; regression scope recorded |
-| F-004 | document-only request | document type/purpose/audience recorded; fit-for-purpose artifact |
-| F-005 | Deep design conflict | issue ledger, dissent, convergence or user escalation after budget |
-| F-006 | unauthorized deploy/secret/delete | refused, action event logged, approval request created |
-| F-007 | resume after context reset | new run reconstructs state and next action from files |
-| F-008 | corrupted state/manifest | `failed`, repair guidance, original file preserved |
-| F-009 | delegate timeout/partial result | stale/partial status recorded; safe join or `blocked` |
-| F-010 | `incoming` skill/template request | skill or template not resolved; core fallback or user question |
-| F-011 | non-software request | intake classification only; no invented code workflow |
-| F-012 | concurrent state write | revision conflict is detected and no update is lost |
-| F-013 | harness upgrade/startup request | all `plan/` files, active registry, adapter templates, bootstrap config/schema, and source entrypoints are read first; per-file change classes and approval gate are emitted; no mutation occurs during analysis |
-| F-014 | harness overview request | a self-contained HTML artifact contains required sections, provenance, no network references, and resolving local source links |
-| F-015 | C++/Rust/Java/Python task with hardcoded endpoint, port, timeout, or secret candidate | configuration field selected; candidate classified; existing convention preserved; typed contract, precedence, invalid/missing/boundary and redaction tests, compatibility/docs, and exactly one relevant language reference recorded |
-| B-001 | explicit or unambiguous target root | canonical root selected; conflicting/outside roots, Git errors, accidental harness-root selection, and nonexistent explicit targets are rejected |
-| B-002 | fresh bootstrap install | thin managed wrappers and valid `harness.json` are rendered; no full-plan duplication or network fetch occurs |
-| B-003 | repeat install and edited files | same hashes are idempotent; unknown/user-edited/world-writable/symlink or conflicting parent/child instruction files are preserved or rejected and divergent files require explicit upgrade |
-| B-004 | UTF-8 boundary and placeholders | LF-normalized UTF-8 files (including config) at the exact per-file limit pass; over-limit, BOM/invalid UTF-8, CRLF drift, patch markers, absolute host paths, or unresolved placeholders fail without truncation |
-| B-005 | state containment | target-local state remains under the selected root; missing/read-only/file/broken-symlink, Windows drive/UNC, CWD-outside, and escape paths are rejected; user-level fallback is blocked in MVP |
-| B-006 | enforcement capability | `hook`, `manual`, and `unsupported` record fresh probe evidence; manual requires a valid guard for limited reversible mutation/state writes, unsupported is ephemeral/read-only, and all modes refuse unauthorized high-risk actions |
-| B-007 | source quarantine and registry precedence | incoming/deprecated/unverified/template/symlink sources never resolve; absent approved project source may fall through, malformed/tampered source fails closed, and project/shared/core order remains fixed |
-| B-008 | transaction interruption | pre-install approval/journal, lock/crash/rollback, directory recovery, config self-hash, permissions, and user edits leave no partial managed installation |
-| B-009 | Codex/Claude parity | both adapters produce equivalent routing, root/gate/state/refusal results, including missing Claude plugin/skill mapping |
+```sh
+python3 -B scripts/fixture_runner.py
+```
 
-The MVP exit threshold is 100% pass for F-001, F-002, F-003, F-006, F-007,
-F-008, F-010, and F-011. F-004, F-005, F-009, and F-012 are required before
-their corresponding optional features are enabled. F-013 is required before
-allowing harness mutations; F-014 is required before publishing the overview as
-the current human guide. B-001 through B-009 are required before publishing a
-bootstrap installer or claiming cross-session automatic enforcement. The
-fixture runner itself
-must print fixture ID, pass/fail, expected state, actual state, and artifact
-path.
+This command is an optional provider invocation, not a Core dependency. Use
+`--adapter-command '<native-router>'` to test another implementation. The
+runner prints durable temporary result paths unless an explicit
+`--artifact-dir` is supplied.
 
-F-015 is required before enabling automatic configuration routing. Its four
-language variants must produce the same core `CONFIG-*` semantics while
-allowing language- and framework-specific implementation details.
+| Family | Executable cases | Required result |
+| --- | ---: | --- |
+| `F-017` routing | 4 | composite MIMO selection, architecture conflict, unknown feedback, and third-attempt escalation agree with the gate/feedback contract |
+| `B-CONFLICT` bootstrap | 4 | fresh install, idempotent reinstall, user/edited wrapper preservation, and symlink refusal are deterministic |
+| `C-CONFIG` configuration | 5 | compiled/runtime/Shell/public-web/secret candidates activate the common configuration concern and only affected language/ecosystem branches; invalid secret and port contracts are rejected by unit validation |
+| `T-TECH` technology composition | 6 | all 11 mappings resolve, meaningful robotics/simulation/web/platform/gRPC compositions activate, and unevidenced adjacent technologies remain suppressed |
+| reference runtime unit checks | 6 | ordered architecture-first execution, verified completion/handoff, revision conflict preservation, unreadable-state preservation, secret redaction, and port-bound rules hold |
+
+The intentionally bounded suite is the promotion gate for this reference
+runtime. It avoids the Cartesian product of every language, configuration
+kind, and technology. Coverage is divided by semantic class: one all-mapping
+technology case, representative integration edges, explicit negative adjacency
+cases, and representative configuration boundaries. Add a case only when a new
+rule or regression cannot be represented by an existing class.
+
+The fixture runner must print fixture ID, pass/fail, expected state, actual
+state, and artifact path. Passing `F-017` permits the current deterministic
+Router/backward-invalidation claim. Passing `B-CONFLICT` permits only the
+documented local/separate-root installer behavior; it does not claim lifecycle
+hook enforcement or every platform-native instruction-precedence case.
+`C-CONFIG` and `T-TECH` validate routing and portable contract boundaries, not
+the availability of an external tool, robot, cluster, simulator, or production
+environment.
+
+Unreadable or mismatched task state is handled as a small safety invariant, not
+a separate recovery subsystem or broad fixture family. The state store uses
+atomic replacement, rejects another target-root fingerprint or revision,
+preserves unreadable originals, and reports a blocked recovery action. It does
+not guess or silently repair user-owned task history.

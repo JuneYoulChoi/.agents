@@ -25,6 +25,7 @@ The adapter reports capabilities before routing:
 {
   "platform": "codex",
   "skills": "lazy_or_platform_defined",
+  "gated_routing": "portable_core_or_native_equivalent",
   "subagents": true,
   "worktree_isolation": true,
   "hooks": false,
@@ -94,8 +95,10 @@ The installer uses this policy:
    target collisions;
 3. copy approved templates; do not silently replace unknown or user-edited
    `AGENTS.md`, `CLAUDE.md`, or `harness.json` files;
-4. require an explicit upgrade for divergent managed hashes and apply all
-   changes atomically with a lock and rollback record;
+4. require an explicit upgrade for divergent managed hashes; exclusively
+   create a journal/lock, atomically replace each new file, and roll back only
+   unchanged files created by a caught failed transaction; a crash journal
+   fails closed for explicit review;
 5. normalize LF, validate UTF-8 byte size and placeholder expansion, then
    record rendered hashes; never truncate;
 6. resolve `harness_source.locator` from the adapter installation/bundle root,
@@ -138,11 +141,36 @@ For the same fixture input and project snapshot, both adapters MUST produce:
 - the same user gate for material ambiguity;
 - no resolution of `incoming` skills;
 - the same required artifact IDs and traceability coverage;
+- the same `G0`–`G7` activated/suppressed branches and reasons within the
+  recorded evidence policy;
+- the same backward-feedback target gate, invalidation boundary, retry budget,
+  and preserved independent branches;
 - refusal of the same unauthorized actions;
 - state/event files conforming to the same schema.
 
 Presentation, exact wording, model choice, and platform-specific skill loading
 may differ. Safety, state, and completion semantics may not.
+
+An adapter may use a native Router, but it cannot replace deterministic gate
+conditions with learned weights or hidden ranking. It must emit the portable
+gate-result and feedback contracts and pass F-017. Missing native support uses
+the same sequential core procedure; it does not justify loading every skill.
+The optional `scripts/harness_router.py` provider is a conformance reference,
+not a runtime requirement. The reference `harness_runner.py` orders one skill
+at a time, `harness_state.py` stores target-local revisions/events,
+`harness_validator.py` validates portable contracts, and
+`harness_bootstrap.py` performs conflict-safe local installation. The fixture
+runner can invoke a Codex, Claude, C++, Rust, Go, Java, Shell, or other Router
+and Bootstrap provider through replaceable commands. A platform agent remains
+responsible for natural-language intake and for performing the returned
+`SKILL.md`; the Runner never executes instruction text as shell code.
+
+The selected adapter records a complete intake containing intent, success
+criteria, constraints, risk/depth/confidence, evidence, and a capability or
+manual-guard decision. It then calls `start`, reads exactly one returned
+`next.skill_path`, submits the typed result with the expected revision, and
+uses `status`/`next` to resume. Absolute skill paths may appear in ephemeral
+runtime output but are never written into portable project configuration.
 
 ## Platform capability matrix
 
