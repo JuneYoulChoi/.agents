@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "request_id": "REQ-001",
+  "target": "project",
+  "scope": "software_engineering",
+  "project_state": "brownfield",
+  "action": "change",
+  "risk": "medium",
+  "depth": "standard",
+  "confidence": "high",
+  "intent": {
+    "goal": "Add a configurable gRPC endpoint without changing existing use cases",
+    "success_criteria": ["Existing behavior remains compatible", "Invalid ports are rejected"],
+    "constraints": ["Preserve the current C++ and YAML conventions"]
+  },
+  "enforcement_mode": "manual",
+  "manual_guard_valid": false,
+  "manual_guard": null,
+  "architecture_status": "draft",
+  "fields": ["backend", "api", "configuration", "testing"],
+  "languages": ["cpp"],
+  "technologies": [
+    {
+      "name": "gRPC",
+      "status": "required_by_user",
+      "material": true
+    }
+  ],
+  "configuration_candidates": [
+    {
+      "name": "listen_port",
+      "kind": "port",
+      "source": "yaml"
+    }
+  ],
+  "evidence_ids": [],
+  "artifacts": [],
+  "feedback": []
+}

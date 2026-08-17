@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "id": "C-CONFIG-001-compiled-services",
+  "description": "Compiled service boundaries route host, port, and timeout candidates through the common configuration contract.",
+  "context": {
+    "schema_version": 1,
+    "request_id": "REQ-CONFIG-COMPILED",
+    "target": "project",
+    "scope": "software_engineering",
+    "project_state": "brownfield",
+    "action": "review",
+    "enforcement_mode": "manual",
+    "architecture_status": "accepted",
+    "fields": ["backend", "configuration"],
+    "languages": ["cpp", "rust", "java"],
+    "technologies": [],
+    "configuration_candidates": [
+      {"name": "bind_host", "kind": "host", "source": "yaml"},
+      {"name": "listen_port", "kind": "port", "source": "yaml"},
+      {"name": "request_timeout_ms", "kind": "timeout", "source": "toml"}
+    ],
+    "evidence_ids": ["EV-CONFIG-COMPILED"],
+    "artifacts": [],
+    "feedback": []
+  },
+  "expected": {
+    "status": "active",
+    "activated_skills_contains": [
+      "core.architecture-baseline-and-design",
+      "core.brownfield-impact-analysis",
+      "core.configuration-and-environment-management",
+      "core.language-engineering",
+      "core.verify-and-handoff"
+    ],
+    "gates": {
+      "G4": {
+        "status": "passed",
+        "activated_skills_contains": ["core.configuration-and-environment-management"],
+        "activated_branches_contains": ["configuration"]
+      },
+      "G5": {
+        "status": "passed",
+        "activated_branches_contains": ["cpp", "rust", "java"]
+      }
+    }
+  }
+}

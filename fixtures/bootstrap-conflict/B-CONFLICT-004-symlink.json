@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "fixture_type": "bootstrap",
+  "id": "B-CONFLICT-004-symlink",
+  "description": "A symlink at a managed instruction path is rejected without following or replacing it.",
+  "setup_symlinks": ["AGENTS.md"],
+  "attempts": [
+    {"adapter": "codex"}
+  ],
+  "expected": {
+    "bootstrap_statuses": ["conflict"],
+    "preserved_files": {
+      "AGENTS.md": "<symlink>"
+    }
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "id": "F-017-retry-budget",
+  "description": "A third unresolved material feedback attempt escalates instead of looping.",
+  "context": {
+    "schema_version": 1,
+    "request_id": "REQ-F017-RETRY",
+    "target": "project",
+    "scope": "software_engineering",
+    "project_state": "brownfield",
+    "action": "verify",
+    "enforcement_mode": "manual",
+    "architecture_status": "accepted",
+    "fields": ["testing"],
+    "languages": ["rust"],
+    "technologies": [],
+    "configuration_candidates": [],
+    "evidence_ids": ["EV-TEST-RETRY-003"],
+    "artifacts": [
+      {"id": "IMPL", "depends_on": []},
+      {"id": "TEST", "depends_on": ["IMPL"]}
+    ],
+    "feedback": [
+      {
+        "feedback_id": "FDB-RETRY-003",
+        "source_gate": "G7",
+        "kind": "implementation_or_assembly_defect",
+        "expected": "verification passes",
+        "actual": "the same material defect remains",
+        "evidence_ids": ["EV-TEST-RETRY-003"],
+        "invalidated_root_artifact_ids": ["IMPL"],
+        "attempt": 3
+      }
+    ]
+  },
+  "expected": {
+    "status": "waiting_user",
+    "forward_revision": 1,
+    "activated_skills_contains": [
+      "core.brownfield-impact-analysis",
+      "core.language-engineering",
+      "core.verify-and-handoff"
+    ],
+    "feedback": [
+      {
+        "target_gate": "G6",
+        "requires_user": true,
+        "next_forward_revision": 1,
+        "invalidated_artifact_ids_contains": ["IMPL", "TEST"]
+      }
+    ]
+  }
+}

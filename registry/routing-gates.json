@@ -1,0 +1,142 @@
+{
+  "schema_version": 1,
+  "model": "layered_gated_skill_graph",
+  "evaluation": {
+    "mode": "deterministic",
+    "condition_operators": ["all_of", "any_of", "none_of"],
+    "activation_states": ["activated", "candidate", "suppressed", "blocked"],
+    "learned_weights": false,
+    "load_policy": "metadata_then_activated_skill_only",
+    "feedback_policy": "reopen_nearest_responsible_gate_and_recompute_affected_descendants"
+  },
+  "forward_edges": [
+    ["G0", "G1"],
+    ["G1", "G2"],
+    ["G2", "G3"],
+    ["G3", "G4"],
+    ["G4", "G5"],
+    ["G5", "G6"],
+    ["G6", "G7"]
+  ],
+  "selectors": {
+    "technology_aliases": {
+      "ros 2": "ros2",
+      "ros_2": "ros2",
+      "node": "nodejs",
+      "node.js": "nodejs",
+      "isaac lab": "isaac_lab",
+      "isaac sim": "isaac_sim",
+      "moveit 2": "moveit",
+      "moveit2": "moveit"
+    },
+    "technology_skills": {
+      "ros2": "core.ros2-engineering",
+      "nodejs": "core.nodejs-engineering",
+      "react": "core.react-engineering",
+      "grpc": "core.grpc-engineering",
+      "isaac_lab": "core.isaac-lab-engineering",
+      "docker": "core.docker-engineering",
+      "isaac_sim": "core.isaac-sim-engineering",
+      "moveit": "core.moveit-engineering",
+      "kubernetes": "core.kubernetes-engineering",
+      "modbus": "core.modbus-engineering",
+      "colcon": "core.colcon-workspace-engineering"
+    },
+    "adjacent_technologies": {
+      "ros2": ["moveit", "isaac_lab", "isaac_sim", "modbus", "grpc", "colcon"],
+      "docker": ["kubernetes"],
+      "react": ["nodejs"],
+      "isaac_lab": ["isaac_sim", "kubernetes"],
+      "moveit": ["ros2", "colcon"]
+    }
+  },
+  "gates": [
+    {
+      "id": "G0",
+      "name": "guard",
+      "purpose": "Resolve authority, target, adapter capability, and safe execution mode",
+      "inputs": ["request", "instructions", "task_state", "adapter_capabilities"],
+      "outputs": ["authority", "target_root", "enforcement_mode", "allowed_actions"]
+    },
+    {
+      "id": "G1",
+      "name": "intake",
+      "purpose": "Classify one request across multiple simultaneous fields",
+      "inputs": ["request", "prior_state", "approved_skill_metadata"],
+      "outputs": ["intent", "classification", "questions", "candidate_branches"]
+    },
+    {
+      "id": "G2",
+      "name": "baseline",
+      "purpose": "Establish project and architecture evidence before material routing",
+      "inputs": ["classification", "architecture_documents", "project_evidence"],
+      "outputs": ["architecture_status", "project_state", "impact_candidates", "evidence_gaps"]
+    },
+    {
+      "id": "G3",
+      "name": "workflow",
+      "purpose": "Activate the applicable Greenfield, Brownfield, document, or harness workflow branches",
+      "inputs": ["intent", "project_state", "architecture_status", "action"],
+      "outputs": ["workflow_branches", "required_artifacts", "blocking_decisions"]
+    },
+    {
+      "id": "G4",
+      "name": "concern",
+      "purpose": "Activate cross-cutting concerns supported by evidence",
+      "inputs": ["fields", "impact", "requirements", "configuration_candidates", "technology_candidates"],
+      "outputs": ["technology_selection", "configuration", "testing", "documentation", "security", "performance", "operations"]
+    },
+    {
+      "id": "G5",
+      "name": "specialist",
+      "purpose": "Select only evidenced ecosystem and authored-language skills",
+      "inputs": ["technology_artifacts", "affected_modules", "language_evidence", "generated_code_ownership"],
+      "outputs": ["ecosystem_skills", "language_profiles", "suppressed_adjacent_skills", "compatibility_gaps"]
+    },
+    {
+      "id": "G6",
+      "name": "assembly_execution",
+      "purpose": "Join selected branches, order dependencies, and execute accepted slices",
+      "inputs": ["workflow_results", "concern_results", "specialist_results", "acceptance_contract"],
+      "outputs": ["execution_plan", "changed_artifacts", "command_log", "verification_inputs"]
+    },
+    {
+      "id": "G7",
+      "name": "verification_handoff",
+      "purpose": "Verify the joined result and emit completion or bounded backward feedback",
+      "inputs": ["acceptance_contract", "changed_artifacts", "validation_results", "routing_trace"],
+      "outputs": ["completion_status", "handoff", "feedback_signals", "residual_risk"]
+    }
+  ],
+  "skill_placement": {
+    "G1": ["core.intake-and-route"],
+    "G2": ["core.architecture-baseline-and-design"],
+    "G3": ["core.greenfield-planning", "core.brownfield-impact-analysis", "core.document-purpose", "core.harness-upgrade-analysis"],
+    "G4": ["core.technology-selection-and-integration", "core.configuration-and-environment-management"],
+    "G5": [
+      "core.language-engineering",
+      "core.ros2-engineering",
+      "core.nodejs-engineering",
+      "core.react-engineering",
+      "core.grpc-engineering",
+      "core.isaac-lab-engineering",
+      "core.docker-engineering",
+      "core.isaac-sim-engineering",
+      "core.moveit-engineering",
+      "core.kubernetes-engineering",
+      "core.modbus-engineering",
+      "core.colcon-workspace-engineering"
+    ],
+    "G6": ["core.harness-overview-html"],
+    "G7": ["core.verify-and-handoff"]
+  },
+  "backward_routes": [
+    {"signal": "authority_or_capability_failure", "target_gate": "G0"},
+    {"signal": "intent_scope_or_user_correction", "target_gate": "G1"},
+    {"signal": "architecture_or_project_baseline_conflict", "target_gate": "G2"},
+    {"signal": "workflow_or_impact_mismatch", "target_gate": "G3"},
+    {"signal": "technology_configuration_or_cross_cutting_gap", "target_gate": "G4"},
+    {"signal": "ecosystem_binding_language_or_generated_code_gap", "target_gate": "G5"},
+    {"signal": "implementation_or_assembly_defect", "target_gate": "G6"}
+  ]
+}

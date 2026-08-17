@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "id": "T-TECH-003-simulation-stack",
+  "description": "Isaac Lab and Isaac Sim may compose with Docker while Kubernetes remains suppressed without evidence.",
+  "context": {
+    "schema_version": 1,
+    "request_id": "REQ-TECH-SIM",
+    "target": "project",
+    "scope": "software_engineering",
+    "project_state": "greenfield",
+    "action": "design",
+    "enforcement_mode": "manual",
+    "architecture_status": "accepted",
+    "fields": ["simulation", "ai_ml", "technology_selection"],
+    "languages": ["python"],
+    "technologies": [
+      {"name": "Isaac Lab", "status": "selected", "material": true},
+      {"name": "Isaac Sim", "status": "selected", "material": true},
+      {"name": "Docker", "status": "selected", "material": true}
+    ],
+    "configuration_candidates": [],
+    "evidence_ids": ["EV-TECH-SIM"],
+    "artifacts": [],
+    "feedback": []
+  },
+  "expected": {
+    "status": "active",
+    "activated_skills_contains": [
+      "core.isaac-lab-engineering",
+      "core.isaac-sim-engineering",
+      "core.docker-engineering",
+      "core.language-engineering"
+    ],
+    "suppressed_skills_contains": ["core.kubernetes-engineering"]
+  }
+}

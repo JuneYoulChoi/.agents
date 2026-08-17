@@ -24,6 +24,23 @@
     }
   ],
   "self_hosted_entrypoints": ["AGENTS.md", "CLAUDE.md"],
+  "routing": {
+    "manifest": "registry/routing-gates.json",
+    "model": "layered_gated_skill_graph",
+    "required_fixture": "F-017",
+    "learned_weights": false,
+    "reference_provider": {
+      "required": false,
+      "router": "scripts/harness_router.py",
+      "runner": "scripts/harness_runner.py",
+      "state_store": "scripts/harness_state.py",
+      "validator": "scripts/harness_validator.py",
+      "bootstrap": "scripts/harness_bootstrap.py",
+      "fixture_runner": "scripts/fixture_runner.py",
+      "fixture_root": "fixtures",
+      "transport": "json_files_with_input_output_arguments"
+    }
+  },
   "source_manifest_excludes": [
     ".git",
     "incoming",

@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "fixture_type": "bootstrap",
+  "id": "B-CONFLICT-001-fresh-idempotent",
+  "description": "A fresh install succeeds and an identical second install is idempotent.",
+  "attempts": [
+    {"adapter": "codex"},
+    {"adapter": "codex"}
+  ],
+  "expected": {
+    "bootstrap_statuses": ["installed", "idempotent"],
+    "files_present": ["AGENTS.md", "CLAUDE.md", ".agents/harness.json"]
+  }
+}

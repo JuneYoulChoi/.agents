@@ -10,6 +10,7 @@
     "excluded_paths": [".git", "incoming", "state", ".DS_Store", "docs/.DS_Store", "registry/active-skills.json", "registry/adapter-manifest.json"]
   },
   "resolution_order": ["project_reviewed", "shared_reviewed", "core_fallback"],
+  "routing_manifest": "registry/routing-gates.json",
   "skills": [
     {
       "id": "core.intake-and-route",
@@ -68,10 +69,153 @@
     },
     {
       "id": "core.configuration-and-environment-management",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "entry": "skills/configuration-and-environment-management/SKILL.md",
       "trust": "approved",
-      "capabilities": ["configuration_design", "environment_management", "secret_separation", "configuration_validation", "configuration_migration"],
+      "capabilities": ["configuration_design", "environment_management", "secret_separation", "configuration_validation", "configuration_migration", "ecosystem_tool_selection"],
+      "network_access": "none",
+      "data_access": "workspace",
+      "mutation": "workspace",
+      "platforms": ["codex", "claude"]
+    },
+    {
+      "id": "core.technology-selection-and-integration",
+      "version": "0.1.0",
+      "entry": "skills/technology-selection-and-integration/SKILL.md",
+      "trust": "approved",
+      "capabilities": ["technology_classification", "capability_mapping", "compatibility_analysis", "ecosystem_composition", "technology_decision"],
+      "network_access": "none",
+      "data_access": "workspace",
+      "mutation": "none",
+      "platforms": ["codex", "claude"]
+    },
+    {
+      "id": "core.language-engineering",
+      "version": "0.1.0",
+      "entry": "skills/language-engineering/SKILL.md",
+      "trust": "approved",
+      "capabilities": ["language_detection", "idiomatic_implementation", "binding_integration", "language_verification"],
+      "network_access": "none",
+      "data_access": "workspace",
+      "mutation": "workspace",
+      "platforms": ["codex", "claude"]
+    },
+    {
+      "id": "core.ros2-engineering",
+      "version": "0.1.0",
+      "entry": "skills/ros2-engineering/SKILL.md",
+      "trust": "approved",
+      "capabilities": ["ros2_architecture", "ros2_interfaces", "ros2_qos", "ros2_execution", "ros2_verification"],
+      "network_access": "none",
+      "data_access": "workspace",
+      "mutation": "workspace",
+      "platforms": ["codex", "claude"]
+    },
+    {
+      "id": "core.nodejs-engineering",
+      "version": "0.1.0",
+      "entry": "skills/nodejs-engineering/SKILL.md",
+      "trust": "approved",
+      "capabilities": ["nodejs_architecture", "async_runtime", "process_lifecycle", "nodejs_verification"],
+      "network_access": "none",
+      "data_access": "workspace",
+      "mutation": "workspace",
+      "platforms": ["codex", "claude"]
+    },
+    {
+      "id": "core.react-engineering",
+      "version": "0.1.0",
+      "entry": "skills/react-engineering/SKILL.md",
+      "trust": "approved",
+      "capabilities": ["react_architecture", "component_design", "state_ownership", "accessibility", "react_verification"],
+      "network_access": "none",
+      "data_access": "workspace",
+      "mutation": "workspace",
+      "platforms": ["codex", "claude"]
+    },
+    {
+      "id": "core.grpc-engineering",
+      "version": "0.1.0",
+      "entry": "skills/grpc-engineering/SKILL.md",
+      "trust": "approved",
+      "capabilities": ["grpc_api_design", "protobuf_compatibility", "grpc_resilience", "grpc_verification"],
+      "network_access": "none",
+      "data_access": "workspace",
+      "mutation": "workspace",
+      "platforms": ["codex", "claude"]
+    },
+    {
+      "id": "core.isaac-lab-engineering",
+      "version": "0.1.0",
+      "entry": "skills/isaac-lab-engineering/SKILL.md",
+      "trust": "approved",
+      "capabilities": ["isaac_lab_tasks", "robot_learning", "experiment_reproducibility", "sim_to_real", "isaac_lab_verification"],
+      "network_access": "none",
+      "data_access": "workspace",
+      "mutation": "workspace",
+      "platforms": ["codex", "claude"]
+    },
+    {
+      "id": "core.docker-engineering",
+      "version": "0.1.0",
+      "entry": "skills/docker-engineering/SKILL.md",
+      "trust": "approved",
+      "capabilities": ["container_build", "container_runtime", "compose_design", "image_security", "docker_verification"],
+      "network_access": "none",
+      "data_access": "workspace",
+      "mutation": "workspace",
+      "platforms": ["codex", "claude"]
+    },
+    {
+      "id": "core.isaac-sim-engineering",
+      "version": "0.1.0",
+      "entry": "skills/isaac-sim-engineering/SKILL.md",
+      "trust": "approved",
+      "capabilities": ["isaac_sim_architecture", "usd_assets", "simulation_physics", "sensor_modeling", "simulation_verification"],
+      "network_access": "none",
+      "data_access": "workspace",
+      "mutation": "workspace",
+      "platforms": ["codex", "claude"]
+    },
+    {
+      "id": "core.moveit-engineering",
+      "version": "0.1.0",
+      "entry": "skills/moveit-engineering/SKILL.md",
+      "trust": "approved",
+      "capabilities": ["moveit_architecture", "motion_planning", "planning_scene", "trajectory_execution", "moveit_verification"],
+      "network_access": "none",
+      "data_access": "workspace",
+      "mutation": "workspace",
+      "platforms": ["codex", "claude"]
+    },
+    {
+      "id": "core.kubernetes-engineering",
+      "version": "0.1.0",
+      "entry": "skills/kubernetes-engineering/SKILL.md",
+      "trust": "approved",
+      "capabilities": ["kubernetes_architecture", "workload_design", "cluster_security", "rollout_operations", "kubernetes_verification"],
+      "network_access": "none",
+      "data_access": "workspace",
+      "mutation": "workspace",
+      "platforms": ["codex", "claude"]
+    },
+    {
+      "id": "core.modbus-engineering",
+      "version": "0.1.0",
+      "entry": "skills/modbus-engineering/SKILL.md",
+      "trust": "approved",
+      "capabilities": ["modbus_contract", "register_map", "industrial_transport", "device_interoperability", "modbus_verification"],
+      "network_access": "none",
+      "data_access": "workspace",
+      "mutation": "workspace",
+      "platforms": ["codex", "claude"]
+    },
+    {
+      "id": "core.colcon-workspace-engineering",
+      "version": "0.1.0",
+      "entry": "skills/colcon-workspace-engineering/SKILL.md",
+      "trust": "approved",
+      "capabilities": ["colcon_workspace", "package_graph", "overlay_management", "multi_package_build", "colcon_verification"],
       "network_access": "none",
       "data_access": "workspace",
       "mutation": "workspace",

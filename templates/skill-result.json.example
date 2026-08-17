@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "skill_id": "core.architecture-baseline-and-design",
+  "status": "completed",
+  "artifact_ids": ["ARCH-001"],
+  "evidence_ids": ["EV-ARCH-001"],
+  "transition": {
+    "next_stage": "impact"
+  },
+  "error": null
+}

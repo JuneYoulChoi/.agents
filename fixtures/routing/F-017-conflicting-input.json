@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "id": "F-017-conflicting-input",
+  "description": "Conflicting architecture evidence blocks the baseline gate before mutation.",
+  "context": {
+    "schema_version": 1,
+    "request_id": "REQ-F017-CONFLICT",
+    "target": "project",
+    "scope": "software_engineering",
+    "project_state": "brownfield",
+    "action": "review",
+    "enforcement_mode": "manual",
+    "architecture_status": "conflicted",
+    "fields": ["architecture"],
+    "languages": [],
+    "technologies": [],
+    "configuration_candidates": [],
+    "evidence_ids": ["EV-ARCH-CONFLICT-001"],
+    "artifacts": [],
+    "feedback": []
+  },
+  "expected": {
+    "status": "blocked",
+    "forward_revision": 1,
+    "activated_skills_contains": [
+      "core.intake-and-route",
+      "core.architecture-baseline-and-design",
+      "core.brownfield-impact-analysis",
+      "core.verify-and-handoff"
+    ],
+    "gates": {
+      "G2": {"status": "blocked", "activated_branches_contains": ["conflicted"]}
+    }
+  }
+}

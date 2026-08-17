@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "id": "C-CONFIG-002-runtime-services",
+  "description": "Python, TypeScript, and Go runtime values select one common configuration concern plus detected languages.",
+  "context": {
+    "schema_version": 1,
+    "request_id": "REQ-CONFIG-RUNTIME",
+    "target": "project",
+    "scope": "software_engineering",
+    "project_state": "greenfield",
+    "action": "design",
+    "enforcement_mode": "manual",
+    "architecture_status": "accepted",
+    "fields": ["backend", "configuration"],
+    "languages": ["python", "typescript", "go"],
+    "technologies": [],
+    "configuration_candidates": [
+      {"name": "api_url", "kind": "url", "source": "environment"},
+      {"name": "retry_limit", "kind": "retry", "source": "json"}
+    ],
+    "evidence_ids": ["EV-CONFIG-RUNTIME"],
+    "artifacts": [],
+    "feedback": []
+  },
+  "expected": {
+    "status": "active",
+    "activated_skills_contains": [
+      "core.greenfield-planning",
+      "core.configuration-and-environment-management",
+      "core.language-engineering"
+    ],
+    "gates": {
+      "G5": {
+        "status": "passed",
+        "activated_branches_contains": ["python", "typescript", "go"]
+      }
+    }
+  }
+}

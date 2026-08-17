@@ -1,0 +1,125 @@
+{
+  "schema_version": 1,
+  "id": "F-017-composite",
+  "description": "Brownfield ROS 2 C++ change with gRPC, Docker, configuration, tests, documentation, and two bounded feedback signals.",
+  "context": {
+    "schema_version": 1,
+    "request_id": "REQ-F017-COMPOSITE",
+    "target": "project",
+    "scope": "software_engineering",
+    "project_state": "brownfield",
+    "action": "change",
+    "enforcement_mode": "manual",
+    "manual_guard_valid": true,
+    "architecture_status": "accepted",
+    "fields": ["backend", "api", "configuration", "testing", "documentation", "devops_release"],
+    "languages": ["cpp"],
+    "technologies": [
+      {"name": "ROS 2", "status": "detected_existing", "material": true},
+      {"name": "gRPC", "status": "required_by_user", "material": true},
+      {"name": "Docker", "status": "selected", "material": true}
+    ],
+    "configuration_candidates": [
+      {"name": "grpc_port", "kind": "port", "source": "yaml"}
+    ],
+    "evidence_ids": ["EV-ARCH-001", "EV-CODE-001"],
+    "artifacts": [
+      {"id": "INTENT", "depends_on": []},
+      {"id": "ARCH", "depends_on": ["INTENT"]},
+      {"id": "IMPACT", "depends_on": ["ARCH"]},
+      {"id": "TECH", "depends_on": ["IMPACT"]},
+      {"id": "CONFIG", "depends_on": ["TECH"]},
+      {"id": "IMPL", "depends_on": ["CONFIG"]},
+      {"id": "TEST", "depends_on": ["IMPL"]},
+      {"id": "DOC", "depends_on": ["IMPL"]},
+      {"id": "SECURITY", "depends_on": ["INTENT"]}
+    ],
+    "feedback": [
+      {
+        "feedback_id": "FDB-CONFIG-001",
+        "source_gate": "G7",
+        "kind": "technology_configuration_or_cross_cutting_gap",
+        "expected": "grpc_port rejects values outside 1..65535",
+        "actual": "invalid port was accepted",
+        "evidence_ids": ["EV-TEST-PORT-001"],
+        "invalidated_root_artifact_ids": ["CONFIG"],
+        "attempt": 1
+      },
+      {
+        "feedback_id": "FDB-ARCH-001",
+        "source_gate": "G7",
+        "kind": "architecture_or_project_baseline_conflict",
+        "expected": "existing UC remains unchanged",
+        "actual": "user changed the UC boundary",
+        "evidence_ids": ["EV-USER-UC-002"],
+        "invalidated_root_artifact_ids": ["ARCH"],
+        "attempt": 1
+      }
+    ]
+  },
+  "expected": {
+    "status": "active",
+    "forward_revision": 3,
+    "activated_skills_exact": [
+      "core.intake-and-route",
+      "core.architecture-baseline-and-design",
+      "core.brownfield-impact-analysis",
+      "core.document-purpose",
+      "core.technology-selection-and-integration",
+      "core.configuration-and-environment-management",
+      "core.ros2-engineering",
+      "core.grpc-engineering",
+      "core.docker-engineering",
+      "core.language-engineering",
+      "core.verify-and-handoff"
+    ],
+    "suppressed_skills_contains": [
+      "core.moveit-engineering",
+      "core.isaac-lab-engineering",
+      "core.isaac-sim-engineering",
+      "core.kubernetes-engineering",
+      "core.colcon-workspace-engineering"
+    ],
+    "gates": {
+      "G0": {"status": "passed", "activated_branches_contains": ["manual"]},
+      "G3": {
+        "status": "passed",
+        "activated_skills_contains": ["core.brownfield-impact-analysis", "core.document-purpose"]
+      },
+      "G4": {
+        "status": "passed",
+        "activated_skills_contains": [
+          "core.technology-selection-and-integration",
+          "core.configuration-and-environment-management"
+        ],
+        "activated_branches_contains": ["configuration", "testing", "documentation", "devops_release"]
+      },
+      "G5": {
+        "status": "passed",
+        "activated_skills_contains": [
+          "core.ros2-engineering",
+          "core.grpc-engineering",
+          "core.docker-engineering",
+          "core.language-engineering"
+        ]
+      }
+    },
+    "feedback": [
+      {
+        "target_gate": "G4",
+        "requires_user": false,
+        "next_forward_revision": 2,
+        "invalidated_artifact_ids_contains": ["CONFIG", "IMPL", "TEST", "DOC"],
+        "preserved_artifact_ids_contains": ["INTENT", "ARCH", "IMPACT", "TECH", "SECURITY"]
+      },
+      {
+        "target_gate": "G2",
+        "requires_user": false,
+        "next_forward_revision": 3,
+        "invalidated_artifact_ids_contains": ["ARCH", "IMPACT", "TECH", "CONFIG", "IMPL", "TEST", "DOC"],
+        "preserved_artifact_ids_contains": ["INTENT", "SECURITY"]
+      }
+    ],
+    "event_types_contains": ["gate_evaluated", "feedback_emitted", "artifact_invalidated", "gate_reopened"]
+  }
+}

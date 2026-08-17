@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "id": "C-CONFIG-003-shell-profile",
+  "description": "Shell paths and profiles remain explicit configuration candidates rather than embedded machine paths.",
+  "context": {
+    "schema_version": 1,
+    "request_id": "REQ-CONFIG-SHELL",
+    "target": "project",
+    "scope": "software_related",
+    "project_state": "brownfield",
+    "action": "review",
+    "enforcement_mode": "manual",
+    "architecture_status": "accepted",
+    "fields": ["configuration", "devops_release"],
+    "languages": ["shell"],
+    "technologies": [],
+    "configuration_candidates": [
+      {"name": "toolchain_root", "kind": "path", "source": "environment"},
+      {"name": "build_profile", "kind": "profile", "source": "shell"}
+    ],
+    "evidence_ids": ["EV-CONFIG-SHELL"],
+    "artifacts": [],
+    "feedback": []
+  },
+  "expected": {
+    "status": "active",
+    "activated_skills_contains": [
+      "core.configuration-and-environment-management",
+      "core.language-engineering"
+    ],
+    "gates": {
+      "G4": {"activated_branches_contains": ["configuration", "devops_release"]},
+      "G5": {"activated_branches_contains": ["shell"]}
+    }
+  }
+}

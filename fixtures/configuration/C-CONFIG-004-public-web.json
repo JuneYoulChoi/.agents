@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "id": "C-CONFIG-004-public-web",
+  "description": "Public browser bootstrap and theme values activate HTML, CSS, and TypeScript boundaries without treating them as secret stores.",
+  "context": {
+    "schema_version": 1,
+    "request_id": "REQ-CONFIG-WEB",
+    "target": "project",
+    "scope": "software_engineering",
+    "project_state": "brownfield",
+    "action": "review",
+    "enforcement_mode": "manual",
+    "architecture_status": "accepted",
+    "fields": ["frontend", "configuration"],
+    "languages": ["html", "css", "typescript"],
+    "technologies": [{"name": "React", "status": "detected_existing", "material": true}],
+    "configuration_candidates": [
+      {"name": "public_api_base", "kind": "public_client_url", "source": "json"},
+      {"name": "theme_name", "kind": "design_token", "source": "css"}
+    ],
+    "evidence_ids": ["EV-CONFIG-WEB"],
+    "artifacts": [],
+    "feedback": []
+  },
+  "expected": {
+    "status": "active",
+    "activated_skills_contains": [
+      "core.react-engineering",
+      "core.configuration-and-environment-management",
+      "core.language-engineering"
+    ],
+    "suppressed_skills_contains": ["core.nodejs-engineering"],
+    "gates": {
+      "G5": {"activated_branches_contains": ["html", "css", "typescript"]}
+    }
+  }
+}

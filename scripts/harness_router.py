@@ -1,0 +1,418 @@
+#!/usr/bin/env python3
+"""Dependency-free reference provider for the portable gated Router contract."""
+
+from __future__ import annotations
+
+import argparse
+import json
+import sys
+from collections import deque
+from pathlib import Path
+from typing import Any
+
+
+SELECTED_TECH_STATUSES = {"required_by_user", "detected_existing", "selected"}
+
+
+class RouterError(ValueError):
+    """Raised when the portable input or manifest contract is invalid."""
+
+
+def _read_json(path: Path | None) -> dict[str, Any]:
+    try:
+        if path is None:
+            value = json.load(sys.stdin)
+        else:
+            value = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise RouterError(f"cannot read JSON input: {exc}") from exc
+    if not isinstance(value, dict):
+        raise RouterError("input must be a JSON object")
+    return value
+
+
+def _write_json(value: dict[str, Any], path: Path | None) -> None:
+    data = json.dumps(value, indent=2, sort_keys=True, ensure_ascii=False) + "\n"
+    if path is None:
+        sys.stdout.write(data)
+    else:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        with path.open("w", encoding="utf-8", newline="\n") as stream:
+            stream.write(data)
+
+
+def _normalize_token(value: str, aliases: dict[str, str]) -> str:
+    token = value.strip().lower().replace("-", "_")
+    return aliases.get(token, aliases.get(value.strip().lower(), token))
+
+
+def _require_string(context: dict[str, Any], key: str, allowed: set[str] | None = None) -> str:
+    value = context.get(key)
+    if not isinstance(value, str) or not value:
+        raise RouterError(f"{key} must be a non-empty string")
+    if allowed is not None and value not in allowed:
+        raise RouterError(f"{key} has unsupported value: {value}")
+    return value
+
+
+def _string_list(context: dict[str, Any], key: str) -> list[str]:
+    value = context.get(key, [])
+    if not isinstance(value, list) or any(not isinstance(item, str) for item in value):
+        raise RouterError(f"{key} must be an array of strings")
+    return list(dict.fromkeys(value))
+
+
+def _load_manifest(path: Path) -> dict[str, Any]:
+    manifest = _read_json(path)
+    gates = manifest.get("gates")
+    edges = manifest.get("forward_edges")
+    if manifest.get("model") != "layered_gated_skill_graph":
+        raise RouterError("routing manifest model is unsupported")
+    if not isinstance(gates, list) or {g.get("id") for g in gates if isinstance(g, dict)} != {
+        f"G{i}" for i in range(8)
+    }:
+        raise RouterError("routing manifest must define G0 through G7 exactly once")
+    if not isinstance(edges, list):
+        raise RouterError("routing manifest forward_edges must be an array")
+    expected = [[f"G{i}", f"G{i + 1}"] for i in range(7)]
+    if edges != expected:
+        raise RouterError("reference provider requires the canonical G0 through G7 forward chain")
+    if manifest.get("evaluation", {}).get("learned_weights") is not False:
+        raise RouterError("learned routing weights are not permitted")
+    selectors = manifest.get("selectors")
+    if not isinstance(selectors, dict):
+        raise RouterError("routing manifest selectors must be an object")
+    for key in ("technology_aliases", "technology_skills", "adjacent_technologies"):
+        if not isinstance(selectors.get(key), dict):
+            raise RouterError(f"routing manifest selector {key} must be an object")
+    backward_routes = manifest.get("backward_routes")
+    if not isinstance(backward_routes, list):
+        raise RouterError("routing manifest backward_routes must be an array")
+    signals: set[str] = set()
+    for item in backward_routes:
+        if not isinstance(item, dict):
+            raise RouterError("each backward route must be an object")
+        signal = item.get("signal")
+        target = item.get("target_gate")
+        if not isinstance(signal, str) or target not in {f"G{i}" for i in range(7)}:
+            raise RouterError("each backward route requires a unique signal and G0 through G6 target")
+        if signal in signals:
+            raise RouterError(f"duplicate backward route signal: {signal}")
+        signals.add(signal)
+    return manifest
+
+
+def _gate_result(
+    gate_id: str,
+    revision: int,
+    activated: list[str] | None = None,
+    branches: list[str] | None = None,
+    suppressed: list[dict[str, Any]] | None = None,
+    blocked: list[dict[str, Any]] | None = None,
+    evidence: list[str] | None = None,
+) -> dict[str, Any]:
+    blocked = blocked or []
+    return {
+        "gate_id": gate_id,
+        "forward_revision": revision,
+        "activated_skills": activated or [],
+        "activated_branches": branches or [],
+        "candidate_branches": [],
+        "suppressed": suppressed or [],
+        "blocked": blocked,
+        "evidence_ids": evidence or [],
+        "status": "blocked" if blocked else "passed",
+    }
+
+
+def _technology_selection(
+    context: dict[str, Any], manifest: dict[str, Any]
+) -> tuple[set[str], list[dict[str, Any]]]:
+    selectors = manifest.get("selectors", {})
+    aliases = selectors.get("technology_aliases", {})
+    skill_map = selectors.get("technology_skills", {})
+    adjacent = selectors.get("adjacent_technologies", {})
+    if not all(isinstance(value, dict) for value in (aliases, skill_map, adjacent)):
+        raise RouterError("routing manifest selectors must be objects")
+    raw = context.get("technologies", [])
+    if not isinstance(raw, list):
+        raise RouterError("technologies must be an array")
+    selected: set[str] = set()
+    for item in raw:
+        if not isinstance(item, dict):
+            raise RouterError("each technology must be an object")
+        name = item.get("name")
+        status = item.get("status")
+        if not isinstance(name, str) or not isinstance(status, str):
+            raise RouterError("technology name and status must be strings")
+        normalized = _normalize_token(name, aliases)
+        if status in SELECTED_TECH_STATUSES and item.get("material", True):
+            selected.add(normalized)
+
+    suppressed_names: set[str] = set()
+    for name in selected:
+        neighbors = adjacent.get(name, [])
+        if not isinstance(neighbors, list) or any(not isinstance(x, str) for x in neighbors):
+            raise RouterError(f"adjacent technology selector for {name} must be an array of strings")
+        suppressed_names.update(set(neighbors) - selected)
+    suppressed = [
+        {
+            "skill_id": skill_map[name],
+            "reason": "adjacent_technology_not_evidenced",
+            "technology": name,
+        }
+        for name in sorted(suppressed_names)
+        if name in skill_map
+    ]
+    return selected, suppressed
+
+
+def _artifact_invalidation(context: dict[str, Any], roots: list[str]) -> tuple[list[str], list[str]]:
+    artifacts = context.get("artifacts", [])
+    if not isinstance(artifacts, list):
+        raise RouterError("artifacts must be an array")
+    all_ids: set[str] = set()
+    children: dict[str, set[str]] = {}
+    for artifact in artifacts:
+        if not isinstance(artifact, dict) or not isinstance(artifact.get("id"), str):
+            raise RouterError("each artifact requires a string id")
+        artifact_id = artifact["id"]
+        all_ids.add(artifact_id)
+        depends_on = artifact.get("depends_on", [])
+        if not isinstance(depends_on, list) or any(not isinstance(x, str) for x in depends_on):
+            raise RouterError("artifact depends_on must be an array of strings")
+        for parent in depends_on:
+            children.setdefault(parent, set()).add(artifact_id)
+    unknown = set(roots) - all_ids
+    if unknown:
+        raise RouterError(f"feedback roots reference unknown artifacts: {sorted(unknown)}")
+    invalidated: set[str] = set(roots)
+    queue: deque[str] = deque(roots)
+    while queue:
+        parent = queue.popleft()
+        for child in children.get(parent, set()):
+            if child not in invalidated:
+                invalidated.add(child)
+                queue.append(child)
+    return sorted(invalidated), sorted(all_ids - invalidated)
+
+
+def _feedback_results(
+    context: dict[str, Any], manifest: dict[str, Any], start_revision: int
+) -> tuple[list[dict[str, Any]], int, bool]:
+    feedback = context.get("feedback", [])
+    if not isinstance(feedback, list):
+        raise RouterError("feedback must be an array")
+    route_map = {item["signal"]: item["target_gate"] for item in manifest["backward_routes"]}
+    results: list[dict[str, Any]] = []
+    revision = start_revision
+    requires_user = False
+    for index, item in enumerate(feedback, start=1):
+        if not isinstance(item, dict):
+            raise RouterError("each feedback item must be an object")
+        kind = item.get("kind")
+        attempt = item.get("attempt", 1)
+        if not isinstance(kind, str) or not isinstance(attempt, int) or attempt < 1:
+            raise RouterError("feedback kind must be a string and attempt a positive integer")
+        target = route_map.get(kind)
+        item_requires_user = target is None or attempt >= 3 or bool(item.get("requires_user", False))
+        roots = item.get("invalidated_root_artifact_ids", [])
+        if not isinstance(roots, list) or any(not isinstance(x, str) for x in roots):
+            raise RouterError("invalidated_root_artifact_ids must be an array of strings")
+        invalidated, preserved = _artifact_invalidation(context, roots) if roots else ([], sorted(
+            a["id"] for a in context.get("artifacts", []) if isinstance(a, dict) and isinstance(a.get("id"), str)
+        ))
+        next_revision = revision if item_requires_user else revision + 1
+        result = {
+            "feedback_id": item.get("feedback_id", f"FDB-{index:03d}"),
+            "source_gate": item.get("source_gate", "G7"),
+            "target_gate": target,
+            "kind": kind,
+            "expected": item.get("expected", ""),
+            "actual": item.get("actual", ""),
+            "evidence_ids": item.get("evidence_ids", []),
+            "invalidated_artifact_ids": invalidated,
+            "preserved_artifact_ids": preserved,
+            "attempt": attempt,
+            "requires_user": item_requires_user,
+            "next_forward_revision": next_revision,
+        }
+        results.append(result)
+        revision = next_revision
+        requires_user = requires_user or item_requires_user
+    return results, revision, requires_user
+
+
+def route(context: dict[str, Any], manifest: dict[str, Any]) -> dict[str, Any]:
+    """Evaluate one structured routing context and return a portable result."""
+
+    if context.get("schema_version") != 1:
+        raise RouterError("schema_version must be 1")
+    request_id = _require_string(context, "request_id")
+    target = _require_string(context, "target", {"project", "harness", "harness_overview"})
+    scope = _require_string(
+        context,
+        "scope",
+        {
+            "software_engineering",
+            "software_related",
+            "general_information",
+            "decision_support",
+            "creative",
+            "non_engineering",
+        },
+    )
+    project_state = _require_string(
+        context, "project_state", {"greenfield", "brownfield", "hybrid", "unknown", "not_applicable"}
+    )
+    action = _require_string(
+        context,
+        "action",
+        {"investigate", "define", "plan", "design", "implement", "change", "verify", "review", "document", "approve", "handoff"},
+    )
+    fields = set(_string_list(context, "fields"))
+    languages = _string_list(context, "languages")
+    evidence = _string_list(context, "evidence_ids")
+    enforcement = context.get("enforcement_mode", "manual")
+    if enforcement not in {"hook", "manual", "unsupported"}:
+        raise RouterError("enforcement_mode must be hook, manual, or unsupported")
+
+    is_software = scope in {"software_engineering", "software_related"}
+    revision = 1
+    gate_results: list[dict[str, Any]] = []
+    all_activated: list[str] = []
+
+    g0_blocked = []
+    if enforcement == "unsupported" and action in {"implement", "change", "approve"}:
+        g0_blocked.append({"reason": "unsupported_enforcement_is_read_only"})
+    if enforcement == "manual" and action in {"implement", "change", "approve"} and not context.get(
+        "manual_guard_valid", False
+    ):
+        g0_blocked.append({"reason": "manual_guard_required_for_mutation"})
+    gate_results.append(_gate_result("G0", revision, branches=[enforcement], blocked=g0_blocked, evidence=evidence))
+
+    intake_skill = "core.intake-and-route"
+    all_activated.append(intake_skill)
+    g1_blocked = []
+    if context.get("material_ambiguity", False):
+        g1_blocked.append({"reason": "material_clarification_required"})
+    gate_results.append(_gate_result("G1", revision, [intake_skill], sorted(fields), blocked=g1_blocked, evidence=evidence))
+
+    g2_skills: list[str] = []
+    g2_blocked: list[dict[str, Any]] = []
+    architecture_status = context.get("architecture_status", "not_applicable" if not is_software else "draft")
+    if architecture_status not in {"not_applicable", "missing", "draft", "accepted", "stale", "conflicted"}:
+        raise RouterError(f"architecture_status has unsupported value: {architecture_status}")
+    if is_software and target == "project":
+        g2_skills.append("core.architecture-baseline-and-design")
+        if architecture_status == "conflicted":
+            g2_blocked.append({"reason": "architecture_baseline_conflicted"})
+    all_activated.extend(g2_skills)
+    gate_results.append(_gate_result("G2", revision, g2_skills, [str(architecture_status)], blocked=g2_blocked, evidence=evidence))
+
+    g3_skills: list[str] = []
+    if target == "harness":
+        g3_skills.append("core.harness-upgrade-analysis")
+    elif target == "project" and is_software:
+        if project_state == "greenfield":
+            g3_skills.append("core.greenfield-planning")
+        elif project_state == "brownfield":
+            g3_skills.append("core.brownfield-impact-analysis")
+        elif project_state == "hybrid":
+            g3_skills.extend(["core.brownfield-impact-analysis", "core.greenfield-planning"])
+    if action == "document" or "documentation" in fields:
+        g3_skills.append("core.document-purpose")
+    g3_skills = list(dict.fromkeys(g3_skills))
+    all_activated.extend(g3_skills)
+    gate_results.append(_gate_result("G3", revision, g3_skills, [project_state], evidence=evidence))
+
+    tech_selected, suppressed = _technology_selection(context, manifest)
+    config_candidates = context.get("configuration_candidates", [])
+    if not isinstance(config_candidates, list):
+        raise RouterError("configuration_candidates must be an array")
+    g4_skills: list[str] = []
+    g4_branches = sorted(fields & {"testing", "documentation", "security", "performance", "operations", "devops_release"})
+    if tech_selected or "technology_selection" in fields:
+        g4_skills.append("core.technology-selection-and-integration")
+        g4_branches.append("technology_selection")
+    if config_candidates or "configuration" in fields:
+        g4_skills.append("core.configuration-and-environment-management")
+        g4_branches.append("configuration")
+    g4_branches = sorted(set(g4_branches))
+    all_activated.extend(g4_skills)
+    gate_results.append(_gate_result("G4", revision, g4_skills, g4_branches, evidence=evidence))
+
+    technology_skills = manifest["selectors"]["technology_skills"]
+    g5_skills = [technology_skills[name] for name in sorted(tech_selected) if name in technology_skills]
+    if languages:
+        g5_skills.append("core.language-engineering")
+    all_activated.extend(g5_skills)
+    gate_results.append(_gate_result("G5", revision, g5_skills, sorted(languages), suppressed=suppressed, evidence=evidence))
+
+    g6_skills = ["core.harness-overview-html"] if target == "harness_overview" else []
+    all_activated.extend(g6_skills)
+    gate_results.append(_gate_result("G6", revision, g6_skills, ["execution"], evidence=evidence))
+
+    verify_skill = "core.verify-and-handoff"
+    all_activated.append(verify_skill)
+    gate_results.append(_gate_result("G7", revision, [verify_skill], ["verification", "handoff"], evidence=evidence))
+
+    feedback, final_revision, feedback_requires_user = _feedback_results(context, manifest, revision)
+    blocked = any(result["blocked"] for result in gate_results)
+    if g0_blocked or (blocked and not g1_blocked):
+        status = "blocked"
+    elif feedback_requires_user or g1_blocked:
+        status = "waiting_user"
+    else:
+        status = "active"
+    events = [
+        {"type": "gate_evaluated", "gate_id": result["gate_id"], "forward_revision": result["forward_revision"]}
+        for result in gate_results
+    ]
+    for item in feedback:
+        events.append({"type": "feedback_emitted", "feedback_id": item["feedback_id"], "target_gate": item["target_gate"]})
+        if item["target_gate"] is not None and not item["requires_user"]:
+            events.extend(
+                [
+                    {"type": "artifact_invalidated", "artifact_id": artifact_id, "feedback_id": item["feedback_id"]}
+                    for artifact_id in item["invalidated_artifact_ids"]
+                ]
+            )
+            events.append({"type": "gate_reopened", "gate_id": item["target_gate"], "forward_revision": item["next_forward_revision"]})
+
+    return {
+        "schema_version": 1,
+        "request_id": request_id,
+        "model": manifest["model"],
+        "status": status,
+        "forward_revision": final_revision,
+        "gate_results": gate_results,
+        "activated_skills": list(dict.fromkeys(all_activated)),
+        "suppressed_skills": suppressed,
+        "feedback_results": feedback,
+        "events": events,
+    }
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--input", type=Path, help="Router JSON input; defaults to stdin")
+    parser.add_argument("--output", type=Path, help="Router JSON output; defaults to stdout")
+    parser.add_argument(
+        "--manifest",
+        type=Path,
+        default=Path(__file__).resolve().parents[1] / "registry" / "routing-gates.json",
+    )
+    args = parser.parse_args(argv)
+    try:
+        result = route(_read_json(args.input), _load_manifest(args.manifest))
+        _write_json(result, args.output)
+    except RouterError as exc:
+        error = {"schema_version": 1, "status": "failed", "error": str(exc)}
+        _write_json(error, args.output)
+        return 2
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

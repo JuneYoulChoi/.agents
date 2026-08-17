@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "id": "T-TECH-002-robotics-stack",
+  "description": "Explicit robotics integration selects ROS 2, MoveIt, Modbus, and colcon without simulation skills.",
+  "context": {
+    "schema_version": 1,
+    "request_id": "REQ-TECH-ROBOTICS",
+    "target": "project",
+    "scope": "software_engineering",
+    "project_state": "brownfield",
+    "action": "review",
+    "enforcement_mode": "manual",
+    "architecture_status": "accepted",
+    "fields": ["robotics", "industrial_integration", "technology_selection"],
+    "languages": ["cpp"],
+    "technologies": [
+      {"name": "ROS 2", "status": "detected_existing", "material": true},
+      {"name": "MoveIt", "status": "selected", "material": true},
+      {"name": "Modbus", "status": "selected", "material": true},
+      {"name": "colcon", "status": "detected_existing", "material": true}
+    ],
+    "configuration_candidates": [],
+    "evidence_ids": ["EV-TECH-ROBOTICS"],
+    "artifacts": [],
+    "feedback": []
+  },
+  "expected": {
+    "status": "active",
+    "activated_skills_contains": [
+      "core.ros2-engineering",
+      "core.moveit-engineering",
+      "core.modbus-engineering",
+      "core.colcon-workspace-engineering",
+      "core.language-engineering"
+    ],
+    "suppressed_skills_contains": ["core.isaac-lab-engineering", "core.isaac-sim-engineering"]
+  }
+}

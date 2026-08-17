@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "id": "T-TECH-006-grpc-polyglot",
+  "description": "A polyglot gRPC boundary selects only gRPC and the authored language profiles.",
+  "context": {
+    "schema_version": 1,
+    "request_id": "REQ-TECH-GRPC",
+    "target": "project",
+    "scope": "software_engineering",
+    "project_state": "brownfield",
+    "action": "review",
+    "enforcement_mode": "manual",
+    "architecture_status": "accepted",
+    "fields": ["api", "technology_selection"],
+    "languages": ["cpp", "java", "rust"],
+    "technologies": [
+      {"name": "gRPC", "status": "selected", "material": true}
+    ],
+    "configuration_candidates": [],
+    "evidence_ids": ["EV-TECH-GRPC"],
+    "artifacts": [],
+    "feedback": []
+  },
+  "expected": {
+    "status": "active",
+    "activated_skills_contains": ["core.grpc-engineering", "core.language-engineering"],
+    "gates": {
+      "G5": {"activated_branches_contains": ["cpp", "java", "rust"]}
+    }
+  }
+}

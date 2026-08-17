@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "fixture_type": "bootstrap",
+  "id": "B-CONFLICT-003-edited-managed-file",
+  "description": "A managed wrapper edited after installation is not overwritten by a repeat install.",
+  "attempts": [
+    {"adapter": "claude"},
+    {"adapter": "claude"}
+  ],
+  "modify_after_attempt": {
+    "1": {
+      "CLAUDE.md": "locally edited managed file\n"
+    }
+  },
+  "expected": {
+    "bootstrap_statuses": ["installed", "conflict"],
+    "preserved_files": {
+      "CLAUDE.md": "locally edited managed file\n"
+    }
+  }
+}

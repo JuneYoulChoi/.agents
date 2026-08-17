@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "id": "T-TECH-001-all-mappings",
+  "description": "Every approved ecosystem mapping can be selected explicitly in one deterministic route.",
+  "context": {
+    "schema_version": 1,
+    "request_id": "REQ-TECH-ALL",
+    "target": "project",
+    "scope": "software_engineering",
+    "project_state": "greenfield",
+    "action": "design",
+    "enforcement_mode": "manual",
+    "architecture_status": "accepted",
+    "fields": ["technology_selection"],
+    "languages": [],
+    "technologies": [
+      {"name": "ROS 2", "status": "required_by_user", "material": true},
+      {"name": "Node.js", "status": "required_by_user", "material": true},
+      {"name": "React", "status": "required_by_user", "material": true},
+      {"name": "gRPC", "status": "required_by_user", "material": true},
+      {"name": "Isaac Lab", "status": "required_by_user", "material": true},
+      {"name": "Docker", "status": "required_by_user", "material": true},
+      {"name": "Isaac Sim", "status": "required_by_user", "material": true},
+      {"name": "MoveIt 2", "status": "required_by_user", "material": true},
+      {"name": "Kubernetes", "status": "required_by_user", "material": true},
+      {"name": "Modbus", "status": "required_by_user", "material": true},
+      {"name": "colcon", "status": "required_by_user", "material": true}
+    ],
+    "configuration_candidates": [],
+    "evidence_ids": ["EV-TECH-ALL-EXPLICIT"],
+    "artifacts": [],
+    "feedback": []
+  },
+  "expected": {
+    "status": "active",
+    "activated_skills_contains": [
+      "core.technology-selection-and-integration",
+      "core.ros2-engineering",
+      "core.nodejs-engineering",
+      "core.react-engineering",
+      "core.grpc-engineering",
+      "core.isaac-lab-engineering",
+      "core.docker-engineering",
+      "core.isaac-sim-engineering",
+      "core.moveit-engineering",
+      "core.kubernetes-engineering",
+      "core.modbus-engineering",
+      "core.colcon-workspace-engineering"
+    ]
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "id": "T-TECH-005-platform-stack",
+  "description": "Docker and Kubernetes compose when both are selected explicitly.",
+  "context": {
+    "schema_version": 1,
+    "request_id": "REQ-TECH-PLATFORM",
+    "target": "project",
+    "scope": "software_engineering",
+    "project_state": "greenfield",
+    "action": "design",
+    "enforcement_mode": "manual",
+    "architecture_status": "accepted",
+    "fields": ["devops_release", "operations", "technology_selection"],
+    "languages": [],
+    "technologies": [
+      {"name": "Docker", "status": "selected", "material": true},
+      {"name": "Kubernetes", "status": "selected", "material": true}
+    ],
+    "configuration_candidates": [],
+    "evidence_ids": ["EV-TECH-PLATFORM"],
+    "artifacts": [],
+    "feedback": []
+  },
+  "expected": {
+    "status": "active",
+    "activated_skills_contains": ["core.docker-engineering", "core.kubernetes-engineering"]
+  }
+}

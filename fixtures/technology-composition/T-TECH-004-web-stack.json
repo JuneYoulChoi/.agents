@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "id": "T-TECH-004-web-stack",
+  "description": "React and Node.js are selected together only when both have explicit evidence; Docker does not imply Kubernetes.",
+  "context": {
+    "schema_version": 1,
+    "request_id": "REQ-TECH-WEB",
+    "target": "project",
+    "scope": "software_engineering",
+    "project_state": "brownfield",
+    "action": "review",
+    "enforcement_mode": "manual",
+    "architecture_status": "accepted",
+    "fields": ["frontend", "backend", "technology_selection"],
+    "languages": ["typescript"],
+    "technologies": [
+      {"name": "React", "status": "detected_existing", "material": true},
+      {"name": "Node.js", "status": "detected_existing", "material": true},
+      {"name": "Docker", "status": "selected", "material": true}
+    ],
+    "configuration_candidates": [],
+    "evidence_ids": ["EV-TECH-WEB"],
+    "artifacts": [],
+    "feedback": []
+  },
+  "expected": {
+    "status": "active",
+    "activated_skills_contains": [
+      "core.react-engineering",
+      "core.nodejs-engineering",
+      "core.docker-engineering",
+      "core.language-engineering"
+    ],
+    "suppressed_skills_contains": ["core.kubernetes-engineering"]
+  }
+}

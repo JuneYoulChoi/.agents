@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "fixture_type": "bootstrap",
+  "id": "B-CONFLICT-002-user-file",
+  "description": "An existing user-owned root instruction file is preserved and reported as a conflict.",
+  "setup_files": {
+    "AGENTS.md": "user-owned instructions\n"
+  },
+  "attempts": [
+    {"adapter": "codex"}
+  ],
+  "expected": {
+    "bootstrap_statuses": ["conflict"],
+    "preserved_files": {
+      "AGENTS.md": "user-owned instructions\n"
+    }
+  }
+}

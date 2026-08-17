@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "id": "F-017-unknown-feedback",
+  "description": "An unknown feedback cause is not guessed and requires user direction.",
+  "context": {
+    "schema_version": 1,
+    "request_id": "REQ-F017-UNKNOWN",
+    "target": "project",
+    "scope": "software_engineering",
+    "project_state": "greenfield",
+    "action": "design",
+    "enforcement_mode": "manual",
+    "architecture_status": "accepted",
+    "fields": ["architecture"],
+    "languages": [],
+    "technologies": [],
+    "configuration_candidates": [],
+    "evidence_ids": ["EV-UNKNOWN-001"],
+    "artifacts": [{"id": "ARCH", "depends_on": []}],
+    "feedback": [
+      {
+        "feedback_id": "FDB-UNKNOWN-001",
+        "source_gate": "G7",
+        "kind": "unclassified_material_gap",
+        "expected": "known responsible gate",
+        "actual": "evidence does not identify a responsible gate",
+        "evidence_ids": ["EV-UNKNOWN-001"],
+        "invalidated_root_artifact_ids": [],
+        "attempt": 1
+      }
+    ]
+  },
+  "expected": {
+    "status": "waiting_user",
+    "forward_revision": 1,
+    "feedback": [
+      {
+        "target_gate": null,
+        "requires_user": true,
+        "next_forward_revision": 1,
+        "preserved_artifact_ids_contains": ["ARCH"]
+      }
+    ],
+    "event_types_contains": ["gate_evaluated", "feedback_emitted"]
+  }
+}

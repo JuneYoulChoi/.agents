@@ -11,6 +11,13 @@ Before material work:
    stale, allow read-only diagnostics only and stop mutation.
 2. Run the pinned `intake-and-route` procedure. Classify session scope,
    project state, fields, action, risk, depth, evidence, and user decisions.
+   Evaluate `registry/routing-gates.json` from `G0` through `G7`: gates may
+   activate several evidence-backed branches, but load only activated skills.
+   When the reference runtime is available, write that structured intake as
+   JSON, validate it with `harness_validator.py`, and start/resume it through
+   `harness_runner.py`. Load only the returned `next.skill_path`, submit its
+   structured result with the expected revision, and repeat. A native Codex
+   adapter may replace the command but must preserve the same JSON behavior.
 3. If the request changes this harness, run `harness-upgrade-analysis` next;
    the harness plan is its architecture baseline. If it also changes a target
    software project, add that project's architecture gate.
@@ -30,6 +37,8 @@ Before material work:
    supplied concept/direction.
 8. Before completion run `verify-and-handoff`, update affected documents and
    traceability, and report checks, assumptions, waivers, and residual risk.
+   A failure emits bounded backward feedback to the nearest responsible gate;
+   preserve unaffected branches and never rewrite user intent as a weight.
 
 The bootstrap cannot enforce MUST rules by itself. Follow the configured
 `hook`, `manual`, or `unsupported` enforcement mode. In `manual` mode, task
