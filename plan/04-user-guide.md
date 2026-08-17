@@ -84,6 +84,18 @@ that adds gRPC, a configurable port, Docker packaging, tests, and documentation
 activates those exact concerns; it suppresses MoveIt, Isaac, Kubernetes, or
 colcon unless their own project evidence requires them.
 
+The same summary may show an execution role and `low`, `medium`, or `high`
+reasoning recommendation for the current gate. These are portable effort hints,
+not fixed product names. Codex or Claude maps the hint to what the current
+platform actually supports and records whether it matched, upgraded, degraded,
+used a platform default, or was unavailable. The portable level stays in the
+common three-level scale while the adapter records any native platform label.
+A stronger model never grants
+permission or resolves a product decision automatically. `light` work is not
+raised merely because several skills are active; high risk, architecture
+conflict, and repeated evidence-backed failure are the bounded escalation
+conditions.
+
 If a later check fails, the Router sends a bounded feedback signal to the
 nearest responsible gate and reruns only the affected descendants. A bad port
 validation returns to the configuration concern; a changed UC returns to the
@@ -268,6 +280,7 @@ The final response must state:
 - implementation languages/bindings, generated-code ownership, and language checks when code changed;
 - configuration sources, precedence, validation, and secret handling when changed;
 - activated and materially suppressed routing branches, plus any backward feedback and recomputed artifacts;
+- recommended execution profiles and any actual model/reasoning degradation or platform-default fallback;
 - assumptions, waivers, and residual risks;
 - the next action, if any.
 

@@ -9,7 +9,7 @@
       "platform": "codex",
       "path": "adapters/codex/AGENTS.md.tmpl",
       "rendered_name": "AGENTS.md",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "sha256": "PENDING_PIN_BEFORE_BOOTSTRAP",
       "max_bytes": 32768
     },
@@ -18,7 +18,7 @@
       "platform": "claude",
       "path": "adapters/claude/CLAUDE.md.tmpl",
       "rendered_name": "CLAUDE.md",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "sha256": "PENDING_PIN_BEFORE_BOOTSTRAP",
       "max_bytes": 32768
     }
@@ -39,6 +39,15 @@
       "fixture_runner": "scripts/fixture_runner.py",
       "fixture_root": "fixtures",
       "transport": "json_files_with_input_output_arguments"
+    },
+    "execution_profile": {
+      "policy_id": "adaptive_v1",
+      "portable_reasoning_levels": ["low", "medium", "high"],
+      "specific_model_binding": false,
+      "resolution_owner": "platform_adapter",
+      "resolution_statuses": ["exact", "upgraded", "degraded", "platform_default", "unavailable"],
+      "actual_resolution_record_required": true,
+      "native_reasoning_record_required": true
     }
   },
   "source_manifest_excludes": [

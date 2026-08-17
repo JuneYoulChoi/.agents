@@ -12,7 +12,7 @@ from pathlib import Path
 HARNESS_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(HARNESS_ROOT / "scripts"))
 
-from harness_runner import start, submit  # noqa: E402
+from harness_runner import RunnerError, start, submit  # noqa: E402
 from harness_state import StateError, StateStore  # noqa: E402
 from harness_validator import ContractError, validate_intake, write_object  # noqa: E402
 
@@ -47,6 +47,17 @@ def intake() -> dict:
     }
 
 
+def execution_resolution(reasoning: str, status: str = "exact") -> dict:
+    return {
+        "adapter": "codex",
+        "model": "test-model",
+        "reasoning": reasoning,
+        "native_reasoning": reasoning,
+        "status": status,
+        "evidence_ids": ["EV-EXECUTION-PROFILE"],
+    }
+
+
 class RuntimeTests(unittest.TestCase):
     def setUp(self) -> None:
         self.temp_owner = tempfile.TemporaryDirectory(prefix="harness-runtime-test-")
@@ -77,6 +88,8 @@ class RuntimeTests(unittest.TestCase):
         started = self.start_task()
         self.assertEqual("active", started["status"])
         self.assertEqual("core.architecture-baseline-and-design", started["next"]["skill_id"])
+        self.assertEqual("architect", started["next"]["execution_profile"]["role"])
+        self.assertEqual("medium", started["next"]["execution_profile"]["reasoning"])
         result_path = self.target / "skill-result.json"
         write_object(
             result_path,
@@ -87,6 +100,7 @@ class RuntimeTests(unittest.TestCase):
                 "artifact_ids": ["ARCH-001"],
                 "evidence_ids": ["EV-ARCH-001"],
                 "transition": {"next_stage": "impact"},
+                "execution_resolution": execution_resolution("medium"),
                 "error": None,
             },
         )
@@ -122,6 +136,9 @@ class RuntimeTests(unittest.TestCase):
                         if skill_id == "core.verify-and-handoff"
                         else next_item["stage"]
                     },
+                    "execution_resolution": execution_resolution(
+                        next_item["execution_profile"]["reasoning"]
+                    ),
                     "error": None,
                 },
             )
@@ -138,6 +155,32 @@ class RuntimeTests(unittest.TestCase):
         self.assertEqual("passed", state["validation_status"])
         handoff = self.target / ".agents" / "state" / "TASK-RUNTIME" / "handoff.md"
         self.assertTrue(handoff.is_file())
+
+    def test_runner_rejects_inconsistent_execution_resolution(self) -> None:
+        started = self.start_task()
+        result_path = self.target / "skill-result.json"
+        write_object(
+            result_path,
+            {
+                "schema_version": 1,
+                "skill_id": started["next"]["skill_id"],
+                "status": "completed",
+                "artifact_ids": [],
+                "evidence_ids": [],
+                "transition": {"next_stage": "impact"},
+                "execution_resolution": execution_resolution("low", "upgraded"),
+                "error": None,
+            },
+        )
+        with self.assertRaises(RunnerError):
+            submit(
+                self.target,
+                "TASK-RUNTIME",
+                started["revision"],
+                result_path,
+                HARNESS_ROOT,
+                self.registry,
+            )
 
     def test_revision_conflict_preserves_current_state(self) -> None:
         self.start_task()

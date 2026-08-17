@@ -12,6 +12,7 @@ Each adapter MUST provide:
 bootstrap()          load the short global entry instruction
 discover_skills()    return approved metadata only
 load_skill(id)       load the selected skill and required resources
+resolve_execution_profile(profile) map portable role/reasoning to current platform controls
 delegate(request)    run an isolated delegate or return unavailable
 request_approval()   pause and persist an action request
 read_state(task_id)  read state/events/handoff
@@ -149,7 +150,12 @@ For the same fixture input and project snapshot, both adapters MUST produce:
 - state/event files conforming to the same schema.
 
 Presentation, exact wording, model choice, and platform-specific skill loading
-may differ. Safety, state, and completion semantics may not.
+may differ. Both adapters produce the same portable execution profile from the
+same input, but their actual model/reasoning resolution may differ. Each must
+record `exact`, `upgraded`, `degraded`, `platform_default`, or `unavailable`;
+the common result uses normalized reasoning for comparison and a separate
+`native_reasoning` label for platform-specific controls. Model availability,
+safety, state, and completion semantics may not differ.
 
 An adapter may use a native Router, but it cannot replace deterministic gate
 conditions with learned weights or hidden ranking. It must emit the portable
@@ -168,7 +174,9 @@ responsible for natural-language intake and for performing the returned
 The selected adapter records a complete intake containing intent, success
 criteria, constraints, risk/depth/confidence, evidence, and a capability or
 manual-guard decision. It then calls `start`, reads exactly one returned
-`next.skill_path`, submits the typed result with the expected revision, and
+`next.skill_path` plus `next.execution_profile`, resolves that profile without
+letting a skill pin a model name, submits the typed result and actual
+`execution_resolution` with the expected revision, and
 uses `status`/`next` to resume. Absolute skill paths may appear in ephemeral
 runtime output but are never written into portable project configuration.
 
@@ -182,6 +190,7 @@ a platform changes:
 | --- | --- | --- | --- | --- |
 | Global bootstrap | MUST | `AGENTS.md` | `CLAUDE.md` | stop and report |
 | Skill discovery | MUST | adapter mapping | adapter/plugin mapping | core procedure |
+| Model/reasoning resolution | MUST record | map portable profile or report platform default | map portable profile or report platform default | record degraded/default/unavailable; never weaken gates |
 | Local state | MUST | JSON/NDJSON files | JSON/NDJSON files | target-local only; block until an explicit future fallback is approved |
 | Sub-agent delegation | MAY for Deep | capability probe | capability probe | sequential reviewer |
 | Worktree isolation | MUST for mutation delegate | probe | probe | no mutation delegate |

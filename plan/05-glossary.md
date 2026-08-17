@@ -38,6 +38,8 @@ record an override in `.agents/overrides/` before routing work.
 | deferred issue | Explicitly excluded with owner, reason, and follow-up condition |
 | waiver | Authorized acceptance of a known unmet validation or traceability requirement |
 | depth | Light, standard, or deep procedure intensity |
+| execution profile | Vendor-neutral gate role, low/medium/high reasoning recommendation, independent-context flag, and evidence-backed escalation reasons |
+| execution resolution | Adapter record of the actual model/reasoning application: exact, upgraded, degraded, platform_default, or unavailable |
 | NFR | Non-functional requirement, such as latency, availability, privacy, or security |
 | configuration candidate | A value examined for classification as a code constant, build-time, deploy-time, runtime, or secret setting; it is not automatically externalized |
 | configuration contract | The typed keys, sources, precedence, validation, ownership, compatibility, redaction, tests, and documentation governing application settings |

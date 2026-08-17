@@ -27,7 +27,9 @@ An optional, dependency-free reference Router, fixed-stage Runner, target-local
 State store, Validator, conflict-safe Bootstrap installer, and replaceable
 fixture driver live in `scripts/`; executable scenarios live in `fixtures/`
 and focused runtime checks in `tests/`. Their JSON protocol is portable and
-does not make Python a target-project or adapter requirement.
+does not make Python a target-project or adapter requirement. The Router also
+emits a vendor-neutral `execution_profile`; only the platform adapter maps its
+role and `low/medium/high` reasoning recommendation to an available model.
 
 ## For an implementer
 

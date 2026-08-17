@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "id": "E-PROFILE-002-high-risk",
+  "description": "High-risk work raises baseline through verification without binding a vendor model.",
+  "context": {
+    "schema_version": 1,
+    "request_id": "REQ-EXECUTION-HIGH-RISK",
+    "target": "project",
+    "scope": "software_engineering",
+    "project_state": "brownfield",
+    "action": "change",
+    "risk": "high",
+    "depth": "standard",
+    "enforcement_mode": "hook",
+    "architecture_status": "accepted",
+    "fields": ["backend", "security"],
+    "languages": ["rust"],
+    "technologies": [],
+    "configuration_candidates": [],
+    "evidence_ids": ["EV-EXECUTION-HIGH-RISK"],
+    "artifacts": [],
+    "feedback": []
+  },
+  "expected": {
+    "status": "active",
+    "execution_profile": {
+      "policy_id": "adaptive_v1",
+      "depth": "standard",
+      "risk": "high",
+      "escalation_triggers_exact": ["high_risk"],
+      "gate_reasoning": {
+        "G0": "low",
+        "G1": "medium",
+        "G2": "high",
+        "G3": "high",
+        "G4": "high",
+        "G5": "high",
+        "G6": "high",
+        "G7": "high"
+      }
+    }
+  }
+}

@@ -9,7 +9,10 @@ Before material work:
 1. Run `skills/intake-and-route/SKILL.md` and record scope, project state,
    fields, action, risk, depth, evidence, and unresolved decisions. Evaluate
    `registry/routing-gates.json` as the deterministic `G0`–`G7` multi-input/
-   multi-output skill graph and load only activated branches.
+   multi-output skill graph and load only activated branches. Resolve each
+   returned portable `execution_profile` through current Codex capabilities;
+   never treat a model name as skill policy, and record the actual or degraded
+   model/reasoning resolution and native reasoning label in the skill result.
 2. If the request changes this harness, run `harness-upgrade-analysis` across
    all `plan/`, the active registry, skills, adapters, templates, and fixtures;
    the harness plan is its architecture baseline. If it also changes a target

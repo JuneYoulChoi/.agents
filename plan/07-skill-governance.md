@@ -106,6 +106,14 @@ body concise and put large references/scripts in named resources. It MUST NOT
 assume a project-specific path, cloud account, secret, or framework unless the
 manifest declares that requirement.
 
+A skill may declare role or minimum capability needs but MUST NOT pin a vendor
+model name, price tier, or token budget as portable policy. Gate depth and risk
+produce the shared `execution_profile`; the platform adapter owns actual model
+and reasoning resolution and records any upgrade, degradation, default, or
+unavailable control. Platform-specific effort labels remain adapter evidence,
+not skill policy. Model capability cannot grant authority, weaken a MUST,
+or replace an unresolved user decision.
+
 `registry/routing-gates.json` assigns active skills to one primary `G0`–`G7`
 gate. The manifest is deliberately small: it defines gate inputs/outputs,
 approved skill placement, deterministic forward edges, and bounded feedback

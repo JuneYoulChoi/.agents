@@ -53,12 +53,36 @@ Minimal `state.json`:
     "active_skill_ids": ["core.brownfield-impact-analysis"],
     "pending_feedback_ids": []
   },
+  "route": {
+    "execution_profile": {
+      "policy_id": "adaptive_v1",
+      "specific_model": null,
+      "depth": "standard",
+      "risk": "medium",
+      "adapter_resolution_required": true,
+      "escalation_triggers": [],
+      "gate_profiles": [
+        {"gate_id": "G0", "role": "guard", "reasoning": "low", "independent_context": false, "reasons": ["depth_standard"]},
+        {"gate_id": "G1", "role": "classifier", "reasoning": "medium", "independent_context": false, "reasons": ["depth_standard"]},
+        {"gate_id": "G2", "role": "architect", "reasoning": "medium", "independent_context": false, "reasons": ["depth_standard"]},
+        {"gate_id": "G3", "role": "analyst", "reasoning": "medium", "independent_context": false, "reasons": ["depth_standard"]},
+        {"gate_id": "G4", "role": "planner", "reasoning": "medium", "independent_context": false, "reasons": ["depth_standard"]},
+        {"gate_id": "G5", "role": "specialist", "reasoning": "medium", "independent_context": false, "reasons": ["depth_standard"]},
+        {"gate_id": "G6", "role": "implementer", "reasoning": "medium", "independent_context": false, "reasons": ["depth_standard"]},
+        {"gate_id": "G7", "role": "verifier", "reasoning": "medium", "independent_context": false, "reasons": ["depth_standard"]}
+      ]
+    }
+  },
   "execution": {
     "queue": ["core.brownfield-impact-analysis", "core.verify-and-handoff"],
     "cursor": 0,
     "skill_stages": {
       "core.brownfield-impact-analysis": "impact",
       "core.verify-and-handoff": "verification"
+    },
+    "skill_gates": {
+      "core.brownfield-impact-analysis": "G3",
+      "core.verify-and-handoff": "G7"
     },
     "results": [],
     "artifact_ids": [],
@@ -111,6 +135,10 @@ The validator MUST enforce these invariants:
 15. Three unresolved feedback attempts for one material issue require
     `waiting_user`, `blocked`, or an authorized defer/waiver; the Router cannot
     loop indefinitely.
+16. Every routed task records exactly one G0–G7 execution profile. Every skill
+    result records the adapter's actual model/reasoning resolution. An
+    unavailable resolution cannot complete, and no execution profile may weaken
+    authority, safety, architecture, verification, or completion gates.
 
 ## Event contract
 
@@ -184,6 +212,7 @@ license, complete skill reading, dependency review, and a reviewer record.
 
 ```json
 {
+  "schema_version": 1,
   "skill_id": "testing.tdd",
   "status": "completed",
   "classification_updates": [],
@@ -193,13 +222,37 @@ license, complete skill reading, dependency review, and a reviewer record.
   "open_issue_ids": [],
   "validation": ["VAL-003"],
   "transition": {"next_stage": "execution", "entry_conditions": []},
+  "execution_resolution": {
+    "adapter": "codex",
+    "model": "platform-default",
+    "reasoning": "medium",
+    "native_reasoning": "medium",
+    "status": "exact",
+    "evidence_ids": ["EVD-EXEC-001"]
+  },
   "error": null
 }
 ```
 
-`status` is one of `completed`, `not_applicable`, `blocked`, or `failed`.
+`status` is one of `completed`, `not_applicable`, `waiting_user`, `blocked`, or `failed`.
 Failed or blocked results must include an error and recovery action. A skill
-cannot mark the whole task complete.
+cannot mark the whole task complete. `execution_resolution` records what the
+adapter actually used. `reasoning` is the portable normalized level;
+`native_reasoning` preserves the adapter's platform label without adding it to
+Core's enum. `exact` equals the recommendation, `upgraded` is higher,
+`degraded` is lower, `platform_default` means the platform did not expose a
+reliable control, and `unavailable` requires a blocked or failed result. The
+portable policy never supplies a specific model name.
+
+## Execution profile contract
+
+`execution_profile.policy_id` is `adaptive_v1`; reasoning is `low`, `medium`,
+or `high`. It contains exactly one ordered profile for G0–G7 with a portable
+role, reasoning recommendation, independent-context flag, and reasons. The
+only current escalation triggers are `high_risk`, `architecture_conflict`, and
+`repeated_feedback:<gate>`. Branch count, technology count, or model popularity
+cannot raise the profile. The adapter owns actual model mapping, but it must
+record a resolution and cannot use model capability to weaken a safety gate.
 
 ## Gate result contract
 
@@ -676,7 +729,8 @@ runner prints durable temporary result paths unless an explicit
 | `B-CONFLICT` bootstrap | 4 | fresh install, idempotent reinstall, user/edited wrapper preservation, and symlink refusal are deterministic |
 | `C-CONFIG` configuration | 5 | compiled/runtime/Shell/public-web/secret candidates activate the common configuration concern and only affected language/ecosystem branches; invalid secret and port contracts are rejected by unit validation |
 | `T-TECH` technology composition | 6 | all 11 mappings resolve, meaningful robotics/simulation/web/platform/gRPC compositions activate, and unevidenced adjacent technologies remain suppressed |
-| reference runtime unit checks | 6 | ordered architecture-first execution, verified completion/handoff, revision conflict preservation, unreadable-state preservation, secret redaction, and port-bound rules hold |
+| `E-PROFILE` execution profiles | 3 | light work remains bounded, high risk raises G2–G7, and repeated feedback raises only the responsible gate plus G7 without a model binding |
+| reference runtime unit checks | 7 | ordered architecture-first execution, profile resolution validation, verified completion/handoff, revision conflict preservation, unreadable-state preservation, secret redaction, and port-bound rules hold |
 
 The intentionally bounded suite is the promotion gate for this reference
 runtime. It avoids the Cartesian product of every language, configuration

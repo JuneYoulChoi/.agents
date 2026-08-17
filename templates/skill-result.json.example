@@ -7,5 +7,13 @@
   "transition": {
     "next_stage": "impact"
   },
+  "execution_resolution": {
+    "adapter": "codex",
+    "model": "platform-default",
+    "reasoning": "unknown",
+    "native_reasoning": "platform-default",
+    "status": "platform_default",
+    "evidence_ids": []
+  },
   "error": null
 }

@@ -50,6 +50,17 @@ STAGES = {
     "handoff",
 }
 SKILL_RESULT_STATUSES = {"completed", "not_applicable", "waiting_user", "blocked", "failed"}
+REASONING_LEVELS = {"low", "medium", "high"}
+EXECUTION_ROLES = {
+    "guard",
+    "classifier",
+    "architect",
+    "analyst",
+    "planner",
+    "specialist",
+    "implementer",
+    "verifier",
+}
 IDENTIFIER = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$")
 
 
@@ -350,6 +361,31 @@ def validate_route_result(value: dict[str, Any], approved_skills: set[str]) -> d
     unknown = set(activated) - approved_skills
     if unknown:
         raise ContractError(f"route selected unapproved skills: {sorted(unknown)}")
+    validate_execution_profile(value.get("execution_profile"))
+    return value
+
+
+def validate_execution_profile(value: Any) -> dict[str, Any]:
+    if not isinstance(value, dict) or value.get("policy_id") != "adaptive_v1":
+        raise ContractError("execution_profile requires adaptive_v1")
+    if value.get("specific_model") is not None:
+        raise ContractError("portable execution_profile cannot bind a specific model")
+    _require_string(value, "depth", {"light", "standard", "deep"})
+    _require_string(value, "risk", {"low", "medium", "high"})
+    if value.get("adapter_resolution_required") is not True:
+        raise ContractError("execution_profile requires adapter resolution")
+    _string_array(value, "escalation_triggers")
+    profiles = value.get("gate_profiles")
+    if not isinstance(profiles, list) or [
+        profile.get("gate_id") for profile in profiles if isinstance(profile, dict)
+    ] != [f"G{i}" for i in range(8)]:
+        raise ContractError("execution_profile must contain ordered G0 through G7 profiles")
+    for profile in profiles:
+        _require_string(profile, "role", EXECUTION_ROLES)
+        _require_string(profile, "reasoning", REASONING_LEVELS)
+        if not isinstance(profile.get("independent_context"), bool):
+            raise ContractError("execution profile independent_context must be boolean")
+        _string_array(profile, "reasons")
     return value
 
 
@@ -369,6 +405,25 @@ def validate_skill_result(value: dict[str, Any], approved_skills: set[str]) -> d
     error = value.get("error")
     if status in {"blocked", "failed"} and not isinstance(error, str):
         raise ContractError("blocked or failed skill result requires an error string")
+    resolution = value.get("execution_resolution")
+    if not isinstance(resolution, dict):
+        raise ContractError("skill result requires an execution_resolution")
+    _require_string(resolution, "adapter", {"codex", "claude"})
+    model = _require_string(resolution, "model")
+    if len(model) > 128:
+        raise ContractError("execution_resolution.model is too long")
+    _require_string(resolution, "reasoning", REASONING_LEVELS | {"unknown"})
+    native_reasoning = _require_string(resolution, "native_reasoning")
+    if len(native_reasoning) > 64:
+        raise ContractError("execution_resolution.native_reasoning is too long")
+    resolution_status = _require_string(
+        resolution,
+        "status",
+        {"exact", "upgraded", "degraded", "platform_default", "unavailable"},
+    )
+    _string_array(resolution, "evidence_ids")
+    if resolution_status == "unavailable" and status not in {"blocked", "failed"}:
+        raise ContractError("unavailable execution capability requires a blocked or failed result")
     return value
 
 
@@ -402,6 +457,10 @@ def validate_state(
         raise ContractError("state intent must be an object")
     if not isinstance(value.get("gate_network"), dict):
         raise ContractError("state gate_network must be an object")
+    route = value.get("route")
+    if not isinstance(route, dict):
+        raise ContractError("state route must be an object")
+    validate_execution_profile(route.get("execution_profile"))
     execution = value.get("execution")
     if not isinstance(execution, dict):
         raise ContractError("state execution must be an object")
@@ -411,6 +470,12 @@ def validate_state(
         raise ContractError("state execution.queue must be an array of strings")
     if not isinstance(cursor, int) or cursor < 0 or cursor > len(queue):
         raise ContractError("state execution.cursor is outside the queue")
+    for key in ("skill_stages", "skill_gates"):
+        mapping = execution.get(key)
+        if not isinstance(mapping, dict) or set(mapping) != set(queue):
+            raise ContractError(f"state execution.{key} must map every queued skill exactly once")
+    if any(gate_id not in {f"G{i}" for i in range(2, 8)} for gate_id in execution["skill_gates"].values()):
+        raise ContractError("state execution.skill_gates contains an invalid gate")
     status = value["status"]
     if status == "complete":
         if cursor != len(queue) or value.get("validation_status") != "passed":

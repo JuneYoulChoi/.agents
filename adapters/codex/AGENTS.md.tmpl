@@ -16,7 +16,12 @@ Before material work:
    When the reference runtime is available, write that structured intake as
    JSON, validate it with `harness_validator.py`, and start/resume it through
    `harness_runner.py`. Load only the returned `next.skill_path`, submit its
-   structured result with the expected revision, and repeat. A native Codex
+   structured result with the expected revision, and repeat. Resolve the
+   returned `next.execution_profile` to the available Codex model/reasoning
+   setting and submit the actual `execution_resolution`; record an upgrade,
+   degradation, platform default, or unavailable capability instead of hiding
+   it, including the native reasoning label. The portable profile never binds a
+   model name. A native Codex
    adapter may replace the command but must preserve the same JSON behavior.
 3. If the request changes this harness, run `harness-upgrade-analysis` next;
    the harness plan is its architecture baseline. If it also changes a target

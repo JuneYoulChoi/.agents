@@ -79,6 +79,24 @@ def _load_manifest(path: Path) -> dict[str, Any]:
         raise RouterError("reference provider requires the canonical G0 through G7 forward chain")
     if manifest.get("evaluation", {}).get("learned_weights") is not False:
         raise RouterError("learned routing weights are not permitted")
+    execution_policy = manifest.get("execution_policy")
+    if not isinstance(execution_policy, dict) or execution_policy.get("policy_id") != "adaptive_v1":
+        raise RouterError("routing manifest execution policy is unsupported")
+    if execution_policy.get("specific_model_binding") is not False:
+        raise RouterError("portable execution policy cannot bind a specific model")
+    if execution_policy.get("reasoning_levels") != ["low", "medium", "high"]:
+        raise RouterError("execution policy reasoning levels are invalid")
+    defaults = execution_policy.get("depth_defaults")
+    roles = execution_policy.get("gate_roles")
+    if not isinstance(defaults, dict) or set(defaults) != {"light", "standard", "deep"}:
+        raise RouterError("execution policy must define light, standard, and deep defaults")
+    if not isinstance(roles, dict) or set(roles) != {f"G{i}" for i in range(8)}:
+        raise RouterError("execution policy must define one role per gate")
+    for depth, levels in defaults.items():
+        if not isinstance(levels, list) or len(levels) != 8 or any(
+            level not in {"low", "medium", "high"} for level in levels
+        ):
+            raise RouterError(f"execution policy depth defaults are invalid: {depth}")
     selectors = manifest.get("selectors")
     if not isinstance(selectors, dict):
         raise RouterError("routing manifest selectors must be an object")
@@ -243,6 +261,69 @@ def _feedback_results(
     return results, revision, requires_user
 
 
+def _execution_profile(
+    context: dict[str, Any],
+    manifest: dict[str, Any],
+    architecture_status: str,
+    feedback: list[dict[str, Any]],
+) -> dict[str, Any]:
+    policy = manifest["execution_policy"]
+    depth = context.get("depth", "standard")
+    risk = context.get("risk", "medium")
+    if depth not in {"light", "standard", "deep"}:
+        raise RouterError(f"depth has unsupported value: {depth}")
+    if risk not in {"low", "medium", "high"}:
+        raise RouterError(f"risk has unsupported value: {risk}")
+    rank = {"low": 0, "medium": 1, "high": 2}
+    levels = list(policy["depth_defaults"][depth])
+    reasons: dict[str, list[str]] = {
+        f"G{index}": [f"depth_{depth}"] for index in range(8)
+    }
+    triggers: list[str] = []
+
+    def raise_to(gate_id: str, level: str, reason: str) -> None:
+        index = int(gate_id[1:])
+        if rank[level] > rank[levels[index]]:
+            levels[index] = level
+        if reason not in reasons[gate_id]:
+            reasons[gate_id].append(reason)
+
+    if risk == "high":
+        triggers.append("high_risk")
+        for gate_id in policy["escalation_rules"]["high_risk"]:
+            raise_to(gate_id, "high", "high_risk")
+    if architecture_status == "conflicted":
+        triggers.append("architecture_conflict")
+        for gate_id in policy["escalation_rules"]["architecture_conflict"]:
+            raise_to(gate_id, "high", "architecture_conflict")
+    for item in feedback:
+        target_gate = item.get("target_gate")
+        if item.get("attempt", 1) >= 2 and target_gate is not None:
+            trigger = f"repeated_feedback:{target_gate}"
+            triggers.append(trigger)
+            raise_to(target_gate, "high", "repeated_feedback")
+            raise_to("G7", "high", "repeated_feedback")
+
+    return {
+        "policy_id": policy["policy_id"],
+        "specific_model": None,
+        "depth": depth,
+        "risk": risk,
+        "adapter_resolution_required": True,
+        "escalation_triggers": list(dict.fromkeys(triggers)),
+        "gate_profiles": [
+            {
+                "gate_id": f"G{index}",
+                "role": policy["gate_roles"][f"G{index}"],
+                "reasoning": levels[index],
+                "independent_context": depth == "deep" and index == 7,
+                "reasons": reasons[f"G{index}"],
+            }
+            for index in range(8)
+        ],
+    }
+
+
 def route(context: dict[str, Any], manifest: dict[str, Any]) -> dict[str, Any]:
     """Evaluate one structured routing context and return a portable result."""
 
@@ -358,6 +439,7 @@ def route(context: dict[str, Any], manifest: dict[str, Any]) -> dict[str, Any]:
     gate_results.append(_gate_result("G7", revision, [verify_skill], ["verification", "handoff"], evidence=evidence))
 
     feedback, final_revision, feedback_requires_user = _feedback_results(context, manifest, revision)
+    execution_profile = _execution_profile(context, manifest, str(architecture_status), feedback)
     blocked = any(result["blocked"] for result in gate_results)
     if g0_blocked or (blocked and not g1_blocked):
         status = "blocked"
@@ -386,6 +468,7 @@ def route(context: dict[str, Any], manifest: dict[str, Any]) -> dict[str, Any]:
         "model": manifest["model"],
         "status": status,
         "forward_revision": final_revision,
+        "execution_profile": execution_profile,
         "gate_results": gate_results,
         "activated_skills": list(dict.fromkeys(all_activated)),
         "suppressed_skills": suppressed,

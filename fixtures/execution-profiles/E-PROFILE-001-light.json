@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "id": "E-PROFILE-001-light",
+  "description": "Light work stays low except for the architecture and verification minimums.",
+  "context": {
+    "schema_version": 1,
+    "request_id": "REQ-EXECUTION-LIGHT",
+    "target": "project",
+    "scope": "software_engineering",
+    "project_state": "brownfield",
+    "action": "review",
+    "risk": "low",
+    "depth": "light",
+    "enforcement_mode": "hook",
+    "architecture_status": "accepted",
+    "fields": ["backend"],
+    "languages": [],
+    "technologies": [],
+    "configuration_candidates": [],
+    "evidence_ids": ["EV-EXECUTION-LIGHT"],
+    "artifacts": [],
+    "feedback": []
+  },
+  "expected": {
+    "status": "active",
+    "execution_profile": {
+      "policy_id": "adaptive_v1",
+      "depth": "light",
+      "risk": "low",
+      "escalation_triggers_exact": [],
+      "gate_reasoning": {
+        "G0": "low",
+        "G1": "low",
+        "G2": "medium",
+        "G3": "low",
+        "G6": "low",
+        "G7": "medium"
+      }
+    }
+  }
+}

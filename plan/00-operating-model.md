@@ -181,6 +181,17 @@ skill and its explicitly required resources. It chooses application depth:
 | standard | normal feature, review, documentation, or refactor |
 | deep | architecture, security, data, public API, broad Brownfield impact, or material uncertainty |
 
+Depth controls procedure and artifact rigor; it is not a vendor model name.
+For each gate the Router derives a portable `execution_profile` containing the
+role, recommended `low`, `medium`, or `high` reasoning level, independent-
+context recommendation, and evidence-backed escalation reasons. The platform
+adapter maps that profile to an actually available model/reasoning setting and
+records `exact`, `upgraded`, `degraded`, `platform_default`, or `unavailable`.
+The result keeps both the portable normalized reasoning level and the adapter's
+native reasoning label so newer platform-specific levels do not change Core.
+Skills and Core manifests never pin a commercial model name. A model upgrade
+does not grant authority, bypass a gate, or replace missing user intent.
+
 Each invoked skill must yield: classification changes, evidence, artifacts,
 assumptions/open points, validation requirements, and a `transition` to the
 next decision.

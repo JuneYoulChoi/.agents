@@ -53,9 +53,12 @@ def _registry_entries(path: Path) -> dict[str, str]:
     return result
 
 
-def _execution_queue(route_result: dict[str, Any]) -> tuple[list[str], dict[str, str]]:
+def _execution_queue(
+    route_result: dict[str, Any],
+) -> tuple[list[str], dict[str, str], dict[str, str]]:
     queue: list[str] = []
     stages: dict[str, str] = {}
+    gates: dict[str, str] = {}
     for gate in route_result["gate_results"]:
         gate_id = gate["gate_id"]
         for skill_id in gate.get("activated_skills", []):
@@ -63,7 +66,8 @@ def _execution_queue(route_result: dict[str, Any]) -> tuple[list[str], dict[str,
                 continue
             queue.append(skill_id)
             stages[skill_id] = GATE_STAGE.get(gate_id, "assembly")
-    return queue, stages
+            gates[skill_id] = gate_id
+    return queue, stages, gates
 
 
 def _next_item(state: dict[str, Any], entries: dict[str, str], harness_root: Path) -> dict[str, Any] | None:
@@ -79,12 +83,16 @@ def _next_item(state: dict[str, Any], entries: dict[str, str], harness_root: Pat
     skill_path = harness_root.joinpath(entry).resolve(strict=True)
     if harness_root.resolve(strict=True) not in skill_path.parents:
         raise RunnerError(f"queued skill path escapes the harness root: {skill_id}")
+    gate_id = execution["skill_gates"][skill_id]
+    profiles = state["route"]["execution_profile"]["gate_profiles"]
+    execution_profile = next(profile for profile in profiles if profile["gate_id"] == gate_id)
     return {
         "position": cursor,
         "skill_id": skill_id,
         "stage": execution["skill_stages"][skill_id],
         "skill_entry": entry,
         "skill_path": str(skill_path),
+        "execution_profile": execution_profile,
         "expected_result": {
             "schema_version": 1,
             "skill_id": skill_id,
@@ -92,6 +100,14 @@ def _next_item(state: dict[str, Any], entries: dict[str, str], harness_root: Pat
             "artifact_ids": [],
             "evidence_ids": [],
             "transition": {"next_stage": execution["skill_stages"][skill_id]},
+            "execution_resolution": {
+                "adapter": state["selected_adapter"],
+                "model": "platform-selected-or-default",
+                "reasoning": execution_profile["reasoning"],
+                "native_reasoning": "platform-reported-value",
+                "status": "exact | upgraded | degraded | platform_default | unavailable",
+                "evidence_ids": [],
+            },
             "error": None,
         },
     }
@@ -140,7 +156,7 @@ def start(
             "route": route_result,
             "next": None,
         }
-    queue, stages = _execution_queue(route_result)
+    queue, stages, gates = _execution_queue(route_result)
     if route_result["status"] == "waiting_user":
         state_stage = "clarification"
     elif route_result["status"] == "blocked":
@@ -193,6 +209,7 @@ def start(
             "queue": queue,
             "cursor": 0,
             "skill_stages": stages,
+            "skill_gates": gates,
             "results": [],
             "artifact_ids": [],
             "evidence_ids": [],
@@ -241,6 +258,25 @@ def submit(
         raise RunnerError(
             f"out-of-order skill result: expected {next_item['skill_id']}, got {result['skill_id']}"
         )
+    resolution = result["execution_resolution"]
+    if resolution["adapter"] != current["selected_adapter"]:
+        raise RunnerError("execution resolution adapter does not match the task adapter")
+    expected_reasoning = next_item["execution_profile"]["reasoning"]
+    actual_reasoning = resolution["reasoning"]
+    resolution_status = resolution["status"]
+    rank = {"low": 0, "medium": 1, "high": 2}
+    if resolution_status == "exact" and actual_reasoning != expected_reasoning:
+        raise RunnerError("exact execution resolution must match recommended reasoning")
+    if resolution_status == "upgraded" and (
+        actual_reasoning == "unknown" or rank[actual_reasoning] <= rank[expected_reasoning]
+    ):
+        raise RunnerError("upgraded execution resolution must exceed recommended reasoning")
+    if resolution_status == "degraded" and (
+        actual_reasoning == "unknown" or rank[actual_reasoning] >= rank[expected_reasoning]
+    ):
+        raise RunnerError("degraded execution resolution must be below recommended reasoning")
+    if resolution_status in {"exact", "upgraded", "degraded"} and actual_reasoning == "unknown":
+        raise RunnerError("known execution resolution status requires a known reasoning level")
     if result["skill_id"] == "core.verify-and-handoff" and result["status"] == "not_applicable":
         raise RunnerError("verify-and-handoff cannot be marked not_applicable")
 

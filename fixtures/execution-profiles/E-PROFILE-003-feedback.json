@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "id": "E-PROFILE-003-feedback",
+  "description": "Repeated specialist feedback raises only its responsible gate and verification.",
+  "context": {
+    "schema_version": 1,
+    "request_id": "REQ-EXECUTION-FEEDBACK",
+    "target": "project",
+    "scope": "software_engineering",
+    "project_state": "brownfield",
+    "action": "review",
+    "risk": "medium",
+    "depth": "standard",
+    "enforcement_mode": "hook",
+    "architecture_status": "accepted",
+    "fields": ["implementation", "testing"],
+    "languages": ["cpp"],
+    "technologies": [],
+    "configuration_candidates": [],
+    "evidence_ids": ["EV-EXECUTION-FEEDBACK"],
+    "artifacts": [
+      {"id": "IMPL", "depends_on": []},
+      {"id": "TEST", "depends_on": ["IMPL"]}
+    ],
+    "feedback": [
+      {
+        "feedback_id": "FDB-EXECUTION-002",
+        "source_gate": "G7",
+        "kind": "ecosystem_binding_language_or_generated_code_gap",
+        "expected": "Language binding follows the selected ecosystem contract",
+        "actual": "The second verification found the same binding mismatch",
+        "evidence_ids": ["EV-BINDING-002"],
+        "invalidated_root_artifact_ids": ["IMPL"],
+        "attempt": 2
+      }
+    ]
+  },
+  "expected": {
+    "status": "active",
+    "forward_revision": 2,
+    "execution_profile": {
+      "policy_id": "adaptive_v1",
+      "depth": "standard",
+      "risk": "medium",
+      "escalation_triggers_exact": ["repeated_feedback:G5"],
+      "gate_reasoning": {
+        "G4": "medium",
+        "G5": "high",
+        "G6": "medium",
+        "G7": "high"
+      }
+    }
+  }
+}

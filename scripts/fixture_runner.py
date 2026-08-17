@@ -115,6 +115,36 @@ def _compare(fixture: dict[str, Any], actual: dict[str, Any]) -> list[str]:
         wanted = expected["event_types_contains"]
         if not _contains(actual_types, wanted):
             failures.append(f"event_types_contains: missing {sorted(set(wanted) - set(actual_types))!r}")
+    profile_expected = expected.get("execution_profile")
+    if profile_expected is not None:
+        profile = actual.get("execution_profile")
+        if not isinstance(profile_expected, dict) or not isinstance(profile, dict):
+            failures.append("execution_profile: expected and actual must be objects")
+        else:
+            for key in ("policy_id", "depth", "risk"):
+                if key in profile_expected and profile.get(key) != profile_expected[key]:
+                    failures.append(
+                        f"execution_profile.{key}: expected {profile_expected[key]!r}, "
+                        f"actual {profile.get(key)!r}"
+                    )
+            if "escalation_triggers_exact" in profile_expected:
+                wanted = profile_expected["escalation_triggers_exact"]
+                got = profile.get("escalation_triggers", [])
+                if sorted(got) != sorted(wanted):
+                    failures.append(
+                        f"execution_profile.escalation_triggers_exact: expected {wanted!r}, actual {got!r}"
+                    )
+            gate_profiles = {
+                item.get("gate_id"): item
+                for item in profile.get("gate_profiles", [])
+                if isinstance(item, dict)
+            }
+            for gate_id, reasoning in profile_expected.get("gate_reasoning", {}).items():
+                if gate_profiles.get(gate_id, {}).get("reasoning") != reasoning:
+                    failures.append(
+                        f"execution_profile.{gate_id}.reasoning: expected {reasoning!r}, "
+                        f"actual {gate_profiles.get(gate_id, {}).get('reasoning')!r}"
+                    )
     return failures
 
 

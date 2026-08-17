@@ -116,9 +116,11 @@ python3 -B scripts/harness_runner.py start \
   --harness-revision <pinned-revision>
 ```
 
-The Runner returns exactly one `next` skill with its reviewed source path and
-expected result shape. The adapter loads that skill, performs it, and submits
-the result with optimistic revision control:
+The Runner returns exactly one `next` skill with its reviewed source path,
+portable execution profile, and expected result shape. The adapter maps the
+profile to its available model/reasoning controls, loads that skill, performs
+it, and submits the result plus the normalized and platform-native resolution
+with optimistic revision control:
 
 ```sh
 python3 -B scripts/harness_runner.py submit \
@@ -249,11 +251,18 @@ but it MUST follow this order:
    `language-engineering` and only its detected language profiles. When the
    baseline exposes configuration candidates, also select the common
    configuration skill and only its configuration-specific language reference.
-8. If a skill is unavailable, use the core fallback or ask the user.
-9. Run the current stage; validate its output and gate-result contracts.
-10. Append events, topologically join all required branch outputs, and evaluate
+8. Derive the gate `execution_profile` from depth defaults, then apply only
+   explicit escalation triggers: high risk, architecture conflict, or repeated
+   feedback at the responsible gate. Do not bind a model name or raise the
+   profile merely because several skills were selected.
+9. Let the adapter resolve the profile to an available model/reasoning setting
+   and record the actual resolution. If unavailable or degraded, report it;
+   model strength never weakens authority, safety, or completion guards.
+10. If a skill is unavailable, use the core fallback or ask the user.
+11. Run the current stage; validate its output and gate-result contracts.
+12. Append events, topologically join all required branch outputs, and evaluate
     the transition guard.
-11. If verification or new evidence emits backward feedback, reopen the nearest
+13. If verification or new evidence emits backward feedback, reopen the nearest
     responsible gate, invalidate only dependent descendants, and recompute that
     subgraph. Otherwise repeat forward until handoff, blocked, failed,
     cancelled, or waiting_user.
@@ -337,6 +346,13 @@ uses only a previously recorded, still-valid approval.
 | `light` | intent, classification, changed files, validation result, short handoff | none by default |
 | `standard` | light artifacts plus impact, task, acceptance tests, trace links, document update decision | one focused reviewer only when useful |
 | `deep` | standard artifacts plus alternatives, NFR/QAS, ADR, issue ledger, independent evaluator, rollback/operational plan | selective and isolated |
+
+The reference `adaptive_v1` profile keeps `light` work low by default while
+retaining `medium` minimums for architecture and verification. `standard` is
+normally medium after the low-cost guard. `deep` recommends high reasoning and
+an independent verification context. High risk raises G2–G7; an architecture
+conflict raises G2; a second unresolved feedback attempt raises only its target
+gate and G7. These are recommendations for adapter resolution, not new gates.
 
 “Material work” means a change to behavior, public contract, data, security,
 operations, user-facing documentation, or a decision that is costly to reverse.

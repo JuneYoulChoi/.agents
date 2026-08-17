@@ -14,6 +14,7 @@ were reviewed on 2026-08-17. These are design inputs, not runtime dependencies.
 | Observability, governance, and human-in-the-loop for consequential actions | [AWS enterprise agentic AI guidance](https://docs.aws.amazon.com/prescriptive-guidance/latest/govern-architect-agentic-ai/enterprise-architecture.html) | Record decisions, evidence, tool/action scope, verification, and user approvals; gate destructive/external activity. |
 | Externalized, environment-independent application configuration | [The Twelve-Factor App: Config](https://12factor.net/config) and the reviewed [configuration-management skill](https://www.skills.sh/aj-geddes/useful-ai-prompts/configuration-management) | Add a language-neutral configuration contract with typed validation, explicit precedence, secret separation, and progressively loaded C++/Rust/Java/Python/TypeScript/JavaScript/Go/Shell references plus HTML/CSS public-artifact boundaries. |
 | Capability-first technology selection and version-matched ecosystem guidance | Official documentation for [ROS 2](https://docs.ros.org/en/ros2_documentation/rolling/Concepts.html), [Node.js](https://nodejs.org/docs/latest/api/), [React](https://react.dev/), [gRPC](https://grpc.io/docs/), [Isaac Lab](https://isaac-sim.github.io/IsaacLab/), [Docker](https://docs.docker.com/), [Isaac Sim](https://docs.isaacsim.omniverse.nvidia.com/), [MoveIt 2](https://moveit.picknik.ai/), [Kubernetes](https://kubernetes.io/docs/concepts/), [Modbus](https://www.modbus.org/modbus-specifications), and [colcon](https://colcon.readthedocs.io/) | Add a product-neutral `TECH-*` decision layer, then progressively load one approved ecosystem engineering skill and only the changed implementation-language profiles. Treat official/versioned contracts as authority and popularity as advisory. |
+| Evaluation-driven reasoning effort instead of maximum effort everywhere | [Official OpenAI model guidance](https://developers.openai.com/api/docs/guides/latest-model), reviewed 2026-08-17 | Use a balanced portable baseline, raise it only for explicit risk/conflict/feedback signals, and compare actual adapter choices on representative tasks. Keep vendor-specific levels in adapter evidence rather than Core policy. |
 
 ## Deliberate adaptations
 
@@ -35,6 +36,11 @@ were reviewed on 2026-08-17. These are design inputs, not runtime dependencies.
 - **Portable core, explicit adapters.** A shared state/skill contract is
   normative; Codex and Claude entrypoints are adapters and must negotiate their
   actual available capabilities rather than pretending feature parity.
+- **Portable execution profiles, not fixed models.** The Router recommends a
+  role and `low`/`medium`/`high` reasoning level per gate. Each adapter maps that
+  recommendation to an available platform model, records the actual resolution,
+  and reports degradation instead of encoding vendor model names, prices, or
+  token limits in the core policy.
 
 ## Applicability and evidence discipline
 
