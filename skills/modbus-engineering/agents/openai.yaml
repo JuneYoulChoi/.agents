@@ -1,0 +1,6 @@
+interface:
+  display_name: "Modbus Engineering"
+  short_description: "Engineer interoperable and resilient Modbus integration"
+  default_prompt: "Use $modbus-engineering to design or change Modbus contracts, register maps, transports, timing, gateways, and tests."
+policy:
+  allow_implicit_invocation: true

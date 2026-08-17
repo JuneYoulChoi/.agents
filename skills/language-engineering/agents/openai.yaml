@@ -1,0 +1,6 @@
+interface:
+  display_name: "Language Engineering"
+  short_description: "Apply language-specific implementation practices"
+  default_prompt: "Use $language-engineering to apply the detected implementation language's idioms, safety rules, build conventions, and verification."
+policy:
+  allow_implicit_invocation: true

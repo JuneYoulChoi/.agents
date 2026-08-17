@@ -23,6 +23,12 @@ build/run/test commands, and initial results. Inspect the current user-visible
 behavior, relevant tests, contracts, docs, dependencies, schemas/migrations,
 CI, and operational signals.
 
+Detect runtimes, libraries, frameworks, protocols, platforms, simulators,
+middleware, build tools, language bindings, generated-code owners, versions,
+support windows, and their integration graph. An installed executable or
+manifest entry is evidence of presence, not proof that it owns the affected
+behavior.
+
 If the system cannot be run, record why. Use code, tests, or observed behavior
 as characterization evidence. Do not fabricate a passing baseline.
 
@@ -70,6 +76,8 @@ impact:
   use_cases: []
   requirements: []
   contracts: []
+  technologies: []
+  language_bindings: []
   configuration: []
   modules: []
   tests: []
@@ -86,11 +94,20 @@ transition:
   next_skill: ''
 ```
 
+Record this result as one `G3` workflow branch. A Hybrid request may join it
+with a bounded Greenfield branch for a genuinely new area. Emit affected
+technology, configuration, testing, documentation, security, performance, or
+operations concerns as `G4` candidates without loading every concern skill.
+
 ## 5. Choose the next action
 
 Route to design when architecture, contract, data, or quality decisions remain.
 Route configuration candidates to `$configuration-and-environment-management`
 after the current behavior and migration impact are recorded.
+Route technology adoption, replacement, upgrade, or specialist integration to
+`$technology-selection-and-integration` after the current stack and migration
+impact are recorded. Invoke only the affected ecosystem skill, then
+`$language-engineering` for changed authored code.
 Route to execution only when the change boundary and regression plan are clear.
 Route to clarification when impact depends on user intent. Route to
 `$verify-and-handoff` after implementation and required documentation updates.

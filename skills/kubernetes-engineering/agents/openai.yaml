@@ -1,0 +1,6 @@
+interface:
+  display_name: "Kubernetes Engineering"
+  short_description: "Engineer operable Kubernetes workloads"
+  default_prompt: "Use $kubernetes-engineering to design or change Kubernetes workloads, configuration, security, rollout, and observability."
+policy:
+  allow_implicit_invocation: true

@@ -36,11 +36,22 @@ expiry, and residual risk. For Brownfield work, include relevant regression
 checks. For API, data, security, migration, or operational changes, include the
 applicable contract, rollback, or post-change checks.
 
+When a technology ecosystem or implementation language is affected, verify the
+selected `TECH-*` and `IMPL-*` artifacts: purpose and version/binding evidence,
+integration/compatibility edges, required specialist skill result, generated
+vs authored ownership, ecosystem-specific checks, language build/lint/test
+profile, configuration contracts, and architecture/document synchronization.
+Confirm that unrelated ecosystem/language skills were not treated as required
+and that popularity did not grant adoption authority.
+
 When configuration is affected, verify safe defaults, supported sources and
 precedence, invalid/missing/boundary values, compatibility aliases, secret
 redaction, and startup/reload/rollback behavior as applicable. Confirm that
 tests and examples contain no real secrets or machine-specific production
-values.
+values. When a configuration tool or dependency changed, verify the recorded
+functional category, popularity-evidence source/window, maintenance, license,
+security, compatibility, migration, and approval decision; popularity alone is
+not a passing result.
 
 ## 3. Check traceability and documentation
 
@@ -49,12 +60,25 @@ link to their rationale, and changed behavior has fit-for-purpose documentation
 or a recorded reason not to create it. Do not update protected documents without
 approval.
 
+Use `REQ/QAS -> ADR -> TECH -> IMPL -> CONFIG -> TASK -> TEST -> DOC` for
+material technology work, omitting only non-applicable entities with an
+explicit compact trace or waiver appropriate to depth.
+
 ## 4. Decide status honestly
 
 Mark `complete` only when all material acceptance criteria have passed or have
 valid waivers, no material issue is `open` or `user_decision`, approvals remain
 valid, and a durable handoff exists. Otherwise return `active`, `blocked`,
 `failed`, or `waiting_user` with the exact next action.
+
+When a check fails or new evidence invalidates an earlier output, act as gate
+`G7` and emit one bounded backward feedback record. Target the nearest
+responsible gate: guard/capability `G0`, intent `G1`, baseline/architecture
+`G2`, workflow/impact `G3`, cross-cutting concern `G4`, ecosystem/language
+`G5`, or implementation/assembly `G6`. Include expected/actual evidence,
+invalidated and preserved artifact IDs, and attempt count. Never broadcast to
+every gate, mutate an immutable prior result, or change user-owned intent or an
+accepted decision. Escalate after three unresolved material attempts.
 
 ## 5. Write the handoff
 
@@ -80,7 +104,7 @@ Always return an explicit transition:
 
 ```yaml
 transition:
-  next_stage: handoff | execution | clarification | blocked | failed
+  next_stage: handoff | execution | clarification | backward_feedback | blocked | failed
   next_skill: ''
   entry_conditions: []
 ```

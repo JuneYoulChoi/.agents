@@ -28,7 +28,7 @@ proposals, not confirmed requirements.
 Create stable IDs and a concise trace:
 
 ```text
-GOAL -> REQ/FR -> NFR/QAS -> ADR -> CONFIG -> TASK -> TEST -> DOC
+GOAL -> REQ/FR -> NFR/QAS -> ADR -> TECH -> IMPL -> CONFIG -> TASK -> TEST -> DOC
 ```
 
 Write functional requirements as observable outcomes. For important quality
@@ -42,6 +42,13 @@ public-contract decisions.
 Choose the minimum architecture that satisfies the requirements. State system
 boundaries, major components, data/API contracts, failure behavior, security
 and privacy constraints, operational needs, and alternatives considered.
+
+Derive technology capabilities before choosing a product. Route material
+runtime, library, framework, protocol, platform, simulator, middleware, build,
+or orchestration choices through `$technology-selection-and-integration`.
+After an ecosystem is selected, route every implementation-producing module
+through the matching ecosystem skill and `$language-engineering`; do not choose
+a language or adjacent platform only because an example uses it.
 
 When deploy-time or runtime values may vary, define a configuration contract
 before implementation: classify code/build/deploy/runtime/secret values, name
@@ -67,6 +74,8 @@ goal: GOAL-001
 requirements: [REQ-001]
 quality_scenarios: [QAS-001]
 decisions: [ADR-001]
+technologies: [TECH-001]
+implementation_profiles: [IMPL-001]
 tasks:
   - id: TASK-001
     outcome: ''
@@ -78,6 +87,10 @@ transition:
   next_stage: execution | clarification
   next_skill: ''
 ```
+
+Record this result as one `G3` workflow branch. It may join document,
+technology, configuration, testing, or other concern branches emitted for the
+same request; it does not preload or execute those skills itself.
 
 ## 5. Guard implementation
 

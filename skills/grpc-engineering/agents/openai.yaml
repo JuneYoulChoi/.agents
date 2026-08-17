@@ -1,0 +1,6 @@
+interface:
+  display_name: "gRPC Engineering"
+  short_description: "Engineer compatible and observable gRPC APIs"
+  default_prompt: "Use $grpc-engineering to design or change Protobuf contracts, gRPC services, clients, compatibility, and operations."
+policy:
+  allow_implicit_invocation: true

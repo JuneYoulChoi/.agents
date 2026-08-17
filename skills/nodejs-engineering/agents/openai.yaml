@@ -1,0 +1,6 @@
+interface:
+  display_name: "Node.js Engineering"
+  short_description: "Engineer reliable Node.js applications and services"
+  default_prompt: "Use $nodejs-engineering to design or change a Node.js runtime, package, service, or tooling workflow."
+policy:
+  allow_implicit_invocation: true

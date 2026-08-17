@@ -40,7 +40,7 @@ Look for an index and the following logical artifacts (filenames may vary):
 
 ```text
 PRD, SRS, external entities/interfaces, UC, configuration model,
-FA, QA/QAS, HLD, LLD, ADR,
+FA, QA/QAS, HLD, LLD, ADR, technology and integration model,
 layer, infrastructure, architectural, module, C&C, data, runtime views,
 class, sequence, context, deployment diagrams
 ```
@@ -62,7 +62,7 @@ PRD / SRS
   -> QA / QAS
   -> HLD
   -> ADR
-  -> LLD / Module / Configuration Contract
+  -> TECH / LLD / Module / Configuration Contract
   -> Views / Diagrams
   -> TASK / CODE / TEST / OPERATIONS
 ```
@@ -84,6 +84,8 @@ identify:
 - FA candidates and responsibilities;
 - QA/QAS candidates and measurable scenarios;
 - HLD boundaries and dependencies;
+- technology capabilities, existing/candidate ecosystems, versions/bindings,
+  and integration/compatibility boundaries;
 - LLD/module candidates and ownership;
 - relevant layer, infrastructure, C&C, runtime, class, and sequence views;
 - configuration boundaries, sources, precedence, secret strategy, and their
@@ -115,6 +117,13 @@ views, ADRs, and documents. Let `$brownfield-impact-analysis` decide
 
 ## 5. Produce the architecture record and transition
 
+This skill is gate `G2`. Consume all relevant intake branches and project
+evidence together. Emit each applicable workflow/concern candidate rather than
+forcing one exclusive output, but keep unsupported adjacent technologies or
+documents suppressed with evidence. A user correction or later architecture
+contradiction may reopen `G2`; preserve the prior result and mark only dependent
+downstream artifacts stale.
+
 ```yaml
 architecture:
   status: confirmed | draft | missing | stale | conflicted
@@ -131,9 +140,16 @@ architecture:
   views: []
   diagrams: []
   configuration: []
+  technologies: []
+  integration_relationships: []
   evidence: []
   user_confirmations_needed: []
   open_issues: []
+gate_result:
+  gate_id: G2
+  activated_branches: []
+  suppressed_branches: []
+  output_artifacts: []
 transition:
   next_stage: clarification | discovery | impact | design | execution | verification
   next_skill: ''
@@ -145,6 +161,12 @@ recorded. Route to `$greenfield-planning` for a new system, to
 `$brownfield-impact-analysis` for an existing system, to `$document-purpose`
 for a document-only request, and to `$verify-and-handoff` after implementation
 or architecture synchronization.
+
+Route a material technology choice or detected specialist ecosystem through
+`$technology-selection-and-integration` after the Greenfield/Brownfield
+baseline and before implementation. Architecture records required capability
+and integration constraints; the technology skill selects products and
+specialist procedures.
 
 ## Exit gate
 

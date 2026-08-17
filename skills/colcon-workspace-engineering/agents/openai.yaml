@@ -1,0 +1,6 @@
+interface:
+  display_name: "colcon Workspace Engineering"
+  short_description: "Engineer deterministic multi-package colcon workspaces"
+  default_prompt: "Use $colcon-workspace-engineering to design or change colcon workspace layouts, overlays, builds, tests, and CI behavior."
+policy:
+  allow_implicit_invocation: true

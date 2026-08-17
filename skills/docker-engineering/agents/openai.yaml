@@ -1,0 +1,6 @@
+interface:
+  display_name: "Docker Engineering"
+  short_description: "Engineer secure and reproducible container workflows"
+  default_prompt: "Use $docker-engineering to design or change Docker images, Compose workflows, configuration, security, and verification."
+policy:
+  allow_implicit_invocation: true

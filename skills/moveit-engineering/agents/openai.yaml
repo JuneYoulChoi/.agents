@@ -1,0 +1,6 @@
+interface:
+  display_name: "MoveIt Engineering"
+  short_description: "Engineer safe and testable MoveIt systems"
+  default_prompt: "Use $moveit-engineering to design or change MoveIt planning scenes, pipelines, kinematics, trajectories, and ROS 2 integration."
+policy:
+  allow_implicit_invocation: true

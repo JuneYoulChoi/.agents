@@ -36,7 +36,8 @@ Read in this order, progressively:
 1. `plan/README.md`, then every `plan/*.md` file. Treat this set as the
    normative statement of requirements, concept, direction, sequence, gates,
    contracts, and implementation phases.
-2. `registry/active-skills.json`, `registry/adapter-manifest.json`, and any
+2. `registry/active-skills.json`, its referenced
+   `registry/routing-gates.json`, `registry/adapter-manifest.json`, and any
    referenced registry/taxonomy files.
 3. Active skill metadata (`SKILL.md` frontmatter and `agents/openai.yaml`) for
    all entries; read full bodies only for skills affected by the request and
@@ -61,6 +62,8 @@ Decompose the request into atomic changes. For each change, identify:
 - the preserved concept or contract;
 - affected sequence stages, gates, transitions, skills, registry entries,
   adapters, fixtures, and user-facing instructions;
+- affected forward edges, activation/suppression behavior, feedback targets,
+  invalidation boundaries, and retry/escalation behavior;
 - compatibility and regression risks;
 - unresolved user decisions and a reversible safe default, if one exists.
 

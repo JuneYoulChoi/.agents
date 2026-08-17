@@ -1,0 +1,6 @@
+interface:
+  display_name: "Isaac Sim Engineering"
+  short_description: "Engineer reliable Isaac Sim simulation systems"
+  default_prompt: "Use $isaac-sim-engineering to design or change Isaac Sim stages, assets, extensions, sensors, physics, and integrations."
+policy:
+  allow_implicit_invocation: true

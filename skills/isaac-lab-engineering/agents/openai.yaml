@@ -1,0 +1,6 @@
+interface:
+  display_name: "Isaac Lab Engineering"
+  short_description: "Engineer reproducible Isaac Lab learning systems"
+  default_prompt: "Use $isaac-lab-engineering to design or change Isaac Lab tasks, environments, training, evaluation, and reproducibility."
+policy:
+  allow_implicit_invocation: true

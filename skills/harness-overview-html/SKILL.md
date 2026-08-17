@@ -58,14 +58,17 @@ Use this order so the page has a clear beginning, middle, and end:
    Claude-compatible, progressive skill loading, and evidence-first behavior.
 3. **Architecture** — the harness layers (global guard, intake/router,
    baseline, workflow skills, verification/handoff, registry/adapters) and
-   their responsibilities.
+   their responsibilities. Distinguish the architectural `L0`–`L7` layers from
+   the routing `G0`–`G7` layered gated skill graph.
 4. **Traceability** —
    `PRD/SRS -> external entity/interface -> UC -> FA -> QA/QAS -> HLD -> ADR -> LLD/configuration -> views/diagrams -> code/tests/operations`.
    Explain that FA means Functional Architecture and QA means Quality
    Attribute, and link to the project architecture documents when present.
 5. **Sequence** — intake, clarification, discovery, architecture, impact,
    assembly, deliberation, design, execution, verification, and handoff; show
-   Greenfield, Brownfield, Hybrid, and unknown branches.
+   Greenfield, Brownfield, Hybrid, and unknown branches. Show multi-input/
+   multi-output activation and suppression, forward joining, and bounded
+   backward feedback that reopens only the nearest responsible gate.
 6. **Gates** — intent, ambiguity/authority, architecture, impact,
    documentation gap, mutation, verification, and handoff conditions.
 7. **Skills and registry** — active skill name, purpose, entry condition, next

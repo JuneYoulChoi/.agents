@@ -1,0 +1,6 @@
+interface:
+  display_name: "Technology Selection and Integration"
+  short_description: "Select and compose project technology ecosystems"
+  default_prompt: "Use $technology-selection-and-integration to select and compose only the technologies justified by this project's requirements and evidence."
+policy:
+  allow_implicit_invocation: true

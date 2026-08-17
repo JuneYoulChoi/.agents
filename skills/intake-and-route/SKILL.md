@@ -45,6 +45,12 @@ duplicate labels. Add `configuration` when the request or discovered software
 contains deploy/runtime settings, environment-specific hardcoded values,
 configuration files, environment variables, profiles, secrets, endpoints,
 ports, paths, timeouts, retries, pool sizes, or feature flags.
+Add `technology_selection` when the request names, adopts, replaces, compares,
+or materially integrates a runtime, library, framework, protocol, platform,
+simulator, middleware, build tool, or container/orchestration technology. Add
+`robotics`, `simulation`, or `industrial_integration` only when that domain is
+actually in scope; a technology name alone does not select every adjacent
+domain or specialist skill.
 
 Use `unknown` only when software context is insufficient. It permits read-only
 discovery, not material mutation. Use `not_applicable` for non-software scope.
@@ -97,6 +103,8 @@ closed until a scope-bound approval exists. Silence is not approval.
 | Greenfield design or new capability | `$greenfield-planning` |
 | Brownfield/Hybrid change | `$brownfield-impact-analysis` before edits |
 | Configuration candidate after architecture and Greenfield/Brownfield baseline | `$configuration-and-environment-management` during assembly/design |
+| Technology adoption/integration or detected ecosystem with specialist rules | `$technology-selection-and-integration`, then only selected ecosystem skills |
+| Material implementation after ecosystem selection | `$language-engineering` for each changed authored language boundary |
 | Document request | `$document-purpose` |
 | Existing implementation ready for completion | `$verify-and-handoff` |
 | Missing or incompatible specialist skill | use the core procedure and report the fallback |
@@ -105,9 +113,32 @@ For mixed requests, order work by dependency. Example: existing-feature request
 with API docs becomes Brownfield impact, design, implementation/test, then
 document update.
 
+Treat intake as gate `G1` in `registry/routing-gates.json`. It accepts several
+simultaneous request/context signals and may emit several candidate branches.
+Do not collapse a mixed request into one field or load every candidate body.
+Record materially plausible but unevidenced adjacent branches as suppressed
+with a reason; later gates may activate them only when new evidence appears.
+
+For technology work, use this dependency order: architecture and Greenfield or
+Brownfield baseline, technology selection/integration, selected ecosystem
+engineering skill, changed implementation-language profile, conditional
+configuration, execution, verification, and documentation. Never preload all
+ecosystem or language skills merely because they are registered.
+
 ## 5. Return a transition, not a hidden conclusion
 
-Return the intake record, current evidence, assumptions/open decisions, and:
+Return the intake record, current evidence, assumptions/open decisions, one
+immutable `G1` gate result, and:
+
+```yaml
+gate_result:
+  gate_id: G1
+  activated_branches: []
+  candidate_branches: []
+  suppressed_branches: []
+  blocked_branches: []
+  evidence: []
+```
 
 ```yaml
 transition:

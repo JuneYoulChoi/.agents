@@ -1,6 +1,6 @@
 ---
 name: configuration-and-environment-management
-description: Design, review, migrate, implement, or verify portable application configuration and environment handling. Use when software contains or introduces IPs, hosts, ports, URLs, paths, timeouts, retries, pool sizes, feature flags, credentials, environment variables, profiles, YAML/JSON/TOML/properties files, deploy-time or runtime settings, or environment-specific hardcoded values in C++, Rust, Java, Python, or another language.
+description: Design, review, migrate, implement, or verify portable application configuration and environment handling. Use when software contains or introduces IPs, hosts, ports, URLs, paths, timeouts, retries, pool sizes, feature flags, credentials, environment variables, profiles, YAML/JSON/TOML/properties files, deploy-time or runtime settings, public client bootstrap or theme values, shell configuration, or environment-specific hardcoded values in C++, Rust, Java, Python, TypeScript, Go, HTML, CSS, Shell, or another language.
 ---
 
 # Configuration and Environment Management
@@ -17,8 +17,19 @@ require an impact record covering existing configuration behavior before
 material edits. If product defaults, operator authority, compatibility, or the
 acceptable secret source is unclear, return to clarification.
 
+When configuration belongs to a selected runtime, framework, protocol,
+platform, simulator, middleware, or build ecosystem, require its `TECH-*`
+record and use the selected ecosystem skill to define semantic keys and
+lifecycle. This skill owns externalization, source/precedence, validation,
+secret separation, and migration; it does not replace ecosystem rules.
+
 Do not use this skill to externalize every constant. Do not place secrets in
 repository files, examples, logs, task state, or architecture documents.
+
+This is a conditional `G4` concern branch. Activate it only when request,
+architecture, impact, or runtime evidence contains a justified configuration
+candidate. A verification failure may reopen this branch through bounded
+backward feedback while preserving unrelated workflow and technology results.
 
 ## 1. Classify each candidate
 
@@ -49,7 +60,9 @@ an approved migration and compatibility window exist.
 Read [references/common.md](references/common.md) for the common contract and
 [references/config-formats.md](references/config-formats.md) when selecting or
 changing a format. Read [references/secrets.md](references/secrets.md) whenever
-sensitive values or production configuration are in scope.
+sensitive values or production configuration are in scope. Read
+[references/tool-selection.md](references/tool-selection.md) before proposing a
+new configuration dependency or using popularity as selection evidence.
 
 ## 3. Define the configuration contract
 
@@ -89,11 +102,27 @@ read only the matching reference:
 - Rust: [references/rust.md](references/rust.md)
 - Java: [references/java.md](references/java.md)
 - Python: [references/python.md](references/python.md)
+- TypeScript/JavaScript: [references/typescript.md](references/typescript.md)
+- Go: [references/go.md](references/go.md)
+- Shell: [references/shell.md](references/shell.md)
+- HTML public bootstrap boundary: [references/html.md](references/html.md)
+- CSS theme/token boundary: [references/css.md](references/css.md)
+
+Read exactly one primary implementation-language reference for each
+configuration producer. Also read the HTML or CSS boundary reference only when
+that configuration is rendered into those public artifacts. A frontend may
+therefore use the TypeScript reference plus the directly affected HTML/CSS
+boundary without loading unrelated language guidance.
 
 For an unlisted language, apply the common contract and the project's existing
 typed configuration mechanism. Do not introduce a dependency solely because a
 reference names an ecosystem pattern; dependency changes require impact,
 license, security, and approval review.
+
+If `$language-engineering` is selected for the implementation slice, its
+language profile owns general code idioms while this skill's corresponding
+reference owns configuration-specific mechanisms. Record both without loading
+unrelated language profiles.
 
 ## 5. Test, document, and transition
 
@@ -112,6 +141,9 @@ Return:
 ```yaml
 configuration:
   status: confirmed | draft | migrated | conflicted
+  primary_language: ''
+  boundary_contexts: []
+  references_loaded: []
   candidates: []
   retained_constants: []
   externalized: []
@@ -119,6 +151,7 @@ configuration:
   precedence: []
   secret_strategy: ''
   compatibility: []
+  tool_selection_evidence: []
   artifacts: []
   validation: []
   documentation: []
