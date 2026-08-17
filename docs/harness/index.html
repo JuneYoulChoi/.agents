@@ -60,7 +60,7 @@
       <h1>Universal Engineering Harness</h1>
       <p>Codex와 Claude에서 재사용할 수 있도록 설계한, 증거 기반·문서 우선·점진적 스킬 로딩 방식의 소프트웨어 개발 하네스입니다.</p>
       <div class="meta" aria-label="문서 메타데이터">
-        <span class="tag">상태: draft</span><span class="tag">형식: living reference</span><span class="tag">대상: 개발자·하네스 유지보수자</span><span class="tag">생성: 2026-08-03</span><span class="tag">기준: working tree (pending commit)</span>
+        <span class="tag">상태: draft</span><span class="tag">형식: living reference</span><span class="tag">대상: 개발자·하네스 유지보수자</span><span class="tag">생성: 2026-08-17</span><span class="tag">기준: 이 문서가 포함된 Git revision</span>
       </div>
     </div>
   </header>
@@ -100,7 +100,7 @@
     <section id="traceability">
       <p class="eyebrow">3. Traceability <span class="evidence observed">관찰됨</span></p>
       <h2>요구에서 실행·검증·문서까지 연결한다</h2>
-      <div class="card full"><p style="font-size:1.05rem"><code>PRD/SRS</code> → external entity/interface → <code>UC</code> → <code>FA</code> → <code>QA/QAS</code> → <code>HLD</code> → <code>ADR</code> → <code>LLD</code> → views/diagrams → code/tests/operations</p><p>여기서 <strong>FA</strong>는 Functional Architecture, <strong>QA</strong>는 Quality Attribute, <strong>QAS</strong>는 측정 가능한 Quality Attribute Scenario를 뜻합니다. 테스트 활동의 QA와 품질속성 QA는 문맥상 구분합니다.</p></div>
+      <div class="card full"><p style="font-size:1.05rem"><code>PRD/SRS</code> → external entity/interface → <code>UC</code> → <code>FA</code> → <code>QA/QAS</code> → <code>HLD</code> → <code>ADR</code> → <code>LLD / CONFIG</code> → views/diagrams → code/tests/operations</p><p>여기서 <strong>FA</strong>는 Functional Architecture, <strong>QA</strong>는 Quality Attribute, <strong>QAS</strong>는 측정 가능한 Quality Attribute Scenario를 뜻합니다. 테스트 활동의 QA와 품질속성 QA는 문맥상 구분합니다. <strong>CONFIG</strong>는 외부화가 정당한 설정의 타입·소스·우선순위·검증·시크릿·호환성 계약입니다.</p></div>
       <div class="note"><strong>아키텍처 게이트:</strong> 소프트웨어 관련 요청은 사용자가 문서를 언급하지 않아도 <code>docs/architecture/</code>를 확인합니다. 없거나 오래됐으면 코드 기반 초안을 만들 수 있지만, UC·FA·QA·외부 인터페이스·모듈 경계의 중요한 결정은 사용자 확인이 필요합니다.</div>
     </section>
 
@@ -108,7 +108,7 @@
       <p class="eyebrow">4. Sequence <span class="evidence observed">관찰됨</span></p>
       <h2>모든 요청은 분류부터, 구현은 근거와 승인 이후에</h2>
       <ol class="timeline" aria-label="표준 작업 시퀀스">
-        <li><strong>1. Intake</strong><span>범위·상태·필드·행동·위험·깊이 분류</span></li><li><strong>2. Clarification</strong><span>가치·권한·제약의 불명확성을 사용자에게 질의</span></li><li><strong>3. Discovery</strong><span>현재 동작·문서·계약·테스트 근거 수집</span></li><li><strong>4. Architecture</strong><span>PRD/SRS~LLD와 뷰/다이어그램 기준선 확인</span></li><li><strong>5. Impact</strong><span>변경 영향과 회귀 범위 확인</span></li><li><strong>6. Assembly</strong><span>최소 스킬·깊이·전문가 역할 구성</span></li><li><strong>7. Deliberation</strong><span>증거 중심 합의, 최대 3라운드 후 사용자 승격</span></li><li><strong>8. Design</strong><span>ADR·작업 단위·수락 기준·테스트 계획</span></li><li><strong>9. Execution</strong><span>작고 응집된 단위로 구현·문서 동기화</span></li><li><strong>10. Verify / Handoff</strong><span>검증 근거·잔여 위험·재개 가능한 인계</span></li>
+        <li><strong>1. Intake</strong><span>범위·상태·필드·행동·위험·깊이 분류</span></li><li><strong>2. Clarification</strong><span>가치·권한·제약의 불명확성을 사용자에게 질의</span></li><li><strong>3. Discovery</strong><span>현재 동작·문서·계약·테스트 근거 수집</span></li><li><strong>4. Architecture</strong><span>PRD/SRS~LLD와 뷰/다이어그램 기준선 확인</span></li><li><strong>5. Impact</strong><span>변경 영향과 회귀 범위 확인</span></li><li><strong>6. Assembly</strong><span>최소 스킬 구성; 설정 후보면 공통 계약과 해당 언어 reference 선택</span></li><li><strong>7. Deliberation</strong><span>증거 중심 합의, 최대 3라운드 후 사용자 승격</span></li><li><strong>8. Design</strong><span>ADR·CONFIG·작업 단위·수락 기준·테스트 계획</span></li><li><strong>9. Execution</strong><span>작고 응집된 단위로 구현·문서 동기화</span></li><li><strong>10. Verify / Handoff</strong><span>검증 근거·잔여 위험·재개 가능한 인계</span></li>
       </ol>
       <table><thead><tr><th>프로젝트 상태</th><th>기본 경로</th><th>수정 전 필수 확인</th></tr></thead><tbody>
         <tr><td>Greenfield</td><td>아키텍처 기준선 → 요구·QAS·ADR·작업 계획</td><td>목표, 사용자, 범위, 품질 시나리오</td></tr>
@@ -125,6 +125,7 @@
         <article class="card"><h3>의도·명확성</h3><p>목표, 성공 조건, 제약, 대상, 방향이 중요한 수준으로 불명확하면 질문합니다.</p></article>
         <article class="card"><h3>권한·행동</h3><p>배포, 데이터 변경, 비용, 자격증명, 외부 발행, 파괴적 동작은 범위가 있는 명시적 승인이 필요합니다.</p></article>
         <article class="card"><h3>아키텍처·영향</h3><p>소프트웨어 변경 전 아키텍처 기준선과 Brownfield 영향/회귀 기록을 확인합니다.</p></article>
+        <article class="card"><h3>설정·환경</h3><p>IP·Port·URL·경로·Timeout·Secret 같은 후보를 코드/빌드/배포/런타임/시크릿으로 분류하고, 외부화할 값은 타입·우선순위·검증·소유자를 갖춰야 합니다.</p></article>
         <article class="card"><h3>문서 공백</h3><p>필요 문서가 없으면 목적·대상·위치가 분명할 때 최소 문서를 만들고, 아니면 용도를 묻습니다.</p></article>
         <article class="card"><h3>검증·완료</h3><p>검증하지 않은 완료는 완료가 아닙니다. 미실행 검사는 통과로 표시하지 않고 잔여 위험을 남깁니다.</p></article>
         <article class="card"><h3>다중 에이전트</h3><p>독립된 전문성 또는 병렬 증거가 실제로 도움이 될 때만 사용합니다. 최종 책임은 Router에 남습니다.</p></article>
@@ -145,12 +146,13 @@
 
     <section id="skills">
       <p class="eyebrow">7. Active skills <span class="evidence observed">관찰됨</span></p>
-      <h2>현재 승인된 8개 코어 스킬</h2>
+      <h2>현재 승인된 9개 코어 스킬</h2>
       <table><thead><tr><th>스킬</th><th>역할과 입구</th><th>변경/네트워크</th><th>플랫폼</th></tr></thead><tbody>
         <tr><td><a href="../../skills/intake-and-route/SKILL.md">intake-and-route</a></td><td>모든 요청의 첫 분류·질의·경로 선택</td><td>none / none</td><td>Codex, Claude</td></tr>
         <tr><td><a href="../../skills/architecture-baseline-and-design/SKILL.md">architecture-baseline-and-design</a></td><td>소프트웨어 작업의 PRD/SRS, UC, FA, QA/QAS, HLD/LLD, 뷰/다이어그램 기준선</td><td>workspace / none</td><td>Codex, Claude</td></tr>
         <tr><td><a href="../../skills/greenfield-planning/SKILL.md">greenfield-planning</a></td><td>새 능력을 요구·품질·ADR·작업·테스트 계획으로 전개</td><td>none / none</td><td>Codex, Claude</td></tr>
         <tr><td><a href="../../skills/brownfield-impact-analysis/SKILL.md">brownfield-impact-analysis</a></td><td>기존 동작과 변경·회귀 영향을 증거로 지도화</td><td>none / none</td><td>Codex, Claude</td></tr>
+        <tr><td><a href="../../skills/configuration-and-environment-management/SKILL.md">configuration-and-environment-management</a></td><td>설정 후보를 분류하고 타입·소스·우선순위·시크릿·검증 계약을 설계; C++·Rust·Java·Python reference를 선택 로드</td><td>workspace / none</td><td>Codex, Claude</td></tr>
         <tr><td><a href="../../skills/document-purpose/SKILL.md">document-purpose</a></td><td>문서의 목적·독자·권위·수명·상세도 결정</td><td>workspace / none</td><td>Codex, Claude</td></tr>
         <tr><td><a href="../../skills/verify-and-handoff/SKILL.md">verify-and-handoff</a></td><td>수락 기준 검증, 추적성·문서 동기화, 인계</td><td>workspace / none</td><td>Codex, Claude</td></tr>
         <tr><td><a href="../../skills/harness-upgrade-analysis/SKILL.md">harness-upgrade-analysis</a></td><td>하네스 변경 전 plan/·Registry·스킬 영향 분석; 분석 중 수정 금지</td><td>none / none</td><td>Codex, Claude</td></tr>
@@ -173,10 +175,11 @@
     <section id="sources">
       <p class="eyebrow">10. Sources and unresolved items</p>
       <h2>이 페이지는 계획의 파생물이며, 권위 원천은 Markdown과 Registry다</h2>
-      <div class="note ok"><strong>출처 <span class="evidence observed">관찰됨</span>:</strong> <a href="../../plan/README.md">plan/README.md</a>, <a href="../../plan/00-operating-model.md">00 operating model</a>, <a href="../../plan/02-implementation-guide.md">02 implementation guide</a>, <a href="../../plan/03-contracts-and-fixtures.md">03 contracts and fixtures</a>, <a href="../../plan/04-user-guide.md">04 user guide</a>, <a href="../../plan/06-platform-adapters.md">06 platform adapters</a>, <a href="../../plan/07-skill-governance.md">07 skill governance</a>, <a href="../../registry/active-skills.json">active-skills.json</a>, <a href="../../registry/adapter-manifest.json">adapter-manifest.json</a>, <a href="../../templates/harness.json.example">harness.json.example</a>, <a href="../../templates/harness.schema.json">harness.schema.json</a>, <a href="../../adapters/codex/AGENTS.md.tmpl">Codex template</a>, <a href="../../adapters/claude/CLAUDE.md.tmpl">Claude template</a>, <a href="../../AGENTS.md">source AGENTS.md</a>, <a href="../../CLAUDE.md">source CLAUDE.md</a>. Registry 기준일은 2026-08-03입니다.</div>
+      <div class="note ok"><strong>출처 <span class="evidence observed">관찰됨</span>:</strong> <a href="../../plan/README.md">plan/README.md</a>, <a href="../../plan/00-operating-model.md">00 operating model</a>, <a href="../../plan/02-implementation-guide.md">02 implementation guide</a>, <a href="../../plan/03-contracts-and-fixtures.md">03 contracts and fixtures</a>, <a href="../../plan/04-user-guide.md">04 user guide</a>, <a href="../../plan/06-platform-adapters.md">06 platform adapters</a>, <a href="../../plan/07-skill-governance.md">07 skill governance</a>, <a href="../../registry/active-skills.json">active-skills.json</a>, <a href="../../registry/taxonomy.json">field taxonomy</a>, <a href="../../registry/adapter-manifest.json">adapter-manifest.json</a>, <a href="../../skills/configuration-and-environment-management/SKILL.md">configuration skill</a>, <a href="../../templates/harness.json.example">harness.json.example</a>, <a href="../../templates/harness.schema.json">harness.schema.json</a>, <a href="../../adapters/codex/AGENTS.md.tmpl">Codex template</a>, <a href="../../adapters/claude/CLAUDE.md.tmpl">Claude template</a>, <a href="../../AGENTS.md">source AGENTS.md</a>, <a href="../../CLAUDE.md">source CLAUDE.md</a>. Registry 기준일은 2026-08-17입니다.</div>
       <h3>현재 확인된 공백·가정</h3>
       <ul>
         <li><span class="evidence observed">관찰됨</span> Canonical adapter templates와 bootstrap schema/example은 추가됐지만, 실제 installer, Router, 실행 가능한 fixture runner, 영속 task-state 구현은 아직 없습니다. 계획에는 있지만 구현 상태를 이 문서가 완료로 주장하지 않습니다.</li>
+        <li><span class="evidence observed">관찰됨</span> 설정 관리 스킬과 F-015의 C++·Rust·Java·Python 계약은 추가됐지만 실행 가능한 fixture runner가 없으므로 자동 라우팅 통과는 아직 주장하지 않습니다.</li>
         <li><span class="evidence observed">관찰됨</span> 샌드박스에 따라 hook 자동 강제가 불가능할 수 있으므로 현재 문서는 `manual`/`unsupported` 안전 fallback을 우선합니다. 자동 enforcement를 주장하려면 B-001~B-009 fixture를 통과해야 합니다.</li>
         <li><span class="evidence observed">관찰됨</span> `harness.json.example`은 `PIN_REQUIRED`와 해시 sentinel을 포함한 비설치용 예시입니다. 실제 대상 프로젝트에는 고정된 source/template/registry revision과 64자리 SHA-256을 렌더링해야 합니다.</li>
         <li><span class="evidence observed">관찰됨</span> <code>registry/adapter-manifest.json</code>도 현재는 pre-activation provenance 계약이며, 실제 source-tree/template hash pin은 bootstrap 구현 단계에서 채워야 합니다.</li>

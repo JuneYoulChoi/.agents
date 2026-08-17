@@ -105,3 +105,9 @@ validation, failure behavior, and its transition result. It SHOULD keep the
 body concise and put large references/scripts in named resources. It MUST NOT
 assume a project-specific path, cloud account, secret, or framework unless the
 manifest declares that requirement.
+
+Cross-language skills keep one language-neutral contract in `SKILL.md` and
+load only the detected ecosystem reference. A reference may describe an
+established C++, Rust, Java, Python, or framework mechanism, but it cannot make
+that dependency mandatory, bypass project conventions, or skip dependency,
+license, security, compatibility, and approval review.

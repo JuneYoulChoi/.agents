@@ -28,7 +28,7 @@ proposals, not confirmed requirements.
 Create stable IDs and a concise trace:
 
 ```text
-GOAL -> REQ/FR -> NFR/QAS -> ADR -> TASK -> TEST -> DOC
+GOAL -> REQ/FR -> NFR/QAS -> ADR -> CONFIG -> TASK -> TEST -> DOC
 ```
 
 Write functional requirements as observable outcomes. For important quality
@@ -42,6 +42,13 @@ public-contract decisions.
 Choose the minimum architecture that satisfies the requirements. State system
 boundaries, major components, data/API contracts, failure behavior, security
 and privacy constraints, operational needs, and alternatives considered.
+
+When deploy-time or runtime values may vary, define a configuration contract
+before implementation: classify code/build/deploy/runtime/secret values, name
+supported sources and precedence, require typed validation, and document safe
+defaults and secret handling. Route the design slice through
+`$configuration-and-environment-management`; do not make every constant
+configurable.
 
 When a decision needs independent expertise, request focused review rather
 than a generic debate. Preserve dissent and escalate unresolved material

@@ -32,6 +32,8 @@ record an override in `.agents/overrides/` before routing work.
 | waiver | Authorized acceptance of a known unmet validation or traceability requirement |
 | depth | Light, standard, or deep procedure intensity |
 | NFR | Non-functional requirement, such as latency, availability, privacy, or security |
+| configuration candidate | A value examined for classification as a code constant, build-time, deploy-time, runtime, or secret setting; it is not automatically externalized |
+| configuration contract | The typed keys, sources, precedence, validation, ownership, compatibility, redaction, tests, and documentation governing application settings |
 | QAS | Quality-attribute scenario: stimulus, context, response, and measurable response measure |
 | QA | Quality assurance/testing activity; do not use it as a quality-attribute abbreviation |
 | source of truth | The artifact that wins when project evidence conflicts; default hierarchy is in the implementation guide |

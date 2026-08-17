@@ -1,0 +1,4 @@
+interface:
+  display_name: "Configuration and Environment Management"
+  short_description: "Design portable, typed, secure runtime configuration."
+  default_prompt: "Use $configuration-and-environment-management to externalize and validate deploy-time or runtime configuration without coupling the design to one language."

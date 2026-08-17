@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-03",
+  "generated_at": "2026-08-17",
   "integrity_policy": {
     "core_entries": "harness_source_tree_manifest",
     "adapter_manifest": "registry/adapter-manifest.json",
@@ -61,6 +61,17 @@
       "entry": "skills/document-purpose/SKILL.md",
       "trust": "approved",
       "capabilities": ["document_classification", "document_planning"],
+      "network_access": "none",
+      "data_access": "workspace",
+      "mutation": "workspace",
+      "platforms": ["codex", "claude"]
+    },
+    {
+      "id": "core.configuration-and-environment-management",
+      "version": "0.1.0",
+      "entry": "skills/configuration-and-environment-management/SKILL.md",
+      "trust": "approved",
+      "capabilities": ["configuration_design", "environment_management", "secret_separation", "configuration_validation", "configuration_migration"],
       "network_access": "none",
       "data_access": "workspace",
       "mutation": "workspace",

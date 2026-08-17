@@ -186,7 +186,9 @@ but it MUST follow this order:
 5. If a material decision is missing, write question.json and enter waiting_user.
 6. If software-related, run discovery and the architecture baseline gate before
    impact, design, or mutation.
-7. Choose the smallest depth and smallest compatible skill set.
+7. Choose the smallest depth and smallest compatible skill set. When the
+   baseline exposes configuration candidates, select the common configuration
+   skill and only the detected language reference.
 8. If a skill is unavailable, use the core fallback or ask the user.
 9. Run the current stage; validate its output contract.
 10. Append an event and evaluate the transition guard.
@@ -252,10 +254,27 @@ Before changing an existing project, record:
 [ ] affected UC, REQ/FR, NFR/QAS, API/data contracts
 [ ] affected modules, tests, docs, CI, and operational paths
 [ ] dependency, schema, migration, security, and performance signals
+[ ] configuration keys, sources, precedence, hardcoding, secrets, compatibility, and rollback
 [ ] extend/new/mixed decision with evidence
 ```
 
 No material file mutation occurs until the impact record is written.
+
+## Configuration assembly rule
+
+Configuration does not add a state-machine stage. During assembly/design, use
+`configuration-and-environment-management` when code or requirements contain
+build-, deployment-, runtime-, environment-, or secret-dependent values. The
+skill first separates code constants from build/deploy/runtime/secret values,
+then defines a typed configuration contract and loads only the applicable
+C++, Rust, Java, Python, or common fallback reference.
+
+For Greenfield work, establish sources, precedence, safe defaults, ownership,
+validation, secret handling, documentation, and tests before implementing the
+affected slice. For Brownfield/Hybrid work, first record current keys,
+precedence, behavior, consumers, and migration compatibility. Do not introduce
+a new parser/framework without the normal dependency, license, security, and
+approval review.
 
 ## Failure and recovery defaults
 

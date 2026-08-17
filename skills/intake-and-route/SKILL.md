@@ -40,7 +40,11 @@ evidence: []
 ```
 
 Use lower_snake_case values from the approved field taxonomy, such as `api`,
-`backend`, `testing`, and `documentation`; do not invent near-duplicate labels.
+`backend`, `configuration`, `testing`, and `documentation`; do not invent near-
+duplicate labels. Add `configuration` when the request or discovered software
+contains deploy/runtime settings, environment-specific hardcoded values,
+configuration files, environment variables, profiles, secrets, endpoints,
+ports, paths, timeouts, retries, pool sizes, or feature flags.
 
 Use `unknown` only when software context is insufficient. It permits read-only
 discovery, not material mutation. Use `not_applicable` for non-software scope.
@@ -92,6 +96,7 @@ closed until a scope-bound approval exists. Silence is not approval.
 | Software scope before design/change/implementation | `$architecture-baseline-and-design` |
 | Greenfield design or new capability | `$greenfield-planning` |
 | Brownfield/Hybrid change | `$brownfield-impact-analysis` before edits |
+| Configuration candidate after architecture and Greenfield/Brownfield baseline | `$configuration-and-environment-management` during assembly/design |
 | Document request | `$document-purpose` |
 | Existing implementation ready for completion | `$verify-and-handoff` |
 | Missing or incompatible specialist skill | use the core procedure and report the fallback |

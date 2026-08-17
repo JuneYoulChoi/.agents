@@ -31,7 +31,8 @@ reviewed and adapted skills may be promoted to `skills/`.
    external actions, deployment, data mutation, cost, credential access, or
    destructive operations.
 6. **Keep traceability.** For material work maintain
-   `GOAL -> REQ/FR -> NFR/QAS -> ADR -> TASK -> TEST -> DOC` as applicable.
+   `GOAL -> REQ/FR -> NFR/QAS -> ADR -> CONFIG -> TASK -> TEST -> DOC` as
+   applicable.
 7. **Detect and repair documentation gaps.** If a required document is absent
    or stale, create/update the smallest fit-for-purpose record when purpose and
    location are clear. Otherwise ask what the document is for before writing it.
@@ -41,6 +42,11 @@ reviewed and adapted skills may be promoted to `skills/`.
 9. **Least privilege and data care.** Do not expose credentials, secrets, or
    unnecessary sensitive data to skills or delegates. Use only the tools,
    environment, and data tier needed for the assigned task.
+10. **Make operational variation explicit.** For software work, detect values
+   that may vary by build, deployment, runtime, environment, or secret source.
+   Classify them before coding, externalize only justified deploy/runtime
+   settings, use typed validation and documented precedence, and never turn
+   every code constant into configuration.
 
 Rules have an enforcement class. `MUST` rules are enforced by a file layout,
 validator, permission policy, or hook where available; `SHOULD` rules are
@@ -86,7 +92,7 @@ Classify every request across these axes:
 classification:
   session_scope: software_engineering | software_related | general_information | decision_support | creative | non_engineering
   project_state: greenfield | brownfield | hybrid | unknown | not_applicable
-  fields: [idea, requirements, architecture, ui_ux, frontend, backend, api, database, data, ai_ml, security, privacy, implementation, testing, documentation, performance, devops_release, operations, research, compliance]
+  fields: [idea, requirements, architecture, ui_ux, frontend, backend, api, database, data, ai_ml, security, privacy, configuration, implementation, testing, documentation, performance, devops_release, operations, research, compliance]
   field_registry: registry/taxonomy.json
   action: investigate | define | plan | design | implement | change | verify | review | document | approve | handoff
   risk: low | medium | high
@@ -177,6 +183,15 @@ mandatory checkpoint. It reads `docs/architecture/`, establishes or drafts the
 PRD/SRS/UC/FA/QA/HLD/LLD/view/diagram baseline, and then transitions to the
 existing Greenfield, Brownfield, or document workflow. This is an additive gate;
 it does not replace those workflows.
+
+Configuration is a conditional cross-cutting concern rather than a new lifecycle
+stage. When intake, architecture discovery, or impact analysis finds IPs,
+hosts, ports, URLs, paths, timeouts, retries, pool sizes, feature flags,
+credentials, profiles, environment variables, configuration files, or other
+environment-specific values, workflow assembly selects
+`configuration-and-environment-management`. The skill classifies code/build/
+deploy/runtime/secret values, preserves language and framework conventions,
+and loads only the matching language reference.
 
 ### Harness-maintenance path
 

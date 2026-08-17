@@ -36,6 +36,12 @@ expiry, and residual risk. For Brownfield work, include relevant regression
 checks. For API, data, security, migration, or operational changes, include the
 applicable contract, rollback, or post-change checks.
 
+When configuration is affected, verify safe defaults, supported sources and
+precedence, invalid/missing/boundary values, compatibility aliases, secret
+redaction, and startup/reload/rollback behavior as applicable. Confirm that
+tests and examples contain no real secrets or machine-specific production
+values.
+
 ## 3. Check traceability and documentation
 
 Confirm that material requirements link to tests or explicit waivers, decisions

@@ -270,7 +270,7 @@ risk. `not_run` is never equivalent to `passed`.
 ## Traceability contract
 
 Use typed IDs: `GOAL-*`, `REQ-*`, `FR-*`, `NFR-*`, `QAS-*`, `ADR-*`, `TASK-*`,
-`CODE-*`, `TEST-*`, `DOC-*`, and `EVD-*`. Relations are:
+`CONFIG-*`, `CODE-*`, `TEST-*`, `DOC-*`, and `EVD-*`. Relations are:
 
 ```text
 defines, refines, constrains, decides, implements, verifies, documents,
@@ -281,6 +281,50 @@ The validator reports orphan requirements, dangling links, requirements with
 no verification, and documents that claim a changed API without an API
 artifact. Light work may use a compact `TASK -> TEST` link; standard and deep
 work require all applicable links and an explicit waiver for omitted entities.
+
+## Configuration artifact contract
+
+Use a `CONFIG-*` artifact when a task externalizes, changes, migrates, or
+materially relies on application configuration:
+
+```json
+{
+  "configuration_id": "CONFIG-001",
+  "status": "confirmed",
+  "language": "rust",
+  "candidates": [
+    {"name": "listener_port", "kind": "runtime", "evidence_ids": ["EVD-030"]}
+  ],
+  "retained_constants": [],
+  "settings": [
+    {
+      "key": "APP_LISTENER_PORT",
+      "kind": "runtime",
+      "type": "tcp_port",
+      "required": false,
+      "safe_default": 8080,
+      "sources": ["environment", "toml", "code_default"],
+      "precedence": ["environment", "toml", "code_default"],
+      "validation": ["1..65535"],
+      "secret": false,
+      "owner": "service_owner",
+      "reload": "startup",
+      "compatibility": "existing default preserved",
+      "test_ids": ["TEST-CONFIG-001"],
+      "document_ids": ["DOC-CONFIG-001"]
+    }
+  ],
+  "secret_strategy": "references_only",
+  "rollback": "restore previous key aliases and loader",
+  "open_issue_ids": []
+}
+```
+
+Allowed `kind` values are `code_constant`, `build_time`, `deploy_time`,
+`runtime`, and `secret`. A material setting requires evidence, type, owner,
+source/precedence, validation, tests, and documentation. Secret entries never
+contain the value. Brownfield key removal requires a compatibility/deprecation
+record and rollback.
 
 ## Document metadata contract
 
@@ -439,6 +483,7 @@ passes only when every assertion passes.
 | F-012 | concurrent state write | revision conflict is detected and no update is lost |
 | F-013 | harness upgrade/startup request | all `plan/` files, active registry, adapter templates, bootstrap config/schema, and source entrypoints are read first; per-file change classes and approval gate are emitted; no mutation occurs during analysis |
 | F-014 | harness overview request | a self-contained HTML artifact contains required sections, provenance, no network references, and resolving local source links |
+| F-015 | C++/Rust/Java/Python task with hardcoded endpoint, port, timeout, or secret candidate | configuration field selected; candidate classified; existing convention preserved; typed contract, precedence, invalid/missing/boundary and redaction tests, compatibility/docs, and exactly one relevant language reference recorded |
 | B-001 | explicit or unambiguous target root | canonical root selected; conflicting/outside roots, Git errors, accidental harness-root selection, and nonexistent explicit targets are rejected |
 | B-002 | fresh bootstrap install | thin managed wrappers and valid `harness.json` are rendered; no full-plan duplication or network fetch occurs |
 | B-003 | repeat install and edited files | same hashes are idempotent; unknown/user-edited/world-writable/symlink or conflicting parent/child instruction files are preserved or rejected and divergent files require explicit upgrade |
@@ -458,3 +503,7 @@ bootstrap installer or claiming cross-session automatic enforcement. The
 fixture runner itself
 must print fixture ID, pass/fail, expected state, actual state, and artifact
 path.
+
+F-015 is required before enabling automatic configuration routing. Its four
+language variants must produce the same core `CONFIG-*` semantics while
+allowing language- and framework-specific implementation details.

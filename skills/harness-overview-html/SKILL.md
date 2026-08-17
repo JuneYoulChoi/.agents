@@ -36,8 +36,8 @@ audience, purpose, authority, lifetime, detail level, and output location.
 Read all of the following before drafting:
 
 1. `plan/README.md`, then all `plan/*.md` files;
-2. `registry/active-skills.json`, `registry/adapter-manifest.json`, and every
-   active skill entry's metadata;
+2. `registry/active-skills.json`, `registry/adapter-manifest.json`, referenced
+   taxonomy/registry files, and every active skill entry's metadata;
 3. full `SKILL.md` bodies for the active skills (the overview must explain
    their responsibilities and routes);
 4. adapter templates, bootstrap configuration/schema, validators, fixtures,
@@ -60,7 +60,7 @@ Use this order so the page has a clear beginning, middle, and end:
    baseline, workflow skills, verification/handoff, registry/adapters) and
    their responsibilities.
 4. **Traceability** —
-   `PRD/SRS -> external entity/interface -> UC -> FA -> QA/QAS -> HLD -> ADR -> LLD -> views/diagrams -> code/tests/operations`.
+   `PRD/SRS -> external entity/interface -> UC -> FA -> QA/QAS -> HLD -> ADR -> LLD/configuration -> views/diagrams -> code/tests/operations`.
    Explain that FA means Functional Architecture and QA means Quality
    Attribute, and link to the project architecture documents when present.
 5. **Sequence** — intake, clarification, discovery, architecture, impact,

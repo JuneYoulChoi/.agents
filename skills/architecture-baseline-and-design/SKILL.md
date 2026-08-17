@@ -39,7 +39,7 @@ confirmed | draft | missing | stale | conflicted
 Look for an index and the following logical artifacts (filenames may vary):
 
 ```text
-PRD, SRS, external entities/interfaces, UC,
+PRD, SRS, external entities/interfaces, UC, configuration model,
 FA, QA/QAS, HLD, LLD, ADR,
 layer, infrastructure, architectural, module, C&C, data, runtime views,
 class, sequence, context, deployment diagrams
@@ -62,7 +62,7 @@ PRD / SRS
   -> QA / QAS
   -> HLD
   -> ADR
-  -> LLD / Module
+  -> LLD / Module / Configuration Contract
   -> Views / Diagrams
   -> TASK / CODE / TEST / OPERATIONS
 ```
@@ -86,6 +86,8 @@ identify:
 - HLD boundaries and dependencies;
 - LLD/module candidates and ownership;
 - relevant layer, infrastructure, C&C, runtime, class, and sequence views;
+- configuration boundaries, sources, precedence, secret strategy, and their
+  deployment/runtime relationships when applicable;
 - document gaps, contradictions, and risks.
 
 Never promote code-derived intent to confirmed product requirements. Ask the
@@ -128,6 +130,7 @@ architecture:
   lld_modules: []
   views: []
   diagrams: []
+  configuration: []
   evidence: []
   user_confirmations_needed: []
   open_issues: []

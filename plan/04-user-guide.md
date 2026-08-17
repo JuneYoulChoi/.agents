@@ -41,6 +41,15 @@ If a target baseline is missing or stale, the harness may produce a code-derived
 draft and ask the user to confirm UC, FA, QA, external-interface, or module
 boundaries before material implementation.
 
+When software contains IPs, hosts, ports, URLs, paths, timeouts, retries, pool
+sizes, feature flags, credentials, profiles, environment variables, or config
+files, the harness also checks whether they are code constants, build settings,
+deploy/runtime settings, or secrets. It externalizes only justified values,
+keeps existing project conventions where safe, and loads the matching C++,
+Rust, Java, Python, or common guidance. The user is asked when a default,
+precedence, compatibility window, or secret source is a product/operations
+decision.
+
 If a decision is needed, the user receives facts, options, recommendation, and
 safe default. Answer with a choice or correct the assumptions. Silence is not
 treated as approval for a material decision.
@@ -186,6 +195,7 @@ The final response must state:
 - which requirements and acceptance criteria were addressed;
 - tests/checks run and their results;
 - documents updated or intentionally not created;
+- configuration sources, precedence, validation, and secret handling when changed;
 - assumptions, waivers, and residual risks;
 - the next action, if any.
 

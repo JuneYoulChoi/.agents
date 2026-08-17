@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "fields": [
+    {"id": "idea", "description": "Concept exploration and option generation"},
+    {"id": "requirements", "description": "Product and software requirements"},
+    {"id": "architecture", "description": "System structure, boundaries, decisions, and views"},
+    {"id": "ui_ux", "description": "User experience, interaction, and visual design"},
+    {"id": "frontend", "description": "Client-side applications and presentation"},
+    {"id": "backend", "description": "Server-side application behavior"},
+    {"id": "api", "description": "External and internal service contracts"},
+    {"id": "database", "description": "Persistent storage, schemas, and queries"},
+    {"id": "data", "description": "Data processing, governance, and pipelines"},
+    {"id": "ai_ml", "description": "AI and machine-learning systems"},
+    {"id": "security", "description": "Security controls, threats, and secrets"},
+    {"id": "privacy", "description": "Personal and sensitive-data handling"},
+    {"id": "configuration", "description": "Build, deploy, runtime, environment, and secret-backed settings"},
+    {"id": "implementation", "description": "Source-code construction and change"},
+    {"id": "testing", "description": "Test design, execution, and quality assurance"},
+    {"id": "documentation", "description": "Documentation planning and authoring"},
+    {"id": "performance", "description": "Efficiency, capacity, and optimization"},
+    {"id": "devops_release", "description": "Build, CI/CD, packaging, and release"},
+    {"id": "operations", "description": "Deployment, runtime operation, observability, and recovery"},
+    {"id": "research", "description": "Evidence gathering and technology research"},
+    {"id": "compliance", "description": "Policy, legal, and regulatory obligations"}
+  ]
+}

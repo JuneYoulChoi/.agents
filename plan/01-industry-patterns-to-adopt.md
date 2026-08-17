@@ -1,6 +1,7 @@
 # Industry patterns assessed for this harness
 
-Checked on 2026-08-03. These are design inputs, not runtime dependencies.
+Checked on 2026-08-03; configuration-management inputs were reviewed on
+2026-08-17. These are design inputs, not runtime dependencies.
 
 | Pattern | Evidence | Apply here |
 | --- | --- | --- |
@@ -11,6 +12,7 @@ Checked on 2026-08-03. These are design inputs, not runtime dependencies.
 | Incremental features plus durable handoff artifacts across sessions | [Anthropic effective long-running harnesses](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents) | Maintain task state, progress/handoff record, feature/acceptance list, and runnable verification instructions. |
 | DAG/workflow rather than unrestricted agent chatter | [AWS multi-agent workflow and graph patterns](https://aws.amazon.com/blogs/machine-learning/multi-agent-collaboration-patterns-with-strands-agents-and-amazon-nova/) | Model stages and transition conditions explicitly; parallelize only independent branches and converge through a synthesizer. |
 | Observability, governance, and human-in-the-loop for consequential actions | [AWS enterprise agentic AI guidance](https://docs.aws.amazon.com/prescriptive-guidance/latest/govern-architect-agentic-ai/enterprise-architecture.html) | Record decisions, evidence, tool/action scope, verification, and user approvals; gate destructive/external activity. |
+| Externalized, environment-independent application configuration | [The Twelve-Factor App: Config](https://12factor.net/config) and the reviewed [configuration-management skill](https://www.skills.sh/aj-geddes/useful-ai-prompts/configuration-management) | Add a language-neutral configuration contract with typed validation, explicit precedence, secret separation, and progressively loaded C++/Rust/Java/Python references. |
 
 ## Deliberate adaptations
 

@@ -46,7 +46,8 @@ product, compatibility, or authority decision.
 
 Identify affected UC, REQ/FR, NFR/QAS, API and data contracts, modules,
 dependencies, tests, documents, CI, operational paths, security/privacy risks,
-and rollback needs. Then decide one of:
+configuration keys/sources/precedence, environment-specific hardcoding,
+secret handling, compatibility aliases, and rollback needs. Then decide one of:
 
 - `extend`: an existing boundary remains appropriate;
 - `new`: a new boundary is required with limited existing changes;
@@ -69,6 +70,7 @@ impact:
   use_cases: []
   requirements: []
   contracts: []
+  configuration: []
   modules: []
   tests: []
   documents: []
@@ -87,6 +89,8 @@ transition:
 ## 5. Choose the next action
 
 Route to design when architecture, contract, data, or quality decisions remain.
+Route configuration candidates to `$configuration-and-environment-management`
+after the current behavior and migration impact are recorded.
 Route to execution only when the change boundary and regression plan are clear.
 Route to clarification when impact depends on user intent. Route to
 `$verify-and-handoff` after implementation and required documentation updates.
