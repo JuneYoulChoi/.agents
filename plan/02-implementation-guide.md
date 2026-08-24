@@ -247,17 +247,22 @@ but it MUST follow this order:
    the smallest depth and smallest compatible set. When a technology is named
    or detected, select `technology-selection-and-integration` to record its
    purpose, kind, status, compatibility, and integration graph; load only
-   selected ecosystem skills. For changed authored code, select
-   `language-engineering` and only its detected language profiles. When the
+   selected ecosystem skills. For an authored code boundary in scope, select
+   `language-engineering` and only its affected language profiles. A detected-
+   only or generated-only language is recorded but does not activate the skill. When the
    baseline exposes configuration candidates, also select the common
    configuration skill and only its configuration-specific language reference.
    At G2 record standard applicability and load only selected profiles. At G5,
-   activate `architecture-and-design-patterns` for material design,
-   implementation, or change, and require an evidenced selected/rejected/
-   not-applicable result before implementation proceeds. Group pattern
+   activate `architecture-and-design-patterns` only for explicit pattern scope,
+   architecture-structure change, or design-interaction change; a local code
+   change records the branch as suppressed. Require an evidenced selected/
+   rejected/not-applicable result only when that review is active. Group pattern
    alternatives by decision scope; when several remain materially viable,
    emit their reasons and trade-offs plus one recommendation, then wait for the
-   user's recorded selection instead of choosing during routing.
+   user's recorded selection instead of choosing during routing. At G6,
+   activate `implementation-quality` only for authored code in scope, always
+   use its core profile, and add only quality profiles selected from recorded
+   change characteristics. Record one application depth per activated skill.
 8. Derive the gate `execution_profile` from depth defaults, then apply only
    explicit escalation triggers: high risk, architecture conflict, or repeated
    feedback at the responsible gate. Do not bind a model name or raise the
@@ -435,9 +440,11 @@ is blocked without authorized normative-source evidence and a declared scope.
 The architecture skill progressively loads the selected profile; it does not
 load every standard or make a certification claim.
 
-G5 activates `architecture-and-design-patterns` for material `design`,
-`implement`, or `change`, plus explicit architecture/pattern review. Derive
-scope (`architecture`, `design`, or both) and candidates from UC/FA/QAS,
+G5 activates `architecture-and-design-patterns` for an explicit pattern scope,
+an `architecture_structure` change characteristic, a `design_interaction`
+change characteristic, or an explicit architecture design/review request.
+Action `implement` or `change` alone is insufficient. Derive scope
+(`architecture`, `design`, or both) and candidates from UC/FA/QAS,
 constraints, affected modules, existing Brownfield patterns, and selected
 technology evidence. The result may select, reject, retain, or mark patterns
 not applicable. A selected architecture pattern receives `PATTERN-*` and an
@@ -451,6 +458,28 @@ verification. When two or more remain viable, mark the review
 options unselected, and return to clarification. Material execution resumes
 only after user or still-valid existing-decision evidence identifies the
 selection.
+
+## Selective implementation-quality assembly rule
+
+Treat `languages` as authored boundaries in scope only when `language_scope` is
+`authored_in_scope`; `detected_only`, `generated_only`, and `none` do not
+activate `language-engineering` or `implementation-quality`. Generated output
+remains tool-owned. Natural-language adapters derive the scope from affected
+paths and evidence rather than listing every project language.
+
+G6 activates `implementation-quality` for authored code during investigate,
+design-with-implementation-scope, implement, change, review, or verify work.
+The `core` profile is always present. Additional profiles are selected only by
+the matching `change_characteristics`: `object_oriented`, `functional`,
+`data_oriented`, `api_data_contract`, `concurrency`, `distributed`, `security`,
+`performance`, or `realtime_embedded`. `documentation_only` and
+`generated_code_only` suppress implementation quality.
+
+Every activation requires scope overlap, evidence, an expected output, and a
+verification method. The Router records `application_depths` per activated
+skill. A confirmed architecture baseline with no structure/API-data signal may
+run as `light`; high risk and existing execution-profile escalation rules still
+apply and cannot be weakened by a light adjacent branch.
 
 ## Configuration assembly rule
 

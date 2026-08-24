@@ -9,7 +9,7 @@
       "platform": "codex",
       "path": "adapters/codex/AGENTS.md.tmpl",
       "rendered_name": "AGENTS.md",
-      "version": "0.4.0",
+      "version": "0.5.0",
       "sha256": "PENDING_PIN_BEFORE_BOOTSTRAP",
       "max_bytes": 32768
     },
@@ -18,7 +18,7 @@
       "platform": "claude",
       "path": "adapters/claude/CLAUDE.md.tmpl",
       "rendered_name": "CLAUDE.md",
-      "version": "0.4.0",
+      "version": "0.5.0",
       "sha256": "PENDING_PIN_BEFORE_BOOTSTRAP",
       "max_bytes": 32768
     }

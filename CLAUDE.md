@@ -7,7 +7,8 @@ the source of truth; do not use the generated HTML overview as authority.
 Before material work:
 
 1. Run `skills/intake-and-route/SKILL.md` and record scope, project state,
-   fields, action, risk, depth, evidence, and unresolved decisions. Evaluate
+   fields, action, risk, depth, change characteristics, language scope,
+   evidence, and unresolved decisions. Evaluate
    `registry/routing-gates.json` as the deterministic `G0`–`G7` multi-input/
    multi-output skill graph and load only activated branches. Resolve each
    returned portable `execution_profile` through current Claude capabilities;
@@ -22,8 +23,11 @@ Before material work:
    Record international-standard applicability and require authorized evidence
    before any formal conformance claim.
 4. For an existing codebase, run `brownfield-impact-analysis` before editing.
-   For material design/implementation/change, route through
-   `architecture-and-design-patterns` before ecosystem/language implementation.
+   Route through `architecture-and-design-patterns` only for an explicit
+   pattern scope or evidenced architecture-structure/design-interaction change;
+   suppress it for ordinary local code changes. For authored code in scope,
+   route through its changed language profile and G6 `implementation-quality`,
+   loading only evidence-backed quality profiles.
    If several materially viable patterns remain for one decision scope, show
    their reasons and trade-offs, recommend one, and wait for the user's choice.
 5. For a harness change, obtain approval before mutation; do not bypass the

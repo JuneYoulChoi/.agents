@@ -47,12 +47,14 @@ policy/contract, or supported by project evidence. `guidance` and `alignment`
 are different from formal `conformance`; conformance is blocked unless the
 authorized edition, assessment scope, evidence, deviations, and owner exist.
 
-Before material design, implementation, or change, G5 performs a focused
-architecture/design-pattern review. It derives candidates from UC/FA/QAS,
-constraints, existing Brownfield structure, and affected modules. The valid
-answer can be “no named pattern is applicable.” Selected patterns include
-trade-offs, ADR/trace links, migration/rollback, and verification before
-ecosystem and language skills implement them.
+G5 performs a focused architecture/design-pattern review only when the request
+explicitly asks for patterns or evidence shows a changed architecture structure
+or component/object interaction. A local implementation change does not load
+the pattern skill merely because code is changing. Active reviews derive
+candidates from UC/FA/QAS, constraints, existing Brownfield structure, and
+affected modules. The valid answer can be “no named pattern is applicable.”
+Selected patterns include trade-offs, ADR/trace links, migration/rollback, and
+verification before ecosystem and language skills implement them.
 
 If several patterns are genuinely viable for the same decision, the harness
 does not choose one silently. It shows each candidate's fit, recommendation
@@ -79,6 +81,21 @@ For actual code, the harness additionally loads only the changed implementation
 language profiles: C, C++, C#, Rust, Go, Java, Python, JavaScript, TypeScript,
 HTML, CSS, or Shell. Generated interface/client code remains generator-owned.
 Examples do not choose a language or platform on the user's behalf.
+
+When authored code is actually in scope, G6 applies one common
+`implementation-quality` skill. Its core correctness, simplicity, dependency,
+state/lifecycle, error, and testability checks are bounded to the changed
+module. Object-oriented/SOLID, functional, data-oriented, API/data,
+concurrency, distributed, security, performance, and real-time/embedded
+profiles are loaded only when the code or requirements provide matching
+evidence and a verification method. A language that is merely detected, a
+generated-code-only task, or documentation-only work does not activate these
+implementation skills.
+
+Application depth is recorded per selected skill. For example, a confirmed
+architecture baseline can receive a light delta check while a security or gRPC
+branch receives standard or deep treatment. The number of active skills alone
+does not raise depth.
 
 When software contains IPs, hosts, ports, URLs, paths, timeouts, retries, pool
 sizes, feature flags, credentials, profiles, environment variables, or config
@@ -304,6 +321,7 @@ The final response must state:
 - architecture/design pattern decisions, trade-offs, ADRs, and verification or explicit not-applicable result;
 - user selection evidence when several materially viable pattern alternatives existed;
 - implementation languages/bindings, generated-code ownership, and language checks when code changed;
+- implementation-quality profiles applied or suppressed, their bounded authored paths, and verification evidence;
 - configuration sources, precedence, validation, and secret handling when changed;
 - activated and materially suppressed routing branches, plus any backward feedback and recomputed artifacts;
 - recommended execution profiles and any actual model/reasoning degradation or platform-default fallback;

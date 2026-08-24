@@ -14,6 +14,10 @@ record an override in `.agents/overrides/` before routing work.
 | gate | One routing layer that consumes multiple evidence/artifact inputs and emits activated, candidate, suppressed, or blocked branches plus typed outputs |
 | activation | Evidence-backed selection of a branch whose approved skill body may be loaded |
 | suppression | An explicit decision not to activate a candidate or adjacent branch, with reason and evidence |
+| change characteristic | A small evidence-backed description of the affected slice, such as authored code, architecture structure, design interaction, API/data contract, concurrency, security, or documentation-only work; it selects profiles but is not a learned weight |
+| language scope | Whether listed languages are `authored_in_scope`, `detected_only`, `generated_only`, or `none`; only the first may activate language and implementation-quality skills |
+| application depth | The light, standard, or deep procedure rigor assigned to one activated skill; it does not weaken task risk, authority, or completion gates |
+| implementation-quality profile | A progressively loaded, language-neutral G6 rule set selected for an evidenced authored-code concern; `core` is mandatory only when the skill is applicable |
 | forward pass | Ordered evaluation from guard through verification, joining required predecessor outputs |
 | backward feedback propagation | Bounded repair that reopens the nearest responsible gate, invalidates only dependent descendants, and starts a new forward revision; it is not learned-weight training |
 | forward revision | Immutable version of one gate-network evaluation pass for a task |

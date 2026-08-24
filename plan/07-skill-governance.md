@@ -168,6 +168,9 @@ The common `architecture-and-design-patterns` skill is placed at G5 before
 ecosystem/language implementation. It must derive candidates from recorded
 drivers, preserve Brownfield conventions unless migration is justified, allow
 an explicit not-applicable result, and produce `PATTERN-*` trade-off evidence.
+The Router activates it only for an explicit pattern scope, architecture-
+structure signal, or design-interaction signal; an ordinary material action is
+not enough. A plausible but unsupported branch is recorded as suppressed.
 It must distinguish competing options from composable cross-level patterns. If
 several options remain materially viable for one decision scope, it must show
 their fit, benefits, liabilities, QAS effects, migration/rollback, and
@@ -176,6 +179,17 @@ without selecting on the user's behalf. A recorded user or still-valid existing
 decision is required before material execution resumes.
 Do not create one active skill for every named pattern or encode framework-
 specific pattern choices into the global router.
+
+The common `implementation-quality` skill is placed at G6 and remains one
+language-neutral package rather than one skill per principle. It activates only
+for an authored boundary in scope, always loads its bounded `core` reference,
+and progressively loads only evidenced paradigm, API/data, concurrency,
+distributed, security, performance, or real-time profiles. Its profile cannot
+override architecture, ecosystem binding, generated-code ownership, or
+language rules. Every active profile requires bounded paths, evidence, an
+expected outcome, verification, and an application depth. Detected-only,
+generated-only, and documentation-only work must remain suppressed or
+`not_applicable`.
 
 Popularity evidence is advisory and role-specific. Record the source URL,
 metric type, measurement window, review date, count or rank, applicability,

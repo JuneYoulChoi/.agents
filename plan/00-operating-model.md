@@ -52,6 +52,11 @@ reviewed and adapted skills may be promoted to `skills/`.
    design options remain, show each option's fit, rationale, benefits,
    trade-offs, QAS effects, migration/rollback, and verification; recommend one
    and ask the user to select before material execution.
+12. **Activate the least sufficient practice set.** A skill or internal
+   profile requires scope overlap, evidence, an expected output, and a
+   verification method. Keep plausible but unsupported branches suppressed;
+   do not activate a pattern, language, or quality profile merely because it
+   is generally useful or a language was detected somewhere in the project.
 
 Rules have an enforcement class. `MUST` rules are enforced by a file layout,
 validator, permission policy, or hook where available; `SHOULD` rules are
@@ -132,6 +137,8 @@ classification:
   action: investigate | define | plan | design | implement | change | verify | review | document | approve | handoff
   risk: low | medium | high
   depth: light | standard | deep
+  change_characteristics: [authored_code, architecture_structure, design_interaction, object_oriented, functional, data_oriented, api_data_contract, concurrency, distributed, security, performance, realtime_embedded, configuration, documentation_only, generated_code_only]
+  language_scope: authored_in_scope | detected_only | generated_only | none
 ```
 
 Hybrid requests are decomposed by dependency, not treated as a single label.
@@ -244,8 +251,11 @@ information items. Formal conformance is never inferred: it requires the
 authorized edition, declared scope/entity, evidence mapping, deviations, and an
 accountable owner. Otherwise the result is explicitly guidance or alignment.
 
-Material architecture, design, implementation, and change then activate the
-language/framework-neutral `architecture-and-design-patterns` review at G5.
+An explicit pattern request or evidence of a changed architecture structure or
+design interaction activates the language/framework-neutral
+`architecture-and-design-patterns` review at G5. An ordinary local
+implementation/change does not activate it merely because the action is
+material.
 Patterns are selected or rejected from UC/FA/QAS drivers, constraints, existing
 Brownfield structure, and trade-offs. An explicit `not_applicable` result is
 valid; the harness does not force a fashionable pattern. Selected material
@@ -283,6 +293,16 @@ configuration surfaces, language bindings, and verification. It then invokes
 Python, JavaScript, TypeScript, HTML, CSS, or Shell boundaries. Generated code
 remains owned by its schema/toolchain. This preserves progressive disclosure
 and prevents an adjacent technology from being inferred automatically.
+
+G6 activates the language-neutral `implementation-quality` skill only when an
+authored code boundary is being created, changed, reviewed, or verified. It
+always applies a bounded core profile, then progressively loads only evidenced
+object-oriented, functional, data-oriented, API/data, concurrency,
+distributed, security, performance, or real-time/embedded profiles. Detected-
+only and generated-only languages do not activate either language engineering
+or implementation quality. Each activated skill records an application depth;
+the architecture checkpoint may remain `light` when a confirmed baseline has
+no structural or contract signal even if later branches need more work.
 
 ### Harness-maintenance path
 

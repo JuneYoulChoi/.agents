@@ -31,7 +31,10 @@ does not make Python a target-project or adapter requirement. The Router also
 emits a vendor-neutral `execution_profile`; only the platform adapter maps its
 role and `low/medium/high` reasoning recommendation to an available model.
 G2 also evaluates international-standard applicability, while G5 performs an
-evidence-backed architecture/design-pattern review before material execution.
+evidence-backed architecture/design-pattern review only when a structural or
+interaction signal makes it applicable. G6 applies one common implementation-
+quality skill to authored code and progressively loads only evidenced quality
+profiles.
 When several materially viable alternatives remain in one decision scope, G5
 shows their rationale and trade-offs, recommends one, and waits for the user's
 selection instead of silently choosing it.

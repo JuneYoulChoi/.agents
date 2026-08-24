@@ -148,6 +148,9 @@ For the same fixture input and project snapshot, both adapters MUST produce:
   architecture/design-pattern G5 activation;
 - the same pattern recommendation and `user_decision_required` result when
   multiple materially viable candidates share one decision scope;
+- the same pattern suppression for local changes without a structure or
+  interaction signal, and the same language scope, implementation-quality
+  profiles, and per-skill application depths for authored code;
 - the same backward-feedback target gate, invalidation boundary, retry budget,
   and preserved independent branches;
 - refusal of the same unauthorized actions;
@@ -178,7 +181,8 @@ responsible for natural-language intake and for performing the returned
 The selected adapter records a complete intake containing intent, success
 criteria, constraints, risk/depth/confidence, evidence, and a capability or
 manual-guard decision. It then calls `start`, reads exactly one returned
-`next.skill_path` plus `next.execution_profile`, resolves that profile without
+`next.skill_path`, `next.application_depth`, and `next.execution_profile`,
+uses the application depth to bound the selected procedure, and resolves the profile without
 letting a skill pin a model name, submits the typed result and actual
 `execution_resolution` with the expected revision, and
 uses `status`/`next` to resume. Absolute skill paths may appear in ephemeral

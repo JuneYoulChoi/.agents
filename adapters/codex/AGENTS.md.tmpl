@@ -10,14 +10,16 @@ Before material work:
    source, registry, template hash, or enforcement capability is missing or
    stale, allow read-only diagnostics only and stop mutation.
 2. Run the pinned `intake-and-route` procedure. Classify session scope,
-   project state, fields, action, risk, depth, evidence, and user decisions.
+   project state, fields, action, risk, depth, change characteristics, language
+   scope, evidence, and user decisions.
    Evaluate `registry/routing-gates.json` from `G0` through `G7`: gates may
    activate several evidence-backed branches, but load only activated skills.
    When the reference runtime is available, write that structured intake as
    JSON, validate it with `harness_validator.py`, and start/resume it through
    `harness_runner.py`. Load only the returned `next.skill_path`, submit its
    structured result with the expected revision, and repeat. Resolve the
-   returned `next.execution_profile` to the available Codex model/reasoning
+   returned `next.application_depth` to bound the skill procedure and map
+   `next.execution_profile` to the available Codex model/reasoning
    setting and submit the actual `execution_resolution`; record an upgrade,
    degradation, platform default, or unavailable capability instead of hiding
    it, including the native reasoning label. The portable profile never binds a
@@ -33,9 +35,12 @@ Before material work:
    profiles and distinguish guidance/alignment from evidenced conformance.
 5. For Brownfield or Hybrid work, run `brownfield-impact-analysis` before
    editing and preserve existing UC/FA/QA and regression behavior.
-   For material design/implementation/change, run the G5
-   `architecture-and-design-patterns` review before ecosystem/language work;
-   selected, rejected, existing, and not-applicable are all explicit results.
+   Run the G5 `architecture-and-design-patterns` review only for an explicit
+   pattern scope or evidenced architecture-structure/design-interaction change;
+   suppress it for ordinary local code changes. For authored code in scope,
+   run its changed language profile and G6 `implementation-quality`, loading
+   only evidence-backed quality profiles. For an active pattern review,
+   selected, rejected, existing, and not-applicable are explicit results.
    When several materially viable options remain for one decision scope, show
    their reasons and trade-offs, recommend one, and wait for the user's choice.
 6. For harness changes, obtain approval before applying only the bounded plan.

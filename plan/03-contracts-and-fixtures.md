@@ -145,14 +145,24 @@ The validator MUST enforce these invariants:
 18. A formal standards-conformance claim requires authorized normative-source
     evidence, selected edition/profile, declared scope/entity, deviations, and
     owner. Missing evidence blocks only the claim, not ordinary guidance work.
-19. Material design/implementation/change reaches a G5 pattern review whose
-    result is selected, rejected, existing, candidate, or `not_applicable`;
-    pattern count or popularity cannot satisfy this invariant.
+19. An explicit pattern scope, architecture-structure change, or design-
+    interaction change reaches a G5 pattern review whose result is selected,
+    rejected, existing, candidate, or `not_applicable`. A material action alone
+    does not satisfy applicability; a plausible local change records pattern
+    suppression instead.
 20. When two or more materially viable pattern candidates address the same
     decision scope, the review records one recommendation, its rationale and
     change conditions, keeps all candidates unselected, and enters
     `user_decision_required`. Material execution resumes only after a selected
     candidate links to recorded user or still-valid existing-decision evidence.
+21. `language-engineering` and `implementation-quality` activate only for an
+    authored language boundary in scope. Detected-only, generated-only, and
+    documentation-only work cannot activate them. Every applicable authored
+    code route includes implementation-quality `core`; additional profiles
+    require their matching change characteristic.
+22. Every activated skill has exactly one `light`, `standard`, or `deep`
+    `application_depth`. Branch depth reduces irrelevant procedure but cannot
+    weaken risk, authority, architecture, or verification gates.
 
 ## Event contract
 
@@ -290,6 +300,12 @@ tree, but one result can activate several branches:
   "questions": [],
   "output_artifact_ids": ["IMPL-001"],
   "evidence_ids": ["EVD-040", "EVD-041"],
+  "application_depths": {
+    "core.architecture-and-design-patterns": "standard",
+    "core.ros2-engineering": "standard",
+    "core.grpc-engineering": "standard",
+    "core.language-engineering": "standard"
+  },
   "status": "passed"
 }
 ```
@@ -305,7 +321,8 @@ classification evidence but never acts as an undocumented learned weight.
 
 The executable reference provider accepts a JSON object using
 `schema_version`, `request_id`, `target`, `scope`, `project_state`, `action`,
-`enforcement_mode`, architecture status, fields, languages, technologies,
+`enforcement_mode`, architecture status, fields, `change_characteristics`,
+languages, `language_scope`, technologies,
 configuration candidates, requested standards, conformance intent/scope/owner/evidence,
 pattern scopes, evidence, artifacts, and optional feedback. It emits
 one JSON object with status, forward revision, `G0`–`G7` evaluation results,
@@ -626,6 +643,52 @@ rejects hand-edited generated paths, and reports an ecosystem/binding/language
 combination unsupported by the selected version. Project conventions remain
 the Brownfield default unless a reviewed migration is approved.
 
+## Implementation-quality artifact contract
+
+An applicable authored-code boundary produces a focused G6 result. It does not
+repeat the `PATTERN-*`, `TECH-*`, or `IMPL-*` decision:
+
+```json
+{
+  "schema_version": 1,
+  "status": "completed",
+  "authored_boundaries": ["src/controller"],
+  "activated_profiles": [
+    {
+      "id": "core",
+      "depth": "standard",
+      "authored_boundaries": ["src/controller"],
+      "evidence_ids": ["EVD-CODE-001"],
+      "expected_outcomes": ["explicit error and lifecycle behavior"],
+      "verification_ids": ["TEST-IMPL-001"]
+    },
+    {
+      "id": "concurrency",
+      "depth": "standard",
+      "authored_boundaries": ["src/controller"],
+      "evidence_ids": ["EVD-CALLBACK-001"],
+      "expected_outcomes": ["bounded cancellation and shutdown"],
+      "verification_ids": ["TEST-CONCURRENCY-001"]
+    }
+  ],
+  "suppressed_profiles": [
+    {"id": "performance", "reason": "no performance QAS or observed hotspot"}
+  ],
+  "findings": [],
+  "residual_risks": [],
+  "open_points": []
+}
+```
+
+Allowed profiles are `core`, `object_oriented`, `functional`, `data_oriented`,
+`api_data`, `concurrency`, `distributed`, `security`, `performance`, and
+`realtime_embedded`. `core` is required whenever the skill is applicable. Each
+additional profile requires a matching change characteristic, its own bounded
+authored paths within the top-level boundary, evidence, expected outcomes, and
+verification. A detected-only,
+generated-only, or documentation-only route returns `not_applicable` without
+loading the profile references.
+
 ## Configuration artifact contract
 
 Use a `CONFIG-*` artifact when a task externalizes, changes, migrates, or
@@ -838,8 +901,9 @@ runner prints durable temporary result paths unless an explicit
 | `C-CONFIG` configuration | 5 | compiled/runtime/Shell/public-web/secret candidates activate the common configuration concern and only affected language/ecosystem branches; invalid secret and port contracts are rejected by unit validation |
 | `T-TECH` technology composition | 6 | all 11 mappings resolve, meaningful robotics/simulation/web/platform/gRPC compositions activate, and unevidenced adjacent technologies remain suppressed |
 | `E-PROFILE` execution profiles | 3 | light work remains bounded, high risk raises G2–G7, and repeated feedback raises only the responsible gate plus G7 without a model binding |
-| `A-STD-PATTERN` standards and patterns | 6 | named standard profiles normalize at G2, compliance/quality branches remain visible, material pattern review activates at G5, legacy status is canonicalized, missing/unknown conformance inputs fail closed, and a fully scoped evidenced route may proceed |
-| reference runtime unit checks | 13 | ordered architecture-first execution, profile resolution validation, verified completion/handoff, revision conflict preservation, unreadable-state preservation, secret redaction, port-bound rules, material pattern routing, pattern recommendation/user-decision validation, conformance blocking, and legacy-status canonicalization hold |
+| `A-STD-PATTERN` standards and patterns | 6 | named standard profiles normalize at G2, compliance/quality branches remain visible, evidenced pattern scopes activate at G5, legacy status is canonicalized, missing/unknown conformance inputs fail closed, and a fully scoped evidenced route may proceed |
+| `S-MIN` selective routing | 3 | local authored code suppresses pattern review, structural code selects scoped patterns and quality profiles, and detected-only documentation avoids implementation skills |
+| reference runtime unit checks | 17 | ordered architecture-first execution, profile resolution validation, verified completion/handoff, revision conflict preservation, unreadable-state preservation, secret redaction, port-bound rules, selective pattern and implementation-quality routing and artifact validation, pattern recommendation/user-decision validation, conformance blocking, and legacy-status canonicalization hold |
 
 The intentionally bounded suite is the promotion gate for this reference
 runtime. It avoids the Cartesian product of every language, configuration
