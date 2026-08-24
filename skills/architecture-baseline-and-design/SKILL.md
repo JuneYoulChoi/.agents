@@ -207,10 +207,11 @@ baseline and before implementation. Architecture records required capability
 and integration constraints; the technology skill selects products and
 specialist procedures.
 
-Route material architecture, design, implementation, and change work through
-`$architecture-and-design-patterns` at G5. The architecture baseline supplies
-drivers and constraints; the pattern skill evaluates reusable structures and
-trade-offs without forcing a pattern or replacing an ADR.
+Route through `$architecture-and-design-patterns` at G5 only when an explicit
+pattern scope, architecture-structure change, or design-interaction change is
+evidenced. The architecture baseline supplies drivers and constraints; an
+ordinary local implementation can record no pattern impact and continue
+without loading the pattern catalogs.
 
 ## Exit gate
 

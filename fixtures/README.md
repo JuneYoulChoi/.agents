@@ -34,11 +34,12 @@ platform-native runtime. It passes only when it implements the same JSON file
 transport and observable routing semantics. Do not put secrets or live
 production endpoints in fixture inputs.
 
-Current executable coverage is 28 cases: four F-017 routing cases, four
+Current executable coverage is 31 cases: four F-017 routing cases, four
 Bootstrap-conflict cases, five configuration-routing cases, six
 technology-composition cases, three adaptive execution-profile cases, and six
-international-standard/pattern-routing cases.
-`python3 -B -m unittest discover -s tests -v` adds thirteen focused
+international-standard/pattern-routing cases, plus three selective-routing
+cases for local, structural, and detected-only work.
+`python3 -B -m unittest discover -s tests -v` adds seventeen focused
 State/Runner/Validator checks, including pattern recommendation and user-
 decision contract validation. This bounded suite does not
 claim platform-native hooks, external runtime availability, or every possible

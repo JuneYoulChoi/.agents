@@ -112,7 +112,8 @@ closed until a scope-bound approval exists. Silence is not approval.
 | Configuration candidate after architecture and Greenfield/Brownfield baseline | `$configuration-and-environment-management` during assembly/design |
 | Technology adoption/integration or detected ecosystem with specialist rules | `$technology-selection-and-integration`, then only selected ecosystem skills |
 | Material implementation after ecosystem selection | `$language-engineering` for each changed authored language boundary |
-| Material architecture/design/implementation/change | `$architecture-and-design-patterns` for applicable architecture/design scopes |
+| Explicit pattern request or architecture-structure/design-interaction signal | `$architecture-and-design-patterns` for only the evidenced scopes |
+| Authored code creation/change/review/verification | `$implementation-quality` at G6 with only evidenced profiles |
 | Document request | `$document-purpose` |
 | Existing implementation ready for completion | `$verify-and-handoff` |
 | Missing or incompatible specialist skill | use the core procedure and report the fallback |
@@ -132,6 +133,16 @@ Brownfield baseline, technology selection/integration, selected ecosystem
 engineering skill, changed implementation-language profile, conditional
 configuration, execution, verification, and documentation. Never preload all
 ecosystem or language skills merely because they are registered.
+
+For code-related work record `language_scope` as `authored_in_scope`,
+`detected_only`, `generated_only`, or `none`. Record only evidenced
+`change_characteristics`; at minimum distinguish `authored_code`,
+`architecture_structure`, `design_interaction`, `api_data_contract`,
+`concurrency`, `distributed`, `security`, `performance`, `realtime_embedded`,
+`configuration`, `documentation_only`, and `generated_code_only` as applicable.
+Do not infer every project language or quality practice from repository-wide
+detection. An activation requires scope overlap, evidence, an expected output,
+and a verification method; otherwise suppress it with a reason.
 
 ## 5. Return a transition, not a hidden conclusion
 

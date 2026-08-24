@@ -14,7 +14,7 @@
   "skills": [
     {
       "id": "core.intake-and-route",
-      "version": "0.2.0",
+      "version": "0.3.0",
       "entry": "skills/intake-and-route/SKILL.md",
       "trust": "approved",
       "capabilities": ["classification", "clarification", "routing", "standard_and_pattern_intake"],
@@ -25,7 +25,7 @@
     },
     {
       "id": "core.greenfield-planning",
-      "version": "0.2.0",
+      "version": "0.3.0",
       "entry": "skills/greenfield-planning/SKILL.md",
       "trust": "approved",
       "capabilities": ["requirements", "architecture", "standard_and_pattern_trace", "delivery_planning"],
@@ -36,7 +36,7 @@
     },
     {
       "id": "core.architecture-baseline-and-design",
-      "version": "0.2.0",
+      "version": "0.3.0",
       "entry": "skills/architecture-baseline-and-design/SKILL.md",
       "trust": "approved",
       "capabilities": ["architecture_baseline", "international_standard_applicability", "hld", "lld", "viewpoints", "views", "diagrams", "architecture_sync"],
@@ -47,7 +47,7 @@
     },
     {
       "id": "core.brownfield-impact-analysis",
-      "version": "0.2.0",
+      "version": "0.3.0",
       "entry": "skills/brownfield-impact-analysis/SKILL.md",
       "trust": "approved",
       "capabilities": ["baseline", "impact_analysis", "standard_and_pattern_drift", "regression_planning"],
@@ -91,7 +91,7 @@
     },
     {
       "id": "core.language-engineering",
-      "version": "0.2.0",
+      "version": "0.3.0",
       "entry": "skills/language-engineering/SKILL.md",
       "trust": "approved",
       "capabilities": ["language_detection", "idiomatic_implementation", "binding_integration", "language_verification"],
@@ -102,13 +102,24 @@
     },
     {
       "id": "core.architecture-and-design-patterns",
-      "version": "0.2.0",
+      "version": "0.3.0",
       "entry": "skills/architecture-and-design-patterns/SKILL.md",
       "trust": "approved",
       "capabilities": ["architecture_pattern_selection", "design_pattern_selection", "pattern_tradeoff_analysis", "pattern_decision_support", "brownfield_pattern_assessment"],
       "network_access": "none",
       "data_access": "workspace",
       "mutation": "none",
+      "platforms": ["codex", "claude"]
+    },
+    {
+      "id": "core.implementation-quality",
+      "version": "0.1.0",
+      "entry": "skills/implementation-quality/SKILL.md",
+      "trust": "approved",
+      "capabilities": ["implementation_applicability", "language_neutral_code_quality", "selective_quality_profiles", "implementation_verification"],
+      "network_access": "none",
+      "data_access": "workspace",
+      "mutation": "workspace",
       "platforms": ["codex", "claude"]
     },
     {
@@ -234,7 +245,7 @@
     },
     {
       "id": "core.verify-and-handoff",
-      "version": "0.2.0",
+      "version": "0.3.0",
       "entry": "skills/verify-and-handoff/SKILL.md",
       "trust": "approved",
       "capabilities": ["verification", "standards_evidence_review", "pattern_decision_review", "traceability", "handoff"],

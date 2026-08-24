@@ -14,6 +14,15 @@
     "architecture_status": "accepted",
     "fields": ["backend", "api", "configuration", "testing", "documentation", "devops_release"],
     "languages": ["cpp"],
+    "language_scope": "authored_in_scope",
+    "change_characteristics": [
+      "authored_code",
+      "architecture_structure",
+      "design_interaction",
+      "api_data_contract",
+      "distributed",
+      "configuration"
+    ],
     "technologies": [
       {"name": "ROS 2", "status": "detected_existing", "material": true},
       {"name": "gRPC", "status": "required_by_user", "material": true},
@@ -72,6 +81,7 @@
       "core.grpc-engineering",
       "core.docker-engineering",
       "core.language-engineering",
+      "core.implementation-quality",
       "core.verify-and-handoff"
     ],
     "suppressed_skills_contains": [
@@ -103,6 +113,15 @@
           "core.grpc-engineering",
           "core.docker-engineering",
           "core.language-engineering"
+        ],
+        "activated_branches_contains": ["pattern:architecture", "pattern:design", "cpp"]
+      },
+      "G6": {
+        "activated_skills_contains": ["core.implementation-quality"],
+        "activated_branches_contains": [
+          "implementation_quality:core",
+          "implementation_quality:api_data",
+          "implementation_quality:distributed"
         ]
       }
     },

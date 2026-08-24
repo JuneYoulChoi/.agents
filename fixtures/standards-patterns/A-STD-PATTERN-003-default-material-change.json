@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "id": "A-STD-PATTERN-003-default-material-change",
-  "description": "A material change performs standards applicability and pattern review without forcing a specific standard or pattern.",
+  "description": "A material structural change performs standards applicability and scoped pattern review without forcing a specific pattern.",
   "context": {
     "schema_version": 1,
     "request_id": "REQ-STD-PATTERN-003",
@@ -15,6 +15,8 @@
     "architecture_status": "accepted",
     "fields": ["backend", "implementation"],
     "languages": ["java"],
+    "language_scope": "authored_in_scope",
+    "change_characteristics": ["authored_code", "architecture_structure", "design_interaction"],
     "technologies": [],
     "configuration_candidates": [],
     "evidence_ids": ["EV-STD-PATTERN-003"],
@@ -28,6 +30,10 @@
       "G5": {
         "activated_skills_contains": ["core.architecture-and-design-patterns", "core.language-engineering"],
         "activated_branches_contains": ["pattern:architecture", "pattern:design", "java"]
+      },
+      "G6": {
+        "activated_skills_contains": ["core.implementation-quality"],
+        "activated_branches_contains": ["implementation_quality:core"]
       }
     }
   }

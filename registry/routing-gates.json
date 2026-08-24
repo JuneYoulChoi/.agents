@@ -98,6 +98,21 @@
       "iso_iec_ieee_12207_2026": "skills/architecture-baseline-and-design/references/standards/iso-12207-15288.md",
       "iso_iec_ieee_15288_2023": "skills/architecture-baseline-and-design/references/standards/iso-12207-15288.md",
       "iso_iec_ieee_15289_2019": "skills/architecture-baseline-and-design/references/standards/iso-15289.md"
+    },
+    "pattern_characteristic_scopes": {
+      "architecture_structure": "architecture",
+      "design_interaction": "design"
+    },
+    "implementation_quality_profiles": {
+      "object_oriented": "object_oriented",
+      "functional": "functional",
+      "data_oriented": "data_oriented",
+      "api_data_contract": "api_data",
+      "concurrency": "concurrency",
+      "distributed": "distributed",
+      "security": "security",
+      "performance": "performance",
+      "realtime_embedded": "realtime_embedded"
     }
   },
   "gates": [
@@ -140,15 +155,15 @@
       "id": "G5",
       "name": "specialist",
       "purpose": "Select evidenced architecture/design pattern, ecosystem, and authored-language skills",
-      "inputs": ["technology_artifacts", "affected_modules", "architecture_drivers", "pattern_scopes", "language_evidence", "generated_code_ownership"],
+      "inputs": ["technology_artifacts", "affected_modules", "architecture_drivers", "change_characteristics", "pattern_scopes", "language_evidence", "language_scope", "generated_code_ownership"],
       "outputs": ["pattern_review", "ecosystem_skills", "language_profiles", "suppressed_adjacent_skills", "compatibility_gaps"]
     },
     {
       "id": "G6",
       "name": "assembly_execution",
       "purpose": "Join selected branches, order dependencies, and execute accepted slices",
-      "inputs": ["workflow_results", "concern_results", "specialist_results", "acceptance_contract"],
-      "outputs": ["execution_plan", "changed_artifacts", "command_log", "verification_inputs"]
+      "inputs": ["workflow_results", "concern_results", "specialist_results", "change_characteristics", "acceptance_contract"],
+      "outputs": ["implementation_quality_profiles", "execution_plan", "changed_artifacts", "command_log", "verification_inputs"]
     },
     {
       "id": "G7",
@@ -178,7 +193,7 @@
       "core.modbus-engineering",
       "core.colcon-workspace-engineering"
     ],
-    "G6": ["core.harness-overview-html"],
+    "G6": ["core.implementation-quality", "core.harness-overview-html"],
     "G7": ["core.verify-and-handoff"]
   },
   "backward_routes": [

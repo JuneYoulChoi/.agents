@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "id": "S-MIN-002-structural-code-change",
+  "description": "A structural Java API change activates scoped pattern review and only the evidenced quality profiles.",
+  "context": {
+    "schema_version": 1,
+    "request_id": "REQ-S-MIN-002",
+    "target": "project",
+    "scope": "software_engineering",
+    "project_state": "brownfield",
+    "action": "change",
+    "risk": "medium",
+    "depth": "standard",
+    "enforcement_mode": "hook",
+    "architecture_status": "confirmed",
+    "fields": ["backend", "api", "implementation", "testing"],
+    "languages": ["java"],
+    "language_scope": "authored_in_scope",
+    "change_characteristics": [
+      "authored_code",
+      "architecture_structure",
+      "design_interaction",
+      "object_oriented",
+      "api_data_contract"
+    ],
+    "technologies": [],
+    "configuration_candidates": [],
+    "evidence_ids": ["EV-S-MIN-002"],
+    "artifacts": [],
+    "feedback": []
+  },
+  "expected": {
+    "status": "active",
+    "activated_skills_contains": [
+      "core.architecture-and-design-patterns",
+      "core.language-engineering",
+      "core.implementation-quality"
+    ],
+    "gates": {
+      "G5": {
+        "activated_branches_contains": ["pattern:architecture", "pattern:design", "java"]
+      },
+      "G6": {
+        "activated_branches_contains": [
+          "implementation_quality:core",
+          "implementation_quality:object_oriented",
+          "implementation_quality:api_data"
+        ]
+      }
+    }
+  }
+}

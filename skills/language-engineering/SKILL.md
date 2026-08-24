@@ -21,6 +21,9 @@ This is a `G5` specialist branch. Activate one instance per changed authored
 language boundary and keep unrelated or generator-owned language profiles
 suppressed. A language/build failure may reopen `G5`; a pure implementation
 defect returns to `G6` without reclassifying unaffected technology branches.
+`language_scope` must be `authored_in_scope`; a language that is merely
+detected, generated, or mentioned in documentation does not activate this
+skill.
 
 ## 1. Detect the implementation context
 

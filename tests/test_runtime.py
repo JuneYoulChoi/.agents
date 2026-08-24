@@ -18,6 +18,7 @@ from harness_state import StateError, StateStore  # noqa: E402
 from harness_validator import (  # noqa: E402
     ContractError,
     validate_intake,
+    validate_implementation_quality,
     validate_pattern_review,
     write_object,
 )
@@ -113,6 +114,31 @@ def undecided_pattern_review() -> dict:
     }
 
 
+def implementation_quality_result() -> dict:
+    return {
+        "schema_version": 1,
+        "status": "completed",
+        "authored_boundaries": ["src/service"],
+        "activated_profiles": [
+            {
+                "id": "core",
+                "depth": "light",
+                "authored_boundaries": ["src/service"],
+                "evidence_ids": ["EV-CODE-001"],
+                "expected_outcomes": ["errors remain explicit"],
+                "verification_ids": ["TEST-CODE-001"],
+            }
+        ],
+        "suppressed_profiles": [
+            {"id": "performance", "reason": "no performance QAS or hotspot"}
+        ],
+        "findings": [],
+        "changes_or_recommendations": [],
+        "residual_risks": [],
+        "open_points": [],
+    }
+
+
 class RuntimeTests(unittest.TestCase):
     def setUp(self) -> None:
         self.temp_owner = tempfile.TemporaryDirectory(prefix="harness-runtime-test-")
@@ -145,6 +171,12 @@ class RuntimeTests(unittest.TestCase):
         self.assertEqual("core.architecture-baseline-and-design", started["next"]["skill_id"])
         self.assertEqual("architect", started["next"]["execution_profile"]["role"])
         self.assertEqual("medium", started["next"]["execution_profile"]["reasoning"])
+        state = StateStore(self.target).read("TASK-RUNTIME")
+        self.assertEqual(
+            intake().get("change_characteristics", []),
+            state["classification"]["change_characteristics"],
+        )
+        self.assertEqual("authored_in_scope", state["classification"]["language_scope"])
         result_path = self.target / "skill-result.json"
         write_object(
             result_path,
@@ -274,9 +306,14 @@ class RuntimeTests(unittest.TestCase):
         with self.assertRaises(ContractError):
             validate_intake(value, self.taxonomy)
 
-    def test_material_change_routes_through_pattern_review(self) -> None:
+    def test_structural_change_routes_through_scoped_pattern_review(self) -> None:
         value = intake()
         value["action"] = "change"
+        value["change_characteristics"] = [
+            "authored_code",
+            "architecture_structure",
+            "design_interaction",
+        ]
         result = route(value, _load_manifest(self.manifest))
         gates = {gate["gate_id"]: gate for gate in result["gate_results"]}
         self.assertIn("core.architecture-and-design-patterns", result["activated_skills"])
@@ -286,6 +323,63 @@ class RuntimeTests(unittest.TestCase):
         )
         self.assertIn("pattern:architecture", gates["G5"]["activated_branches"])
         self.assertIn("pattern:design", gates["G5"]["activated_branches"])
+
+    def test_local_code_change_suppresses_pattern_review_and_loads_core_quality(self) -> None:
+        value = intake()
+        value.update(
+            action="change",
+            risk="low",
+            depth="light",
+            change_characteristics=["authored_code"],
+            language_scope="authored_in_scope",
+        )
+        result = route(value, _load_manifest(self.manifest))
+        gates = {gate["gate_id"]: gate for gate in result["gate_results"]}
+        self.assertNotIn("core.architecture-and-design-patterns", result["activated_skills"])
+        self.assertIn("core.language-engineering", result["activated_skills"])
+        self.assertIn("core.implementation-quality", result["activated_skills"])
+        self.assertIn(
+            {
+                "skill_id": "core.architecture-and-design-patterns",
+                "reason": "no_structural_or_interaction_pattern_signal",
+            },
+            result["suppressed_skills"],
+        )
+        self.assertEqual(
+            ["implementation_quality:core"], gates["G6"]["activated_branches"]
+        )
+        self.assertEqual(
+            "light", gates["G6"]["application_depths"]["core.implementation-quality"]
+        )
+
+    def test_detected_only_language_does_not_activate_implementation_skills(self) -> None:
+        value = intake()
+        value.update(
+            action="document",
+            fields=["documentation"],
+            language_scope="detected_only",
+            change_characteristics=["documentation_only"],
+            configuration_candidates=[],
+        )
+        result = route(value, _load_manifest(self.manifest))
+        self.assertNotIn("core.language-engineering", result["activated_skills"])
+        self.assertNotIn("core.implementation-quality", result["activated_skills"])
+
+    def test_implementation_quality_requires_core_evidence_and_verification(self) -> None:
+        value = implementation_quality_result()
+        self.assertIs(validate_implementation_quality(value), value)
+        value["activated_profiles"][0]["verification_ids"] = []
+        with self.assertRaises(ContractError):
+            validate_implementation_quality(value)
+        value = implementation_quality_result()
+        value["activated_profiles"][0]["authored_boundaries"] = ["src/unrelated"]
+        with self.assertRaises(ContractError):
+            validate_implementation_quality(value)
+
+    def test_not_applicable_implementation_quality_has_no_authored_scope(self) -> None:
+        value = implementation_quality_result()
+        value.update(status="not_applicable", authored_boundaries=[], activated_profiles=[])
+        self.assertIs(validate_implementation_quality(value), value)
 
     def test_multiple_viable_patterns_require_a_user_decision(self) -> None:
         value = undecided_pattern_review()

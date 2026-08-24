@@ -1,6 +1,6 @@
 ---
 name: architecture-and-design-patterns
-description: Evaluate, select, document, implement, or review architecture and software design patterns from requirements, quality scenarios, constraints, and existing project structure. Use for material architecture, design, implementation, change, refactoring, or reviews where reusable structural or object/module interaction patterns may affect boundaries, coupling, ownership, testability, deployment, or evolution.
+description: Evaluate, select, document, or review architecture and software design patterns when an explicit pattern request or evidenced architecture-structure/design-interaction change affects boundaries, coupling, ownership, testability, deployment, or evolution. Do not use for ordinary local code changes without a structural or collaboration decision.
 ---
 
 # Architecture and Design Patterns
@@ -17,10 +17,16 @@ pattern/convention evidence and impact record before recommending structural
 change. Do not mutate code in this skill. Return to clarification when a choice
 depends on product priorities or an unconfirmed UC/FA/QAS/module boundary.
 
-This is a G5 specialist review. Activate it for material `design`, `implement`,
-or `change` actions and explicit architecture/pattern reviews. Use scope
-`architecture`, `design`, or both. A pattern failure reopens G5; a requirements
+This is a G5 specialist review. Activate it for an explicit pattern scope,
+`architecture_structure`, `design_interaction`, or an explicit architecture
+design/review request. Action `implement` or `change` alone is insufficient.
+Use scope `architecture`, `design`, or both. A pattern failure reopens G5; a requirements
 or architecture-driver contradiction reopens G2/G3 instead.
+
+Before loading either reference, require scope overlap, evidence, an expected
+decision artifact, and a verification method. If none exists, return
+`not_applicable` or keep the branch suppressed without reading the pattern
+catalogs.
 
 ## 1. Derive drivers before candidates
 

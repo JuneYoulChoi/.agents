@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "id": "S-MIN-001-local-code-change",
+  "description": "A local authored-code change uses language and core quality rules while suppressing pattern review.",
+  "context": {
+    "schema_version": 1,
+    "request_id": "REQ-S-MIN-001",
+    "target": "project",
+    "scope": "software_engineering",
+    "project_state": "brownfield",
+    "action": "change",
+    "risk": "low",
+    "depth": "light",
+    "enforcement_mode": "hook",
+    "architecture_status": "confirmed",
+    "fields": ["frontend", "implementation", "testing"],
+    "languages": ["typescript"],
+    "language_scope": "authored_in_scope",
+    "change_characteristics": ["authored_code"],
+    "technologies": [{"name": "React", "status": "detected_existing", "material": true}],
+    "configuration_candidates": [],
+    "evidence_ids": ["EV-S-MIN-001"],
+    "artifacts": [],
+    "feedback": []
+  },
+  "expected": {
+    "status": "active",
+    "activated_skills_contains": [
+      "core.react-engineering",
+      "core.language-engineering",
+      "core.implementation-quality"
+    ],
+    "suppressed_skills_contains": ["core.architecture-and-design-patterns"],
+    "gates": {
+      "G2": {
+        "application_depths": {"core.architecture-baseline-and-design": "light"}
+      },
+      "G5": {
+        "activated_branches_contains": ["typescript"]
+      },
+      "G6": {
+        "activated_branches_contains": ["implementation_quality:core"],
+        "application_depths": {"core.implementation-quality": "light"}
+      }
+    }
+  }
+}

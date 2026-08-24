@@ -21,8 +21,16 @@
   "conformance_intent": "alignment",
   "authorized_standard_evidence_ids": [],
   "pattern_scopes": ["architecture", "design"],
+  "change_characteristics": [
+    "authored_code",
+    "architecture_structure",
+    "api_data_contract",
+    "distributed",
+    "configuration"
+  ],
   "fields": ["backend", "api", "configuration", "testing"],
   "languages": ["cpp"],
+  "language_scope": "authored_in_scope",
   "technologies": [
     {
       "name": "gRPC",

@@ -44,6 +44,13 @@ profile, configuration contracts, and architecture/document synchronization.
 Confirm that unrelated ecosystem/language skills were not treated as required
 and that popularity did not grant adoption authority.
 
+When authored code is affected, verify the `implementation-quality` result:
+the core profile is present, every additional profile has matching evidence,
+bounded paths, expected outcomes, and verification, and detected-only,
+generated-only, or documentation-only work did not activate implementation
+rules. Confirm each activated skill has one application depth and that a light
+adjacent branch did not weaken risk or completion checks.
+
 When a standard profile is applicable, verify the `STD-*` scope, edition,
 intent, owner, evidence, deviations, and affected artifacts. Reject a formal
 `conformance` claim without authorized normative source evidence and the

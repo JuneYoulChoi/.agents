@@ -60,6 +60,10 @@ patterns and conventions at each affected boundary. Record standard or pattern
 drift without renaming code shapes speculatively. A proposed pattern migration
 must include compatibility, incremental migration, rollback, and the QAS it is
 expected to improve.
+Mark `architecture_structure` or `design_interaction` only when the affected
+boundary supplies evidence; do not turn every code change into a pattern
+review. Distinguish changed authored languages from detected-only and generated
+languages so later G5/G6 routing remains minimal.
 
 - `extend`: an existing boundary remains appropriate;
 - `new`: a new boundary is required with limited existing changes;

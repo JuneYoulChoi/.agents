@@ -17,6 +17,7 @@
     "conformance_intent": "alignment",
     "authorized_standard_evidence_ids": [],
     "pattern_scopes": [],
+    "change_characteristics": ["architecture_structure", "design_interaction"],
     "fields": ["architecture", "quality_attributes"],
     "languages": [],
     "technologies": [],

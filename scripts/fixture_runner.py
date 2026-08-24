@@ -81,12 +81,27 @@ def _compare(fixture: dict[str, Any], actual: dict[str, Any]) -> list[str]:
             if key in gate_expected and gate.get(key) != gate_expected[key]:
                 failures.append(f"gate {gate_id}.{key}: expected {gate_expected[key]!r}, actual {gate.get(key)!r}")
         for key in ("activated_skills", "activated_branches"):
+            exact_key = f"{key}_exact"
+            if exact_key in gate_expected:
+                wanted = gate_expected[exact_key]
+                got = gate.get(key, [])
+                if not isinstance(wanted, list) or sorted(got) != sorted(wanted):
+                    failures.append(
+                        f"gate {gate_id}.{exact_key}: expected {sorted(wanted)!r}, actual {sorted(got)!r}"
+                    )
             contains_key = f"{key}_contains"
             if contains_key in gate_expected:
                 wanted = gate_expected[contains_key]
                 got = gate.get(key, [])
                 if not _contains(got, wanted):
                     failures.append(f"gate {gate_id}.{contains_key}: missing {sorted(set(wanted) - set(got))!r}")
+        for skill_id, expected_depth in gate_expected.get("application_depths", {}).items():
+            actual_depth = gate.get("application_depths", {}).get(skill_id)
+            if actual_depth != expected_depth:
+                failures.append(
+                    f"gate {gate_id}.application_depths[{skill_id!r}]: "
+                    f"expected {expected_depth!r}, actual {actual_depth!r}"
+                )
 
     feedback = actual.get("feedback_results", [])
     if not isinstance(feedback, list):

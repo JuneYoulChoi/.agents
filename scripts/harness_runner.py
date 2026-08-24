@@ -86,6 +86,12 @@ def _next_item(state: dict[str, Any], entries: dict[str, str], harness_root: Pat
     gate_id = execution["skill_gates"][skill_id]
     profiles = state["route"]["execution_profile"]["gate_profiles"]
     execution_profile = next(profile for profile in profiles if profile["gate_id"] == gate_id)
+    gate_result = next(
+        gate for gate in state["route"]["gate_results"] if gate["gate_id"] == gate_id
+    )
+    application_depth = gate_result.get("application_depths", {}).get(
+        skill_id, state["classification"]["depth"]
+    )
     return {
         "position": cursor,
         "skill_id": skill_id,
@@ -93,6 +99,7 @@ def _next_item(state: dict[str, Any], entries: dict[str, str], harness_root: Pat
         "skill_entry": entry,
         "skill_path": str(skill_path),
         "execution_profile": execution_profile,
+        "application_depth": application_depth,
         "expected_result": {
             "schema_version": 1,
             "skill_id": skill_id,
@@ -184,6 +191,10 @@ def start(
             "action": intake["action"],
             "risk": intake["risk"],
             "depth": intake["depth"],
+            "change_characteristics": intake.get("change_characteristics", []),
+            "language_scope": intake.get(
+                "language_scope", "authored_in_scope" if intake.get("languages") else "none"
+            ),
             "confidence": intake["confidence"],
             "evidence_ids": intake.get("evidence_ids", []),
         },

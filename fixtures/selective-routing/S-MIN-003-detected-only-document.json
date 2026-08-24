@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "id": "S-MIN-003-detected-only-document",
+  "description": "A documentation task may observe a language without activating language, pattern, or implementation-quality work.",
+  "context": {
+    "schema_version": 1,
+    "request_id": "REQ-S-MIN-003",
+    "target": "project",
+    "scope": "software_related",
+    "project_state": "brownfield",
+    "action": "document",
+    "risk": "low",
+    "depth": "light",
+    "enforcement_mode": "hook",
+    "architecture_status": "confirmed",
+    "fields": ["documentation"],
+    "languages": ["python"],
+    "language_scope": "detected_only",
+    "change_characteristics": ["documentation_only"],
+    "technologies": [],
+    "configuration_candidates": [],
+    "evidence_ids": ["EV-S-MIN-003"],
+    "artifacts": [],
+    "feedback": []
+  },
+  "expected": {
+    "status": "active",
+    "activated_skills_contains": [
+      "core.architecture-baseline-and-design",
+      "core.brownfield-impact-analysis",
+      "core.document-purpose",
+      "core.verify-and-handoff"
+    ],
+    "suppressed_skills_contains": ["core.language-engineering"],
+    "gates": {
+      "G5": {"activated_skills_exact": []},
+      "G6": {"activated_skills_exact": []}
+    }
+  }
+}

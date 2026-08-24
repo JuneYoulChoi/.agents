@@ -45,10 +45,11 @@ and privacy constraints, operational needs, and alternatives considered.
 
 Carry forward applicable `STD-*` profiles from the architecture record and
 their guidance/alignment/conformance intent. Use
-`$architecture-and-design-patterns` to evaluate architecture and design scopes
-from UC/FA/QAS drivers before implementation; an explicit `not_applicable`
-result is valid and safer than forcing a pattern. A material architecture
-pattern decision requires a `PATTERN-*` artifact and ADR.
+`$architecture-and-design-patterns` only for explicit or evidenced
+architecture-structure/design-interaction scopes from UC/FA/QAS drivers; a
+local slice without such a decision keeps the branch suppressed. An explicit
+`not_applicable` result is valid when the review is active. A material
+architecture pattern decision requires a `PATTERN-*` artifact and ADR.
 
 Derive technology capabilities before choosing a product. Route material
 runtime, library, framework, protocol, platform, simulator, middleware, build,
@@ -56,6 +57,8 @@ or orchestration choices through `$technology-selection-and-integration`.
 After an ecosystem is selected, route every implementation-producing module
 through the matching ecosystem skill and `$language-engineering`; do not choose
 a language or adjacent platform only because an example uses it.
+For authored code, continue through `$implementation-quality` with its core and
+only the additional profiles evidenced by the slice.
 
 When deploy-time or runtime values may vary, define a configuration contract
 before implementation: classify code/build/deploy/runtime/secret values, name

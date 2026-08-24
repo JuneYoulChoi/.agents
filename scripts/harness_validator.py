@@ -291,6 +291,36 @@ def validate_intake(
         raise ContractError(
             f"unsupported pattern scopes: {sorted(unknown_pattern_scopes)}"
         )
+    characteristics = _string_array(value, "change_characteristics")
+    allowed_characteristics = {
+        "authored_code",
+        "architecture_structure",
+        "design_interaction",
+        "object_oriented",
+        "functional",
+        "data_oriented",
+        "api_data_contract",
+        "concurrency",
+        "distributed",
+        "security",
+        "performance",
+        "realtime_embedded",
+        "configuration",
+        "documentation_only",
+        "generated_code_only",
+    }
+    unknown_characteristics = set(characteristics) - allowed_characteristics
+    if unknown_characteristics:
+        raise ContractError(
+            f"unsupported change characteristics: {sorted(unknown_characteristics)}"
+        )
+    language_scope = value.get(
+        "language_scope", "authored_in_scope" if value.get("languages") else "none"
+    )
+    if language_scope not in {"authored_in_scope", "detected_only", "generated_only", "none"}:
+        raise ContractError(f"unsupported language_scope: {language_scope}")
+    if not value.get("languages") and language_scope != "none":
+        raise ContractError("language_scope must be none when languages is empty")
     enforcement = value.get("enforcement_mode", "manual")
     if enforcement not in {"hook", "manual", "unsupported"}:
         raise ContractError("enforcement_mode must be hook, manual, or unsupported")
@@ -390,6 +420,14 @@ def validate_route_result(value: dict[str, Any], approved_skills: set[str]) -> d
     unknown = set(activated) - approved_skills
     if unknown:
         raise ContractError(f"route selected unapproved skills: {sorted(unknown)}")
+    for gate in gates:
+        depths = gate.get("application_depths", {})
+        if not isinstance(depths, dict):
+            raise ContractError("gate application_depths must be an object")
+        if set(depths) != set(gate.get("activated_skills", [])):
+            raise ContractError("gate application_depths must cover exactly its activated skills")
+        if any(depth not in {"light", "standard", "deep"} for depth in depths.values()):
+            raise ContractError("gate application_depths contains an unsupported depth")
     validate_execution_profile(value.get("execution_profile"))
     return value
 
@@ -564,6 +602,81 @@ def validate_pattern_review(value: dict[str, Any]) -> dict[str, Any]:
     else:  # existing_decision
         if len(existing_ids) != 1 or selected_id != existing_ids[0] or not evidence_ids:
             raise ContractError("existing_decision requires one existing candidate and decision evidence")
+    return value
+
+
+def validate_implementation_quality(value: dict[str, Any]) -> dict[str, Any]:
+    """Validate selective G6 implementation-quality applicability evidence."""
+    if value.get("schema_version") != 1:
+        raise ContractError("implementation quality schema_version must be 1")
+    status = _require_string(
+        value,
+        "status",
+        {"completed", "not_applicable", "waiting_user", "blocked", "failed"},
+    )
+    boundaries = _string_array(value, "authored_boundaries")
+    active = value.get("activated_profiles", [])
+    suppressed = value.get("suppressed_profiles", [])
+    if not isinstance(active, list) or not isinstance(suppressed, list):
+        raise ContractError("implementation quality profiles must be arrays")
+
+    allowed_profiles = {
+        "core",
+        "object_oriented",
+        "functional",
+        "data_oriented",
+        "api_data",
+        "concurrency",
+        "distributed",
+        "security",
+        "performance",
+        "realtime_embedded",
+    }
+    active_ids: set[str] = set()
+    for profile in active:
+        if not isinstance(profile, dict):
+            raise ContractError("each active implementation quality profile must be an object")
+        profile_id = _require_string(profile, "id", allowed_profiles)
+        if profile_id in active_ids:
+            raise ContractError(f"duplicate active implementation quality profile: {profile_id}")
+        active_ids.add(profile_id)
+        _require_string(profile, "depth", {"light", "standard", "deep"})
+        profile_boundaries = _string_array(profile, "authored_boundaries")
+        if not profile_boundaries:
+            raise ContractError(
+                f"implementation quality profile requires authored boundaries: {profile_id}"
+            )
+        if set(profile_boundaries) - set(boundaries):
+            raise ContractError(
+                f"implementation quality profile escapes the declared authored boundaries: {profile_id}"
+            )
+        if not _string_array(profile, "evidence_ids"):
+            raise ContractError(f"implementation quality profile requires evidence: {profile_id}")
+        if not _string_array(profile, "expected_outcomes"):
+            raise ContractError(f"implementation quality profile requires expected outcomes: {profile_id}")
+        if not _string_array(profile, "verification_ids"):
+            raise ContractError(f"implementation quality profile requires verification: {profile_id}")
+
+    suppressed_ids: set[str] = set()
+    for profile in suppressed:
+        if not isinstance(profile, dict):
+            raise ContractError("each suppressed implementation quality profile must be an object")
+        profile_id = _require_string(profile, "id", allowed_profiles)
+        if profile_id in suppressed_ids or profile_id in active_ids:
+            raise ContractError(f"implementation quality profile state is duplicated: {profile_id}")
+        suppressed_ids.add(profile_id)
+        _require_string(profile, "reason")
+
+    for key in ("findings", "changes_or_recommendations", "residual_risks", "open_points"):
+        _string_array(value, key)
+    if status == "not_applicable":
+        if boundaries or active:
+            raise ContractError("not_applicable implementation quality cannot contain authored boundaries or active profiles")
+    elif status == "completed":
+        if not boundaries:
+            raise ContractError("completed implementation quality requires authored boundaries")
+        if "core" not in active_ids:
+            raise ContractError("applicable implementation quality requires the core profile")
     return value
 
 
@@ -772,7 +885,15 @@ def main(argv: Iterable[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "kind",
-        choices=["intake", "route", "skill-result", "pattern-review", "state", "harness-config"],
+        choices=[
+            "intake",
+            "route",
+            "skill-result",
+            "pattern-review",
+            "implementation-quality",
+            "state",
+            "harness-config",
+        ],
     )
     parser.add_argument("--input", required=True, type=Path)
     parser.add_argument("--target-root", type=Path)
@@ -790,6 +911,8 @@ def main(argv: Iterable[str] | None = None) -> int:
             validate_skill_result(value, active_skill_ids(args.registry))
         elif args.kind == "pattern-review":
             validate_pattern_review(value)
+        elif args.kind == "implementation-quality":
+            validate_implementation_quality(value)
         elif args.kind == "state":
             if args.target_root is None:
                 raise ContractError("--target-root is required for state validation")

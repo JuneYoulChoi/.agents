@@ -15,6 +15,25 @@ SELECTED_TECH_STATUSES = {"required_by_user", "detected_existing", "selected"}
 ARCHITECTURE_STATUS_ALIASES = {"accepted": "confirmed"}
 CONFORMANCE_INTENTS = {"guidance", "alignment", "conformance"}
 PATTERN_SCOPES = {"architecture", "design"}
+LANGUAGE_SCOPES = {"authored_in_scope", "detected_only", "generated_only", "none"}
+CHANGE_CHARACTERISTICS = {
+    "authored_code",
+    "architecture_structure",
+    "design_interaction",
+    "object_oriented",
+    "functional",
+    "data_oriented",
+    "api_data_contract",
+    "concurrency",
+    "distributed",
+    "security",
+    "performance",
+    "realtime_embedded",
+    "configuration",
+    "documentation_only",
+    "generated_code_only",
+}
+CODE_SCOPE_ACTIONS = {"investigate", "design", "implement", "change", "verify", "review"}
 
 
 class RouterError(ValueError):
@@ -109,6 +128,8 @@ def _load_manifest(path: Path) -> dict[str, Any]:
         "adjacent_technologies",
         "standard_aliases",
         "standard_profiles",
+        "pattern_characteristic_scopes",
+        "implementation_quality_profiles",
     ):
         if not isinstance(selectors.get(key), dict):
             raise RouterError(f"routing manifest selector {key} must be an object")
@@ -128,6 +149,29 @@ def _load_manifest(path: Path) -> dict[str, Any]:
             "references",
         ):
             raise RouterError(f"standard profile path is outside the approved architecture skill: {standard_id}")
+    pattern_characteristics = selectors["pattern_characteristic_scopes"]
+    if any(
+        key not in CHANGE_CHARACTERISTICS or value not in PATTERN_SCOPES
+        for key, value in pattern_characteristics.items()
+    ):
+        raise RouterError("pattern characteristic scopes contain unsupported values")
+    quality_profiles = selectors["implementation_quality_profiles"]
+    allowed_quality_profiles = {
+        "object_oriented",
+        "functional",
+        "data_oriented",
+        "api_data",
+        "concurrency",
+        "distributed",
+        "security",
+        "performance",
+        "realtime_embedded",
+    }
+    if any(
+        key not in CHANGE_CHARACTERISTICS or value not in allowed_quality_profiles
+        for key, value in quality_profiles.items()
+    ):
+        raise RouterError("implementation quality profile selectors contain unsupported values")
     backward_routes = manifest.get("backward_routes")
     if not isinstance(backward_routes, list):
         raise RouterError("routing manifest backward_routes must be an array")
@@ -153,6 +197,8 @@ def _gate_result(
     suppressed: list[dict[str, Any]] | None = None,
     blocked: list[dict[str, Any]] | None = None,
     evidence: list[str] | None = None,
+    candidates: list[str] | None = None,
+    application_depths: dict[str, str] | None = None,
 ) -> dict[str, Any]:
     blocked = blocked or []
     return {
@@ -160,12 +206,47 @@ def _gate_result(
         "forward_revision": revision,
         "activated_skills": activated or [],
         "activated_branches": branches or [],
-        "candidate_branches": [],
+        "candidate_branches": candidates or [],
         "suppressed": suppressed or [],
         "blocked": blocked,
         "evidence_ids": evidence or [],
+        "application_depths": application_depths or {},
         "status": "blocked" if blocked else "passed",
     }
+
+
+def _depths_for_skills(
+    skills: list[str],
+    default_depth: str,
+    architecture_status: str,
+    characteristics: set[str],
+    implementation_profiles: list[str] | None = None,
+    risk: str = "medium",
+) -> dict[str, str]:
+    depths = {skill_id: default_depth for skill_id in skills}
+    if "core.intake-and-route" in depths:
+        depths["core.intake-and-route"] = "light"
+    architecture_signals = {
+        "architecture_structure",
+        "design_interaction",
+        "api_data_contract",
+        "distributed",
+        "security",
+        "realtime_embedded",
+    }
+    if (
+        "core.architecture-baseline-and-design" in depths
+        and architecture_status == "confirmed"
+        and not characteristics & architecture_signals
+    ):
+        depths["core.architecture-baseline-and-design"] = "light"
+    if (
+        "core.implementation-quality" in depths
+        and implementation_profiles == ["core"]
+        and risk == "low"
+    ):
+        depths["core.implementation-quality"] = "light"
+    return depths
 
 
 def _technology_selection(
@@ -396,6 +477,17 @@ def route(context: dict[str, Any], manifest: dict[str, Any]) -> dict[str, Any]:
     unknown_pattern_scopes = pattern_scopes - PATTERN_SCOPES
     if unknown_pattern_scopes:
         raise RouterError(f"pattern_scopes has unsupported values: {sorted(unknown_pattern_scopes)}")
+    characteristics = set(_string_list(context, "change_characteristics"))
+    unknown_characteristics = characteristics - CHANGE_CHARACTERISTICS
+    if unknown_characteristics:
+        raise RouterError(
+            f"change_characteristics has unsupported values: {sorted(unknown_characteristics)}"
+        )
+    language_scope = context.get("language_scope", "authored_in_scope" if languages else "none")
+    if language_scope not in LANGUAGE_SCOPES:
+        raise RouterError(f"language_scope has unsupported value: {language_scope}")
+    if not languages and language_scope != "none":
+        raise RouterError("language_scope must be none when languages is empty")
     enforcement = context.get("enforcement_mode", "manual")
     if enforcement not in {"hook", "manual", "unsupported"}:
         raise RouterError("enforcement_mode must be hook, manual, or unsupported")
@@ -419,7 +511,17 @@ def route(context: dict[str, Any], manifest: dict[str, Any]) -> dict[str, Any]:
     g1_blocked = []
     if context.get("material_ambiguity", False):
         g1_blocked.append({"reason": "material_clarification_required"})
-    gate_results.append(_gate_result("G1", revision, [intake_skill], sorted(fields), blocked=g1_blocked, evidence=evidence))
+    gate_results.append(_gate_result(
+        "G1",
+        revision,
+        [intake_skill],
+        sorted(fields),
+        blocked=g1_blocked,
+        evidence=evidence,
+        application_depths=_depths_for_skills(
+            [intake_skill], context.get("depth", "standard"), "not_applicable", characteristics
+        ),
+    ))
 
     g2_skills: list[str] = []
     g2_blocked: list[dict[str, Any]] = []
@@ -459,6 +561,13 @@ def route(context: dict[str, Any], manifest: dict[str, Any]) -> dict[str, Any]:
         [str(architecture_status), f"conformance_intent:{conformance_intent}", *g2_branches],
         blocked=g2_blocked,
         evidence=[*evidence, *authorized_standard_evidence],
+        application_depths=_depths_for_skills(
+            g2_skills,
+            context.get("depth", "standard"),
+            str(architecture_status),
+            characteristics,
+            risk=context.get("risk", "medium"),
+        ),
     ))
 
     g3_skills: list[str] = []
@@ -475,7 +584,20 @@ def route(context: dict[str, Any], manifest: dict[str, Any]) -> dict[str, Any]:
         g3_skills.append("core.document-purpose")
     g3_skills = list(dict.fromkeys(g3_skills))
     all_activated.extend(g3_skills)
-    gate_results.append(_gate_result("G3", revision, g3_skills, [project_state], evidence=evidence))
+    gate_results.append(_gate_result(
+        "G3",
+        revision,
+        g3_skills,
+        [project_state],
+        evidence=evidence,
+        application_depths=_depths_for_skills(
+            g3_skills,
+            context.get("depth", "standard"),
+            str(architecture_status),
+            characteristics,
+            risk=context.get("risk", "medium"),
+        ),
+    ))
 
     tech_selected, suppressed = _technology_selection(context, manifest)
     config_candidates = context.get("configuration_candidates", [])
@@ -500,38 +622,140 @@ def route(context: dict[str, Any], manifest: dict[str, Any]) -> dict[str, Any]:
         g4_branches.append("configuration")
     g4_branches = sorted(set(g4_branches))
     all_activated.extend(g4_skills)
-    gate_results.append(_gate_result("G4", revision, g4_skills, g4_branches, evidence=evidence))
+    gate_results.append(_gate_result(
+        "G4",
+        revision,
+        g4_skills,
+        g4_branches,
+        evidence=evidence,
+        application_depths=_depths_for_skills(
+            g4_skills,
+            context.get("depth", "standard"),
+            str(architecture_status),
+            characteristics,
+            risk=context.get("risk", "medium"),
+        ),
+    ))
 
     technology_skills = manifest["selectors"]["technology_skills"]
     g5_skills = [technology_skills[name] for name in sorted(tech_selected) if name in technology_skills]
-    material_pattern_actions = {"design", "implement", "change"}
-    if target == "project" and is_software and (
-        action in material_pattern_actions
-        or "architecture" in fields
-        or "design_patterns" in fields
-    ):
-        if not pattern_scopes:
-            if action in material_pattern_actions:
-                pattern_scopes.update(PATTERN_SCOPES)
-            elif "architecture" in fields:
-                pattern_scopes.add("architecture")
-            if "design_patterns" in fields:
-                pattern_scopes.add("design")
-        g5_skills.insert(0, "core.architecture-and-design-patterns")
-    if languages:
-        g5_skills.append("core.language-engineering")
-    g5_branches = [f"pattern:{scope}" for scope in sorted(pattern_scopes)]
-    g5_branches.extend(sorted(languages))
-    all_activated.extend(g5_skills)
-    gate_results.append(_gate_result("G5", revision, g5_skills, g5_branches, suppressed=suppressed, evidence=evidence))
+    pattern_scope_map = manifest["selectors"]["pattern_characteristic_scopes"]
+    pattern_scopes.update(
+        pattern_scope_map[item] for item in sorted(characteristics) if item in pattern_scope_map
+    )
+    if "design_patterns" in fields:
+        pattern_scopes.add("design")
+    if "architecture" in fields and action in {"design", "review"}:
+        pattern_scopes.add("architecture")
 
-    g6_skills = ["core.harness-overview-html"] if target == "harness_overview" else []
+    pattern_suppressed: list[dict[str, Any]] = []
+    if target == "project" and is_software and pattern_scopes:
+        g5_skills.insert(0, "core.architecture-and-design-patterns")
+    elif target == "project" and is_software and action in {"design", "implement", "change", "review"}:
+        pattern_suppressed.append({
+            "skill_id": "core.architecture-and-design-patterns",
+            "reason": "no_structural_or_interaction_pattern_signal",
+        })
+
+    language_in_scope = (
+        bool(languages)
+        and language_scope == "authored_in_scope"
+        and action in CODE_SCOPE_ACTIONS
+        and not characteristics & {"documentation_only", "generated_code_only"}
+    )
+    language_suppressed: list[dict[str, Any]] = []
+    if language_in_scope:
+        g5_skills.append("core.language-engineering")
+    elif languages:
+        if characteristics & {"documentation_only", "generated_code_only"}:
+            language_suppression_reason = "non_authored_content_only"
+        elif language_scope != "authored_in_scope":
+            language_suppression_reason = f"language_scope_{language_scope}"
+        else:
+            language_suppression_reason = f"action_{action}_has_no_authored_code_work"
+        language_suppressed.append({
+            "skill_id": "core.language-engineering",
+            "reason": language_suppression_reason,
+        })
+    g5_branches = [f"pattern:{scope}" for scope in sorted(pattern_scopes)]
+    if language_in_scope:
+        g5_branches.extend(sorted(languages))
+    g5_suppressed = [*suppressed, *pattern_suppressed, *language_suppressed]
+    all_activated.extend(g5_skills)
+    gate_results.append(_gate_result(
+        "G5",
+        revision,
+        g5_skills,
+        g5_branches,
+        suppressed=g5_suppressed,
+        evidence=evidence,
+        application_depths=_depths_for_skills(
+            g5_skills,
+            context.get("depth", "standard"),
+            str(architecture_status),
+            characteristics,
+            risk=context.get("risk", "medium"),
+        ),
+    ))
+
+    implementation_profiles: list[str] = []
+    g6_suppressed: list[dict[str, Any]] = []
+    if language_in_scope:
+        implementation_profiles.append("core")
+        profile_map = manifest["selectors"]["implementation_quality_profiles"]
+        implementation_profiles.extend(
+            profile_map[item]
+            for item in sorted(characteristics)
+            if item in profile_map
+        )
+        implementation_profiles = list(dict.fromkeys(implementation_profiles))
+    elif target == "project" and is_software and action in CODE_SCOPE_ACTIONS:
+        g6_suppressed.append({
+            "skill_id": "core.implementation-quality",
+            "reason": "no_authored_code_boundary_in_scope",
+        })
+    g6_skills = []
+    if implementation_profiles:
+        g6_skills.append("core.implementation-quality")
+    if target == "harness_overview":
+        g6_skills.append("core.harness-overview-html")
     all_activated.extend(g6_skills)
-    gate_results.append(_gate_result("G6", revision, g6_skills, ["execution"], evidence=evidence))
+    g6_branches = [f"implementation_quality:{profile}" for profile in implementation_profiles]
+    if not g6_branches:
+        g6_branches = ["execution"]
+    gate_results.append(_gate_result(
+        "G6",
+        revision,
+        g6_skills,
+        g6_branches,
+        suppressed=g6_suppressed,
+        evidence=evidence,
+        application_depths=_depths_for_skills(
+            g6_skills,
+            context.get("depth", "standard"),
+            str(architecture_status),
+            characteristics,
+            implementation_profiles,
+            context.get("risk", "medium"),
+        ),
+    ))
 
     verify_skill = "core.verify-and-handoff"
     all_activated.append(verify_skill)
-    gate_results.append(_gate_result("G7", revision, [verify_skill], ["verification", "handoff"], evidence=evidence))
+    gate_results.append(_gate_result(
+        "G7",
+        revision,
+        [verify_skill],
+        ["verification", "handoff"],
+        evidence=evidence,
+        application_depths=_depths_for_skills(
+            [verify_skill],
+            context.get("depth", "standard"),
+            str(architecture_status),
+            characteristics,
+            risk=context.get("risk", "medium"),
+        ),
+    ))
 
     feedback, final_revision, feedback_requires_user = _feedback_results(context, manifest, revision)
     execution_profile = _execution_profile(context, manifest, str(architecture_status), feedback)
@@ -566,7 +790,7 @@ def route(context: dict[str, Any], manifest: dict[str, Any]) -> dict[str, Any]:
         "execution_profile": execution_profile,
         "gate_results": gate_results,
         "activated_skills": list(dict.fromkeys(all_activated)),
-        "suppressed_skills": suppressed,
+        "suppressed_skills": [*g5_suppressed, *g6_suppressed],
         "feedback_results": feedback,
         "events": events,
     }
