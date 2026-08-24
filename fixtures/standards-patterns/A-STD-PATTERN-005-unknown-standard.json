@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "id": "A-STD-PATTERN-005-unknown-standard",
+  "description": "An unknown standard profile blocks instead of silently selecting a similar profile.",
+  "context": {
+    "schema_version": 1,
+    "request_id": "REQ-STD-PATTERN-005",
+    "target": "project",
+    "scope": "software_engineering",
+    "project_state": "brownfield",
+    "action": "review",
+    "risk": "medium",
+    "depth": "standard",
+    "enforcement_mode": "hook",
+    "architecture_status": "confirmed",
+    "standards": ["ISO 99999"],
+    "conformance_intent": "alignment",
+    "authorized_standard_evidence_ids": [],
+    "fields": ["architecture", "compliance"],
+    "languages": [],
+    "technologies": [],
+    "configuration_candidates": [],
+    "evidence_ids": ["EV-STD-PATTERN-005"],
+    "artifacts": [],
+    "feedback": []
+  },
+  "expected": {
+    "status": "blocked",
+    "gates": {"G2": {"status": "blocked"}}
+  }
+}

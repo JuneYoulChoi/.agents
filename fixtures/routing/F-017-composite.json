@@ -67,6 +67,7 @@
       "core.document-purpose",
       "core.technology-selection-and-integration",
       "core.configuration-and-environment-management",
+      "core.architecture-and-design-patterns",
       "core.ros2-engineering",
       "core.grpc-engineering",
       "core.docker-engineering",
@@ -97,6 +98,7 @@
       "G5": {
         "status": "passed",
         "activated_skills_contains": [
+          "core.architecture-and-design-patterns",
           "core.ros2-engineering",
           "core.grpc-engineering",
           "core.docker-engineering",

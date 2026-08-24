@@ -13,8 +13,14 @@ HARNESS_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(HARNESS_ROOT / "scripts"))
 
 from harness_runner import RunnerError, start, submit  # noqa: E402
+from harness_router import _load_manifest, route  # noqa: E402
 from harness_state import StateError, StateStore  # noqa: E402
-from harness_validator import ContractError, validate_intake, write_object  # noqa: E402
+from harness_validator import (  # noqa: E402
+    ContractError,
+    validate_intake,
+    validate_pattern_review,
+    write_object,
+)
 
 
 def intake() -> dict:
@@ -55,6 +61,55 @@ def execution_resolution(reasoning: str, status: str = "exact") -> dict:
         "native_reasoning": reasoning,
         "status": status,
         "evidence_ids": ["EV-EXECUTION-PROFILE"],
+    }
+
+
+def undecided_pattern_review() -> dict:
+    return {
+        "schema_version": 1,
+        "pattern_id": "PATTERN-TEST-001",
+        "scopes": ["architecture"],
+        "drivers": ["QAS-TEST-001"],
+        "candidates": [
+            {
+                "candidate_id": "PATTERN-OPTION-MODULAR",
+                "name": "modular_monolith",
+                "status": "candidate",
+                "decision_scope": "service deployment boundary",
+                "fit": "keeps one deployment while preserving module ownership",
+                "recommendation_reason": "matches the current team and operations constraints",
+                "benefits": ["lower operational complexity"],
+                "liabilities": ["limited independent deployment"],
+                "quality_attribute_effects": ["improves operability"],
+                "affected_artifact_ids": ["ADR-TEST-001"],
+                "migration_and_rollback": ["retain the current deployment unit"],
+                "verification_ids": ["TEST-PATTERN-001"],
+            },
+            {
+                "candidate_id": "PATTERN-OPTION-SERVICES",
+                "name": "microservices",
+                "status": "candidate",
+                "decision_scope": "service deployment boundary",
+                "fit": "supports independent deployment and scaling",
+                "recommendation_reason": "becomes preferable with independent team ownership",
+                "benefits": ["independent deployment"],
+                "liabilities": ["distributed operational complexity"],
+                "quality_attribute_effects": ["improves independent scalability"],
+                "affected_artifact_ids": ["ADR-TEST-001"],
+                "migration_and_rollback": ["extract one boundary and retain a rollback route"],
+                "verification_ids": ["TEST-PATTERN-002"],
+            },
+        ],
+        "decision": {
+            "status": "user_decision_required",
+            "decision_scope": "service deployment boundary",
+            "recommended_candidate_id": "PATTERN-OPTION-MODULAR",
+            "recommendation_reason": "current QAS prioritizes operational simplicity",
+            "conditions_that_change_recommendation": ["teams require independent release ownership"],
+            "selected_candidate_id": None,
+            "decision_evidence_ids": [],
+        },
+        "open_issue_ids": ["ISSUE-PATTERN-001"],
     }
 
 
@@ -218,6 +273,72 @@ class RuntimeTests(unittest.TestCase):
         value["configuration_candidates"][0]["default"] = 70000
         with self.assertRaises(ContractError):
             validate_intake(value, self.taxonomy)
+
+    def test_material_change_routes_through_pattern_review(self) -> None:
+        value = intake()
+        value["action"] = "change"
+        result = route(value, _load_manifest(self.manifest))
+        gates = {gate["gate_id"]: gate for gate in result["gate_results"]}
+        self.assertIn("core.architecture-and-design-patterns", result["activated_skills"])
+        self.assertLess(
+            result["activated_skills"].index("core.architecture-and-design-patterns"),
+            result["activated_skills"].index("core.language-engineering"),
+        )
+        self.assertIn("pattern:architecture", gates["G5"]["activated_branches"])
+        self.assertIn("pattern:design", gates["G5"]["activated_branches"])
+
+    def test_multiple_viable_patterns_require_a_user_decision(self) -> None:
+        value = undecided_pattern_review()
+        self.assertIs(validate_pattern_review(value), value)
+
+    def test_pending_pattern_decision_cannot_preselect_an_option(self) -> None:
+        value = undecided_pattern_review()
+        value["candidates"][0]["status"] = "selected"
+        value["decision"]["selected_candidate_id"] = "PATTERN-OPTION-MODULAR"
+        with self.assertRaises(ContractError):
+            validate_pattern_review(value)
+
+    def test_user_selected_pattern_requires_evidence_and_tradeoffs(self) -> None:
+        value = undecided_pattern_review()
+        value["candidates"][0]["status"] = "selected"
+        value["decision"].update(
+            status="user_selected",
+            selected_candidate_id="PATTERN-OPTION-MODULAR",
+            decision_evidence_ids=["EVD-USER-PATTERN-001"],
+        )
+        value["open_issue_ids"] = []
+        self.assertIs(validate_pattern_review(value), value)
+
+        missing_tradeoff = json.loads(json.dumps(value))
+        missing_tradeoff["candidates"][1]["liabilities"] = []
+        with self.assertRaises(ContractError):
+            validate_pattern_review(missing_tradeoff)
+
+    def test_conformance_without_authorized_source_blocks_g2(self) -> None:
+        value = intake()
+        value.update(
+            standards=["ISO 42010"],
+            conformance_intent="conformance",
+            authorized_standard_evidence_ids=[],
+        )
+        result = route(value, _load_manifest(self.manifest))
+        gate = next(gate for gate in result["gate_results"] if gate["gate_id"] == "G2")
+        self.assertEqual("blocked", result["status"])
+        self.assertIn(
+            {"reason": "authorized_standard_evidence_required"},
+            gate["blocked"],
+        )
+        value["standards"] = []
+        value["authorized_standard_evidence_ids"] = ["EV-AUTHORIZED-STANDARD"]
+        result = route(value, _load_manifest(self.manifest))
+        gate = next(gate for gate in result["gate_results"] if gate["gate_id"] == "G2")
+        self.assertIn({"reason": "conformance_standard_required"}, gate["blocked"])
+
+    def test_legacy_accepted_architecture_status_is_canonicalized(self) -> None:
+        result = route(intake(), _load_manifest(self.manifest))
+        gate = next(gate for gate in result["gate_results"] if gate["gate_id"] == "G2")
+        self.assertIn("confirmed", gate["activated_branches"])
+        self.assertNotIn("accepted", gate["activated_branches"])
 
 
 if __name__ == "__main__":

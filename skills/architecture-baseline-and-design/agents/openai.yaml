@@ -1,4 +1,4 @@
 interface:
   display_name: "Architecture Baseline and Design"
-  short_description: "Build and sync traceable architecture documentation."
-  default_prompt: "Use $architecture-baseline-and-design to inspect or build the architecture baseline before software design or changes."
+  short_description: "Build standards-aware traceable architecture records."
+  default_prompt: "Use $architecture-baseline-and-design to inspect or build the architecture baseline and applicable standard profiles before software design or changes."

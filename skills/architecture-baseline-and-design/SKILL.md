@@ -1,6 +1,6 @@
 ---
 name: architecture-baseline-and-design
-description: Inspect, create, review, or synchronize project architecture documentation before software design or material changes. Use for PRD, SRS, external entities/interfaces, use cases, functional architecture (FA), quality attributes (QA), HLD, LLD, ADRs, layer/infrastructure/architectural/module/C&C views, class/sequence/data/deployment diagrams, missing architecture docs, and code-to-architecture drift.
+description: Inspect, create, review, or synchronize project architecture documentation and international-standard applicability before software design or material changes. Use for PRD, SRS, external entities/interfaces, use cases, functional architecture (FA), quality attributes (QA), HLD, LLD, ADRs, stakeholders/concerns/viewpoints/model kinds, layer/infrastructure/architectural/module/C&C views, class/sequence/data/deployment diagrams, standards alignment or conformance evidence, missing architecture docs, and code-to-architecture drift.
 ---
 
 # Architecture Baseline and Design
@@ -34,6 +34,9 @@ For software scope, classify the architecture baseline as:
 confirmed | draft | missing | stale | conflicted
 ```
 
+Treat legacy input status `accepted` as `confirmed`, but emit only the canonical
+values above.
+
 ## 1. Locate and assess architecture artifacts
 
 Look for an index and the following logical artifacts (filenames may vary):
@@ -50,7 +53,29 @@ document is not confirmed merely because it exists. Compare its claims with
 approved requirements, tests, code, runtime configuration, and observed
 behavior.
 
-## 2. Use the architecture trace
+## 2. Determine international-standard applicability
+
+For every material architecture task, record whether an international standard
+profile is applicable even when the user did not name one. Read
+[the standards catalog](references/standards/catalog.md), then only the profile
+selected by the request, project policy, contract, regulated context, or
+architecture evidence:
+
+- architecture descriptions and viewpoints: [ISO/IEC/IEEE 42010](references/standards/iso-42010.md);
+- requirements engineering: [ISO/IEC/IEEE 29148](references/standards/iso-29148.md);
+- product and quality-in-use models: [ISO/IEC 25010 and 25019](references/standards/iso-25010-25019.md);
+- lifecycle processes: [ISO/IEC/IEEE 12207 and 15288](references/standards/iso-12207-15288.md);
+- lifecycle information items: [ISO/IEC/IEEE 15289](references/standards/iso-15289.md).
+
+Record `guidance`, `alignment`, or `conformance` as the intent. Never claim
+formal conformance from a public abstract, memory, or this skill. A conformance
+claim requires the authorized standard edition, identified scope/entity,
+applicable criteria, evidence, deviations/waivers, and an accountable owner.
+If those inputs are unavailable, downgrade the wording to guidance/alignment or
+block the claim; do not block ordinary architecture work that makes no formal
+conformance claim.
+
+## 3. Use the architecture trace
 
 Use the following relation, allowing one-to-many and many-to-one links:
 
@@ -72,7 +97,7 @@ quality assurance/testing activities labelled `QA testing` to avoid ambiguity.
 Do not claim that every UC automatically produces one FA or QA; derive them
 from UC, interfaces, constraints, and quality goals and record the evidence.
 
-## 3. Handle a missing or stale baseline
+## 4. Handle a missing or stale baseline
 
 If architecture documents are absent or stale, inspect code, tests, API
 contracts, schemas, deployment configuration, and operational evidence. Produce
@@ -88,6 +113,8 @@ identify:
   and integration/compatibility boundaries;
 - LLD/module candidates and ownership;
 - relevant layer, infrastructure, C&C, runtime, class, and sequence views;
+- stakeholders, concerns, viewpoints, model kinds, and correspondence rules
+  needed to explain why each architecture view exists;
 - configuration boundaries, sources, precedence, secret strategy, and their
   deployment/runtime relationships when applicable;
 - document gaps, contradictions, and risks.
@@ -105,7 +132,7 @@ Recommendation: ...
 Safe default: keep draft and do not start material implementation
 ```
 
-## 4. Greenfield and Brownfield modes
+## 5. Greenfield and Brownfield modes
 
 For Greenfield, create or update the minimum PRD/SRS/UC/FA/QA/HLD/ADR/LLD
 artifacts needed for the requested depth before implementation planning.
@@ -115,7 +142,7 @@ tests to the existing architecture, and identify impacted UC, FA, QA, modules,
 views, ADRs, and documents. Let `$brownfield-impact-analysis` decide
 `extend`, `new`, or `mixed` after this evidence is available.
 
-## 5. Produce the architecture record and transition
+## 6. Produce the architecture record and transition
 
 This skill is gate `G2`. Consume all relevant intake branches and project
 evidence together. Emit each applicable workflow/concern candidate rather than
@@ -126,8 +153,19 @@ downstream artifacts stale.
 
 ```yaml
 architecture:
-  status: confirmed | draft | missing | stale | conflicted
+  status: not_applicable | confirmed | draft | missing | stale | conflicted
   root: docs/architecture/
+  entity_of_interest: ''
+  stakeholders: []
+  concerns: []
+  viewpoints: []
+  model_kinds: []
+  correspondences: []
+  standard_profiles: []
+  conformance_intent: guidance | alignment | conformance
+  conformance_scope: ''
+  conformance_owner: ''
+  conformance_evidence: []
   artifacts_read: []
   artifacts_created_or_updated: []
   entities: []
@@ -142,6 +180,7 @@ architecture:
   configuration: []
   technologies: []
   integration_relationships: []
+  pattern_review_required: false
   evidence: []
   user_confirmations_needed: []
   open_issues: []
@@ -167,6 +206,11 @@ Route a material technology choice or detected specialist ecosystem through
 baseline and before implementation. Architecture records required capability
 and integration constraints; the technology skill selects products and
 specialist procedures.
+
+Route material architecture, design, implementation, and change work through
+`$architecture-and-design-patterns` at G5. The architecture baseline supplies
+drivers and constraints; the pattern skill evaluates reusable structures and
+trade-offs without forcing a pattern or replacing an ADR.
 
 ## Exit gate
 

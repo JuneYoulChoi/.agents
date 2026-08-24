@@ -59,6 +59,7 @@ Use this precedence:
 
 ```text
 user-approved requirement and architecture contract
+> accepted architecture/design pattern constraints
 > official ecosystem binding contract
 > project build/test/style convention
 > language safety and idiom profile

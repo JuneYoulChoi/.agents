@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "id": "A-STD-PATTERN-002-multi-profile-review",
+  "description": "An explicit standards and pattern review activates only the named profiles and both cross-cutting branches.",
+  "context": {
+    "schema_version": 1,
+    "request_id": "REQ-STD-PATTERN-002",
+    "target": "project",
+    "scope": "software_engineering",
+    "project_state": "brownfield",
+    "action": "review",
+    "risk": "medium",
+    "depth": "standard",
+    "enforcement_mode": "hook",
+    "architecture_status": "confirmed",
+    "standards": ["ISO 29148", "ISO 25010"],
+    "conformance_intent": "guidance",
+    "authorized_standard_evidence_ids": [],
+    "pattern_scopes": ["architecture", "design"],
+    "fields": ["architecture", "design_patterns", "compliance", "quality_attributes"],
+    "languages": [],
+    "technologies": [],
+    "configuration_candidates": [],
+    "evidence_ids": ["EV-STD-PATTERN-002"],
+    "artifacts": [],
+    "feedback": []
+  },
+  "expected": {
+    "status": "active",
+    "gates": {
+      "G2": {
+        "activated_branches_contains": [
+          "standard:iso_iec_ieee_29148_2018",
+          "standard:iso_iec_25010_2023"
+        ]
+      },
+      "G4": {"activated_branches_contains": ["compliance", "quality_attributes"]},
+      "G5": {
+        "activated_skills_contains": ["core.architecture-and-design-patterns"],
+        "activated_branches_contains": ["pattern:architecture", "pattern:design"]
+      }
+    }
+  }
+}

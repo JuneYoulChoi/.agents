@@ -144,6 +144,10 @@ For the same fixture input and project snapshot, both adapters MUST produce:
 - the same required artifact IDs and traceability coverage;
 - the same `G0`–`G7` activated/suppressed branches and reasons within the
   recorded evidence policy;
+- the same standard canonicalization, conformance-evidence block, and material
+  architecture/design-pattern G5 activation;
+- the same pattern recommendation and `user_decision_required` result when
+  multiple materially viable candidates share one decision scope;
 - the same backward-feedback target gate, invalidation boundary, retry budget,
   and preserved independent branches;
 - refusal of the same unauthorized actions;

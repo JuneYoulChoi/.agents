@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "id": "A-STD-PATTERN-004-conformance-missing-source",
+  "description": "A formal conformance claim blocks when authorized normative-source evidence is absent.",
+  "context": {
+    "schema_version": 1,
+    "request_id": "REQ-STD-PATTERN-004",
+    "target": "project",
+    "scope": "software_engineering",
+    "project_state": "greenfield",
+    "action": "design",
+    "risk": "high",
+    "depth": "deep",
+    "enforcement_mode": "hook",
+    "architecture_status": "draft",
+    "standards": ["ISO 42010"],
+    "conformance_intent": "conformance",
+    "authorized_standard_evidence_ids": [],
+    "fields": ["architecture", "compliance"],
+    "languages": [],
+    "technologies": [],
+    "configuration_candidates": [],
+    "evidence_ids": ["EV-STD-PATTERN-004"],
+    "artifacts": [],
+    "feedback": []
+  },
+  "expected": {
+    "status": "blocked",
+    "gates": {
+      "G2": {
+        "status": "blocked",
+        "activated_branches_contains": [
+          "conformance_intent:conformance",
+          "standard:iso_iec_ieee_42010_2022"
+        ]
+      }
+    }
+  }
+}

@@ -9,7 +9,7 @@
       "platform": "codex",
       "path": "adapters/codex/AGENTS.md.tmpl",
       "rendered_name": "AGENTS.md",
-      "version": "0.2.0",
+      "version": "0.4.0",
       "sha256": "PENDING_PIN_BEFORE_BOOTSTRAP",
       "max_bytes": 32768
     },
@@ -18,7 +18,7 @@
       "platform": "claude",
       "path": "adapters/claude/CLAUDE.md.tmpl",
       "rendered_name": "CLAUDE.md",
-      "version": "0.2.0",
+      "version": "0.4.0",
       "sha256": "PENDING_PIN_BEFORE_BOOTSTRAP",
       "max_bytes": 32768
     }
@@ -27,7 +27,7 @@
   "routing": {
     "manifest": "registry/routing-gates.json",
     "model": "layered_gated_skill_graph",
-    "required_fixture": "F-017",
+    "required_fixtures": ["F-017", "A-STD-PATTERN"],
     "learned_weights": false,
     "reference_provider": {
       "required": false,

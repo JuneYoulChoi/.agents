@@ -44,6 +44,23 @@ profile, configuration contracts, and architecture/document synchronization.
 Confirm that unrelated ecosystem/language skills were not treated as required
 and that popularity did not grant adoption authority.
 
+When a standard profile is applicable, verify the `STD-*` scope, edition,
+intent, owner, evidence, deviations, and affected artifacts. Reject a formal
+`conformance` claim without authorized normative source evidence and the
+declared assessment scope. Guidance/alignment wording must not imply audit or
+certification.
+
+When pattern review is applicable, verify the `PATTERN-*` drivers, alternatives,
+selected/rejected/not-applicable result, trade-offs, affected modules/contracts,
+QAS effects, migration/rollback, ADR links, and tests. Confirm that patterns
+were not selected solely by popularity or because a framework example used
+them. When several materially viable alternatives existed, verify that they
+were compared within the same decision scope, one recommendation and its
+change conditions were shown, the user-owned trade-off was not decided by the
+agent, and the selected option links to recorded user or existing-decision
+evidence. A `user_decision_required` pattern review is not complete and cannot
+enter material execution.
+
 When configuration is affected, verify safe defaults, supported sources and
 precedence, invalid/missing/boundary values, compatibility aliases, secret
 redaction, and startup/reload/rollback behavior as applicable. Confirm that
@@ -60,7 +77,7 @@ link to their rationale, and changed behavior has fit-for-purpose documentation
 or a recorded reason not to create it. Do not update protected documents without
 approval.
 
-Use `REQ/QAS -> ADR -> TECH -> IMPL -> CONFIG -> TASK -> TEST -> DOC` for
+Use `REQ/QAS -> STD -> ADR/PATTERN -> TECH -> IMPL -> CONFIG -> TASK -> TEST -> DOC` for
 material technology work, omitting only non-applicable entities with an
 explicit compact trace or waiver appropriate to depth.
 

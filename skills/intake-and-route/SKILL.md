@@ -52,6 +52,13 @@ simulator, middleware, build tool, or container/orchestration technology. Add
 actually in scope; a technology name alone does not select every adjacent
 domain or specialist skill.
 
+Add `quality_attributes` when the request changes or evaluates measurable
+system/software qualities. Add `design_patterns` when the user explicitly asks
+for architecture/design patterns or project evidence shows a material reusable
+structure decision. Record requested international standards as canonical
+`standards` plus `conformance_intent: guidance | alignment | conformance`; do
+not convert an ordinary best-practice request into a formal conformance claim.
+
 Use `unknown` only when software context is insufficient. It permits read-only
 discovery, not material mutation. Use `not_applicable` for non-software scope.
 
@@ -105,6 +112,7 @@ closed until a scope-bound approval exists. Silence is not approval.
 | Configuration candidate after architecture and Greenfield/Brownfield baseline | `$configuration-and-environment-management` during assembly/design |
 | Technology adoption/integration or detected ecosystem with specialist rules | `$technology-selection-and-integration`, then only selected ecosystem skills |
 | Material implementation after ecosystem selection | `$language-engineering` for each changed authored language boundary |
+| Material architecture/design/implementation/change | `$architecture-and-design-patterns` for applicable architecture/design scopes |
 | Document request | `$document-purpose` |
 | Existing implementation ready for completion | `$verify-and-handoff` |
 | Missing or incompatible specialist skill | use the core procedure and report the fallback |

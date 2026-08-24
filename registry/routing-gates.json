@@ -73,6 +73,31 @@
       "react": ["nodejs"],
       "isaac_lab": ["isaac_sim", "kubernetes"],
       "moveit": ["ros2", "colcon"]
+    },
+    "standard_aliases": {
+      "iso 42010": "iso_iec_ieee_42010_2022",
+      "iso/iec/ieee 42010:2022": "iso_iec_ieee_42010_2022",
+      "iso 29148": "iso_iec_ieee_29148_2018",
+      "iso/iec/ieee 29148:2018": "iso_iec_ieee_29148_2018",
+      "iso 25010": "iso_iec_25010_2023",
+      "iso/iec 25010:2023": "iso_iec_25010_2023",
+      "iso 25019": "iso_iec_25019_2023",
+      "iso/iec 25019:2023": "iso_iec_25019_2023",
+      "iso 12207": "iso_iec_ieee_12207_2026",
+      "iso/iec/ieee 12207:2026": "iso_iec_ieee_12207_2026",
+      "iso 15288": "iso_iec_ieee_15288_2023",
+      "iso/iec/ieee 15288:2023": "iso_iec_ieee_15288_2023",
+      "iso 15289": "iso_iec_ieee_15289_2019",
+      "iso/iec/ieee 15289:2019": "iso_iec_ieee_15289_2019"
+    },
+    "standard_profiles": {
+      "iso_iec_ieee_42010_2022": "skills/architecture-baseline-and-design/references/standards/iso-42010.md",
+      "iso_iec_ieee_29148_2018": "skills/architecture-baseline-and-design/references/standards/iso-29148.md",
+      "iso_iec_25010_2023": "skills/architecture-baseline-and-design/references/standards/iso-25010-25019.md",
+      "iso_iec_25019_2023": "skills/architecture-baseline-and-design/references/standards/iso-25010-25019.md",
+      "iso_iec_ieee_12207_2026": "skills/architecture-baseline-and-design/references/standards/iso-12207-15288.md",
+      "iso_iec_ieee_15288_2023": "skills/architecture-baseline-and-design/references/standards/iso-12207-15288.md",
+      "iso_iec_ieee_15289_2019": "skills/architecture-baseline-and-design/references/standards/iso-15289.md"
     }
   },
   "gates": [
@@ -93,9 +118,9 @@
     {
       "id": "G2",
       "name": "baseline",
-      "purpose": "Establish project and architecture evidence before material routing",
-      "inputs": ["classification", "architecture_documents", "project_evidence"],
-      "outputs": ["architecture_status", "project_state", "impact_candidates", "evidence_gaps"]
+      "purpose": "Establish project, architecture, and international-standard applicability evidence before material routing",
+      "inputs": ["classification", "architecture_documents", "project_evidence", "standards", "conformance_intent", "conformance_scope", "conformance_owner", "authorized_standard_evidence"],
+      "outputs": ["architecture_status", "project_state", "standard_applicability", "impact_candidates", "evidence_gaps"]
     },
     {
       "id": "G3",
@@ -109,14 +134,14 @@
       "name": "concern",
       "purpose": "Activate cross-cutting concerns supported by evidence",
       "inputs": ["fields", "impact", "requirements", "configuration_candidates", "technology_candidates"],
-      "outputs": ["technology_selection", "configuration", "testing", "documentation", "security", "performance", "operations"]
+      "outputs": ["technology_selection", "configuration", "testing", "documentation", "security", "performance", "operations", "compliance", "quality_attributes"]
     },
     {
       "id": "G5",
       "name": "specialist",
-      "purpose": "Select only evidenced ecosystem and authored-language skills",
-      "inputs": ["technology_artifacts", "affected_modules", "language_evidence", "generated_code_ownership"],
-      "outputs": ["ecosystem_skills", "language_profiles", "suppressed_adjacent_skills", "compatibility_gaps"]
+      "purpose": "Select evidenced architecture/design pattern, ecosystem, and authored-language skills",
+      "inputs": ["technology_artifacts", "affected_modules", "architecture_drivers", "pattern_scopes", "language_evidence", "generated_code_ownership"],
+      "outputs": ["pattern_review", "ecosystem_skills", "language_profiles", "suppressed_adjacent_skills", "compatibility_gaps"]
     },
     {
       "id": "G6",
@@ -139,6 +164,7 @@
     "G3": ["core.greenfield-planning", "core.brownfield-impact-analysis", "core.document-purpose", "core.harness-upgrade-analysis"],
     "G4": ["core.technology-selection-and-integration", "core.configuration-and-environment-management"],
     "G5": [
+      "core.architecture-and-design-patterns",
       "core.language-engineering",
       "core.ros2-engineering",
       "core.nodejs-engineering",
@@ -162,6 +188,7 @@
     {"signal": "workflow_or_impact_mismatch", "target_gate": "G3"},
     {"signal": "technology_configuration_or_cross_cutting_gap", "target_gate": "G4"},
     {"signal": "ecosystem_binding_language_or_generated_code_gap", "target_gate": "G5"},
+    {"signal": "pattern_selection_or_implementation_gap", "target_gate": "G5"},
     {"signal": "implementation_or_assembly_defect", "target_gate": "G6"}
   ]
 }

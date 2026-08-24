@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "id": "A-STD-PATTERN-006-evidenced-conformance",
+  "description": "A scoped conformance route may proceed when the standard, authorized evidence, scope, and owner are recorded.",
+  "context": {
+    "schema_version": 1,
+    "request_id": "REQ-STD-PATTERN-006",
+    "target": "project",
+    "scope": "software_engineering",
+    "project_state": "brownfield",
+    "action": "review",
+    "risk": "high",
+    "depth": "deep",
+    "enforcement_mode": "hook",
+    "architecture_status": "confirmed",
+    "standards": ["iso_iec_ieee_42010_2022"],
+    "conformance_intent": "conformance",
+    "conformance_scope": "architecture description for system release R1",
+    "conformance_owner": "authorized_architecture_assessor",
+    "authorized_standard_evidence_ids": ["EV-AUTHORIZED-42010-2022"],
+    "fields": ["architecture", "compliance"],
+    "languages": [],
+    "technologies": [],
+    "configuration_candidates": [],
+    "evidence_ids": ["EV-STD-PATTERN-006"],
+    "artifacts": [],
+    "feedback": []
+  },
+  "expected": {
+    "status": "active",
+    "gates": {
+      "G2": {
+        "status": "passed",
+        "activated_branches_contains": [
+          "conformance_intent:conformance",
+          "standard:iso_iec_ieee_42010_2022"
+        ]
+      },
+      "G4": {"activated_branches_contains": ["compliance"]},
+      "G5": {"activated_branches_contains": ["pattern:architecture"]}
+    }
+  }
+}

@@ -19,7 +19,13 @@ Before material work:
    software project, add that project's architecture gate.
 3. For other software work, inspect `docs/architecture/` in the target project
    with `architecture-baseline-and-design` before impact, design, or mutation.
+   Record international-standard applicability and require authorized evidence
+   before any formal conformance claim.
 4. For an existing codebase, run `brownfield-impact-analysis` before editing.
+   For material design/implementation/change, route through
+   `architecture-and-design-patterns` before ecosystem/language implementation.
+   If several materially viable patterns remain for one decision scope, show
+   their reasons and trade-offs, recommend one, and wait for the user's choice.
 5. For a harness change, obtain approval before mutation; do not bypass the
    control-plane gate.
 6. Load only the smallest approved skill set. Never resolve `incoming`,

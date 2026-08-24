@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-17",
+  "generated_at": "2026-08-24",
   "integrity_policy": {
     "core_entries": "harness_source_tree_manifest",
     "adapter_manifest": "registry/adapter-manifest.json",
@@ -14,10 +14,10 @@
   "skills": [
     {
       "id": "core.intake-and-route",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "entry": "skills/intake-and-route/SKILL.md",
       "trust": "approved",
-      "capabilities": ["classification", "clarification", "routing"],
+      "capabilities": ["classification", "clarification", "routing", "standard_and_pattern_intake"],
       "network_access": "none",
       "data_access": "workspace",
       "mutation": "none",
@@ -25,10 +25,10 @@
     },
     {
       "id": "core.greenfield-planning",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "entry": "skills/greenfield-planning/SKILL.md",
       "trust": "approved",
-      "capabilities": ["requirements", "architecture", "delivery_planning"],
+      "capabilities": ["requirements", "architecture", "standard_and_pattern_trace", "delivery_planning"],
       "network_access": "none",
       "data_access": "workspace",
       "mutation": "none",
@@ -36,10 +36,10 @@
     },
     {
       "id": "core.architecture-baseline-and-design",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "entry": "skills/architecture-baseline-and-design/SKILL.md",
       "trust": "approved",
-      "capabilities": ["architecture_baseline", "hld", "lld", "views", "diagrams", "architecture_sync"],
+      "capabilities": ["architecture_baseline", "international_standard_applicability", "hld", "lld", "viewpoints", "views", "diagrams", "architecture_sync"],
       "network_access": "none",
       "data_access": "workspace",
       "mutation": "workspace",
@@ -47,10 +47,10 @@
     },
     {
       "id": "core.brownfield-impact-analysis",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "entry": "skills/brownfield-impact-analysis/SKILL.md",
       "trust": "approved",
-      "capabilities": ["baseline", "impact_analysis", "regression_planning"],
+      "capabilities": ["baseline", "impact_analysis", "standard_and_pattern_drift", "regression_planning"],
       "network_access": "none",
       "data_access": "workspace",
       "mutation": "none",
@@ -58,7 +58,7 @@
     },
     {
       "id": "core.document-purpose",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "entry": "skills/document-purpose/SKILL.md",
       "trust": "approved",
       "capabilities": ["document_classification", "document_planning"],
@@ -80,7 +80,7 @@
     },
     {
       "id": "core.technology-selection-and-integration",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "entry": "skills/technology-selection-and-integration/SKILL.md",
       "trust": "approved",
       "capabilities": ["technology_classification", "capability_mapping", "compatibility_analysis", "ecosystem_composition", "technology_decision"],
@@ -91,13 +91,24 @@
     },
     {
       "id": "core.language-engineering",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "entry": "skills/language-engineering/SKILL.md",
       "trust": "approved",
       "capabilities": ["language_detection", "idiomatic_implementation", "binding_integration", "language_verification"],
       "network_access": "none",
       "data_access": "workspace",
       "mutation": "workspace",
+      "platforms": ["codex", "claude"]
+    },
+    {
+      "id": "core.architecture-and-design-patterns",
+      "version": "0.2.0",
+      "entry": "skills/architecture-and-design-patterns/SKILL.md",
+      "trust": "approved",
+      "capabilities": ["architecture_pattern_selection", "design_pattern_selection", "pattern_tradeoff_analysis", "pattern_decision_support", "brownfield_pattern_assessment"],
+      "network_access": "none",
+      "data_access": "workspace",
+      "mutation": "none",
       "platforms": ["codex", "claude"]
     },
     {
@@ -223,10 +234,10 @@
     },
     {
       "id": "core.verify-and-handoff",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "entry": "skills/verify-and-handoff/SKILL.md",
       "trust": "approved",
-      "capabilities": ["verification", "traceability", "handoff"],
+      "capabilities": ["verification", "standards_evidence_review", "pattern_decision_review", "traceability", "handoff"],
       "network_access": "none",
       "data_access": "workspace",
       "mutation": "workspace",
@@ -245,7 +256,7 @@
     },
     {
       "id": "core.harness-overview-html",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "entry": "skills/harness-overview-html/SKILL.md",
       "trust": "approved",
       "capabilities": ["harness_documentation", "html_generation", "provenance", "accessibility_review"],

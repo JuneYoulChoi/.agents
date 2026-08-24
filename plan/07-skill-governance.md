@@ -157,6 +157,26 @@ recorded. Detailed references are reviewed against version-matched official
 specifications/documentation first, then official examples and maintained
 project conventions, then reviewed widely adopted community practice.
 
+International-standard profiles remain progressive references under the G2
+architecture skill. Record standard identity/edition from an authoritative
+public source, but use authorized normative text for formal conformance. Do not
+copy copyrighted standards into the skill, silently upgrade editions, or imply
+certification from a checklist. A profile update requires contract, registry,
+fixture, and affected architecture-document review.
+
+The common `architecture-and-design-patterns` skill is placed at G5 before
+ecosystem/language implementation. It must derive candidates from recorded
+drivers, preserve Brownfield conventions unless migration is justified, allow
+an explicit not-applicable result, and produce `PATTERN-*` trade-off evidence.
+It must distinguish competing options from composable cross-level patterns. If
+several options remain materially viable for one decision scope, it must show
+their fit, benefits, liabilities, QAS effects, migration/rollback, and
+verification, recommend one with conditions, and return a user-decision state
+without selecting on the user's behalf. A recorded user or still-valid existing
+decision is required before material execution resumes.
+Do not create one active skill for every named pattern or encode framework-
+specific pattern choices into the global router.
+
 Popularity evidence is advisory and role-specific. Record the source URL,
 metric type, measurement window, review date, count or rank, applicability,
 owner, and revisit trigger. Compare only candidates serving the same function

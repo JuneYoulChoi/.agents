@@ -31,7 +31,7 @@ reviewed and adapted skills may be promoted to `skills/`.
    external actions, deployment, data mutation, cost, credential access, or
    destructive operations.
 6. **Keep traceability.** For material work maintain
-   `GOAL -> REQ/FR -> NFR/QAS -> ADR -> TECH -> IMPL -> CONFIG -> TASK -> TEST -> DOC` as
+   `GOAL -> REQ/FR -> NFR/QAS -> STD -> ADR/PATTERN -> TECH -> IMPL -> CONFIG -> TASK -> TEST -> DOC` as
    applicable.
 7. **Detect and repair documentation gaps.** If a required document is absent
    or stale, create/update the smallest fit-for-purpose record when purpose and
@@ -47,6 +47,11 @@ reviewed and adapted skills may be promoted to `skills/`.
    Classify them before coding, externalize only justified deploy/runtime
    settings, use typed validation and documented precedence, and never turn
    every code constant into configuration.
+11. **Recommend patterns; preserve decision ownership.** Compare only patterns
+   that answer the same material decision. When several viable architecture or
+   design options remain, show each option's fit, rationale, benefits,
+   trade-offs, QAS effects, migration/rollback, and verification; recommend one
+   and ask the user to select before material execution.
 
 Rules have an enforcement class. `MUST` rules are enforced by a file layout,
 validator, permission policy, or hook where available; `SHOULD` rules are
@@ -122,7 +127,7 @@ Classify every request across these axes:
 classification:
   session_scope: software_engineering | software_related | general_information | decision_support | creative | non_engineering
   project_state: greenfield | brownfield | hybrid | unknown | not_applicable
-  fields: [idea, requirements, architecture, ui_ux, frontend, backend, api, database, data, ai_ml, robotics, simulation, industrial_integration, technology_selection, security, privacy, configuration, implementation, testing, documentation, performance, devops_release, operations, research, compliance]
+  fields: [idea, requirements, architecture, design_patterns, ui_ux, frontend, backend, api, database, data, ai_ml, robotics, simulation, industrial_integration, technology_selection, security, privacy, configuration, implementation, testing, documentation, performance, quality_attributes, devops_release, operations, research, compliance]
   field_registry: registry/taxonomy.json
   action: investigate | define | plan | design | implement | change | verify | review | document | approve | handoff
   risk: low | medium | high
@@ -232,6 +237,25 @@ PRD/SRS/UC/FA/QA/HLD/LLD/view/diagram baseline, and then transitions to the
 existing Greenfield, Brownfield, or document workflow. This is an additive gate;
 it does not replace those workflows.
 
+The same G2 checkpoint records international-standard applicability. It loads
+only requested, policy-required, or evidence-backed profiles for architecture
+descriptions, requirements, quality models, lifecycle processes, and lifecycle
+information items. Formal conformance is never inferred: it requires the
+authorized edition, declared scope/entity, evidence mapping, deviations, and an
+accountable owner. Otherwise the result is explicitly guidance or alignment.
+
+Material architecture, design, implementation, and change then activate the
+language/framework-neutral `architecture-and-design-patterns` review at G5.
+Patterns are selected or rejected from UC/FA/QAS drivers, constraints, existing
+Brownfield structure, and trade-offs. An explicit `not_applicable` result is
+valid; the harness does not force a fashionable pattern. Selected material
+architecture patterns receive `PATTERN-*` trace and an ADR before ecosystem and
+language implementation. Compatible patterns at different responsibility
+levels may be composed rather than presented as false alternatives. If two or
+more candidates remain materially viable within one decision scope, the review
+must provide an evidence-backed recommendation and comparison, set a user
+decision issue, and pause before selection or material execution.
+
 Configuration is a conditional cross-cutting concern rather than a new lifecycle
 stage. When intake, architecture discovery, or impact analysis finds IPs,
 hosts, ports, URLs, paths, timeouts, retries, pool sizes, feature flags,
@@ -337,7 +361,7 @@ verification exception is a recorded transition with its authorized owner.
 ### 6. Plan, execution, and verification
 
 Before material implementation, create the minimum appropriate requirements,
-quality scenarios, ADRs, tasks, and acceptance/verification plan. Execute in
+quality scenarios, standard/pattern applicability records, ADRs, tasks, and acceptance/verification plan. Execute in
 small coherent slices; renewed evidence or scope changes return the task to
 discovery or impact analysis.
 

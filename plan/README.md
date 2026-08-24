@@ -30,6 +30,11 @@ and focused runtime checks in `tests/`. Their JSON protocol is portable and
 does not make Python a target-project or adapter requirement. The Router also
 emits a vendor-neutral `execution_profile`; only the platform adapter maps its
 role and `low/medium/high` reasoning recommendation to an available model.
+G2 also evaluates international-standard applicability, while G5 performs an
+evidence-backed architecture/design-pattern review before material execution.
+When several materially viable alternatives remain in one decision scope, G5
+shows their rationale and trade-offs, recommends one, and waits for the user's
+selection instead of silently choosing it.
 
 ## For an implementer
 

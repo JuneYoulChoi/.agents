@@ -61,7 +61,7 @@ changing them.
 | decision | context, options, decision, rationale, consequences |
 | spec | scope, requirements, contracts, acceptance criteria, exclusions |
 | architecture_baseline | current evidence, status, boundaries, gaps, confirmations |
-| architecture_view | viewpoint, scope, elements, relationships, notation, evidence |
+| architecture_view | stakeholder concerns, viewpoint, model kinds, scope, elements, relationships, correspondence/consistency rules, notation, evidence |
 | architecture_decision | context, options, decision, rationale, consequences, owner |
 | architecture_sync | expected architecture, observed implementation, drift, action |
 

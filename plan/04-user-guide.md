@@ -41,6 +41,29 @@ If a target baseline is missing or stale, the harness may produce a code-derived
 draft and ask the user to confirm UC, FA, QA, external-interface, or module
 boundaries before material implementation.
 
+For material architecture work, G2 also records which international standards
+are applicable. It loads only standards requested by you, required by project
+policy/contract, or supported by project evidence. `guidance` and `alignment`
+are different from formal `conformance`; conformance is blocked unless the
+authorized edition, assessment scope, evidence, deviations, and owner exist.
+
+Before material design, implementation, or change, G5 performs a focused
+architecture/design-pattern review. It derives candidates from UC/FA/QAS,
+constraints, existing Brownfield structure, and affected modules. The valid
+answer can be “no named pattern is applicable.” Selected patterns include
+trade-offs, ADR/trace links, migration/rollback, and verification before
+ecosystem and language skills implement them.
+
+If several patterns are genuinely viable for the same decision, the harness
+does not choose one silently. It shows each candidate's fit, recommendation
+reason, benefits, trade-offs, quality effects, migration/rollback cost, and
+verification approach. It identifies a recommended option and explains which
+changed conditions would favor another option, then asks the user to select.
+Patterns at different levels that can coexist are presented as a composition,
+not as a false either/or choice. Material implementation waits for the recorded
+selection; trivial reversible coding idioms do not create an unnecessary user
+gate.
+
 When a request names or touches ROS 2, Node.js, React, gRPC, Isaac Lab, Docker,
 Isaac Sim, MoveIt, Kubernetes, Modbus, colcon, or another ecosystem, the harness
 does not activate every adjacent technology. It first records whether each one
@@ -277,6 +300,9 @@ The final response must state:
 - tests/checks run and their results;
 - documents updated or intentionally not created;
 - selected/detected technologies, compatibility and integration decisions, and the ecosystem rules applied when changed;
+- applicable standard profiles, intent, evidence, and honest conformance status;
+- architecture/design pattern decisions, trade-offs, ADRs, and verification or explicit not-applicable result;
+- user selection evidence when several materially viable pattern alternatives existed;
 - implementation languages/bindings, generated-code ownership, and language checks when code changed;
 - configuration sources, precedence, validation, and secret handling when changed;
 - activated and materially suppressed routing branches, plus any backward feedback and recomputed artifacts;

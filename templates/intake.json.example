@@ -17,6 +17,10 @@
   "manual_guard_valid": false,
   "manual_guard": null,
   "architecture_status": "draft",
+  "standards": ["iso_iec_ieee_42010_2022"],
+  "conformance_intent": "alignment",
+  "authorized_standard_evidence_ids": [],
+  "pattern_scopes": ["architecture", "design"],
   "fields": ["backend", "api", "configuration", "testing"],
   "languages": ["cpp"],
   "technologies": [

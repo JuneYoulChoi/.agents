@@ -61,7 +61,7 @@ Use this order so the page has a clear beginning, middle, and end:
    their responsibilities. Distinguish the architectural `L0`–`L7` layers from
    the routing `G0`–`G7` layered gated skill graph.
 4. **Traceability** —
-   `PRD/SRS -> external entity/interface -> UC -> FA -> QA/QAS -> HLD -> ADR -> LLD/configuration -> views/diagrams -> code/tests/operations`.
+   `PRD/SRS -> external entity/interface -> UC -> FA -> QA/QAS -> STD -> HLD -> ADR/PATTERN -> LLD/configuration -> views/diagrams -> code/tests/operations`.
    Explain that FA means Functional Architecture and QA means Quality
    Attribute, and link to the project architecture documents when present.
 5. **Sequence** — intake, clarification, discovery, architecture, impact,
@@ -73,6 +73,9 @@ Use this order so the page has a clear beginning, middle, and end:
    documentation gap, mutation, verification, and handoff conditions.
 7. **Skills and registry** — active skill name, purpose, entry condition, next
    transition, mutation/network policy, and platform coverage.
+   Explain that international standards control applicable descriptions,
+   requirements, quality/lifecycle evidence, while architecture/design patterns
+   remain evidence-backed reusable design choices at G5.
 8. **Bootstrap and enforcement** — canonical Codex/Claude templates, rendered
    root wrappers, `harness.json` pins, target-root resolution, state
    containment, conflict/no-overwrite policy, transaction rollback, byte limit,

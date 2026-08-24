@@ -28,7 +28,7 @@ proposals, not confirmed requirements.
 Create stable IDs and a concise trace:
 
 ```text
-GOAL -> REQ/FR -> NFR/QAS -> ADR -> TECH -> IMPL -> CONFIG -> TASK -> TEST -> DOC
+GOAL -> REQ/FR -> NFR/QAS -> STD -> ADR/PATTERN -> TECH -> IMPL -> CONFIG -> TASK -> TEST -> DOC
 ```
 
 Write functional requirements as observable outcomes. For important quality
@@ -42,6 +42,13 @@ public-contract decisions.
 Choose the minimum architecture that satisfies the requirements. State system
 boundaries, major components, data/API contracts, failure behavior, security
 and privacy constraints, operational needs, and alternatives considered.
+
+Carry forward applicable `STD-*` profiles from the architecture record and
+their guidance/alignment/conformance intent. Use
+`$architecture-and-design-patterns` to evaluate architecture and design scopes
+from UC/FA/QAS drivers before implementation; an explicit `not_applicable`
+result is valid and safer than forcing a pattern. A material architecture
+pattern decision requires a `PATTERN-*` artifact and ADR.
 
 Derive technology capabilities before choosing a product. Route material
 runtime, library, framework, protocol, platform, simulator, middleware, build,
@@ -74,6 +81,8 @@ goal: GOAL-001
 requirements: [REQ-001]
 quality_scenarios: [QAS-001]
 decisions: [ADR-001]
+standards: [STD-001]
+patterns: [PATTERN-001]
 technologies: [TECH-001]
 implementation_profiles: [IMPL-001]
 tasks:

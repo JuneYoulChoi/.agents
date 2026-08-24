@@ -41,6 +41,7 @@ record an override in `.agents/overrides/` before routing work.
 | execution profile | Vendor-neutral gate role, low/medium/high reasoning recommendation, independent-context flag, and evidence-backed escalation reasons |
 | execution resolution | Adapter record of the actual model/reasoning application: exact, upgraded, degraded, platform_default, or unavailable |
 | NFR | Non-functional requirement, such as latency, availability, privacy, or security |
+| QA | Quality Attribute; use `QA testing` when referring to quality-assurance/testing activity |
 | configuration candidate | A value examined for classification as a code constant, build-time, deploy-time, runtime, or secret setting; it is not automatically externalized |
 | configuration contract | The typed keys, sources, precedence, validation, ownership, compatibility, redaction, tests, and documentation governing application settings |
 | technology ecosystem | A runtime, library, framework, protocol, platform, simulator, middleware, build tool, or orchestration system with its own architecture and engineering rules |
@@ -51,7 +52,13 @@ record an override in `.agents/overrides/` before routing work.
 | implementation profile | The `IMPL-*` record connecting a module and ecosystem binding to exactly the changed authored language profiles, toolchain, ownership, and verification |
 | generated code | Tool-owned output regenerated from an authoritative schema/model; it is not hand-edited as ordinary source |
 | QAS | Quality-attribute scenario: stimulus, context, response, and measurable response measure |
-| QA | Quality assurance/testing activity; do not use it as a quality-attribute abbreviation |
+| standard profile | A progressively loaded `STD-*` applicability/alignment/conformance guide for one identified standard edition and scope |
+| conformance intent | `guidance`, `alignment`, or `conformance`; only the last requires authorized normative text and criteria-level evidence |
+| architecture pattern | A reusable system/module/deployment structure selected from architecture drivers and trade-offs, not prescribed by an international standard |
+| design pattern | A reusable object/component/collaboration solution selected at a concrete responsibility boundary |
+| pattern decision | A `PATTERN-*` record with scope, drivers, alternatives, status, consequences, trace, migration, and verification |
+| materially viable pattern candidate | An option that satisfies hard constraints for the same decision scope and differs in consequential quality, boundary, ownership, operations, cost, or migration trade-offs |
+| pattern recommendation | The evidence-backed preferred candidate plus rationale and conditions that could change the preference; it is not a user selection |
 | source of truth | The artifact that wins when project evidence conflicts; default hierarchy is in the implementation guide |
 | ordinary document | A change-coupled project document that the task owner allows the Router to update |
 | protected document | Policy, compliance, externally published, owner-controlled, or legally significant content |

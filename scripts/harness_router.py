@@ -12,6 +12,9 @@ from typing import Any
 
 
 SELECTED_TECH_STATUSES = {"required_by_user", "detected_existing", "selected"}
+ARCHITECTURE_STATUS_ALIASES = {"accepted": "confirmed"}
+CONFORMANCE_INTENTS = {"guidance", "alignment", "conformance"}
+PATTERN_SCOPES = {"architecture", "design"}
 
 
 class RouterError(ValueError):
@@ -100,9 +103,31 @@ def _load_manifest(path: Path) -> dict[str, Any]:
     selectors = manifest.get("selectors")
     if not isinstance(selectors, dict):
         raise RouterError("routing manifest selectors must be an object")
-    for key in ("technology_aliases", "technology_skills", "adjacent_technologies"):
+    for key in (
+        "technology_aliases",
+        "technology_skills",
+        "adjacent_technologies",
+        "standard_aliases",
+        "standard_profiles",
+    ):
         if not isinstance(selectors.get(key), dict):
             raise RouterError(f"routing manifest selector {key} must be an object")
+    aliases = selectors["standard_aliases"]
+    profiles = selectors["standard_profiles"]
+    if any(not isinstance(key, str) or not isinstance(value, str) for key, value in aliases.items()):
+        raise RouterError("standard aliases must map strings to strings")
+    if set(aliases.values()) - set(profiles):
+        raise RouterError("standard aliases reference unknown profiles")
+    for standard_id, profile_path in profiles.items():
+        if not isinstance(standard_id, str) or not isinstance(profile_path, str):
+            raise RouterError("standard profiles must map strings to strings")
+        path = Path(profile_path)
+        if path.is_absolute() or ".." in path.parts or path.parts[:3] != (
+            "skills",
+            "architecture-baseline-and-design",
+            "references",
+        ):
+            raise RouterError(f"standard profile path is outside the approved architecture skill: {standard_id}")
     backward_routes = manifest.get("backward_routes")
     if not isinstance(backward_routes, list):
         raise RouterError("routing manifest backward_routes must be an array")
@@ -354,6 +379,23 @@ def route(context: dict[str, Any], manifest: dict[str, Any]) -> dict[str, Any]:
     fields = set(_string_list(context, "fields"))
     languages = _string_list(context, "languages")
     evidence = _string_list(context, "evidence_ids")
+    requested_standards = _string_list(context, "standards")
+    authorized_standard_evidence = _string_list(context, "authorized_standard_evidence_ids")
+    conformance_intent = context.get("conformance_intent", "guidance")
+    if conformance_intent not in CONFORMANCE_INTENTS:
+        raise RouterError(f"conformance_intent has unsupported value: {conformance_intent}")
+    conformance_scope = context.get("conformance_scope")
+    conformance_owner = context.get("conformance_owner")
+    for key, value in (
+        ("conformance_scope", conformance_scope),
+        ("conformance_owner", conformance_owner),
+    ):
+        if value is not None and (not isinstance(value, str) or not value.strip()):
+            raise RouterError(f"{key} must be a non-empty string when provided")
+    pattern_scopes = set(_string_list(context, "pattern_scopes"))
+    unknown_pattern_scopes = pattern_scopes - PATTERN_SCOPES
+    if unknown_pattern_scopes:
+        raise RouterError(f"pattern_scopes has unsupported values: {sorted(unknown_pattern_scopes)}")
     enforcement = context.get("enforcement_mode", "manual")
     if enforcement not in {"hook", "manual", "unsupported"}:
         raise RouterError("enforcement_mode must be hook, manual, or unsupported")
@@ -382,14 +424,42 @@ def route(context: dict[str, Any], manifest: dict[str, Any]) -> dict[str, Any]:
     g2_skills: list[str] = []
     g2_blocked: list[dict[str, Any]] = []
     architecture_status = context.get("architecture_status", "not_applicable" if not is_software else "draft")
-    if architecture_status not in {"not_applicable", "missing", "draft", "accepted", "stale", "conflicted"}:
+    architecture_status = ARCHITECTURE_STATUS_ALIASES.get(str(architecture_status), str(architecture_status))
+    if architecture_status not in {"not_applicable", "missing", "draft", "confirmed", "stale", "conflicted"}:
         raise RouterError(f"architecture_status has unsupported value: {architecture_status}")
+    standard_aliases = manifest["selectors"]["standard_aliases"]
+    standard_profiles = manifest["selectors"]["standard_profiles"]
+    normalized_standards = [
+        _normalize_token(standard, standard_aliases) for standard in requested_standards
+    ]
+    unsupported_standards = sorted(set(normalized_standards) - set(standard_profiles))
+    g2_branches: list[str] = []
     if is_software and target == "project":
         g2_skills.append("core.architecture-baseline-and-design")
+        g2_branches.append("standards_applicability")
         if architecture_status == "conflicted":
             g2_blocked.append({"reason": "architecture_baseline_conflicted"})
+        for standard in sorted(set(normalized_standards) & set(standard_profiles)):
+            g2_branches.append(f"standard:{standard}")
+        for standard in unsupported_standards:
+            g2_blocked.append({"reason": "unsupported_standard_profile", "standard": standard})
+        if conformance_intent == "conformance" and not normalized_standards:
+            g2_blocked.append({"reason": "conformance_standard_required"})
+        if conformance_intent == "conformance" and not authorized_standard_evidence:
+            g2_blocked.append({"reason": "authorized_standard_evidence_required"})
+        if conformance_intent == "conformance" and not conformance_scope:
+            g2_blocked.append({"reason": "conformance_scope_required"})
+        if conformance_intent == "conformance" and not conformance_owner:
+            g2_blocked.append({"reason": "conformance_owner_required"})
     all_activated.extend(g2_skills)
-    gate_results.append(_gate_result("G2", revision, g2_skills, [str(architecture_status)], blocked=g2_blocked, evidence=evidence))
+    gate_results.append(_gate_result(
+        "G2",
+        revision,
+        g2_skills,
+        [str(architecture_status), f"conformance_intent:{conformance_intent}", *g2_branches],
+        blocked=g2_blocked,
+        evidence=[*evidence, *authorized_standard_evidence],
+    ))
 
     g3_skills: list[str] = []
     if target == "harness":
@@ -412,7 +482,16 @@ def route(context: dict[str, Any], manifest: dict[str, Any]) -> dict[str, Any]:
     if not isinstance(config_candidates, list):
         raise RouterError("configuration_candidates must be an array")
     g4_skills: list[str] = []
-    g4_branches = sorted(fields & {"testing", "documentation", "security", "performance", "operations", "devops_release"})
+    g4_branches = sorted(fields & {
+        "testing",
+        "documentation",
+        "security",
+        "performance",
+        "operations",
+        "devops_release",
+        "compliance",
+        "quality_attributes",
+    })
     if tech_selected or "technology_selection" in fields:
         g4_skills.append("core.technology-selection-and-integration")
         g4_branches.append("technology_selection")
@@ -425,10 +504,26 @@ def route(context: dict[str, Any], manifest: dict[str, Any]) -> dict[str, Any]:
 
     technology_skills = manifest["selectors"]["technology_skills"]
     g5_skills = [technology_skills[name] for name in sorted(tech_selected) if name in technology_skills]
+    material_pattern_actions = {"design", "implement", "change"}
+    if target == "project" and is_software and (
+        action in material_pattern_actions
+        or "architecture" in fields
+        or "design_patterns" in fields
+    ):
+        if not pattern_scopes:
+            if action in material_pattern_actions:
+                pattern_scopes.update(PATTERN_SCOPES)
+            elif "architecture" in fields:
+                pattern_scopes.add("architecture")
+            if "design_patterns" in fields:
+                pattern_scopes.add("design")
+        g5_skills.insert(0, "core.architecture-and-design-patterns")
     if languages:
         g5_skills.append("core.language-engineering")
+    g5_branches = [f"pattern:{scope}" for scope in sorted(pattern_scopes)]
+    g5_branches.extend(sorted(languages))
     all_activated.extend(g5_skills)
-    gate_results.append(_gate_result("G5", revision, g5_skills, sorted(languages), suppressed=suppressed, evidence=evidence))
+    gate_results.append(_gate_result("G5", revision, g5_skills, g5_branches, suppressed=suppressed, evidence=evidence))
 
     g6_skills = ["core.harness-overview-html"] if target == "harness_overview" else []
     all_activated.extend(g6_skills)

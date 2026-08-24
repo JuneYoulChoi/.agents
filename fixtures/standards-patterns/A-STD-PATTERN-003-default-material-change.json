@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "id": "A-STD-PATTERN-003-default-material-change",
+  "description": "A material change performs standards applicability and pattern review without forcing a specific standard or pattern.",
+  "context": {
+    "schema_version": 1,
+    "request_id": "REQ-STD-PATTERN-003",
+    "target": "project",
+    "scope": "software_engineering",
+    "project_state": "brownfield",
+    "action": "change",
+    "risk": "medium",
+    "depth": "standard",
+    "enforcement_mode": "hook",
+    "architecture_status": "accepted",
+    "fields": ["backend", "implementation"],
+    "languages": ["java"],
+    "technologies": [],
+    "configuration_candidates": [],
+    "evidence_ids": ["EV-STD-PATTERN-003"],
+    "artifacts": [],
+    "feedback": []
+  },
+  "expected": {
+    "status": "active",
+    "gates": {
+      "G2": {"activated_branches_contains": ["confirmed", "standards_applicability"]},
+      "G5": {
+        "activated_skills_contains": ["core.architecture-and-design-patterns", "core.language-engineering"],
+        "activated_branches_contains": ["pattern:architecture", "pattern:design", "java"]
+      }
+    }
+  }
+}

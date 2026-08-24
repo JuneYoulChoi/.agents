@@ -209,7 +209,7 @@ fallback. The Router writes the output before transitioning.
 | `intake` | user request and available project context | `classification.json`, `intent.json` | scope, field, action, risk, and depth have values plus confidence/evidence | `Unknown` + discovery-only or user question |
 | `clarification` | open decision points | `question.json` or recorded answer | every material question is answered, accepted as assumption, or assigned to user | `waiting_user` |
 | `discovery` | project path and classification | `baseline.json`, evidence entries | relevant source-of-truth, current behavior, and run/test instructions recorded | `blocked` with missing-access reason |
-| `architecture` | intake plus project baseline | architecture status and artifact record | `docs/architecture/` assessed; required UC/FA/QA/module decisions confirmed or explicitly draft | user question, code-derived draft, or architecture block |
+| `architecture` | intake plus project baseline and requested standards | architecture status, standard-applicability, and artifact record | `docs/architecture/` assessed; required UC/FA/QA/module decisions confirmed or explicitly draft; conformance claims have authorized evidence | user question, code-derived draft, guidance/alignment downgrade, or architecture block |
 | `impact` | baseline and intended change | `impact.json`, document-gap list | affected requirements, contracts, modules, tests, docs, and risks recorded | ask user if scope cannot be bounded |
 | `assembly` | classification and impact | selected skill IDs, depth, delegate plan | minimal compatible skills and fallback are selected | core procedure without specialist skill |
 | `deliberation` | bounded questions and evidence snapshot | issue ledger and recommendation | every material issue has an allowed terminal status | user decision after budget |
@@ -251,6 +251,13 @@ but it MUST follow this order:
    `language-engineering` and only its detected language profiles. When the
    baseline exposes configuration candidates, also select the common
    configuration skill and only its configuration-specific language reference.
+   At G2 record standard applicability and load only selected profiles. At G5,
+   activate `architecture-and-design-patterns` for material design,
+   implementation, or change, and require an evidenced selected/rejected/
+   not-applicable result before implementation proceeds. Group pattern
+   alternatives by decision scope; when several remain materially viable,
+   emit their reasons and trade-offs plus one recommendation, then wait for the
+   user's recorded selection instead of choosing during routing.
 8. Derive the gate `execution_profile` from depth defaults, then apply only
    explicit escalation triggers: high risk, architecture conflict, or repeated
    feedback at the responsible gate. Do not bind a model name or raise the
@@ -294,7 +301,7 @@ Classify the signal and reopen exactly one nearest responsible gate:
 | architecture/project baseline contradiction | `G2` |
 | Greenfield/Brownfield/workflow or impact mismatch | `G3` |
 | technology, configuration, security, performance, test, or document concern gap | `G4` |
-| ecosystem, binding, language, or generated-code ownership gap | `G5` |
+| pattern, ecosystem, binding, language, or generated-code ownership gap | `G5` |
 | implementation, assembly, or command-result defect | `G6` |
 
 The Router records the failed expectation, observed result, evidence, target
@@ -417,6 +424,33 @@ colcon -> colcon-workspace-engineering -> affected package languages
 These arrows describe skill dependency, not automatic product adoption. React
 does not imply a Node.js production server; Docker does not imply Kubernetes;
 ROS 2 does not imply MoveIt/Isaac; and Modbus does not imply a specific bridge.
+
+## International-standard and pattern assembly rule
+
+G2 always emits `standards_applicability` for target software. Resolve only a
+standard explicitly requested, required by project policy/contract, or supported
+by domain evidence. Use canonical IDs from `routing-gates.json`; record one
+global intent of `guidance`, `alignment`, or `conformance`. Formal conformance
+is blocked without authorized normative-source evidence and a declared scope.
+The architecture skill progressively loads the selected profile; it does not
+load every standard or make a certification claim.
+
+G5 activates `architecture-and-design-patterns` for material `design`,
+`implement`, or `change`, plus explicit architecture/pattern review. Derive
+scope (`architecture`, `design`, or both) and candidates from UC/FA/QAS,
+constraints, affected modules, existing Brownfield patterns, and selected
+technology evidence. The result may select, reject, retain, or mark patterns
+not applicable. A selected architecture pattern receives `PATTERN-*` and an
+ADR; language/ecosystem skills implement it without overriding their binding,
+lifecycle, safety, or generated-code contracts. Compare candidates only within
+the same decision boundary and express compatible cross-level patterns as a
+composed option. For every materially viable option record fit, recommendation
+reason, benefits, liabilities, QAS effects, migration/rollback, and
+verification. When two or more remain viable, mark the review
+`user_decision_required`, recommend one with change conditions, leave all
+options unselected, and return to clarification. Material execution resumes
+only after user or still-valid existing-decision evidence identifies the
+selection.
 
 ## Configuration assembly rule
 

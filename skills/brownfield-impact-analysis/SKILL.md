@@ -55,6 +55,12 @@ dependencies, tests, documents, CI, operational paths, security/privacy risks,
 configuration keys/sources/precedence, environment-specific hardcoding,
 secret handling, compatibility aliases, and rollback needs. Then decide one of:
 
+Also identify applicable/claimed standards and the actual architecture/design
+patterns and conventions at each affected boundary. Record standard or pattern
+drift without renaming code shapes speculatively. A proposed pattern migration
+must include compatibility, incremental migration, rollback, and the QAS it is
+expected to improve.
+
 - `extend`: an existing boundary remains appropriate;
 - `new`: a new boundary is required with limited existing changes;
 - `mixed`: both existing and new boundaries must change.
@@ -77,6 +83,9 @@ impact:
   requirements: []
   contracts: []
   technologies: []
+  standards: []
+  existing_patterns: []
+  pattern_change_candidates: []
   language_bindings: []
   configuration: []
   modules: []

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Architecture and Design Patterns"
+  short_description: "Compare patterns and preserve user decision ownership."
+  default_prompt: "Use $architecture-and-design-patterns to compare relevant architecture and design patterns, recommend with trade-offs, and ask me to choose when multiple material options remain."

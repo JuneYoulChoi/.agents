@@ -37,6 +37,11 @@ each candidate to those capabilities and record missing or excess scope.
 Compare alternatives serving the same function; do not compare download counts
 across unrelated ecosystems.
 
+Treat an accepted `PATTERN-*` result as an implementation constraint only
+after its drivers and trade-offs are recorded. Technology evidence may refine
+or invalidate a candidate pattern through G5 feedback, but product popularity
+or a framework example does not select an architecture pattern.
+
 Use this evidence order:
 
 ```text

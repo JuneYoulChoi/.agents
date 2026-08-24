@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "id": "A-STD-PATTERN-001-42010-alignment",
+  "description": "A material design activates the 42010 alignment profile and both pattern scopes.",
+  "context": {
+    "schema_version": 1,
+    "request_id": "REQ-STD-PATTERN-001",
+    "target": "project",
+    "scope": "software_engineering",
+    "project_state": "greenfield",
+    "action": "design",
+    "risk": "medium",
+    "depth": "deep",
+    "enforcement_mode": "hook",
+    "architecture_status": "confirmed",
+    "standards": ["ISO/IEC/IEEE 42010:2022"],
+    "conformance_intent": "alignment",
+    "authorized_standard_evidence_ids": [],
+    "pattern_scopes": [],
+    "fields": ["architecture", "quality_attributes"],
+    "languages": [],
+    "technologies": [],
+    "configuration_candidates": [],
+    "evidence_ids": ["EV-STD-PATTERN-001"],
+    "artifacts": [],
+    "feedback": []
+  },
+  "expected": {
+    "status": "active",
+    "activated_skills_contains": [
+      "core.architecture-baseline-and-design",
+      "core.greenfield-planning",
+      "core.architecture-and-design-patterns",
+      "core.verify-and-handoff"
+    ],
+    "gates": {
+      "G2": {
+        "status": "passed",
+        "activated_branches_contains": [
+          "confirmed",
+          "conformance_intent:alignment",
+          "standards_applicability",
+          "standard:iso_iec_ieee_42010_2022"
+        ]
+      },
+      "G4": {"activated_branches_contains": ["quality_attributes"]},
+      "G5": {
+        "activated_skills_contains": ["core.architecture-and-design-patterns"],
+        "activated_branches_contains": ["pattern:architecture", "pattern:design"]
+      }
+    }
+  }
+}

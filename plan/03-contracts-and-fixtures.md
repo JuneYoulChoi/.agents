@@ -139,6 +139,20 @@ The validator MUST enforce these invariants:
     result records the adapter's actual model/reasoning resolution. An
     unavailable resolution cannot complete, and no execution profile may weaken
     authority, safety, architecture, verification, or completion gates.
+17. Architecture status is canonically `confirmed`, `draft`, `missing`,
+    `stale`, `conflicted`, or `not_applicable`; legacy Router input `accepted`
+    is normalized to `confirmed` and never emitted.
+18. A formal standards-conformance claim requires authorized normative-source
+    evidence, selected edition/profile, declared scope/entity, deviations, and
+    owner. Missing evidence blocks only the claim, not ordinary guidance work.
+19. Material design/implementation/change reaches a G5 pattern review whose
+    result is selected, rejected, existing, candidate, or `not_applicable`;
+    pattern count or popularity cannot satisfy this invariant.
+20. When two or more materially viable pattern candidates address the same
+    decision scope, the review records one recommendation, its rationale and
+    change conditions, keeps all candidates unselected, and enters
+    `user_decision_required`. Material execution resumes only after a selected
+    candidate links to recorded user or still-valid existing-decision evidence.
 
 ## Event contract
 
@@ -267,7 +281,7 @@ tree, but one result can activate several branches:
   "forward_revision": 2,
   "input_state_revision": 11,
   "input_artifact_ids": ["TECH-001", "IMPACT-001"],
-  "activated": ["core.ros2-engineering", "core.grpc-engineering", "core.language-engineering"],
+  "activated": ["core.architecture-and-design-patterns", "core.ros2-engineering", "core.grpc-engineering", "core.language-engineering"],
   "candidates": [],
   "suppressed": [
     {"skill_id": "core.moveit-engineering", "reason": "motion_planning_not_in_scope", "evidence_ids": ["EVD-040"]}
@@ -292,7 +306,8 @@ classification evidence but never acts as an undocumented learned weight.
 The executable reference provider accepts a JSON object using
 `schema_version`, `request_id`, `target`, `scope`, `project_state`, `action`,
 `enforcement_mode`, architecture status, fields, languages, technologies,
-configuration candidates, evidence, artifacts, and optional feedback. It emits
+configuration candidates, requested standards, conformance intent/scope/owner/evidence,
+pattern scopes, evidence, artifacts, and optional feedback. It emits
 one JSON object with status, forward revision, `G0`–`G7` evaluation results,
 activated and suppressed skills, feedback results, and event projections.
 This projection is not a replacement for the durable task-state/event store;
@@ -433,7 +448,7 @@ risk. `not_run` is never equivalent to `passed`.
 
 ## Traceability contract
 
-Use typed IDs: `GOAL-*`, `REQ-*`, `FR-*`, `NFR-*`, `QAS-*`, `ADR-*`, `TECH-*`,
+Use typed IDs: `GOAL-*`, `REQ-*`, `FR-*`, `NFR-*`, `QAS-*`, `STD-*`, `ADR-*`, `PATTERN-*`, `TECH-*`,
 `IMPL-*`, `TASK-*`, `CONFIG-*`, `CODE-*`, `TEST-*`, `DOC-*`, and `EVD-*`.
 Relations are:
 
@@ -446,6 +461,98 @@ The validator reports orphan requirements, dangling links, requirements with
 no verification, and documents that claim a changed API without an API
 artifact. Light work may use a compact `TASK -> TEST` link; standard and deep
 work require all applicable links and an explicit waiver for omitted entities.
+
+## International-standard applicability contract
+
+Use `STD-*` for each selected or explicitly assessed international standard:
+
+```json
+{
+  "standard_id": "STD-001",
+  "canonical_id": "iso_iec_ieee_42010_2022",
+  "edition": "2022",
+  "intent": "alignment",
+  "scope_or_entity": "payment-service architecture description",
+  "applicability": "applicable",
+  "rationale": "architecture views must address stakeholder concerns",
+  "authorized_source_evidence_ids": [],
+  "criteria_evidence": [],
+  "deviations": [],
+  "owner": "architecture_owner",
+  "affected_artifact_ids": ["ARCH-001", "DOC-ARCH-001"],
+  "review_trigger": "architecture scope or standard edition change"
+}
+```
+
+Allowed intent values are `guidance`, `alignment`, and `conformance`;
+applicability is `applicable`, `not_applicable`, or `undetermined`. Guidance or
+alignment may use public identity/scope evidence. `conformance` requires a
+non-empty authorized-source evidence list plus a project-defined criteria and
+assessment record. Profiles are progressively loaded from the G2 selector;
+unknown IDs block until reviewed instead of silently mapping to a similar
+standard.
+
+## Architecture/design pattern contract
+
+Use one `PATTERN-*` record per material decision scope, including when no
+pattern is selected. A decision may span both architecture and design scopes,
+but independent decisions use independent records:
+
+```json
+{
+  "schema_version": 1,
+  "pattern_id": "PATTERN-001",
+  "scopes": ["architecture", "design"],
+  "drivers": ["QAS-001", "FR-010"],
+  "existing_patterns": [],
+  "candidates": [
+    {
+      "candidate_id": "PATTERN-OPTION-001",
+      "name": "ports_and_adapters",
+      "status": "selected",
+      "decision_scope": "payment provider boundary",
+      "context": "external payment provider varies",
+      "forces": ["testability", "provider isolation"],
+      "fit": "isolates the required external-provider variation",
+      "recommendation_reason": "best satisfies QAS-001 without changing deployment boundaries",
+      "benefits": ["replaceable provider adapter"],
+      "liabilities": ["mapping and indirection"],
+      "quality_attribute_effects": ["improves testability", "adds mapping overhead"],
+      "affected_artifact_ids": ["ADR-010", "IMPL-001"],
+      "migration_and_rollback": ["migrate one provider at a time", "retain the old integration until verification passes"],
+      "verification_ids": ["TEST-010"]
+    }
+  ],
+  "decision": {
+    "status": "single_viable",
+    "decision_scope": "payment provider boundary",
+    "recommended_candidate_id": "PATTERN-OPTION-001",
+    "recommendation_reason": "other reviewed options fail the provider-isolation driver",
+    "conditions_that_change_recommendation": ["provider replacement is no longer required"],
+    "selected_candidate_id": "PATTERN-OPTION-001",
+    "decision_evidence_ids": ["EVD-ARCH-010"]
+  },
+  "migration_and_rollback": [],
+  "open_issue_ids": []
+}
+```
+
+Candidate status is `existing`, `candidate`, `selected`, `rejected`, or
+`not_applicable`. A selected material architecture pattern requires a linked
+ADR. Brownfield migration requires compatibility and rollback. A named pattern
+without drivers/trade-offs, or a QAS benefit without a verification link,
+fails validation/review.
+
+Decision status is `not_applicable`, `single_viable`,
+`user_decision_required`, `user_selected`, or `existing_decision`. Candidates
+are compared only inside one decision scope; compatible patterns at different
+levels are represented as one composed option or separate decisions. If two or
+more candidates remain materially viable, `user_decision_required` requires a
+recommended candidate, recommendation reason, change conditions, no selected
+candidate, and at least one open issue. `user_selected` requires exactly one
+selected candidate plus decision evidence. `existing_decision` requires
+evidence for the still-valid ADR/requirement. A recommendation is not a
+selection.
 
 ## Technology artifact contract
 
@@ -589,7 +696,8 @@ and dependency rationale auditable.
 ```
 
 Supported types are `report`, `seminar`, `manual`, `guide`, `history`,
-`reference`, `decision`, and `spec`. Missing documentation is created only when
+`reference`, `decision`, `spec`, `architecture_baseline`, `architecture_view`,
+`architecture_decision`, and `architecture_sync`. Missing documentation is created only when
 the type, purpose, audience, location, and owner are known; otherwise the
 Router asks the user and records the gap.
 
@@ -730,7 +838,8 @@ runner prints durable temporary result paths unless an explicit
 | `C-CONFIG` configuration | 5 | compiled/runtime/Shell/public-web/secret candidates activate the common configuration concern and only affected language/ecosystem branches; invalid secret and port contracts are rejected by unit validation |
 | `T-TECH` technology composition | 6 | all 11 mappings resolve, meaningful robotics/simulation/web/platform/gRPC compositions activate, and unevidenced adjacent technologies remain suppressed |
 | `E-PROFILE` execution profiles | 3 | light work remains bounded, high risk raises G2–G7, and repeated feedback raises only the responsible gate plus G7 without a model binding |
-| reference runtime unit checks | 7 | ordered architecture-first execution, profile resolution validation, verified completion/handoff, revision conflict preservation, unreadable-state preservation, secret redaction, and port-bound rules hold |
+| `A-STD-PATTERN` standards and patterns | 6 | named standard profiles normalize at G2, compliance/quality branches remain visible, material pattern review activates at G5, legacy status is canonicalized, missing/unknown conformance inputs fail closed, and a fully scoped evidenced route may proceed |
+| reference runtime unit checks | 13 | ordered architecture-first execution, profile resolution validation, verified completion/handoff, revision conflict preservation, unreadable-state preservation, secret redaction, port-bound rules, material pattern routing, pattern recommendation/user-decision validation, conformance blocking, and legacy-status canonicalization hold |
 
 The intentionally bounded suite is the promotion gate for this reference
 runtime. It avoids the Cartesian product of every language, configuration
@@ -747,6 +856,9 @@ hook enforcement or every platform-native instruction-precedence case.
 `C-CONFIG` and `T-TECH` validate routing and portable contract boundaries, not
 the availability of an external tool, robot, cluster, simulator, or production
 environment.
+`A-STD-PATTERN` validates applicability/routing semantics only; it does not
+certify a project against any international standard or prove that a selected
+software pattern achieves its claimed quality outcome.
 
 Unreadable or mismatched task state is handled as a small safety invariant, not
 a separate recovery subsystem or broad fixture family. The state store uses

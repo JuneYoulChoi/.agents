@@ -51,6 +51,20 @@ STAGES = {
 }
 SKILL_RESULT_STATUSES = {"completed", "not_applicable", "waiting_user", "blocked", "failed"}
 REASONING_LEVELS = {"low", "medium", "high"}
+PATTERN_CANDIDATE_STATUSES = {
+    "existing",
+    "candidate",
+    "selected",
+    "rejected",
+    "not_applicable",
+}
+PATTERN_DECISION_STATUSES = {
+    "not_applicable",
+    "single_viable",
+    "user_decision_required",
+    "user_selected",
+    "existing_decision",
+}
 EXECUTION_ROLES = {
     "guard",
     "classifier",
@@ -262,6 +276,21 @@ def validate_intake(
         raise ContractError(f"unknown classification fields: {sorted(unknown_fields)}")
     _string_array(value, "languages")
     _string_array(value, "evidence_ids")
+    _string_array(value, "standards")
+    _string_array(value, "authorized_standard_evidence_ids")
+    _require_string(
+        value,
+        "conformance_intent",
+        {"guidance", "alignment", "conformance"},
+    ) if "conformance_intent" in value else None
+    _require_string(value, "conformance_scope") if "conformance_scope" in value else None
+    _require_string(value, "conformance_owner") if "conformance_owner" in value else None
+    pattern_scopes = _string_array(value, "pattern_scopes")
+    unknown_pattern_scopes = set(pattern_scopes) - {"architecture", "design"}
+    if unknown_pattern_scopes:
+        raise ContractError(
+            f"unsupported pattern scopes: {sorted(unknown_pattern_scopes)}"
+        )
     enforcement = value.get("enforcement_mode", "manual")
     if enforcement not in {"hook", "manual", "unsupported"}:
         raise ContractError("enforcement_mode must be hook, manual, or unsupported")
@@ -424,6 +453,117 @@ def validate_skill_result(value: dict[str, Any], approved_skills: set[str]) -> d
     _string_array(resolution, "evidence_ids")
     if resolution_status == "unavailable" and status not in {"blocked", "failed"}:
         raise ContractError("unavailable execution capability requires a blocked or failed result")
+    return value
+
+
+def validate_pattern_review(value: dict[str, Any]) -> dict[str, Any]:
+    """Validate one PATTERN-* decision scope and its user-selection boundary."""
+    if value.get("schema_version") != 1:
+        raise ContractError("pattern review schema_version must be 1")
+    validate_identifier(value.get("pattern_id"), "pattern_id")
+    scopes = _string_array(value, "scopes")
+    if not scopes or set(scopes) - {"architecture", "design"}:
+        raise ContractError("pattern review scopes must contain architecture or design")
+    if not _string_array(value, "drivers"):
+        raise ContractError("pattern review requires at least one driver")
+    open_issue_ids = _string_array(value, "open_issue_ids")
+
+    candidates = value.get("candidates")
+    if not isinstance(candidates, list) or not candidates:
+        raise ContractError("pattern review requires at least one candidate")
+    candidate_ids: set[str] = set()
+    candidate_by_id: dict[str, dict[str, Any]] = {}
+    viable_ids: list[str] = []
+    selected_ids: list[str] = []
+    existing_ids: list[str] = []
+    decision_scopes: set[str] = set()
+    for candidate in candidates:
+        if not isinstance(candidate, dict):
+            raise ContractError("each pattern candidate must be an object")
+        candidate_id = validate_identifier(candidate.get("candidate_id"), "candidate_id")
+        if candidate_id in candidate_ids:
+            raise ContractError(f"duplicate pattern candidate_id: {candidate_id}")
+        candidate_ids.add(candidate_id)
+        candidate_by_id[candidate_id] = candidate
+        _require_string(candidate, "name")
+        status = _require_string(candidate, "status", PATTERN_CANDIDATE_STATUSES)
+        if status in {"candidate", "selected", "existing"}:
+            decision_scope = _require_string(candidate, "decision_scope")
+            decision_scopes.add(decision_scope)
+            _require_string(candidate, "fit")
+            _require_string(candidate, "recommendation_reason")
+            if not _string_array(candidate, "benefits"):
+                raise ContractError(f"viable pattern candidate requires benefits: {candidate_id}")
+            if not _string_array(candidate, "liabilities"):
+                raise ContractError(f"viable pattern candidate requires liabilities: {candidate_id}")
+            _string_array(candidate, "quality_attribute_effects")
+            _string_array(candidate, "affected_artifact_ids")
+            _string_array(candidate, "migration_and_rollback")
+            _string_array(candidate, "verification_ids")
+            viable_ids.append(candidate_id)
+        if status == "selected":
+            selected_ids.append(candidate_id)
+        elif status == "existing":
+            existing_ids.append(candidate_id)
+    if len(decision_scopes) > 1:
+        raise ContractError("one PATTERN record may contain only one decision scope")
+    if len(selected_ids) > 1:
+        raise ContractError("pattern review may select at most one candidate")
+
+    decision = value.get("decision")
+    if not isinstance(decision, dict):
+        raise ContractError("pattern review requires a decision object")
+    decision_status = _require_string(decision, "status", PATTERN_DECISION_STATUSES)
+    decision_scope = _require_string(decision, "decision_scope")
+    if decision_scopes and decision_scope not in decision_scopes:
+        raise ContractError("decision scope must match every viable candidate")
+
+    recommended_id = decision.get("recommended_candidate_id")
+    selected_id = decision.get("selected_candidate_id")
+    if recommended_id is not None:
+        validate_identifier(recommended_id, "recommended_candidate_id")
+        if recommended_id not in viable_ids:
+            raise ContractError("recommended candidate must be materially viable")
+    if selected_id is not None:
+        validate_identifier(selected_id, "selected_candidate_id")
+        if selected_id not in candidate_by_id:
+            raise ContractError("selected candidate is not present in candidates")
+    evidence_ids = _string_array(decision, "decision_evidence_ids")
+    change_conditions = _string_array(decision, "conditions_that_change_recommendation")
+
+    if decision_status == "not_applicable":
+        if viable_ids or selected_id is not None or recommended_id is not None:
+            raise ContractError("not_applicable cannot contain a viable, selected, or recommended candidate")
+    elif decision_status == "single_viable":
+        if len(viable_ids) != 1 or selected_ids != viable_ids or selected_id != viable_ids[0]:
+            raise ContractError("single_viable requires exactly one viable selected candidate")
+    elif decision_status == "user_decision_required":
+        if len(viable_ids) < 2:
+            raise ContractError("user_decision_required requires at least two viable candidates")
+        if selected_ids or selected_id is not None:
+            raise ContractError("user_decision_required cannot preselect a candidate")
+        if recommended_id is None or not _require_string(decision, "recommendation_reason"):
+            raise ContractError("user_decision_required requires an evidence-backed recommendation")
+        if not change_conditions:
+            raise ContractError("user_decision_required requires recommendation change conditions")
+        if not open_issue_ids:
+            raise ContractError("user_decision_required requires an open user decision issue")
+    elif decision_status == "user_selected":
+        if len(viable_ids) < 2 or len(selected_ids) != 1 or selected_id != selected_ids[0]:
+            raise ContractError("user_selected requires one selected candidate from multiple viable options")
+        if (
+            recommended_id is None
+            or not isinstance(decision.get("recommendation_reason"), str)
+            or not decision["recommendation_reason"].strip()
+            or not change_conditions
+            or not evidence_ids
+        ):
+            raise ContractError(
+                "user_selected requires recommendation rationale, change conditions, and user decision evidence"
+            )
+    else:  # existing_decision
+        if len(existing_ids) != 1 or selected_id != existing_ids[0] or not evidence_ids:
+            raise ContractError("existing_decision requires one existing candidate and decision evidence")
     return value
 
 
@@ -630,7 +770,10 @@ def _result(status: str, kind: str, input_path: Path, error: str | None = None) 
 def main(argv: Iterable[str] | None = None) -> int:
     harness_root = Path(__file__).resolve().parents[1]
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("kind", choices=["intake", "route", "skill-result", "state", "harness-config"])
+    parser.add_argument(
+        "kind",
+        choices=["intake", "route", "skill-result", "pattern-review", "state", "harness-config"],
+    )
     parser.add_argument("--input", required=True, type=Path)
     parser.add_argument("--target-root", type=Path)
     parser.add_argument("--output", type=Path)
@@ -645,6 +788,8 @@ def main(argv: Iterable[str] | None = None) -> int:
             validate_route_result(value, active_skill_ids(args.registry))
         elif args.kind == "skill-result":
             validate_skill_result(value, active_skill_ids(args.registry))
+        elif args.kind == "pattern-review":
+            validate_pattern_review(value)
         elif args.kind == "state":
             if args.target_root is None:
                 raise ContractError("--target-root is required for state validation")
