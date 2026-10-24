@@ -214,3 +214,12 @@ result is a `patch` to intake routing, a `new` architecture skill, and additive
 `extend` changes to Greenfield, Brownfield, document, and verification skills.
 Do not mark all existing skills `replace` unless the baseline proves their
 contracts are incompatible.
+
+## Composition-aware maintenance
+
+Include the five-layer view, `work_plan` contracts, candidate dispositions and
+native delegation boundary in impact analysis. Existing explicit approval of
+the bounded upgrade satisfies the control-plane gate; do not ask again solely
+because a skill says to seek approval. Candidate metadata review does not
+promote packages. Keep active core behavior, candidate evidence and generated
+HTML synchronized and validate source/registry pins after the final edit.

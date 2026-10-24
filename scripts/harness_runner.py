@@ -11,6 +11,7 @@ from typing import Any, Iterable
 
 from harness_router import _load_manifest, route
 from harness_state import StateError, StateStore, utc_now
+from harness_workflow import WorkflowError, compose_work_plan
 from harness_validator import (
     ContractError,
     active_skill_ids,
@@ -65,7 +66,10 @@ def _execution_queue(
             if skill_id == "core.intake-and-route" or skill_id in queue:
                 continue
             queue.append(skill_id)
-            stages[skill_id] = GATE_STAGE.get(gate_id, "assembly")
+            stages[skill_id] = (
+                "assembly" if skill_id == "core.workflow-composition"
+                else GATE_STAGE.get(gate_id, "assembly")
+            )
             gates[skill_id] = gate_id
     return queue, stages, gates
 
@@ -100,6 +104,7 @@ def _next_item(state: dict[str, Any], entries: dict[str, str], harness_root: Pat
         "skill_path": str(skill_path),
         "execution_profile": execution_profile,
         "application_depth": application_depth,
+        "work_plan": state["route"].get("work_plan"),
         "expected_result": {
             "schema_version": 1,
             "skill_id": skill_id,
@@ -269,6 +274,20 @@ def submit(
         raise RunnerError(
             f"out-of-order skill result: expected {next_item['skill_id']}, got {result['skill_id']}"
         )
+    updated_plan = None
+    workflow_update = result.get("workflow_update")
+    if workflow_update is not None:
+        if (result["skill_id"] != "core.workflow-composition" or result["status"] != "completed"
+                or not isinstance(workflow_update, dict) or set(workflow_update) != {"work_units"}):
+            raise RunnerError("only completed composition may update work_units; authority cannot change")
+        if not result.get("artifact_ids") or not result.get("evidence_ids"):
+            raise RunnerError("workflow_update requires plan artifacts and evidence")
+        try:
+            updated_plan = compose_work_plan(
+                {**current["intake"], "work_units": workflow_update["work_units"]}, "active"
+            )
+        except WorkflowError as exc:
+            raise RunnerError(str(exc)) from exc
     resolution = result["execution_resolution"]
     if resolution["adapter"] != current["selected_adapter"]:
         raise RunnerError("execution resolution adapter does not match the task adapter")
@@ -292,6 +311,9 @@ def submit(
         raise RunnerError("verify-and-handoff cannot be marked not_applicable")
 
     def mutate(state: dict[str, Any]) -> None:
+        if updated_plan is not None:
+            state["route"]["work_plan"] = updated_plan
+            state["intake"]["work_units"] = workflow_update["work_units"]
         execution = state["execution"]
         execution["results"].append(result)
         execution["artifact_ids"] = list(

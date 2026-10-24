@@ -65,7 +65,7 @@ def _git_revision(harness_root: Path) -> str:
 
 def _is_excluded(relative: str) -> bool:
     parts = Path(relative).parts
-    if any(part == ".DS_Store" for part in parts):
+    if any(part in {".DS_Store", "__pycache__", ".pytest_cache"} for part in parts):
         return True
     if parts and parts[0] in {".git", "incoming", "state"}:
         return True

@@ -38,6 +38,13 @@ work, name existing patterns and violations as `observed`, `inferred`, or
 
 ## 2. Evaluate only the relevant pattern family
 
+For new modules, inspect how much callers must know, where implementation
+complexity is contained, and whether tests exercise the actual contract. For
+Brownfield work, first establish concrete structural friction; retain existing
+seams when they fit. Do not impose an upstream vocabulary, exactly-one-interface
+rule, mandatory parallel design contest or fixed number of adapters. Keep
+domain language and the project's accepted architecture authoritative.
+
 Read [architecture patterns](references/architecture-patterns.md) only for
 system/module/deployment structure. Read [design patterns](references/design-patterns.md)
 only for concrete object, component, collaboration, state, integration, or

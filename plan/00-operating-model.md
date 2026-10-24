@@ -466,7 +466,8 @@ before multi-agent mutation is enabled.
    adapters. `incoming/` remains unreachable by resolution.
 5. Add traceability, verification, handoff, and conditional release/rollback
    handling.
-6. Add isolated delegates and the independent evaluator only for Deep mode;
+6. Add isolated delegates and the independent evaluator when evidenced benefit,
+   authorization and native capability justify them;
    test timeouts, partial results, dissent, and escalation.
 7. Run all fixtures and cross-platform invariants. Promote only after the
    measurable exit criteria in [03-contracts-and-fixtures.md](03-contracts-and-fixtures.md)
@@ -479,3 +480,12 @@ families selected in the machine contract. Natural-language intake and actual
 `SKILL.md` performance remain platform-agent responsibilities. Native lifecycle
 hooks, autonomous external actions, arbitrary workflow plugins, and a full
 Cartesian environment matrix are intentionally outside this subset.
+
+## Five-layer view and work composition
+
+Use [08-layered-workflow.md](08-layered-workflow.md) as the responsibility view:
+request/context, work composition, routing/gates, execution, verification/feedback.
+G0–G7 remains the only control graph. G3 adds `workflow-composition` after the
+applicable impact/requirements/document branches. Fields select expertise;
+work type selects an outline; risk and uncertainty determine rigor. Compact
+artifacts do not remove mandatory quality or authority checks.

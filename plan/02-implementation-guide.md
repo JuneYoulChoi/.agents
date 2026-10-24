@@ -20,7 +20,10 @@ Read in this order:
 
 ## What is being built
 
-The harness has eight layers. Each layer may depend only on layers below it.
+The primary responsibility view has five layers, defined in
+[08-layered-workflow.md](08-layered-workflow.md). The following L0–L7 list is
+an implementation component breakdown, not a second execution sequence.
+Components communicate through portable contracts; adapters consume the core.
 
 ```text
 L0 Safety and authority guards
@@ -28,7 +31,7 @@ L1 Portable contracts (JSON state, events, manifests, traceability)
 L2 Router and state machine
 L3 Workflow recipes (general intake, Greenfield, Brownfield, documents)
 L4 Specialist skills (progressively loaded and wrapped)
-L5 Optional delegates and evaluator (Deep mode)
+L5 Optional delegates and evaluator (evidence and capability gated)
 L6 Codex and Claude platform adapters
 L7 Fixtures, observability, governance, and release tooling
 ```
@@ -356,7 +359,7 @@ uses only a previously recorded, still-valid approval.
 | Depth | Required artifacts | Delegates |
 | --- | --- | --- |
 | `light` | intent, classification, changed files, validation result, short handoff | none by default |
-| `standard` | light artifacts plus impact, task, acceptance tests, trace links, document update decision | one focused reviewer only when useful |
+| `standard` | light artifacts plus impact, task, acceptance tests, trace links, document update decision | bounded independent units or a reviewer only when justified |
 | `deep` | standard artifacts plus alternatives, NFR/QAS, ADR, issue ledger, independent evaluator, rollback/operational plan | selective and isolated |
 
 The reference `adaptive_v1` profile keeps `light` work low by default while
@@ -532,3 +535,22 @@ Before promotion, a new implementer must be able to answer from these plan files
 9. How can an ordinary developer resume or stop a task?
 
 If any answer requires guessing, the relevant contract or guide is incomplete.
+
+## Additive workflow projection
+
+`harness_workflow.py` validates optional work-type/unit/delegation input and
+projects a bounded `work_plan`. G3 adds `core.workflow-composition` for target
+software or document work, after existing G3 branches. The Runner maps this
+skill to `assembly`, persists `route.work_plan`, and returns `next.work_plan`.
+It still orders core skills serially; native parallel unit execution is an
+adapter responsibility within a current accepted skill. Existing inputs and
+states without the optional fields retain their prior gates and skill order,
+with the additive G3 composition checkpoint for new project runs.
+
+Use the exact [workflow contract](08-layered-workflow.md) for profile precedence,
+dependencies, overlap checks, capability/authority evidence and join policy.
+Never schedule future-gate mutation based solely on a provisional intake plan.
+
+A completed composition result can refine work units using `workflow_update`;
+the Runner validates and persists the new plan without expanding authority.
+See the canonical workflow contract for the exact allowed update fields.

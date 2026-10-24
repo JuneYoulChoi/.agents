@@ -200,11 +200,23 @@ a platform changes:
 | Skill discovery | MUST | adapter mapping | adapter/plugin mapping | core procedure |
 | Model/reasoning resolution | MUST record | map portable profile or report platform default | map portable profile or report platform default | record degraded/default/unavailable; never weaken gates |
 | Local state | MUST | JSON/NDJSON files | JSON/NDJSON files | target-local only; block until an explicit future fallback is approved |
-| Sub-agent delegation | MAY for Deep | capability probe | capability probe | sequential reviewer |
-| Worktree isolation | MUST for mutation delegate | probe | probe | no mutation delegate |
+| Sub-agent delegation | MAY with evidenced benefit | capability probe | capability probe | sequential reviewer |
+| Worktree or exclusive path ownership | MUST for mutation delegate | probe and verify containment | probe and verify containment | serialize mutation |
 | Lifecycle hook | SHOULD for hard gates | probe | probe | explicit block/manual check |
 | MCP | MAY | configured per project | configured per project | no external action |
 
 The installer and adapters MUST preserve the same root-resolution, conflict,
 rollback, state-containment, registry-quarantine, and enforcement semantics;
 only presentation and platform-specific loading may differ.
+
+## Work-plan adapter boundary
+
+Both adapters consume `next.work_plan` and use the same
+[composition contract](08-layered-workflow.md). Record actual delegation
+capability/authorization and benefit evidence. A plan's allowed tool names are
+requirements, not permissions. Recheck tools, current revision, realpaths,
+resource isolation and worker/time limits before dispatch. Native agents run
+only accepted units within the current skill; the serial Runner never spawns
+processes. Return one joined skill result and integration evidence. Unsupported
+or unauthorized delegation uses serial execution. This capability is separate
+from the model/reasoning resolution, hook enforcement and task-state writer.

@@ -130,6 +130,11 @@ def _compare(fixture: dict[str, Any], actual: dict[str, Any]) -> list[str]:
         wanted = expected["event_types_contains"]
         if not _contains(actual_types, wanted):
             failures.append(f"event_types_contains: missing {sorted(set(wanted) - set(actual_types))!r}")
+    if "work_plan" in expected:
+        plan = actual.get("work_plan", {})
+        for key, wanted in expected["work_plan"].items():
+            if plan.get(key) != wanted:
+                failures.append(f"work_plan.{key}: expected {wanted!r}, actual {plan.get(key)!r}")
     profile_expected = expected.get("execution_profile")
     if profile_expected is not None:
         profile = actual.get("execution_profile")

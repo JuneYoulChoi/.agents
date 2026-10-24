@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "id": "W-FLOW-001-small-fix",
+  "description": "001-small-fix",
+  "context": {
+    "schema_version": 1,
+    "request_id": "REQ-W-FLOW-001-small-fix",
+    "target": "project",
+    "scope": "software_engineering",
+    "project_state": "brownfield",
+    "action": "change",
+    "risk": "low",
+    "depth": "light",
+    "enforcement_mode": "hook",
+    "architecture_status": "confirmed",
+    "fields": [
+      "frontend",
+      "implementation",
+      "testing"
+    ],
+    "languages": [
+      "typescript"
+    ],
+    "language_scope": "authored_in_scope",
+    "change_characteristics": [
+      "authored_code"
+    ],
+    "technologies": [
+      {
+        "name": "React",
+        "status": "detected_existing",
+        "material": true
+      }
+    ],
+    "configuration_candidates": [],
+    "evidence_ids": [
+      "EV-S-MIN-001"
+    ],
+    "artifacts": [],
+    "feedback": [],
+    "work_type": "bugfix"
+  },
+  "expected": {
+    "status": "active",
+    "activated_skills_contains": [
+      "core.workflow-composition"
+    ],
+    "work_plan": {
+      "work_type": "bugfix",
+      "mode": "single",
+      "max_workers": 1
+    }
+  }
+}

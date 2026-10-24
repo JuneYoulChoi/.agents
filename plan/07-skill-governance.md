@@ -70,9 +70,10 @@ reject unresolved placeholders or files over 32 KiB.
 
 `registry/adapter-manifest.json` is the shared provenance record for template
 IDs, platform mapping, source revision/tree hash, rendered names, limits, and
-install policy. Its `PENDING_PIN_BEFORE_BOOTSTRAP` values are an explicit
-pre-activation gap; a target config cannot claim automatic bootstrap until the
-manifest and the active registry are pinned.
+install policy. A `PENDING_PIN_BEFORE_BOOTSTRAP` value indicates a pre-activation gap; a target
+config cannot claim automatic bootstrap until the manifest and active registry
+are pinned. The current approved working-tree update records real hashes; a
+later source edit requires refreshed pins and checks, not a silent trust grant.
 
 The root `AGENTS.md` and `CLAUDE.md` in this repository are an explicit
 self-hosted source-repository entrypoint exception. They are not target
@@ -199,3 +200,20 @@ GitHub stars, and catalog ranks are not interchangeable. A maintained, safe,
 compatible project convention wins unless an approved decision documents why a
 change is needed. A popularity result never grants dependency, network, or
 execution authority.
+
+## Candidate screening and selective adaptation
+
+`registry/skill-candidate-review.json` covers each downloaded package once,
+with source, snapshot hash, candidate scope, core coverage and disposition.
+`adapt_principles` approves only the rewritten core portions listed in
+[adoption notes](../docs/harness/skill-adoption.md); it never activates upstream
+scripts, hooks, model names or transitive skills. `defer_package_review` is a
+metadata screen, not a complete security or license review. Keep original
+packages immutable in `incoming/<category>/<bundle>/<package>`.
+
+The role/parallelism rules live in one `workflow-composition` core skill;
+architecture, language, ecosystem and quality skills keep their responsibilities.
+Full source replacement requires evidence of superiority for the same role,
+compatibility and the normal promotion checks. No current core replacement was
+justified by this update. Additional specialist packages remain available for
+future scoped review rather than being silently discarded or globally loaded.

@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "id": "W-FLOW-006-risk-floor",
+  "description": "006-risk-floor",
+  "context": {
+    "schema_version": 1,
+    "request_id": "REQ-W-FLOW-006-risk-floor",
+    "target": "project",
+    "scope": "software_engineering",
+    "project_state": "brownfield",
+    "action": "change",
+    "risk": "high",
+    "depth": "deep",
+    "enforcement_mode": "hook",
+    "architecture_status": "confirmed",
+    "fields": [
+      "frontend",
+      "implementation",
+      "testing"
+    ],
+    "languages": [
+      "typescript"
+    ],
+    "language_scope": "authored_in_scope",
+    "change_characteristics": [
+      "authored_code",
+      "security"
+    ],
+    "technologies": [
+      {
+        "name": "React",
+        "status": "detected_existing",
+        "material": true
+      }
+    ],
+    "configuration_candidates": [],
+    "evidence_ids": [
+      "EV-S-MIN-001"
+    ],
+    "artifacts": [],
+    "feedback": [],
+    "work_type": "bugfix"
+  },
+  "expected": {
+    "status": "active",
+    "activated_skills_contains": [
+      "core.workflow-composition"
+    ],
+    "work_plan": {
+      "work_type": "bugfix",
+      "depth": "deep",
+      "mandatory_gate_checks": [
+        "G0",
+        "G1",
+        "G2",
+        "G3",
+        "G4",
+        "G5",
+        "G6",
+        "G7"
+      ]
+    },
+    "gates": {
+      "G6": {
+        "activated_branches_contains": [
+          "implementation_quality:security"
+        ]
+      }
+    }
+  }
+}

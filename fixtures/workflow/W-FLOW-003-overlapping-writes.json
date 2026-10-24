@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "id": "W-FLOW-003-overlapping-writes",
+  "description": "003-overlapping-writes",
+  "context": {
+    "schema_version": 1,
+    "request_id": "REQ-W-FLOW-003-overlapping-writes",
+    "target": "project",
+    "scope": "software_engineering",
+    "project_state": "brownfield",
+    "action": "change",
+    "risk": "low",
+    "depth": "light",
+    "enforcement_mode": "hook",
+    "architecture_status": "confirmed",
+    "fields": [
+      "frontend",
+      "implementation",
+      "testing"
+    ],
+    "languages": [
+      "typescript"
+    ],
+    "language_scope": "authored_in_scope",
+    "change_characteristics": [
+      "authored_code"
+    ],
+    "technologies": [
+      {
+        "name": "React",
+        "status": "detected_existing",
+        "material": true
+      }
+    ],
+    "configuration_candidates": [],
+    "evidence_ids": [
+      "EV-S-MIN-001"
+    ],
+    "artifacts": [],
+    "feedback": [],
+    "work_units": [
+      {
+        "id": "a",
+        "goal": "Inspect a",
+        "role": "implementer",
+        "mutation": "workspace",
+        "input_revision": "source-001",
+        "evidence_ids": [
+          "EVD-001"
+        ],
+        "allowed_tools": [
+          "read",
+          "edit"
+        ],
+        "expected_output": "bounded findings or tested patch",
+        "acceptance": [
+          "Required behavior is evidenced"
+        ],
+        "depends_on": [],
+        "read_paths": [
+          "src/a"
+        ],
+        "write_paths": [
+          "src/a"
+        ],
+        "shared_resources": []
+      },
+      {
+        "id": "b",
+        "goal": "Inspect b",
+        "role": "implementer",
+        "mutation": "workspace",
+        "input_revision": "source-001",
+        "evidence_ids": [
+          "EVD-001"
+        ],
+        "allowed_tools": [
+          "read",
+          "edit"
+        ],
+        "expected_output": "bounded findings or tested patch",
+        "acceptance": [
+          "Required behavior is evidenced"
+        ],
+        "depends_on": [],
+        "read_paths": [
+          "src/b"
+        ],
+        "write_paths": [
+          "src/a/nested"
+        ],
+        "shared_resources": []
+      }
+    ],
+    "delegation": {
+      "requested": true,
+      "authorized": true,
+      "available": true,
+      "max_workers": 2,
+      "timeout_seconds": 300,
+      "benefit_evidence_ids": [
+        "EVD-independent-scopes"
+      ],
+      "authorization_evidence_ids": [
+        "EVD-user"
+      ],
+      "capability_evidence_ids": [
+        "EVD-native-probe"
+      ]
+    }
+  },
+  "expected": {
+    "status": "active",
+    "activated_skills_contains": [
+      "core.workflow-composition"
+    ],
+    "work_plan": {
+      "mode": "single",
+      "batches": [
+        [
+          "a"
+        ],
+        [
+          "b"
+        ]
+      ]
+    }
+  }
+}

@@ -83,6 +83,9 @@ Proceed without asking only when the request is clear, low-risk, reversible,
 and in scope. A bounded, testable assumption is allowed only when it is safe to
 reverse and explicitly recorded.
 
+Resolve factual questions from current source documents first; do not ask the
+user to restate facts already available. Preserve material user-owned decisions.
+
 Ask the user before material work when product concept, priority, success
 criteria, audience, trade-off, authority, or acceptable scope is unknown. Ask
 at most three related questions using this form:
@@ -100,6 +103,13 @@ closed until a scope-bound approval exists. Silence is not approval.
 
 ## 4. Select the next path
 
+Record optional `work_type` separately from fields and risk/depth. Use
+`standard`, `bugfix`, `feature`, `refactor`, `research`, `document`, or
+`infrastructure`; harness changes resolve to `maintenance`. Do not infer
+parallel agents from field count. Capture `work_units` and `delegation` only
+when bounded tasks and actual authorization/capability evidence are available.
+The five-layer view is in [workflow contract](../../plan/08-layered-workflow.md).
+
 | Condition | Next path |
 | --- | --- |
 | Non-software scope | answer, idea, or decision-support flow; do not invent a code workflow |
@@ -115,6 +125,7 @@ closed until a scope-bound approval exists. Silence is not approval.
 | Explicit pattern request or architecture-structure/design-interaction signal | `$architecture-and-design-patterns` for only the evidenced scopes |
 | Authored code creation/change/review/verification | `$implementation-quality` at G6 with only evidenced profiles |
 | Document request | `$document-purpose` |
+| Project baseline and applicable impact/requirements recorded | `$workflow-composition` at the end of G3, before G4/G5 specialist resolution |
 | Existing implementation ready for completion | `$verify-and-handoff` |
 | Missing or incompatible specialist skill | use the core procedure and report the fallback |
 

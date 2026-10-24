@@ -72,3 +72,16 @@ record an override in `.agents/overrides/` before routing work.
 | residual risk | Risk remaining after the proposed change and verification |
 | approval | Explicit, scope-bound authorization with actor, time, expiry, and target |
 | artifact revision | Immutable or hashable version of the code/document/configuration being evaluated |
+
+## Workflow composition terms
+
+| Term | Meaning |
+| --- | --- |
+| five-layer view | Responsibility view: request/context, composition, routing/gates, execution, verification/feedback; not a second state machine |
+| work type | Outcome-oriented delivery outline, independent of field and risk/depth |
+| work unit | A bounded goal with revision, dependencies, path/resource scope, tools, evidence, output and acceptance |
+| persona | A responsibility and evaluation lens; it does not imply a separate process, model or authority |
+| work plan | Additive planning projection; never a dispatch or tool permission token |
+| join | Acceptance of every required current unit result before integration and dependent work |
+| adapt_principles | Rewrite selected ideas into reviewed core procedures without promoting the source package |
+| defer_package_review | Metadata-screened candidate retained in quarantine; full package audit/promotion not performed |

@@ -58,8 +58,9 @@ Use this order so the page has a clear beginning, middle, and end:
    Claude-compatible, progressive skill loading, and evidence-first behavior.
 3. **Architecture** — the harness layers (global guard, intake/router,
    baseline, workflow skills, verification/handoff, registry/adapters) and
-   their responsibilities. Distinguish the architectural `L0`–`L7` layers from
-   the routing `G0`–`G7` layered gated skill graph.
+   their responsibilities. Lead with the five-layer responsibility view in `plan/08-layered-workflow.md`.
+   Distinguish the L0–L7 implementation components from the G0–G7 gate graph;
+   show work profiles, optional personas and the serial/native execution boundary.
 4. **Traceability** —
    `PRD/SRS -> external entity/interface -> UC -> FA -> QA/QAS -> STD -> HLD -> ADR/PATTERN -> LLD/configuration -> views/diagrams -> code/tests/operations`.
    Explain that FA means Functional Architecture and QA means Quality

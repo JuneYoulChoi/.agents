@@ -1,280 +1,522 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-24",
+  "generated_at": "2026-10-24",
   "integrity_policy": {
     "core_entries": "harness_source_tree_manifest",
     "adapter_manifest": "registry/adapter-manifest.json",
-    "manifest_revision": "PENDING_PIN_BEFORE_BOOTSTRAP",
-    "manifest_sha256": "PENDING_PIN_BEFORE_BOOTSTRAP",
+    "manifest_revision": "workspace-20261024-428834665227",
     "manifest_hash_scope": "canonical active-skills.json excluding integrity_policy.manifest_sha256",
-    "excluded_paths": [".git", "incoming", "state", ".DS_Store", "docs/.DS_Store", "registry/active-skills.json", "registry/adapter-manifest.json"]
+    "excluded_paths": [
+      ".git",
+      "incoming",
+      "state",
+      ".DS_Store",
+      "docs/.DS_Store",
+      "registry/active-skills.json",
+      "registry/adapter-manifest.json",
+      "__pycache__",
+      ".pytest_cache"
+    ],
+    "manifest_sha256": "ab9d9bbf5f2616d768a17dbb5c7d802c36de33e3f39cdc47898fbd4ab8bbcb69"
   },
-  "resolution_order": ["project_reviewed", "shared_reviewed", "core_fallback"],
+  "resolution_order": [
+    "project_reviewed",
+    "shared_reviewed",
+    "core_fallback"
+  ],
   "routing_manifest": "registry/routing-gates.json",
   "skills": [
     {
       "id": "core.intake-and-route",
-      "version": "0.3.0",
+      "version": "0.4.0",
       "entry": "skills/intake-and-route/SKILL.md",
       "trust": "approved",
-      "capabilities": ["classification", "clarification", "routing", "standard_and_pattern_intake"],
+      "capabilities": [
+        "classification",
+        "clarification",
+        "routing",
+        "standard_and_pattern_intake"
+      ],
       "network_access": "none",
       "data_access": "workspace",
       "mutation": "none",
-      "platforms": ["codex", "claude"]
+      "platforms": [
+        "codex",
+        "claude"
+      ]
     },
     {
       "id": "core.greenfield-planning",
-      "version": "0.3.0",
+      "version": "0.4.0",
       "entry": "skills/greenfield-planning/SKILL.md",
       "trust": "approved",
-      "capabilities": ["requirements", "architecture", "standard_and_pattern_trace", "delivery_planning"],
+      "capabilities": [
+        "requirements",
+        "architecture",
+        "standard_and_pattern_trace",
+        "delivery_planning"
+      ],
       "network_access": "none",
       "data_access": "workspace",
       "mutation": "none",
-      "platforms": ["codex", "claude"]
+      "platforms": [
+        "codex",
+        "claude"
+      ]
     },
     {
       "id": "core.architecture-baseline-and-design",
       "version": "0.3.0",
       "entry": "skills/architecture-baseline-and-design/SKILL.md",
       "trust": "approved",
-      "capabilities": ["architecture_baseline", "international_standard_applicability", "hld", "lld", "viewpoints", "views", "diagrams", "architecture_sync"],
+      "capabilities": [
+        "architecture_baseline",
+        "international_standard_applicability",
+        "hld",
+        "lld",
+        "viewpoints",
+        "views",
+        "diagrams",
+        "architecture_sync"
+      ],
       "network_access": "none",
       "data_access": "workspace",
       "mutation": "workspace",
-      "platforms": ["codex", "claude"]
+      "platforms": [
+        "codex",
+        "claude"
+      ]
     },
     {
       "id": "core.brownfield-impact-analysis",
-      "version": "0.3.0",
+      "version": "0.4.0",
       "entry": "skills/brownfield-impact-analysis/SKILL.md",
       "trust": "approved",
-      "capabilities": ["baseline", "impact_analysis", "standard_and_pattern_drift", "regression_planning"],
+      "capabilities": [
+        "baseline",
+        "impact_analysis",
+        "standard_and_pattern_drift",
+        "regression_planning"
+      ],
       "network_access": "none",
       "data_access": "workspace",
       "mutation": "none",
-      "platforms": ["codex", "claude"]
+      "platforms": [
+        "codex",
+        "claude"
+      ]
     },
     {
       "id": "core.document-purpose",
-      "version": "0.2.0",
+      "version": "0.3.0",
       "entry": "skills/document-purpose/SKILL.md",
       "trust": "approved",
-      "capabilities": ["document_classification", "document_planning"],
+      "capabilities": [
+        "document_classification",
+        "document_planning"
+      ],
       "network_access": "none",
       "data_access": "workspace",
       "mutation": "workspace",
-      "platforms": ["codex", "claude"]
+      "platforms": [
+        "codex",
+        "claude"
+      ]
     },
     {
       "id": "core.configuration-and-environment-management",
       "version": "0.2.0",
       "entry": "skills/configuration-and-environment-management/SKILL.md",
       "trust": "approved",
-      "capabilities": ["configuration_design", "environment_management", "secret_separation", "configuration_validation", "configuration_migration", "ecosystem_tool_selection"],
+      "capabilities": [
+        "configuration_design",
+        "environment_management",
+        "secret_separation",
+        "configuration_validation",
+        "configuration_migration",
+        "ecosystem_tool_selection"
+      ],
       "network_access": "none",
       "data_access": "workspace",
       "mutation": "workspace",
-      "platforms": ["codex", "claude"]
+      "platforms": [
+        "codex",
+        "claude"
+      ]
     },
     {
       "id": "core.technology-selection-and-integration",
       "version": "0.2.0",
       "entry": "skills/technology-selection-and-integration/SKILL.md",
       "trust": "approved",
-      "capabilities": ["technology_classification", "capability_mapping", "compatibility_analysis", "ecosystem_composition", "technology_decision"],
+      "capabilities": [
+        "technology_classification",
+        "capability_mapping",
+        "compatibility_analysis",
+        "ecosystem_composition",
+        "technology_decision"
+      ],
       "network_access": "none",
       "data_access": "workspace",
       "mutation": "none",
-      "platforms": ["codex", "claude"]
+      "platforms": [
+        "codex",
+        "claude"
+      ]
     },
     {
       "id": "core.language-engineering",
       "version": "0.3.0",
       "entry": "skills/language-engineering/SKILL.md",
       "trust": "approved",
-      "capabilities": ["language_detection", "idiomatic_implementation", "binding_integration", "language_verification"],
+      "capabilities": [
+        "language_detection",
+        "idiomatic_implementation",
+        "binding_integration",
+        "language_verification"
+      ],
       "network_access": "none",
       "data_access": "workspace",
       "mutation": "workspace",
-      "platforms": ["codex", "claude"]
+      "platforms": [
+        "codex",
+        "claude"
+      ]
     },
     {
       "id": "core.architecture-and-design-patterns",
-      "version": "0.3.0",
+      "version": "0.4.0",
       "entry": "skills/architecture-and-design-patterns/SKILL.md",
       "trust": "approved",
-      "capabilities": ["architecture_pattern_selection", "design_pattern_selection", "pattern_tradeoff_analysis", "pattern_decision_support", "brownfield_pattern_assessment"],
+      "capabilities": [
+        "architecture_pattern_selection",
+        "design_pattern_selection",
+        "pattern_tradeoff_analysis",
+        "pattern_decision_support",
+        "brownfield_pattern_assessment"
+      ],
       "network_access": "none",
       "data_access": "workspace",
       "mutation": "none",
-      "platforms": ["codex", "claude"]
+      "platforms": [
+        "codex",
+        "claude"
+      ]
     },
     {
       "id": "core.implementation-quality",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "entry": "skills/implementation-quality/SKILL.md",
       "trust": "approved",
-      "capabilities": ["implementation_applicability", "language_neutral_code_quality", "selective_quality_profiles", "implementation_verification"],
+      "capabilities": [
+        "implementation_applicability",
+        "language_neutral_code_quality",
+        "selective_quality_profiles",
+        "implementation_verification"
+      ],
       "network_access": "none",
       "data_access": "workspace",
       "mutation": "workspace",
-      "platforms": ["codex", "claude"]
+      "platforms": [
+        "codex",
+        "claude"
+      ]
     },
     {
       "id": "core.ros2-engineering",
       "version": "0.1.0",
       "entry": "skills/ros2-engineering/SKILL.md",
       "trust": "approved",
-      "capabilities": ["ros2_architecture", "ros2_interfaces", "ros2_qos", "ros2_execution", "ros2_verification"],
+      "capabilities": [
+        "ros2_architecture",
+        "ros2_interfaces",
+        "ros2_qos",
+        "ros2_execution",
+        "ros2_verification"
+      ],
       "network_access": "none",
       "data_access": "workspace",
       "mutation": "workspace",
-      "platforms": ["codex", "claude"]
+      "platforms": [
+        "codex",
+        "claude"
+      ]
     },
     {
       "id": "core.nodejs-engineering",
       "version": "0.1.0",
       "entry": "skills/nodejs-engineering/SKILL.md",
       "trust": "approved",
-      "capabilities": ["nodejs_architecture", "async_runtime", "process_lifecycle", "nodejs_verification"],
+      "capabilities": [
+        "nodejs_architecture",
+        "async_runtime",
+        "process_lifecycle",
+        "nodejs_verification"
+      ],
       "network_access": "none",
       "data_access": "workspace",
       "mutation": "workspace",
-      "platforms": ["codex", "claude"]
+      "platforms": [
+        "codex",
+        "claude"
+      ]
     },
     {
       "id": "core.react-engineering",
       "version": "0.1.0",
       "entry": "skills/react-engineering/SKILL.md",
       "trust": "approved",
-      "capabilities": ["react_architecture", "component_design", "state_ownership", "accessibility", "react_verification"],
+      "capabilities": [
+        "react_architecture",
+        "component_design",
+        "state_ownership",
+        "accessibility",
+        "react_verification"
+      ],
       "network_access": "none",
       "data_access": "workspace",
       "mutation": "workspace",
-      "platforms": ["codex", "claude"]
+      "platforms": [
+        "codex",
+        "claude"
+      ]
     },
     {
       "id": "core.grpc-engineering",
       "version": "0.1.0",
       "entry": "skills/grpc-engineering/SKILL.md",
       "trust": "approved",
-      "capabilities": ["grpc_api_design", "protobuf_compatibility", "grpc_resilience", "grpc_verification"],
+      "capabilities": [
+        "grpc_api_design",
+        "protobuf_compatibility",
+        "grpc_resilience",
+        "grpc_verification"
+      ],
       "network_access": "none",
       "data_access": "workspace",
       "mutation": "workspace",
-      "platforms": ["codex", "claude"]
+      "platforms": [
+        "codex",
+        "claude"
+      ]
     },
     {
       "id": "core.isaac-lab-engineering",
       "version": "0.1.0",
       "entry": "skills/isaac-lab-engineering/SKILL.md",
       "trust": "approved",
-      "capabilities": ["isaac_lab_tasks", "robot_learning", "experiment_reproducibility", "sim_to_real", "isaac_lab_verification"],
+      "capabilities": [
+        "isaac_lab_tasks",
+        "robot_learning",
+        "experiment_reproducibility",
+        "sim_to_real",
+        "isaac_lab_verification"
+      ],
       "network_access": "none",
       "data_access": "workspace",
       "mutation": "workspace",
-      "platforms": ["codex", "claude"]
+      "platforms": [
+        "codex",
+        "claude"
+      ]
     },
     {
       "id": "core.docker-engineering",
       "version": "0.1.0",
       "entry": "skills/docker-engineering/SKILL.md",
       "trust": "approved",
-      "capabilities": ["container_build", "container_runtime", "compose_design", "image_security", "docker_verification"],
+      "capabilities": [
+        "container_build",
+        "container_runtime",
+        "compose_design",
+        "image_security",
+        "docker_verification"
+      ],
       "network_access": "none",
       "data_access": "workspace",
       "mutation": "workspace",
-      "platforms": ["codex", "claude"]
+      "platforms": [
+        "codex",
+        "claude"
+      ]
     },
     {
       "id": "core.isaac-sim-engineering",
       "version": "0.1.0",
       "entry": "skills/isaac-sim-engineering/SKILL.md",
       "trust": "approved",
-      "capabilities": ["isaac_sim_architecture", "usd_assets", "simulation_physics", "sensor_modeling", "simulation_verification"],
+      "capabilities": [
+        "isaac_sim_architecture",
+        "usd_assets",
+        "simulation_physics",
+        "sensor_modeling",
+        "simulation_verification"
+      ],
       "network_access": "none",
       "data_access": "workspace",
       "mutation": "workspace",
-      "platforms": ["codex", "claude"]
+      "platforms": [
+        "codex",
+        "claude"
+      ]
     },
     {
       "id": "core.moveit-engineering",
       "version": "0.1.0",
       "entry": "skills/moveit-engineering/SKILL.md",
       "trust": "approved",
-      "capabilities": ["moveit_architecture", "motion_planning", "planning_scene", "trajectory_execution", "moveit_verification"],
+      "capabilities": [
+        "moveit_architecture",
+        "motion_planning",
+        "planning_scene",
+        "trajectory_execution",
+        "moveit_verification"
+      ],
       "network_access": "none",
       "data_access": "workspace",
       "mutation": "workspace",
-      "platforms": ["codex", "claude"]
+      "platforms": [
+        "codex",
+        "claude"
+      ]
     },
     {
       "id": "core.kubernetes-engineering",
       "version": "0.1.0",
       "entry": "skills/kubernetes-engineering/SKILL.md",
       "trust": "approved",
-      "capabilities": ["kubernetes_architecture", "workload_design", "cluster_security", "rollout_operations", "kubernetes_verification"],
+      "capabilities": [
+        "kubernetes_architecture",
+        "workload_design",
+        "cluster_security",
+        "rollout_operations",
+        "kubernetes_verification"
+      ],
       "network_access": "none",
       "data_access": "workspace",
       "mutation": "workspace",
-      "platforms": ["codex", "claude"]
+      "platforms": [
+        "codex",
+        "claude"
+      ]
     },
     {
       "id": "core.modbus-engineering",
       "version": "0.1.0",
       "entry": "skills/modbus-engineering/SKILL.md",
       "trust": "approved",
-      "capabilities": ["modbus_contract", "register_map", "industrial_transport", "device_interoperability", "modbus_verification"],
+      "capabilities": [
+        "modbus_contract",
+        "register_map",
+        "industrial_transport",
+        "device_interoperability",
+        "modbus_verification"
+      ],
       "network_access": "none",
       "data_access": "workspace",
       "mutation": "workspace",
-      "platforms": ["codex", "claude"]
+      "platforms": [
+        "codex",
+        "claude"
+      ]
     },
     {
       "id": "core.colcon-workspace-engineering",
       "version": "0.1.0",
       "entry": "skills/colcon-workspace-engineering/SKILL.md",
       "trust": "approved",
-      "capabilities": ["colcon_workspace", "package_graph", "overlay_management", "multi_package_build", "colcon_verification"],
+      "capabilities": [
+        "colcon_workspace",
+        "package_graph",
+        "overlay_management",
+        "multi_package_build",
+        "colcon_verification"
+      ],
       "network_access": "none",
       "data_access": "workspace",
       "mutation": "workspace",
-      "platforms": ["codex", "claude"]
+      "platforms": [
+        "codex",
+        "claude"
+      ]
     },
     {
       "id": "core.verify-and-handoff",
-      "version": "0.3.0",
+      "version": "0.4.0",
       "entry": "skills/verify-and-handoff/SKILL.md",
       "trust": "approved",
-      "capabilities": ["verification", "standards_evidence_review", "pattern_decision_review", "traceability", "handoff"],
+      "capabilities": [
+        "verification",
+        "standards_evidence_review",
+        "pattern_decision_review",
+        "traceability",
+        "handoff"
+      ],
       "network_access": "none",
       "data_access": "workspace",
       "mutation": "workspace",
-      "platforms": ["codex", "claude"]
+      "platforms": [
+        "codex",
+        "claude"
+      ]
     },
     {
       "id": "core.harness-upgrade-analysis",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "entry": "skills/harness-upgrade-analysis/SKILL.md",
       "trust": "approved",
-      "capabilities": ["harness_baseline", "upgrade_impact", "change_planning", "compatibility_analysis"],
+      "capabilities": [
+        "harness_baseline",
+        "upgrade_impact",
+        "change_planning",
+        "compatibility_analysis"
+      ],
       "network_access": "none",
       "data_access": "workspace",
       "mutation": "none",
-      "platforms": ["codex", "claude"]
+      "platforms": [
+        "codex",
+        "claude"
+      ]
     },
     {
       "id": "core.harness-overview-html",
-      "version": "0.2.0",
+      "version": "0.3.0",
       "entry": "skills/harness-overview-html/SKILL.md",
       "trust": "approved",
-      "capabilities": ["harness_documentation", "html_generation", "provenance", "accessibility_review"],
+      "capabilities": [
+        "harness_documentation",
+        "html_generation",
+        "provenance",
+        "accessibility_review"
+      ],
       "network_access": "none",
       "data_access": "workspace",
       "mutation": "workspace",
-      "platforms": ["codex", "claude"]
+      "platforms": [
+        "codex",
+        "claude"
+      ]
+    },
+    {
+      "id": "core.workflow-composition",
+      "version": "0.1.0",
+      "entry": "skills/workflow-composition/SKILL.md",
+      "trust": "approved",
+      "capabilities": [
+        "work_profiles",
+        "dependency_planning",
+        "persona_assignment",
+        "conditional_delegation",
+        "join_contract"
+      ],
+      "network_access": "none",
+      "data_access": "workspace",
+      "mutation": "none",
+      "platforms": [
+        "codex",
+        "claude"
+      ]
     }
   ]
 }

@@ -96,7 +96,7 @@ tasks:
     document_effect: create | update | none
 open_points: []
 transition:
-  next_stage: execution | clarification
+  next_stage: assembly | clarification
   next_skill: ''
 ```
 
@@ -105,6 +105,13 @@ technology, configuration, testing, or other concern branches emitted for the
 same request; it does not preload or execute those skills itself.
 
 ## 5. Guard implementation
+
+Pass the bounded slices to `$workflow-composition` before specialist execution.
+First prove one useful integrated path; separate parallel implementation only
+after its shared contracts are confirmed. Omit hypothetical providers, modes
+and extension points. A named design pattern or extra abstraction needs an
+actual driver; small interfaces must still expose relevant errors and lifecycle
+constraints. Keep SOLID/GRASP where the responsibility boundary warrants them.
 
 Do not begin material implementation until the current slice has acceptance
 criteria and a verification plan. If new evidence changes scope, return to

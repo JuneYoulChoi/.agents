@@ -1,0 +1,4 @@
+interface:
+  display_name: "Workflow Composition"
+  short_description: "Compose bounded work paths and optional agent roles"
+  default_prompt: "Use $workflow-composition to plan the smallest verified path with scoped roles and dependencies."

@@ -64,3 +64,11 @@ The plan is implementable when a new developer can build the MVP and pass the
 required fixtures without inferring a missing path, enum, state transition,
 permission rule, artifact location, or completion condition. Optional
 delegation and evaluator features remain disabled until their own fixtures pass.
+
+## Five-layer workflow extension
+
+Read [08-layered-workflow.md](08-layered-workflow.md) after the operating model
+for the five-layer view, work types, persona responsibilities, conditional
+parallel planning and native execution boundary. It maps to existing G0–G7;
+it does not add a second router. Candidate review and adaptation decisions are
+tracked separately from active skill resolution.

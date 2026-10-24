@@ -1,16 +1,16 @@
 {
   "schema_version": 1,
   "manifest_id": "adapter-template-manifest-v1",
-  "source_revision": "PENDING_PIN_BEFORE_BOOTSTRAP",
-  "source_tree_sha256": "PENDING_PIN_BEFORE_BOOTSTRAP",
+  "source_revision": "workspace-20261024-428834665227",
+  "source_tree_sha256": "428834665227d0ea1e3bb2c682f5fb45747614383e77916b84cb3a7c0ca318c5",
   "templates": [
     {
       "id": "codex.bootstrap",
       "platform": "codex",
       "path": "adapters/codex/AGENTS.md.tmpl",
       "rendered_name": "AGENTS.md",
-      "version": "0.5.0",
-      "sha256": "PENDING_PIN_BEFORE_BOOTSTRAP",
+      "version": "0.6.0",
+      "sha256": "cbf16b8fefb62ae20b13964af560ea675ac5e4e085270688571cdd38ab1d88e2",
       "max_bytes": 32768
     },
     {
@@ -18,16 +18,23 @@
       "platform": "claude",
       "path": "adapters/claude/CLAUDE.md.tmpl",
       "rendered_name": "CLAUDE.md",
-      "version": "0.5.0",
-      "sha256": "PENDING_PIN_BEFORE_BOOTSTRAP",
+      "version": "0.6.0",
+      "sha256": "20d43c16671b64773f09ba28c4da1c4168621976243d9c0d0be7a27fecbbb790",
       "max_bytes": 32768
     }
   ],
-  "self_hosted_entrypoints": ["AGENTS.md", "CLAUDE.md"],
+  "self_hosted_entrypoints": [
+    "AGENTS.md",
+    "CLAUDE.md"
+  ],
   "routing": {
     "manifest": "registry/routing-gates.json",
     "model": "layered_gated_skill_graph",
-    "required_fixtures": ["F-017", "A-STD-PATTERN"],
+    "required_fixtures": [
+      "F-017",
+      "A-STD-PATTERN",
+      "W-FLOW"
+    ],
     "learned_weights": false,
     "reference_provider": {
       "required": false,
@@ -38,14 +45,25 @@
       "bootstrap": "scripts/harness_bootstrap.py",
       "fixture_runner": "scripts/fixture_runner.py",
       "fixture_root": "fixtures",
-      "transport": "json_files_with_input_output_arguments"
+      "transport": "json_files_with_input_output_arguments",
+      "workflow": "scripts/harness_workflow.py"
     },
     "execution_profile": {
       "policy_id": "adaptive_v1",
-      "portable_reasoning_levels": ["low", "medium", "high"],
+      "portable_reasoning_levels": [
+        "low",
+        "medium",
+        "high"
+      ],
       "specific_model_binding": false,
       "resolution_owner": "platform_adapter",
-      "resolution_statuses": ["exact", "upgraded", "degraded", "platform_default", "unavailable"],
+      "resolution_statuses": [
+        "exact",
+        "upgraded",
+        "degraded",
+        "platform_default",
+        "unavailable"
+      ],
       "actual_resolution_record_required": true,
       "native_reasoning_record_required": true
     }
@@ -56,7 +74,9 @@
     "state",
     ".DS_Store",
     "registry/active-skills.json",
-    "registry/adapter-manifest.json"
+    "registry/adapter-manifest.json",
+    "__pycache__",
+    ".pytest_cache"
   ],
   "hash_semantics": {
     "source_tree": "sorted relative approved-source paths plus normalized file SHA-256; excludes source manifests above",

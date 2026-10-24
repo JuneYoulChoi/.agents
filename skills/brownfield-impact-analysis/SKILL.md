@@ -114,6 +114,14 @@ operations concerns as `G4` candidates without loading every concern skill.
 
 ## 5. Choose the next action
 
+Pass accepted impact and regression boundaries to `$workflow-composition`.
+Use a bugfix/refactor/feature outline according to the intended outcome. Do not
+turn every bug into an architecture improvement: a structural proposal needs
+observed coupling, duplicated knowledge, change friction or testability evidence.
+Inspect the affected domain language and accepted ADRs before reopening design.
+Independent code/test/document investigations may become read-only units;
+shared files, resources and unresolved contracts keep dependent work serial.
+
 Route to design when architecture, contract, data, or quality decisions remain.
 Route configuration candidates to `$configuration-and-environment-management`
 after the current behavior and migration impact are recorded.

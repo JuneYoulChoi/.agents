@@ -1,29 +1,28 @@
-# Incoming skills inventory
+# Incoming source inventory
 
-Downloaded on 2026-08-03. These are **source candidates**, not active skills.
-They must be reviewed for licence, third-party tools, data access, and fit with
-the universal intake/router before promotion to `skills/`.
+Current layout: `incoming/<category>/<source-bundle>/<package>/`. Packages remain inert candidates. Original licenses are under `incoming/_provenance/`.
 
-| Source | Licence to verify at promotion | Installed skill count | Staging paths |
-| --- | --- | ---: | --- |
-| `obra/superpowers` | MIT | 10 | `incoming/superpowers/` |
-| `anthropics/skills` | repository-specific / source-available components | 6 | `incoming/documentation/` |
-| `mattpocock/skills` | MIT | 8 | `incoming/lifecycle/` |
-| `wshobson/agents` | upstream licence | 4 | `incoming/design/` |
-| `0xbigboss/claude-code` | upstream licence | 5 | `incoming/languages/` |
-| `rmyndharis/antigravity-skills` | upstream licence | 10 | `incoming/quality/` |
-| `novotnyllc/dotnet-artisan` | upstream licence | 4 | `incoming/languages/` |
-| `github/awesome-copilot` | upstream licence | 1 | `incoming/lifecycle/prd/` |
-| `pbakaus/impeccable` | upstream licence | 1 | `incoming/design/impeccable/` |
-| `mindrally/skills` | upstream licence | 1 | `incoming/languages/rust/` |
+110 packages contain 126 SKILL.md entrypoints. See [candidate dispositions](skill-candidate-review.json) and [adoption review](../docs/harness/skill-adoption.md). The candidate inventory is not consulted for executable skill resolution.
 
-## Promotion rule
+| Category | Packages | Bundles |
+| --- | ---: | --- |
+| workflow | 13 | awesome-copilot, caveman, mattpocock-skills, superpowers, wshobson-agents |
+| architecture | 3 | mattpocock-skills |
+| context | 5 | agent-skills-for-context-engineering, caveman, context-mode |
+| documentation | 9 | anthropic-skills, antigravity-skills, mcollina-skills, visual-explainer, wshobson-agents |
+| frontend | 6 | 0xbigboss-claude-code, anthropic-skills, impeccable, vercel-agent-skills |
+| backend | 5 | dotnet-artisan, supabase-agent-skills, wshobson-agents |
+| languages | 16 | 0xbigboss-claude-code, antigravity-skills, dotnet-artisan, mindrally-skills, sota-skills, wshobson-agents |
+| quality | 13 | 0xbigboss-claude-code, antigravity-skills, caveman, dotnet-artisan, mattpocock-skills, superpowers |
+| security | 7 | trailofbits-skills, wshobson-agents |
+| devops | 3 | antigravity-skills |
+| integrations | 1 | anthropic-skills |
+| ai | 8 | agent-gpu-skills, huggingface-skills |
+| physical-ai | 3 | nvidia-skills |
+| simulation | 9 | blender-claude-plugin, mujoco, nvidia-skills |
+| 3d | 4 | blender-claude-plugin |
+| robotics | 5 | nvidia-skills |
 
-1. Pin the upstream commit and confirm the licence.
-2. Read the complete `SKILL.md` and all required referenced resources.
-3. Declare runtime/tool/network/data dependencies and scope restrictions.
-4. Adapt the entry and transition contract for the shared router.
-5. Place the reviewed result in `skills/`; leave the original here unchanged.
+## Promotion boundary
 
-`mcp-builder` is temporarily grouped under `incoming/documentation/` only by
-download destination; classify it as an integration skill during promotion.
+Download popularity does not grant execution. A full promotion requires provenance and license review, required resources and scripts reviewed, tool/network/data scope, compatibility, typed transitions, verification and rollback. Selected procedural adaptations do not promote their source packages. Original sources are preserved.

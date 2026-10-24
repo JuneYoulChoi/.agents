@@ -10,6 +10,8 @@ from collections import deque
 from pathlib import Path
 from typing import Any
 
+from harness_workflow import WorkflowError, compose_work_plan, validate_workflow_input
+
 
 SELECTED_TECH_STATUSES = {"required_by_user", "detected_existing", "selected"}
 ARCHITECTURE_STATUS_ALIASES = {"accepted": "confirmed"}
@@ -433,6 +435,10 @@ def _execution_profile(
 def route(context: dict[str, Any], manifest: dict[str, Any]) -> dict[str, Any]:
     """Evaluate one structured routing context and return a portable result."""
 
+    try:
+        validate_workflow_input(context)
+    except WorkflowError as exc:
+        raise RouterError(str(exc)) from exc
     if context.get("schema_version") != 1:
         raise RouterError("schema_version must be 1")
     request_id = _require_string(context, "request_id")
@@ -582,6 +588,8 @@ def route(context: dict[str, Any], manifest: dict[str, Any]) -> dict[str, Any]:
             g3_skills.extend(["core.brownfield-impact-analysis", "core.greenfield-planning"])
     if action == "document" or "documentation" in fields:
         g3_skills.append("core.document-purpose")
+    if target == "project" and (is_software or action == "document"):
+        g3_skills.append("core.workflow-composition")
     g3_skills = list(dict.fromkeys(g3_skills))
     all_activated.extend(g3_skills)
     gate_results.append(_gate_result(
@@ -788,6 +796,7 @@ def route(context: dict[str, Any], manifest: dict[str, Any]) -> dict[str, Any]:
         "status": status,
         "forward_revision": final_revision,
         "execution_profile": execution_profile,
+        "work_plan": compose_work_plan(context, status),
         "gate_results": gate_results,
         "activated_skills": list(dict.fromkeys(all_activated)),
         "suppressed_skills": [*g5_suppressed, *g6_suppressed],

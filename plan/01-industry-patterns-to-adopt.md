@@ -22,8 +22,9 @@ were reviewed on 2026-08-17. These are design inputs, not runtime dependencies.
 
 - **No always-on swarm.** AWS documents swarm and graph patterns, but this
   repository will default to a single Router because agent overhead, duplicated
-  reasoning, and conflicting drafts are costs. Parallel experts are a Deep-mode
-  capability with a defined question and convergence budget.
+  reasoning, and conflicting drafts are costs. Parallel experts require separable work, benefit evidence, authority, native
+  capability, bounded ownership and a convergence budget; depth alone neither
+  enables nor prohibits them.
 - **No automatic user-intent invention.** The planner may propose a product
   direction, but ambiguity in concept, priority, audience, or acceptance must
   produce a user decision gate.
@@ -89,3 +90,15 @@ current bounded reference suite:
 The selected executable fixture definitions and pass/fail assertions are in
 [03-contracts-and-fixtures.md](03-contracts-and-fixtures.md). The ordinary
 developer interaction model is in [04-user-guide.md](04-user-guide.md).
+
+## 2026-10-24 workflow adaptation
+
+AI-DLC's [workflow profiles](https://awslabs.github.io/aidlc-workflows/guide/workflow-profiles/)
+inform explicit work outlines and proportional procedure. Our adaptation keeps
+mandatory gates and quality floors; it does not import Guard Policy off modes,
+the complete AI-DLC runtime or a second router. Superpowers' independent task
+partitioning and review, wshobson's role composition, and selected Caveman
+reporting/stopping ideas inform the native adapter contract. The source snapshot,
+accepted portions, rejected assumptions and responsible core destinations are
+recorded in [adoption notes](../docs/harness/skill-adoption.md). Owner: harness
+maintainer; revisit when source, authority, adapter capability or fixtures change.

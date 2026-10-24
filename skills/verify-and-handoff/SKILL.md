@@ -79,6 +79,20 @@ not a passing result.
 
 ## 3. Check traceability and documentation
 
+For a composed workflow, verify the `WORK-*` outline, unit dependencies, actual
+delegate/capability resolution, ownership, joins and integrated revision. A
+role label, plan or successful child report is not integration evidence. Record
+serial fallback honestly when native delegation was unavailable. Preserve
+valid independent results when repairing a failed unit; stale or partial output
+cannot satisfy required acceptance.
+
+Use focused proof before broader checks. Reuse still-current results only for
+matching artifact revision, scope and environment. An independent review uses
+the pinned requirements and changes, not the entire producer conversation.
+Consolidate duplicate findings; distinguish defects from optional improvements.
+Once all required checks pass, stop optional review loops, cleanup and polish.
+Do not drop unresolved material findings merely because a review budget expired.
+
 Confirm that material requirements link to tests or explicit waivers, decisions
 link to their rationale, and changed behavior has fit-for-purpose documentation
 or a recorded reason not to create it. Do not update protected documents without

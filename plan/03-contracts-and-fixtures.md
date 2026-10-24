@@ -869,7 +869,7 @@ scope and the resolution order is exactly
 the two wrapper names, and `manual_guard` is null for `hook`/`unsupported` and
 freshly evidenced when `manual` performs a durable write. It also verifies
 source/target realpath containment, symlink and permission policy, source-tree
-manifest scope (excluding `.git`, `incoming`, state, and generated metadata),
+manifest scope (excluding `.git`, `incoming`, state, Python/test caches, and generated metadata),
 and the canonical self-excluded config hash. The source-tree manifest excludes
 its own `registry/adapter-manifest.json` and the mutable
 `registry/active-skills.json`; those two manifests are pinned separately to
@@ -903,7 +903,8 @@ runner prints durable temporary result paths unless an explicit
 | `E-PROFILE` execution profiles | 3 | light work remains bounded, high risk raises G2–G7, and repeated feedback raises only the responsible gate plus G7 without a model binding |
 | `A-STD-PATTERN` standards and patterns | 6 | named standard profiles normalize at G2, compliance/quality branches remain visible, evidenced pattern scopes activate at G5, legacy status is canonicalized, missing/unknown conformance inputs fail closed, and a fully scoped evidenced route may proceed |
 | `S-MIN` selective routing | 3 | local authored code suppresses pattern review, structural code selects scoped patterns and quality profiles, and detected-only documentation avoids implementation skills |
-| reference runtime unit checks | 17 | ordered architecture-first execution, profile resolution validation, verified completion/handoff, revision conflict preservation, unreadable-state preservation, secret redaction, port-bound rules, selective pattern and implementation-quality routing and artifact validation, pattern recommendation/user-decision validation, conformance blocking, and legacy-status canonicalization hold |
+| `W-FLOW` workflow composition | 6 | work types, conditional parallel planning, ownership conflicts, capability fallback, document-only routing and risk floors |
+| runtime and documentation checks | discovered by unittest | ordered architecture-first execution, profile resolution validation, verified completion/handoff, revision conflict preservation, unreadable-state preservation, secret redaction, port-bound rules, selective pattern and implementation-quality routing and artifact validation, pattern recommendation/user-decision validation, conformance blocking, and legacy-status canonicalization hold |
 
 The intentionally bounded suite is the promotion gate for this reference
 runtime. It avoids the Cartesian product of every language, configuration
@@ -929,3 +930,19 @@ a separate recovery subsystem or broad fixture family. The state store uses
 atomic replacement, rejects another target-root fingerprint or revision,
 preserves unreadable originals, and reports a blocked recovery action. It does
 not guess or silently repair user-owned task history.
+
+## Additive work-plan contract
+
+The canonical input/output and native delegation contract is
+[08-layered-workflow.md](08-layered-workflow.md). Intake accepts optional
+`work_type`, `work_units`, `delegation`; the Router emits `work_plan`, and the
+Runner preserves it in `state.route` and `next.work_plan`. `WORK-*` artifacts
+record accepted plans. New output fields do not change G0–G7 semantics or grant
+execution authority. Older states without work plans remain readable.
+
+W-FLOW fixtures and `tests/test_workflow.py` cover profile selection, serial
+fallback, dependency/ownership isolation, invalid inputs and Runner propagation.
+Counts are reported by the executed suite rather than treated as fixed policy.
+`tests/test_documentation.py` checks candidate coverage, active placement,
+source links and documentation synchronization. These tests do not claim native
+agent speedup or integration with external tools.

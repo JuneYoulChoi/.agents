@@ -278,7 +278,7 @@ Expected interaction:
 7. It implements, runs the prescribed tests, updates the API guide, and writes
    a handoff containing changed files, validation, and residual risks.
 
-The user does not need to manage sub-agents. Deep mode may add reviewers, but
+The user does not need to manage sub-agents. Evidence-backed delegation may add focused workers or reviewers, but
 the Router owns the final issue ledger and asks the user when a product or
 compatibility choice remains.
 
@@ -356,3 +356,24 @@ conversation or recomputing unaffected branches.
   environment, scope, and rollback before approving.
 - If the Router misunderstood the project state, correct it; the correction is
   recorded and the affected plan is re-evaluated.
+
+## Work paths and focused teams
+
+You can say “fix this bug”, “add this feature”, “refactor without changing
+behavior”, “research this question”, or “update this document”. The harness
+shows the required path and explains optional work it omits. It checks the
+baseline and necessary quality requirements even for a quick fix.
+
+The five views are request/context → work composition → routing/gates →
+execution → verification/feedback; routing and authority apply throughout.
+One agent is the default. Independent evidence collection, implementation with
+confirmed contracts and separate ownership, or focused review may be delegated
+when capability, authorization and benefit are established. Existing valid
+permission is reused. Sequential fallback is normal, not failure.
+
+A persona names a responsibility, not an extra mandatory worker. The coordinator
+integrates results and verifies the combined change. Reported token/time savings
+require measurement. Downloaded packages remain candidates; source affiliation
+and storage category do not make them active. See the
+[workflow guide](08-layered-workflow.md) and
+[candidate review](../registry/skill-candidate-review.json).

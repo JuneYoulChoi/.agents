@@ -75,6 +75,14 @@ when it meets the same acceptance criteria.
 
 ## 3. Produce a focused result
 
+Consume the accepted `WORK-*` plan without repeating G3 planning. Implement one
+coherent acceptance slice; a small diff is not sufficient if it hides root cause
+or breaks ownership. A simplicity review checks unnecessary modes, dependencies,
+configuration and abstraction while preserving applicable SOLID/GRASP, error
+handling, concurrency and lifecycle obligations. Execute native parallel units
+only after adapter rechecks and only within the current gate's accepted scope.
+Integrate and verify their combined revision before proceeding to G7.
+
 ```yaml
 implementation_quality:
   status: completed | not_applicable | waiting_user | blocked | failed

@@ -3,8 +3,17 @@
   "model": "layered_gated_skill_graph",
   "evaluation": {
     "mode": "deterministic",
-    "condition_operators": ["all_of", "any_of", "none_of"],
-    "activation_states": ["activated", "candidate", "suppressed", "blocked"],
+    "condition_operators": [
+      "all_of",
+      "any_of",
+      "none_of"
+    ],
+    "activation_states": [
+      "activated",
+      "candidate",
+      "suppressed",
+      "blocked"
+    ],
     "learned_weights": false,
     "load_policy": "metadata_then_activated_skill_only",
     "feedback_policy": "reopen_nearest_responsible_gate_and_recompute_affected_descendants"
@@ -12,11 +21,42 @@
   "execution_policy": {
     "policy_id": "adaptive_v1",
     "specific_model_binding": false,
-    "reasoning_levels": ["low", "medium", "high"],
+    "reasoning_levels": [
+      "low",
+      "medium",
+      "high"
+    ],
     "depth_defaults": {
-      "light": ["low", "low", "medium", "low", "low", "low", "low", "medium"],
-      "standard": ["low", "medium", "medium", "medium", "medium", "medium", "medium", "medium"],
-      "deep": ["medium", "high", "high", "high", "high", "high", "high", "high"]
+      "light": [
+        "low",
+        "low",
+        "medium",
+        "low",
+        "low",
+        "low",
+        "low",
+        "medium"
+      ],
+      "standard": [
+        "low",
+        "medium",
+        "medium",
+        "medium",
+        "medium",
+        "medium",
+        "medium",
+        "medium"
+      ],
+      "deep": [
+        "medium",
+        "high",
+        "high",
+        "high",
+        "high",
+        "high",
+        "high",
+        "high"
+      ]
     },
     "gate_roles": {
       "G0": "guard",
@@ -29,19 +69,49 @@
       "G7": "verifier"
     },
     "escalation_rules": {
-      "high_risk": ["G2", "G3", "G4", "G5", "G6", "G7"],
-      "architecture_conflict": ["G2"],
+      "high_risk": [
+        "G2",
+        "G3",
+        "G4",
+        "G5",
+        "G6",
+        "G7"
+      ],
+      "architecture_conflict": [
+        "G2"
+      ],
       "repeated_feedback": "target_gate_and_G7"
     }
   },
   "forward_edges": [
-    ["G0", "G1"],
-    ["G1", "G2"],
-    ["G2", "G3"],
-    ["G3", "G4"],
-    ["G4", "G5"],
-    ["G5", "G6"],
-    ["G6", "G7"]
+    [
+      "G0",
+      "G1"
+    ],
+    [
+      "G1",
+      "G2"
+    ],
+    [
+      "G2",
+      "G3"
+    ],
+    [
+      "G3",
+      "G4"
+    ],
+    [
+      "G4",
+      "G5"
+    ],
+    [
+      "G5",
+      "G6"
+    ],
+    [
+      "G6",
+      "G7"
+    ]
   ],
   "selectors": {
     "technology_aliases": {
@@ -68,11 +138,28 @@
       "colcon": "core.colcon-workspace-engineering"
     },
     "adjacent_technologies": {
-      "ros2": ["moveit", "isaac_lab", "isaac_sim", "modbus", "grpc", "colcon"],
-      "docker": ["kubernetes"],
-      "react": ["nodejs"],
-      "isaac_lab": ["isaac_sim", "kubernetes"],
-      "moveit": ["ros2", "colcon"]
+      "ros2": [
+        "moveit",
+        "isaac_lab",
+        "isaac_sim",
+        "modbus",
+        "grpc",
+        "colcon"
+      ],
+      "docker": [
+        "kubernetes"
+      ],
+      "react": [
+        "nodejs"
+      ],
+      "isaac_lab": [
+        "isaac_sim",
+        "kubernetes"
+      ],
+      "moveit": [
+        "ros2",
+        "colcon"
+      ]
     },
     "standard_aliases": {
       "iso 42010": "iso_iec_ieee_42010_2022",
@@ -120,64 +207,177 @@
       "id": "G0",
       "name": "guard",
       "purpose": "Resolve authority, target, adapter capability, and safe execution mode",
-      "inputs": ["request", "instructions", "task_state", "adapter_capabilities"],
-      "outputs": ["authority", "target_root", "enforcement_mode", "allowed_actions"]
+      "inputs": [
+        "request",
+        "instructions",
+        "task_state",
+        "adapter_capabilities"
+      ],
+      "outputs": [
+        "authority",
+        "target_root",
+        "enforcement_mode",
+        "allowed_actions"
+      ]
     },
     {
       "id": "G1",
       "name": "intake",
       "purpose": "Classify one request across multiple simultaneous fields",
-      "inputs": ["request", "prior_state", "approved_skill_metadata"],
-      "outputs": ["intent", "classification", "questions", "candidate_branches"]
+      "inputs": [
+        "request",
+        "prior_state",
+        "approved_skill_metadata"
+      ],
+      "outputs": [
+        "intent",
+        "classification",
+        "questions",
+        "candidate_branches"
+      ]
     },
     {
       "id": "G2",
       "name": "baseline",
       "purpose": "Establish project, architecture, and international-standard applicability evidence before material routing",
-      "inputs": ["classification", "architecture_documents", "project_evidence", "standards", "conformance_intent", "conformance_scope", "conformance_owner", "authorized_standard_evidence"],
-      "outputs": ["architecture_status", "project_state", "standard_applicability", "impact_candidates", "evidence_gaps"]
+      "inputs": [
+        "classification",
+        "architecture_documents",
+        "project_evidence",
+        "standards",
+        "conformance_intent",
+        "conformance_scope",
+        "conformance_owner",
+        "authorized_standard_evidence"
+      ],
+      "outputs": [
+        "architecture_status",
+        "project_state",
+        "standard_applicability",
+        "impact_candidates",
+        "evidence_gaps"
+      ]
     },
     {
       "id": "G3",
       "name": "workflow",
       "purpose": "Activate the applicable Greenfield, Brownfield, document, or harness workflow branches",
-      "inputs": ["intent", "project_state", "architecture_status", "action"],
-      "outputs": ["workflow_branches", "required_artifacts", "blocking_decisions"]
+      "inputs": [
+        "intent",
+        "project_state",
+        "architecture_status",
+        "action",
+        "work_type",
+        "work_units",
+        "delegation"
+      ],
+      "outputs": [
+        "workflow_branches",
+        "required_artifacts",
+        "blocking_decisions",
+        "work_plan"
+      ]
     },
     {
       "id": "G4",
       "name": "concern",
       "purpose": "Activate cross-cutting concerns supported by evidence",
-      "inputs": ["fields", "impact", "requirements", "configuration_candidates", "technology_candidates"],
-      "outputs": ["technology_selection", "configuration", "testing", "documentation", "security", "performance", "operations", "compliance", "quality_attributes"]
+      "inputs": [
+        "fields",
+        "impact",
+        "requirements",
+        "configuration_candidates",
+        "technology_candidates"
+      ],
+      "outputs": [
+        "technology_selection",
+        "configuration",
+        "testing",
+        "documentation",
+        "security",
+        "performance",
+        "operations",
+        "compliance",
+        "quality_attributes"
+      ]
     },
     {
       "id": "G5",
       "name": "specialist",
       "purpose": "Select evidenced architecture/design pattern, ecosystem, and authored-language skills",
-      "inputs": ["technology_artifacts", "affected_modules", "architecture_drivers", "change_characteristics", "pattern_scopes", "language_evidence", "language_scope", "generated_code_ownership"],
-      "outputs": ["pattern_review", "ecosystem_skills", "language_profiles", "suppressed_adjacent_skills", "compatibility_gaps"]
+      "inputs": [
+        "technology_artifacts",
+        "affected_modules",
+        "architecture_drivers",
+        "change_characteristics",
+        "pattern_scopes",
+        "language_evidence",
+        "language_scope",
+        "generated_code_ownership"
+      ],
+      "outputs": [
+        "pattern_review",
+        "ecosystem_skills",
+        "language_profiles",
+        "suppressed_adjacent_skills",
+        "compatibility_gaps"
+      ]
     },
     {
       "id": "G6",
       "name": "assembly_execution",
       "purpose": "Join selected branches, order dependencies, and execute accepted slices",
-      "inputs": ["workflow_results", "concern_results", "specialist_results", "change_characteristics", "acceptance_contract"],
-      "outputs": ["implementation_quality_profiles", "execution_plan", "changed_artifacts", "command_log", "verification_inputs"]
+      "inputs": [
+        "workflow_results",
+        "concern_results",
+        "specialist_results",
+        "change_characteristics",
+        "acceptance_contract"
+      ],
+      "outputs": [
+        "implementation_quality_profiles",
+        "execution_plan",
+        "changed_artifacts",
+        "command_log",
+        "verification_inputs"
+      ]
     },
     {
       "id": "G7",
       "name": "verification_handoff",
       "purpose": "Verify the joined result and emit completion or bounded backward feedback",
-      "inputs": ["acceptance_contract", "changed_artifacts", "validation_results", "routing_trace"],
-      "outputs": ["completion_status", "handoff", "feedback_signals", "residual_risk"]
+      "inputs": [
+        "acceptance_contract",
+        "changed_artifacts",
+        "validation_results",
+        "routing_trace"
+      ],
+      "outputs": [
+        "completion_status",
+        "handoff",
+        "feedback_signals",
+        "residual_risk"
+      ]
     }
   ],
   "skill_placement": {
-    "G1": ["core.intake-and-route"],
-    "G2": ["core.architecture-baseline-and-design"],
-    "G3": ["core.greenfield-planning", "core.brownfield-impact-analysis", "core.document-purpose", "core.harness-upgrade-analysis"],
-    "G4": ["core.technology-selection-and-integration", "core.configuration-and-environment-management"],
+    "G1": [
+      "core.intake-and-route"
+    ],
+    "G2": [
+      "core.architecture-baseline-and-design"
+    ],
+    "G3": [
+      "core.greenfield-planning",
+      "core.brownfield-impact-analysis",
+      "core.document-purpose",
+      "core.harness-upgrade-analysis",
+      "core.workflow-composition"
+    ],
+    "G4": [
+      "core.technology-selection-and-integration",
+      "core.configuration-and-environment-management"
+    ],
     "G5": [
       "core.architecture-and-design-patterns",
       "core.language-engineering",
@@ -193,17 +393,48 @@
       "core.modbus-engineering",
       "core.colcon-workspace-engineering"
     ],
-    "G6": ["core.implementation-quality", "core.harness-overview-html"],
-    "G7": ["core.verify-and-handoff"]
+    "G6": [
+      "core.implementation-quality",
+      "core.harness-overview-html"
+    ],
+    "G7": [
+      "core.verify-and-handoff"
+    ]
   },
   "backward_routes": [
-    {"signal": "authority_or_capability_failure", "target_gate": "G0"},
-    {"signal": "intent_scope_or_user_correction", "target_gate": "G1"},
-    {"signal": "architecture_or_project_baseline_conflict", "target_gate": "G2"},
-    {"signal": "workflow_or_impact_mismatch", "target_gate": "G3"},
-    {"signal": "technology_configuration_or_cross_cutting_gap", "target_gate": "G4"},
-    {"signal": "ecosystem_binding_language_or_generated_code_gap", "target_gate": "G5"},
-    {"signal": "pattern_selection_or_implementation_gap", "target_gate": "G5"},
-    {"signal": "implementation_or_assembly_defect", "target_gate": "G6"}
-  ]
+    {
+      "signal": "authority_or_capability_failure",
+      "target_gate": "G0"
+    },
+    {
+      "signal": "intent_scope_or_user_correction",
+      "target_gate": "G1"
+    },
+    {
+      "signal": "architecture_or_project_baseline_conflict",
+      "target_gate": "G2"
+    },
+    {
+      "signal": "workflow_or_impact_mismatch",
+      "target_gate": "G3"
+    },
+    {
+      "signal": "technology_configuration_or_cross_cutting_gap",
+      "target_gate": "G4"
+    },
+    {
+      "signal": "ecosystem_binding_language_or_generated_code_gap",
+      "target_gate": "G5"
+    },
+    {
+      "signal": "pattern_selection_or_implementation_gap",
+      "target_gate": "G5"
+    },
+    {
+      "signal": "implementation_or_assembly_defect",
+      "target_gate": "G6"
+    }
+  ],
+  "work_plan_contract": "plan/08-layered-workflow.md",
+  "work_plan_provider": "scripts/harness_workflow.py"
 }

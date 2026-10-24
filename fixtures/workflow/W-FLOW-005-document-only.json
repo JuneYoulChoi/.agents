@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "id": "W-FLOW-005-document-only",
+  "description": "005-document-only",
+  "context": {
+    "schema_version": 1,
+    "request_id": "REQ-W-FLOW-005-document-only",
+    "target": "project",
+    "scope": "software_engineering",
+    "project_state": "brownfield",
+    "action": "document",
+    "risk": "low",
+    "depth": "light",
+    "enforcement_mode": "hook",
+    "architecture_status": "confirmed",
+    "fields": [
+      "documentation"
+    ],
+    "languages": [
+      "typescript"
+    ],
+    "language_scope": "detected_only",
+    "change_characteristics": [
+      "documentation_only"
+    ],
+    "technologies": [],
+    "configuration_candidates": [],
+    "evidence_ids": [
+      "EV-S-MIN-001"
+    ],
+    "artifacts": [],
+    "feedback": [],
+    "work_type": "document"
+  },
+  "expected": {
+    "status": "active",
+    "activated_skills_contains": [
+      "core.workflow-composition"
+    ],
+    "work_plan": {
+      "work_type": "document",
+      "mode": "single"
+    },
+    "suppressed_skills_contains": [
+      "core.language-engineering"
+    ],
+    "gates": {
+      "G5": {
+        "activated_skills_exact": []
+      },
+      "G6": {
+        "activated_skills_exact": []
+      }
+    }
+  }
+}

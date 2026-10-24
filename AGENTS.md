@@ -51,3 +51,14 @@ and its own `.agents/state/` is not a task store.
 If the plan, registry, bootstrap configuration, or deterministic guard is
 missing or stale, read-only diagnosis may continue, but material mutation and
 external/destructive actions must stop until the user approves a safe path.
+
+## Work composition
+
+Use the five-layer view in `plan/08-layered-workflow.md` without replacing
+G0–G7. For target work, run `workflow-composition` after G3 impact/requirements;
+keep work type separate from fields and risk. Consume the route's `work_plan`
+(or `next.work_plan`) as a proposal. Default to one agent; delegate only bounded
+independent units with current authority, capability and benefit evidence.
+Recheck owned paths, shared resources, tools and revisions before execution.
+The Runner stays serial; native adapters join approved units within the current
+skill. Preserve required quality and user decisions, then verify integration.

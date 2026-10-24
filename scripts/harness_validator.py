@@ -12,6 +12,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable
 
+from harness_workflow import WorkflowError, validate_workflow_input, validate_work_plan
+
 
 SCOPES = {
     "software_engineering",
@@ -253,6 +255,10 @@ def _validate_artifact_graph(artifacts: Any) -> None:
 def validate_intake(
     value: dict[str, Any], taxonomy_path: Path, require_intent: bool = False
 ) -> dict[str, Any]:
+    try:
+        validate_workflow_input(value)
+    except WorkflowError as exc:
+        raise ContractError(str(exc)) from exc
     if value.get("schema_version") != 1:
         raise ContractError("schema_version must be 1")
     validate_identifier(value.get("request_id"), "request_id")
@@ -429,6 +435,11 @@ def validate_route_result(value: dict[str, Any], approved_skills: set[str]) -> d
         if any(depth not in {"light", "standard", "deep"} for depth in depths.values()):
             raise ContractError("gate application_depths contains an unsupported depth")
     validate_execution_profile(value.get("execution_profile"))
+    if "work_plan" in value:
+        try:
+            validate_work_plan(value["work_plan"], value["status"])
+        except WorkflowError as exc:
+            raise ContractError(str(exc)) from exc
     return value
 
 

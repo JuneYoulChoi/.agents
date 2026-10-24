@@ -1,0 +1,2857 @@
+{
+  "schema_version": 1,
+  "reviewed_on": "2026-10-24",
+  "owner": "harness_maintainer",
+  "purpose": "Complete candidate inventory and selective core procedure adaptation; not an executable registry",
+  "packages": [
+    {
+      "package": "blender-animation-rigging",
+      "category": "3d",
+      "bundle": "blender-claude-plugin",
+      "path": "incoming/3d/blender-claude-plugin/blender-animation-rigging",
+      "repository": "https://github.com/ra100/blender-claude-plugin",
+      "snapshot_sha256": "724f5bbd45f3e83ab59cf599cc6363be976abf0e49e1fa3c9ec399991b43e7b1",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/3d/blender-claude-plugin/blender-animation-rigging/SKILL.md",
+          "frontmatter": "name: blender-animation-rigging\ndescription: Blender 5.x animation and rigging — keyframes, FCurves, layered actions, drivers, constraints, armatures, IK/FK, shape keys, NLA editor, and bone collections via Python (bpy). Includes 5.1 changes (Smooth Gaussian FCurve modifier, Apply to Basis, layered action performance).",
+          "sha256": "154ba38dc503bb449092f5385c8088e0b9b24b13cb12ed6442b188356032d59d"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.technology-selection-and-integration"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "blender-geometry-nodes",
+      "category": "3d",
+      "bundle": "blender-claude-plugin",
+      "path": "incoming/3d/blender-claude-plugin/blender-geometry-nodes",
+      "repository": "https://github.com/ra100/blender-claude-plugin",
+      "snapshot_sha256": "cca6bb2e865f7f2157bfbc05e92a7cef7318474d15ff587baaecf59c72afe5e3",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/3d/blender-claude-plugin/blender-geometry-nodes/SKILL.md",
+          "frontmatter": "name: blender-geometry-nodes\ndescription: Blender 5.x geometry nodes — procedural modeling, scattering, mesh/curve/volume ops, simulation zones, repeat zones, Bone Info, Font socket, UV nodes, volume grid nodes, and scripting node trees via Python (bpy). Includes 5.0 and 5.1 changes.",
+          "sha256": "ff26c72634c31347014964aa6c32adb96a53a415e7717517d449677e1f6a7809"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.technology-selection-and-integration"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "blender-modeling-modifiers",
+      "category": "3d",
+      "bundle": "blender-claude-plugin",
+      "path": "incoming/3d/blender-claude-plugin/blender-modeling-modifiers",
+      "repository": "https://github.com/ra100/blender-claude-plugin",
+      "snapshot_sha256": "092f4cfeb86c7ed6a971185e6c83ae81486d49cd693c292877b360ff75471c76",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/3d/blender-claude-plugin/blender-modeling-modifiers/SKILL.md",
+          "frontmatter": "name: blender-modeling-modifiers\ndescription: Blender 5.x modifiers, bmesh API, mesh editing operators, sculpting setup — SubSurf, Boolean, Array, Mirror, Bevel, bmesh procedural mesh creation, and modeling pipelines via Python (bpy). Includes 5.1 changes (Boolean speed, Corrective Flip Normals, UV improvements).",
+          "sha256": "0840f2a3ea28490feddb9b9f27d66c5957af98feebd5aa1e3a43b04b7d705fbb"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.technology-selection-and-integration"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "blender-shader-nodes",
+      "category": "3d",
+      "bundle": "blender-claude-plugin",
+      "path": "incoming/3d/blender-claude-plugin/blender-shader-nodes",
+      "repository": "https://github.com/ra100/blender-claude-plugin",
+      "snapshot_sha256": "b6d9245dcb72c2cc944e6844123122e15611c67e3891a6aafe8e6681018ba10f",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/3d/blender-claude-plugin/blender-shader-nodes/SKILL.md",
+          "frontmatter": "name: blender-shader-nodes\ndescription: Blender 5.x shader nodes — PBR materials, procedural textures, Principled BSDF, glass/metal/skin shaders, world/HDRI lighting, raycast shader node, and scripting material node trees via Python (bpy). Includes 5.1 changes (Normal Map OpenGL/DirectX, Raycast, OpenColorIO 2.5).",
+          "sha256": "5888df27128549ae52aea00e7bdabb26ce586b4ba3a0fc2b96171a1d3efc0347"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.technology-selection-and-integration"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "cuda-skill",
+      "category": "ai",
+      "bundle": "agent-gpu-skills",
+      "path": "incoming/ai/agent-gpu-skills/cuda-skill",
+      "repository": "https://github.com/slowlyC/agent-gpu-skills",
+      "snapshot_sha256": "9f17336ae6f154b5f290c4d19db02fb22bc11c2e087091b97d1644f9b4aa54ce",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/ai/agent-gpu-skills/cuda-skill/SKILL.md",
+          "frontmatter": "name: cuda-skill\ndescription: \"Query current NVIDIA CUDA, PTX ISA, Runtime API, Driver API, Programming Guide, Best Practices, Nsight Compute, and Nsight Systems references. Use for direct CUDA C++ or PTX work, and for framework tasks only when they need NVIDIA ISA, API, architecture, or tool facts. Triggers include inline PTX, WMMA, WGMMA, TMA, tcgen05, mbarrier, fabric operations, CUDA APIs and Graphs, memory ordering, compute capability, Ampere, Hopper, Blackwell, Rubin, nsys, ncu, and compute-sanitizer.\"",
+          "sha256": "bbfd1c56b6d25101b759dcd016973ee6a048bc67e2295df1382a8bda9b119bfc"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.technology-selection-and-integration",
+        "core.language-engineering"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "cutlass-skill",
+      "category": "ai",
+      "bundle": "agent-gpu-skills",
+      "path": "incoming/ai/agent-gpu-skills/cutlass-skill",
+      "repository": "https://github.com/slowlyC/agent-gpu-skills",
+      "snapshot_sha256": "45652b3192c5b5183d933dd790ef5f99cf21f0120d9202d8b259c20b9aede542",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/ai/agent-gpu-skills/cutlass-skill/SKILL.md",
+          "frontmatter": "name: cutlass-skill\ndescription: >-\n  Write, debug, and optimize CUTLASS, CuTe, and CuTeDSL GPU kernels from local\n  upstream source, examples, and headers. Use when the task explicitly involves\n  CUTLASS/CuTe/CuTeDSL, cute::Layout, cute::Tensor, TiledMMA, TiledCopy,\n  CollectiveBuilder, CollectiveMainloop, CollectiveEpilogue, GemmUniversal,\n  KernelSchedule, EpilogueSchedule, CUTLASS pipelines, EVT, pycute, or CUTLASS\n  template errors. Use cuda-skill for raw CUDA/PTX or NVIDIA architecture facts,\n  and triton-skill for Triton or Gluon implementation work.",
+          "sha256": "76a6af7df6a02e76c572f1c8e53e6e130db141b043e6c1a508b1b74cfdc75a82"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.technology-selection-and-integration",
+        "core.language-engineering"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "triton-skill",
+      "category": "ai",
+      "bundle": "agent-gpu-skills",
+      "path": "incoming/ai/agent-gpu-skills/triton-skill",
+      "repository": "https://github.com/slowlyC/agent-gpu-skills",
+      "snapshot_sha256": "08bddf307797e61ed1b6bc6e84f4de5c352f5ca345c8e516144ecad7023648fb",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/ai/agent-gpu-skills/triton-skill/SKILL.md",
+          "frontmatter": "name: triton-skill\ndescription: >-\n  Write, debug, and optimize Triton and Gluon GPU kernels from local upstream\n  tutorials, production kernels, language definitions, and compiler source. Use\n  when the task explicitly involves triton.jit, triton.language, tl.*, Gluon,\n  TensorDescriptor, Triton autotune, TritonGPU/MLIR lowering, triton_kernels, or\n  converting a CUDA kernel to Triton. Use cuda-skill for raw CUDA/PTX and NVIDIA\n  architecture facts, and cutlass-skill for CUTLASS, CuTe, or CuTeDSL work.",
+          "sha256": "f84507d3d67cef0c32bc37380c91d36d3b4720cef8eb318beb5344e54a104a23"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.technology-selection-and-integration",
+        "core.language-engineering"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "hf-mem",
+      "category": "ai",
+      "bundle": "huggingface-skills",
+      "path": "incoming/ai/huggingface-skills/hf-mem",
+      "repository": "https://github.com/huggingface/skills",
+      "snapshot_sha256": "ab478613ecc5ff682f75fc461da2731560d628efb1b7a9d18c47d471ba12d2a9",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/ai/huggingface-skills/hf-mem/SKILL.md",
+          "frontmatter": "name: hf-mem\ndescription: Hugging Face CLI to estimate the required memory to load Safetensors or GGUF model weights for inference from the Hugging Face Hub",
+          "sha256": "ee99f9d97e084aa61a80eaec4e6de2265341e71256d918d48fb87a2ac01ce99f"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.technology-selection-and-integration",
+        "core.language-engineering"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "huggingface-community-evals",
+      "category": "ai",
+      "bundle": "huggingface-skills",
+      "path": "incoming/ai/huggingface-skills/huggingface-community-evals",
+      "repository": "https://github.com/huggingface/skills",
+      "snapshot_sha256": "9d5a0127ba783dfffb4f3e911b8057f6f76738c3102ee20d7ec0d759b09889dc",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/ai/huggingface-skills/huggingface-community-evals/SKILL.md",
+          "frontmatter": "name: huggingface-community-evals\ndescription: Run evaluations for Hugging Face Hub models using inspect-ai and lighteval on local hardware. Use for backend selection, local GPU evals, and choosing between vLLM / Transformers / accelerate. Not for HF Jobs orchestration, model-card PRs, .eval_results publication, or community-evals automation.",
+          "sha256": "a97f1c703f55b72427453a76af858237e6392a447fcafa9eeb85f7ac67f0155d"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.technology-selection-and-integration",
+        "core.language-engineering"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "huggingface-llm-trainer",
+      "category": "ai",
+      "bundle": "huggingface-skills",
+      "path": "incoming/ai/huggingface-skills/huggingface-llm-trainer",
+      "repository": "https://github.com/huggingface/skills",
+      "snapshot_sha256": "058f908c87f5a9ee1b1c7556d7dbcdbd9bce1827c859cc8d5ac1e864cdb25e19",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/ai/huggingface-skills/huggingface-llm-trainer/SKILL.md",
+          "frontmatter": "name: huggingface-llm-trainer\ndescription: Train or fine-tune language and vision models using TRL (Transformer Reinforcement Learning) or Unsloth with Hugging Face Jobs infrastructure. Covers SFT, DPO, GRPO and reward modeling training methods, plus GGUF conversion for local deployment. Includes guidance on the TRL Jobs package, UV scripts with PEP 723 format, dataset preparation and validation, hardware selection, cost estimation, Trackio monitoring, Hub authentication, model selection/leaderboards and model persistence. Use for tasks involving cloud GPU training, GGUF conversion, or when users mention training on Hugging Face Jobs without local GPU setup.\nlicense: Complete terms in LICENSE.txt",
+          "sha256": "fb5c5e25103e38226e4d8ae28db84a01de42a11da4be1918fa72f833699f9d0d"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.technology-selection-and-integration",
+        "core.language-engineering"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "huggingface-local-models",
+      "category": "ai",
+      "bundle": "huggingface-skills",
+      "path": "incoming/ai/huggingface-skills/huggingface-local-models",
+      "repository": "https://github.com/huggingface/skills",
+      "snapshot_sha256": "e46e590a2fd80616ba8769761ef554c90e6a5720626a6ad170f46d75bcc88d1e",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/ai/huggingface-skills/huggingface-local-models/SKILL.md",
+          "frontmatter": "name: huggingface-local-models\ndescription: \"Use to select models to run locally with llama.cpp and GGUF on CPU, Mac Metal, CUDA, or ROCm. Covers finding GGUFs, quant selection, running servers, exact GGUF file lookup, conversion, and OpenAI-compatible local serving.\"",
+          "sha256": "814640db1d5f2f274aec09d66b3589ed5a0fdcfaf536afd508b1d757dcae1534"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.technology-selection-and-integration",
+        "core.language-engineering"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "trl-training",
+      "category": "ai",
+      "bundle": "huggingface-skills",
+      "path": "incoming/ai/huggingface-skills/trl-training",
+      "repository": "https://github.com/huggingface/skills",
+      "snapshot_sha256": "9bb9f6c11394ee487113bc06a9de75c7b428443f7007512380cadc4e60c6cdb9",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/ai/huggingface-skills/trl-training/SKILL.md",
+          "frontmatter": "name: trl-training\ndescription: Post-train LLMs with TRL (Transformers Reinforcement Learning) — SFT, DPO, GRPO, KTO, and reward-model training. Use when writing or debugging training code with the TRL Python API or the trl CLI.\nlicense: Apache-2.0\nmetadata:\n  author: huggingface\n  documentation: https://huggingface.co/docs/trl",
+          "sha256": "42c855bdc6171390abc7413cdb19bd4fd8dddfb31094d519a874427de08ddc2a"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.technology-selection-and-integration",
+        "core.language-engineering"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "codebase-design",
+      "category": "architecture",
+      "bundle": "mattpocock-skills",
+      "path": "incoming/architecture/mattpocock-skills/codebase-design",
+      "repository": "https://github.com/mattpocock/skills",
+      "snapshot_sha256": "f1c4151e53155ac06637ad45cc02d0e0bf4ce28d469c140de714cc95d04f2932",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/architecture/mattpocock-skills/codebase-design/SKILL.md",
+          "frontmatter": "name: codebase-design\ndescription: Shared vocabulary for designing deep modules. Use when the user wants to design or improve a module's interface, find deepening opportunities, decide where a seam goes, make code more testable or AI-navigable, or when another skill needs the deep-module vocabulary.",
+          "sha256": "2c20617f87ec8af6a434859f381b2f061a69b530444e74eb39e78bb016a6d1e2"
+        }
+      ],
+      "disposition": "adapt_principles",
+      "review_depth": "selected_instruction_portions; no full-package promotion",
+      "core_coverage": [
+        "core.architecture-baseline-and-design",
+        "core.architecture-and-design-patterns"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "adopted_portion": "small meaningful interfaces and localized complexity",
+      "destination": "core.architecture-and-design-patterns",
+      "excluded": "No mandated vocabulary, exactly-one-interface rule or two-adapter threshold."
+    },
+    {
+      "package": "domain-modeling",
+      "category": "architecture",
+      "bundle": "mattpocock-skills",
+      "path": "incoming/architecture/mattpocock-skills/domain-modeling",
+      "repository": "https://github.com/mattpocock/skills",
+      "snapshot_sha256": "db67f4112eaa4590703d506f8f942212535f8b33470ce90b9e2e2db278c5ae7b",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/architecture/mattpocock-skills/domain-modeling/SKILL.md",
+          "frontmatter": "name: domain-modeling\ndescription: Build and sharpen a project's domain model. Use when discussing codebase terminology, writing or editing a GLOSSARY.md, or recording or editing an ADR.",
+          "sha256": "7b925d7b1e341a2eeae33ad68a8a8c0ab889a38ddd22a7598e4c240e5a7556a3"
+        }
+      ],
+      "disposition": "adapt_principles",
+      "review_depth": "selected_instruction_portions; no full-package promotion",
+      "core_coverage": [
+        "core.architecture-baseline-and-design",
+        "core.architecture-and-design-patterns"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "adopted_portion": "preserve domain vocabulary and accepted decisions",
+      "destination": "core.architecture-and-design-patterns",
+      "excluded": "No full domain model for every task."
+    },
+    {
+      "package": "improve-codebase-architecture",
+      "category": "architecture",
+      "bundle": "mattpocock-skills",
+      "path": "incoming/architecture/mattpocock-skills/improve-codebase-architecture",
+      "repository": "https://github.com/mattpocock/skills",
+      "snapshot_sha256": "0f81f2d714a6aa8ec1323c83063ddbbe556b98bcd240f2396241927b48c9ef81",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/architecture/mattpocock-skills/improve-codebase-architecture/SKILL.md",
+          "frontmatter": "name: improve-codebase-architecture\ndescription: Scan a codebase for deepening opportunities, present them as a visual HTML report, then grill through whichever one you pick.\ndisable-model-invocation: true",
+          "sha256": "552240a5ab5cec6b67c15dd1ad6e9f6962b1bca6ce870059a8c2713760c20392"
+        }
+      ],
+      "disposition": "adapt_principles",
+      "review_depth": "selected_instruction_portions; no full-package promotion",
+      "core_coverage": [
+        "core.architecture-baseline-and-design",
+        "core.architecture-and-design-patterns"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "adopted_portion": "evidenced structural friction before refactoring",
+      "destination": "core.brownfield-impact-analysis",
+      "excluded": "No blanket architecture scan, mandatory subagent, CDN report or browser launch."
+    },
+    {
+      "package": "dotnet-api",
+      "category": "backend",
+      "bundle": "dotnet-artisan",
+      "path": "incoming/backend/dotnet-artisan/dotnet-api",
+      "repository": "https://github.com/novotnyllc/dotnet-artisan",
+      "snapshot_sha256": "b1f7f0c330aa74a5f604b40bf31a275d269ab48eb1fbe52874e72b8a19a6079e",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/backend/dotnet-artisan/dotnet-api/SKILL.md",
+          "frontmatter": "name: dotnet-api\ndescription: Builds ASP.NET Core APIs, EF Core data access, gRPC, SignalR, and backend services with middleware, security (OAuth, JWT, OWASP), resilience, messaging, OpenAPI, .NET Aspire, Semantic Kernel, HybridCache, YARP reverse proxy, output caching, Office documents (Excel, Word, PowerPoint), PDF, and architecture patterns. Spans 32 topic areas. Do not use for UI rendering patterns or CI/CD pipeline authoring.\nlicense: MIT\nuser-invocable: false",
+          "sha256": "e372706f4be06d0005285f7bb5f5705edd51e07eec30b16389111a2cb9f877e1"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.technology-selection-and-integration",
+        "core.nodejs-engineering",
+        "core.grpc-engineering",
+        "core.implementation-quality"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "supabase-postgres-best-practices",
+      "category": "backend",
+      "bundle": "supabase-agent-skills",
+      "path": "incoming/backend/supabase-agent-skills/supabase-postgres-best-practices",
+      "repository": "https://github.com/supabase/agent-skills",
+      "snapshot_sha256": "13899f801dfa4d326ad70ef82b0221386c8462cc3539b087d5acd90de333bf96",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/backend/supabase-agent-skills/supabase-postgres-best-practices/SKILL.md",
+          "frontmatter": "name: supabase-postgres-best-practices\ndescription: \"Postgres best practices maintained by Supabase, for Postgres running anywhere. Load this skill BEFORE writing or changing anything that lives in a Postgres database: creating or altering tables and columns (including choosing column types), schema design, migrations and declarative schema files, RLS policies and the tests that verify them, indexes, triggers, database functions, queues and scheduled jobs (pg_cron, pgmq), vector/semantic search (pgvector), and restoring dumps (pg_restore) or importing data. Also load it when diagnosing slow queries, high CPU, timeouts, EXPLAIN plans, connection exhaustion, locking, bloat, or rows visible to the wrong user or tenant. This is not just a performance guide — schema, migration, security, and SQL authoring tasks need these rules too, even for a one-column change or a single query.\"\nlicense: MIT\nmetadata:\n  author: supabase\n  version: \"1.1.1\"\n  organization: Supabase\n  date: January 2026\n  abstract: Comprehensive Postgres performance optimization guide for developers using Supabase and Postgres. Contains performance rules across 8 categories, prioritized by impact from critical (query performance, connection management) to incremental (advanced features). Each rule includes detailed explanations, incorrect vs. correct SQL examples, query plan analysis, and specific performance metrics to guide automated optimization and code generation.",
+          "sha256": "ad65e776f45e761bafc609d3f506c77c1032225aa65e0c4c02f241b8071e5855"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.technology-selection-and-integration",
+        "core.nodejs-engineering",
+        "core.grpc-engineering",
+        "core.implementation-quality"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "api-design-principles",
+      "category": "backend",
+      "bundle": "wshobson-agents",
+      "path": "incoming/backend/wshobson-agents/api-design-principles",
+      "repository": "https://github.com/wshobson/agents",
+      "snapshot_sha256": "ee2287ef74eb76940d795460ab4e886a8d67909db9e6469efc14cb2d58592cb8",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/backend/wshobson-agents/api-design-principles/SKILL.md",
+          "frontmatter": "name: api-design-principles\ndescription: Master REST and GraphQL API design principles to build intuitive, scalable, and maintainable APIs that delight developers. Use when designing new APIs, reviewing API specifications, or establishing API design standards.",
+          "sha256": "1f6166c23c0a0f32d703c19d84b3c30c2873daefb9e8732339a009934fa17013"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.technology-selection-and-integration",
+        "core.nodejs-engineering",
+        "core.grpc-engineering",
+        "core.implementation-quality"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "fastapi-templates",
+      "category": "backend",
+      "bundle": "wshobson-agents",
+      "path": "incoming/backend/wshobson-agents/fastapi-templates",
+      "repository": "https://github.com/wshobson/agents",
+      "snapshot_sha256": "e49c0aa24502ae4c8132d7623ba6cf55c042ad3aa460ea53db8c739cc48cd1b7",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/backend/wshobson-agents/fastapi-templates/SKILL.md",
+          "frontmatter": "name: fastapi-templates\ndescription: Create production-ready FastAPI projects with async patterns, dependency injection, and comprehensive error handling. Use when building new FastAPI applications or setting up backend API projects.",
+          "sha256": "dba8e1287ae03591198ea0ea638bb9862ec3c7b5cbdeb1163368f3ebc9487cb6"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.technology-selection-and-integration",
+        "core.nodejs-engineering",
+        "core.grpc-engineering",
+        "core.implementation-quality"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "nodejs-backend-patterns",
+      "category": "backend",
+      "bundle": "wshobson-agents",
+      "path": "incoming/backend/wshobson-agents/nodejs-backend-patterns",
+      "repository": "https://github.com/wshobson/agents",
+      "snapshot_sha256": "5d04c82f81b441888b02585980ee87a7ddfbadc412a1dfa008c38635d92a5b4d",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/backend/wshobson-agents/nodejs-backend-patterns/SKILL.md",
+          "frontmatter": "name: nodejs-backend-patterns\ndescription: Build production-ready Node.js backend services with Express/Fastify, implementing middleware patterns, error handling, authentication, database integration, and API design best practices. Use when creating Node.js servers, REST APIs, GraphQL backends, or microservices architectures.",
+          "sha256": "d52e1150accdc27e916f0962c9ba0872fcbe8a7d849d905dcc795c0f9d05aeae"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.technology-selection-and-integration",
+        "core.nodejs-engineering",
+        "core.grpc-engineering",
+        "core.implementation-quality"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "context-compression",
+      "category": "context",
+      "bundle": "agent-skills-for-context-engineering",
+      "path": "incoming/context/agent-skills-for-context-engineering/context-compression",
+      "repository": "https://github.com/muratcankoylan/Agent-Skills-for-Context-Engineering",
+      "snapshot_sha256": "cee5b633ff5975899038f1d5c2dcd4e521fe0edb78a843f3ed5c34f48d6f3893",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/context/agent-skills-for-context-engineering/context-compression/SKILL.md",
+          "frontmatter": "name: context-compression\ndescription: \"This skill should be used when long-running agent sessions need context compression, structured summarization, compaction, token-per-task optimization, or durable handoff summaries that preserve decisions, files, risks, and next actions.\"",
+          "sha256": "ab4fd1e1046db339d83ead5089d4cb9d9c487232945d4ff6be90e08a03f6cfea"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.workflow-composition"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "cavecrew",
+      "category": "context",
+      "bundle": "caveman",
+      "path": "incoming/context/caveman/cavecrew",
+      "repository": "https://github.com/juliusbrussee/caveman",
+      "snapshot_sha256": "034e59b62d70e87f76407da947141a44f5b5207ae7fdf83f2bff9f44bc68e1e5",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/context/caveman/cavecrew/SKILL.md",
+          "frontmatter": "name: cavecrew\ndescription: >\n  When to delegate to `cavecrew-investigator` (locate code), `cavecrew-builder`\n  (1-2 file edit) or `cavecrew-reviewer` (diff review) instead of working inline\n  or using `Explore`. Their output is compressed, so main context lasts longer.",
+          "sha256": "534c0a70d4c7728815214a11e80e66cecbd2104f905f96414e6e32504381c002"
+        }
+      ],
+      "disposition": "adapt_principles",
+      "review_depth": "selected_instruction_portions; no full-package promotion",
+      "core_coverage": [
+        "core.workflow-composition"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "adopted_portion": "bounded role outputs with source locations",
+      "destination": "core.workflow-composition",
+      "excluded": "No cryptic compression of reasoning, risk, uncertainty or authority; presets not installed."
+    },
+    {
+      "package": "caveman",
+      "category": "context",
+      "bundle": "caveman",
+      "path": "incoming/context/caveman/caveman",
+      "repository": "https://github.com/juliusbrussee/caveman",
+      "snapshot_sha256": "ee72809114c36b0afad556cd00172459c76fa26b42364e111b1974f39fc70ac2",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/context/caveman/caveman/SKILL.md",
+          "frontmatter": "name: caveman\ndescription: >\n  Terse caveman voice: answer first, fluff gone, every technical fact kept.\n  Use for /caveman, \"caveman mode\", \"talk like caveman\", \"be brief\", \"less\n  tokens\". Stays on until \"stop caveman\" or \"normal mode\".",
+          "sha256": "415d43518f2b1a9498c15a445d4657117b129ee5e81b19454ce348439cc6672b"
+        }
+      ],
+      "disposition": "adapt_principles",
+      "review_depth": "selected_instruction_portions; no full-package promotion",
+      "core_coverage": [
+        "core.workflow-composition"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "adopted_portion": "concise routine reporting",
+      "destination": "core.workflow-composition",
+      "excluded": "No global language compression or omitted design rationale."
+    },
+    {
+      "package": "caveman-compress",
+      "category": "context",
+      "bundle": "caveman",
+      "path": "incoming/context/caveman/caveman-compress",
+      "repository": "https://github.com/juliusbrussee/caveman",
+      "snapshot_sha256": "1c305bde8330716283aab299f55b43ffcbbcac1a825004f437b3a274d6a98fa5",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/context/caveman/caveman-compress/SKILL.md",
+          "frontmatter": "name: caveman-compress\ndescription: >\n  Compress a memory file such as CLAUDE.md or a todo list into caveman format\n  to save input tokens, keeping a readable backup. Sends the file's text to the\n  configured model provider. Trigger: /caveman-compress.",
+          "sha256": "dd5388f085316f9f6a8b34ad906441023033596f8ac1d63b81fb20e8d3f50283"
+        }
+      ],
+      "disposition": "adapt_principles",
+      "review_depth": "selected_instruction_portions; no full-package promotion",
+      "core_coverage": [
+        "core.workflow-composition"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "adopted_portion": "compact repeated context while preserving evidence",
+      "destination": "core.workflow-composition",
+      "excluded": "No destructive context replacement or loss of accepted constraints."
+    },
+    {
+      "package": "context-mode",
+      "category": "context",
+      "bundle": "context-mode",
+      "path": "incoming/context/context-mode/context-mode",
+      "repository": "https://github.com/mksglu/context-mode",
+      "snapshot_sha256": "d48715ca8c87a21cfe4500ccff076766f48627fca9e407ee668b91f695321287",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/context/context-mode/context-mode/SKILL.md",
+          "frontmatter": "name: context-mode\ndescription: |\n  Use context-mode tools (ctx_execute, ctx_execute_file) instead of Bash/cat when processing\n  large outputs. Triggers: \"analyze logs\", \"summarize output\", \"process data\",\n  \"parse JSON\", \"filter results\", \"extract errors\", \"check build output\",\n  \"analyze dependencies\", \"process API response\", \"large file analysis\",\n  \"page snapshot\", \"browser snapshot\", \"DOM structure\", \"inspect page\",\n  \"accessibility tree\", \"Playwright snapshot\",\n  \"run tests\", \"test output\", \"coverage report\", \"git log\", \"recent commits\",\n  \"diff between branches\", \"list containers\", \"pod status\", \"disk usage\",\n  \"fetch docs\", \"API reference\", \"index documentation\",\n  \"call API\", \"check response\", \"query results\",\n  \"find TODOs\", \"count lines\", \"codebase statistics\", \"security audit\",\n  \"outdated packages\", \"dependency tree\", \"cloud resources\", \"CI/CD output\".\n  Also triggers on ANY MCP tool output that may exceed 20 lines.\n  Subagent routing is handled automatically via PreToolUse hook.",
+          "sha256": "ce26cb01de7a116eab256f916620935f029e850771f3fb6cb7d40a3ce8d1f7ff"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.workflow-composition"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "deployment-engineer",
+      "category": "devops",
+      "bundle": "antigravity-skills",
+      "path": "incoming/devops/antigravity-skills/deployment-engineer",
+      "repository": "https://github.com/rmyndharis/antigravity-skills",
+      "snapshot_sha256": "77cefb4c1fd00ecd9cd293601e4c3ee90b222a777201d50bc2e8d83203f96b2c",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/devops/antigravity-skills/deployment-engineer/SKILL.md",
+          "frontmatter": "name: deployment-engineer\ndescription: Expert deployment engineer specializing in modern CI/CD pipelines,\n  GitOps workflows, and advanced deployment automation. Masters GitHub Actions,\n  ArgoCD/Flux, progressive delivery, container security, and platform\n  engineering. Handles zero-downtime deployments, security scanning, and\n  developer experience optimization. Use PROACTIVELY for CI/CD design, GitOps\n  implementation, or deployment automation.\nmetadata:\n  model: haiku",
+          "sha256": "38c7581b7fa112ad71528a776b738465edfa14b49592adef82c24fe794a29bfd"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.docker-engineering",
+        "core.kubernetes-engineering",
+        "core.configuration-and-environment-management"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "devops-troubleshooter",
+      "category": "devops",
+      "bundle": "antigravity-skills",
+      "path": "incoming/devops/antigravity-skills/devops-troubleshooter",
+      "repository": "https://github.com/rmyndharis/antigravity-skills",
+      "snapshot_sha256": "922ca9ecb60a482c742a967b672c4f8287cebaec9bd88c5c1abcdbaf98e5bf41",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/devops/antigravity-skills/devops-troubleshooter/SKILL.md",
+          "frontmatter": "name: devops-troubleshooter\ndescription: Expert DevOps troubleshooter specializing in rapid incident\n  response, advanced debugging, and modern observability. Masters log analysis,\n  distributed tracing, Kubernetes debugging, performance optimization, and root\n  cause analysis. Handles production outages, system reliability, and preventive\n  monitoring. Use PROACTIVELY for debugging, incident response, or system\n  troubleshooting.\nmetadata:\n  model: sonnet",
+          "sha256": "dc6082adc3a5f7f545d24cdffe92de293d20d4927fdcbbd252841ef42d2ad442"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.docker-engineering",
+        "core.kubernetes-engineering",
+        "core.configuration-and-environment-management"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "github-actions-templates",
+      "category": "devops",
+      "bundle": "antigravity-skills",
+      "path": "incoming/devops/antigravity-skills/github-actions-templates",
+      "repository": "https://github.com/rmyndharis/antigravity-skills",
+      "snapshot_sha256": "4d4580645cafb724ceef61e3525ab760e7644a8d164cc673db92cc71f41e0ecd",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/devops/antigravity-skills/github-actions-templates/SKILL.md",
+          "frontmatter": "name: github-actions-templates\ndescription: Create production-ready GitHub Actions workflows for automated testing, building, and deploying applications. Use when setting up CI/CD with GitHub Actions, automating development workflows, or creating reusable workflow templates.",
+          "sha256": "350f2b681378503772ff2f554dce1246c25910c9af0ab81fb9d63817a1144746"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.docker-engineering",
+        "core.kubernetes-engineering",
+        "core.configuration-and-environment-management"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "doc-coauthoring",
+      "category": "documentation",
+      "bundle": "anthropic-skills",
+      "path": "incoming/documentation/anthropic-skills/doc-coauthoring",
+      "repository": "https://github.com/anthropics/skills",
+      "snapshot_sha256": "6a64a6c3327e3fc22dfb4dc6bbc1f6508ed06324aa30a2be9e4ff2c9af329f47",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/documentation/anthropic-skills/doc-coauthoring/SKILL.md",
+          "frontmatter": "name: doc-coauthoring\ndescription: Guide users through a structured workflow for co-authoring documentation. Use when user wants to write documentation, proposals, technical specs, decision docs, or similar structured content. This workflow helps users efficiently transfer context, refine content through iteration, and verify the doc works for readers. Trigger when user mentions writing docs, creating proposals, drafting specs, or similar documentation tasks.",
+          "sha256": "2e47d78846faeea4a56e9809c52700087a15a2155a3f293a3efbaded81398ef4"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.document-purpose",
+        "core.harness-overview-html"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "docx",
+      "category": "documentation",
+      "bundle": "anthropic-skills",
+      "path": "incoming/documentation/anthropic-skills/docx",
+      "repository": "https://github.com/anthropics/skills",
+      "snapshot_sha256": "3ff700bbca65c9e22c3bcabb76c8d1fd9b0686618ef521d101b84bd915989c7b",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/documentation/anthropic-skills/docx/SKILL.md",
+          "frontmatter": "name: docx\ndescription: \"Use this skill whenever the user wants to create, read, edit, or manipulate Word documents (.docx files) or Word templates (.dotx files). Triggers include: any mention of 'Word doc', 'word document', '.docx', '.dotx', or requests to produce professional documents with formatting like tables of contents, headings, page numbers, or letterheads. Also use when extracting or reorganizing content from .docx or .dotx files, inserting or replacing images in documents, performing find-and-replace in Word files, working with tracked changes or comments, or converting content into a polished Word document. If the user asks for a 'report', 'memo', 'letter', 'template', or similar deliverable as a Word or .docx file, use this skill. Do NOT use for PDFs, spreadsheets, Google Docs, or general coding tasks unrelated to document generation.\"\nlicense: Proprietary. LICENSE.txt has complete terms",
+          "sha256": "8017469ea95fb7d28225c62daf8e2f3492a7b516fc64c18c28977cbf8980b7fe"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.document-purpose",
+        "core.harness-overview-html"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "pdf",
+      "category": "documentation",
+      "bundle": "anthropic-skills",
+      "path": "incoming/documentation/anthropic-skills/pdf",
+      "repository": "https://github.com/anthropics/skills",
+      "snapshot_sha256": "90697150891c7a0e2e37105af125151c6414e5cd209e79b3b492897b18e8e2c6",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/documentation/anthropic-skills/pdf/SKILL.md",
+          "frontmatter": "name: pdf\ndescription: Use this skill whenever the user wants to do anything with PDF files. This includes reading or extracting text/tables from PDFs, combining or merging multiple PDFs into one, splitting PDFs apart, rotating pages, adding watermarks, creating new PDFs, filling PDF forms, encrypting/decrypting PDFs, extracting images, and OCR on scanned PDFs to make them searchable. If the user mentions a .pdf file or asks to produce one, use this skill.\nlicense: Proprietary. LICENSE.txt has complete terms",
+          "sha256": "9f78b8359fbd4943ad260a7a1e436e5a96503406d6c34e99f69223d647d85b9c"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.document-purpose",
+        "core.harness-overview-html"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "pptx",
+      "category": "documentation",
+      "bundle": "anthropic-skills",
+      "path": "incoming/documentation/anthropic-skills/pptx",
+      "repository": "https://github.com/anthropics/skills",
+      "snapshot_sha256": "718fb48f17930d6523ca4a7bfd814e559d913f6ea2af8760986106cacb55febc",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/documentation/anthropic-skills/pptx/SKILL.md",
+          "frontmatter": "name: pptx\ndescription: \"Use this skill any time a .pptx or .potx file is involved in any way — as input, output, or both. This includes: creating slide decks, pitch decks, or presentations; reading, parsing, or extracting text from any .pptx or .potx file (even if the extracted content will be used elsewhere, like in an email or summary); editing, modifying, or updating existing presentations; combining or splitting slide files; working with templates (.potx), layouts, speaker notes, or comments. Trigger whenever the user mentions \\\"deck,\\\" \\\"slides,\\\" \\\"presentation,\\\" or references a .pptx or .potx filename, regardless of what they plan to do with the content afterward. If a .pptx or .potx file needs to be opened, created, or touched, use this skill.\"\nlicense: Proprietary. LICENSE.txt has complete terms",
+          "sha256": "a7ff03e2c85b636f55232a6b1555f5dd90216b7a1a359ab289d8364e6acbc6a0"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.document-purpose",
+        "core.harness-overview-html"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "docs-architect",
+      "category": "documentation",
+      "bundle": "antigravity-skills",
+      "path": "incoming/documentation/antigravity-skills/docs-architect",
+      "repository": "https://github.com/rmyndharis/antigravity-skills",
+      "snapshot_sha256": "e839dfd5456c99c96991bede252bc6cb704987629eef727f4c95d60729e73ff8",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/documentation/antigravity-skills/docs-architect/SKILL.md",
+          "frontmatter": "name: docs-architect\ndescription: Creates comprehensive technical documentation from existing\n  codebases. Analyzes architecture, design patterns, and implementation details\n  to produce long-form technical manuals and ebooks. Use PROACTIVELY for system\n  documentation, architecture guides, or technical deep-dives.\nmetadata:\n  model: sonnet",
+          "sha256": "2ae7b79c85722a3bafbc6be68b121ecfb08d5880386f5a552aafe98acd8d6efc"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.document-purpose",
+        "core.harness-overview-html"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "mermaid-expert",
+      "category": "documentation",
+      "bundle": "antigravity-skills",
+      "path": "incoming/documentation/antigravity-skills/mermaid-expert",
+      "repository": "https://github.com/rmyndharis/antigravity-skills",
+      "snapshot_sha256": "302e8256d7b81040fced76707bf553ae58b6ddb7c47da5a0554080e657b78315",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/documentation/antigravity-skills/mermaid-expert/SKILL.md",
+          "frontmatter": "name: mermaid-expert\ndescription: Create Mermaid diagrams for flowcharts, sequences, ERDs, and\n  architectures. Masters syntax for all diagram types and styling. Use\n  PROACTIVELY for visual documentation, system diagrams, or process flows.\nmetadata:\n  model: haiku",
+          "sha256": "ddd5831b07349abc0d2599e92cbc3feed82b83b836cf8e4b3a3f0271923f8bf2"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.document-purpose",
+        "core.harness-overview-html"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "documentation",
+      "category": "documentation",
+      "bundle": "mcollina-skills",
+      "path": "incoming/documentation/mcollina-skills/documentation",
+      "repository": "https://github.com/mcollina/skills",
+      "snapshot_sha256": "81f21c8ed4d6abcac63167a99140799be12fcc0f236651c49061a89af0e514bb",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/documentation/mcollina-skills/documentation/SKILL.md",
+          "frontmatter": "name: documentation\ndescription: \"Creates, structures, and reviews technical documentation following the Diátaxis framework (tutorials, how-to guides, reference, and explanation pages). Use when a user needs to write or reorganize docs, structure a tutorial vs. a how-to guide, build reference docs or API documentation, create explanation pages, choose between Diátaxis documentation types, or improve existing documentation structure. Trigger terms include: documentation structure, Diátaxis, tutorials vs how-to guides, organize docs, user guide, reference docs, technical writing.\"\nmetadata:\n  tags: documentation, technical-writing, tutorials, guides, reference, diataxis",
+          "sha256": "5c5a5a169459a5be92966c41e6128cc537990d647a495a7755ba72b10bc833ca"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.document-purpose",
+        "core.harness-overview-html"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "visual-explainer",
+      "category": "documentation",
+      "bundle": "visual-explainer",
+      "path": "incoming/documentation/visual-explainer/visual-explainer",
+      "repository": "https://github.com/nicobailon/visual-explainer",
+      "snapshot_sha256": "7325b8e9ee634182103b90b00478e37862ad47ac5205c6bbb48f6714f8df95da",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/documentation/visual-explainer/visual-explainer/SKILL.md",
+          "frontmatter": "name: visual-explainer\ndescription: Generate self-contained HTML visual explanations for systems, code changes, plans, data, and technical concepts. Use for diagrams, architecture overviews, diff or plan reviews, project recaps, comparison tables, slide decks, animated explainers, narrated MP4 videos, and other visual explanations.\nlicense: MIT\ncompatibility: Requires a browser to view generated HTML files. Optional surf-cli for AI image generation.\nmetadata:\n  author: nicobailon\n  version: \"0.14.0\"",
+          "sha256": "6cd3ef53c8205e87298084e38326bb6696eddb04451d9566e56777b84f72fd12"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.document-purpose",
+        "core.harness-overview-html"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "openapi-spec-generation",
+      "category": "documentation",
+      "bundle": "wshobson-agents",
+      "path": "incoming/documentation/wshobson-agents/openapi-spec-generation",
+      "repository": "https://github.com/wshobson/agents",
+      "snapshot_sha256": "64ff7fe7a1708d410f4e41a61ae2ac922b721e713b7b227c8f69ad9e0db386cb",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/documentation/wshobson-agents/openapi-spec-generation/SKILL.md",
+          "frontmatter": "name: openapi-spec-generation\ndescription: Generate and maintain OpenAPI 3.1 specifications from code, design-first specs, and validation patterns. Use when creating API documentation, generating SDKs, or ensuring API contract compliance.",
+          "sha256": "8071736973f8a99cbe8644e21f638493ac062c77d650d8fabc4a469285485d7e"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.document-purpose",
+        "core.harness-overview-html"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "react-best-practices",
+      "category": "frontend",
+      "bundle": "0xbigboss-claude-code",
+      "path": "incoming/frontend/0xbigboss-claude-code/react-best-practices",
+      "repository": "https://github.com/0xbigboss/claude-code",
+      "snapshot_sha256": "c1ec7f3dc372d49ad8de22b88eca377a667fee33fa18e357905f4de3f768961b",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/frontend/0xbigboss-claude-code/react-best-practices/SKILL.md",
+          "frontmatter": "name: react-best-practices\ndescription: Use when reading or writing React components (.tsx, .jsx files with React imports).",
+          "sha256": "a5ad1a127d0904857c226fcedd11807060c43524a18a1875a315d0475a2d2578"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.react-engineering",
+        "core.language-engineering"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "frontend-design",
+      "category": "frontend",
+      "bundle": "anthropic-skills",
+      "path": "incoming/frontend/anthropic-skills/frontend-design",
+      "repository": "https://github.com/anthropics/skills",
+      "snapshot_sha256": "98e239f3f6a8e0a6391affe6ab96f1e7ed56072132bfd152ebcd761e79c45dc4",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/frontend/anthropic-skills/frontend-design/SKILL.md",
+          "frontmatter": "name: frontend-design\ndescription: Guidance for distinctive, intentional visual design when building new UI or reshaping an existing one. Helps with aesthetic direction, typography, and making choices that don't read as templated defaults.\nlicense: Complete terms in LICENSE.txt",
+          "sha256": "d91970639e9f5c37682ac7ab60094d35f1c7c1f38d731bd56396563aee10c1d3"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.react-engineering",
+        "core.language-engineering"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "web-artifacts-builder",
+      "category": "frontend",
+      "bundle": "anthropic-skills",
+      "path": "incoming/frontend/anthropic-skills/web-artifacts-builder",
+      "repository": "https://github.com/anthropics/skills",
+      "snapshot_sha256": "07bcc6006014650bfcb78c085a4b7eabc77135614863061727c2005b05334252",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/frontend/anthropic-skills/web-artifacts-builder/SKILL.md",
+          "frontmatter": "name: web-artifacts-builder\ndescription: Suite of tools for creating elaborate, multi-component claude.ai HTML artifacts using modern frontend web technologies (React, Tailwind CSS, shadcn/ui). Use for complex artifacts requiring state management, routing, or shadcn/ui components - not for simple single-file HTML/JSX artifacts.\nlicense: Complete terms in LICENSE.txt",
+          "sha256": "81c5002c6643b0de7b8710b00e7a9038daa6fb9b68d59870ee6adb12da8d10f8"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.react-engineering",
+        "core.language-engineering"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "impeccable",
+      "category": "frontend",
+      "bundle": "impeccable",
+      "path": "incoming/frontend/impeccable/impeccable",
+      "repository": "https://github.com/pbakaus/impeccable",
+      "snapshot_sha256": "b6eb38f66e6f0d9ea363ad2ef8e12fcd59bfe7a961f397ee8569c2d904e39924",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/frontend/impeccable/impeccable/SKILL.md",
+          "frontmatter": "name: impeccable\ndescription: \"Use when the user wants to design, redesign, shape, critique, audit, polish, simplify, harden, animate, or otherwise improve a frontend interface: websites, landing pages, dashboards, product UI, components, forms, settings, onboarding, empty states, and native iOS or Android screens. Handles UX review, hierarchy, layout, typography, color, motion, UX copy, accessibility, responsive behavior, edge cases, and capturing or documenting design systems (DESIGN.md, tokens). Also for making bland UI bolder, loud UI quieter, or ambitious visual effects. Not for backend-only or non-UI tasks.\"\nmetadata:\n  version: 4.7.1",
+          "sha256": "c26d6963fe2278f570930ea083ec89609ba094ee93b1ae825719ff5d29b9ac3c"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.react-engineering",
+        "core.language-engineering"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "vercel-composition-patterns",
+      "category": "frontend",
+      "bundle": "vercel-agent-skills",
+      "path": "incoming/frontend/vercel-agent-skills/vercel-composition-patterns",
+      "repository": "https://github.com/vercel-labs/agent-skills",
+      "snapshot_sha256": "a28589f27b4eaab54614ef72e9430eca9cf125612f53f4ee5960d6a9a8b7e331",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/frontend/vercel-agent-skills/vercel-composition-patterns/SKILL.md",
+          "frontmatter": "name: vercel-composition-patterns\ndescription:\n  React composition patterns that scale. Use when refactoring components with\n  boolean prop proliferation, building flexible component libraries, or\n  designing reusable APIs. Triggers on tasks involving compound components,\n  render props, context providers, or component architecture. Includes React 19\n  API changes.\nlicense: MIT\nmetadata:\n  author: vercel\n  version: '1.0.0'",
+          "sha256": "e38e0eaa609316b10423a9a138ed95e35099accd3f735585295c8a8f165c28a3"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.react-engineering",
+        "core.language-engineering"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "web-design-guidelines",
+      "category": "frontend",
+      "bundle": "vercel-agent-skills",
+      "path": "incoming/frontend/vercel-agent-skills/web-design-guidelines",
+      "repository": "https://github.com/vercel-labs/agent-skills",
+      "snapshot_sha256": "e47e662d2b4f14eae5a13d89fba84e05da89bce90aa43b1203c188f763f90001",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/frontend/vercel-agent-skills/web-design-guidelines/SKILL.md",
+          "frontmatter": "name: web-design-guidelines\ndescription: Review UI code for Web Interface Guidelines compliance. Use when asked to \"review my UI\", \"check accessibility\", \"audit design\", \"review UX\", or \"check my site against best practices\".\nmetadata:\n  author: vercel\n  version: \"1.0.0\"\n  argument-hint: <file-or-pattern>",
+          "sha256": "f4647ca866a3accf763777f83e7682954f0187cd6bea7eea0399796652414e8f"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.react-engineering",
+        "core.language-engineering"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "mcp-builder",
+      "category": "integrations",
+      "bundle": "anthropic-skills",
+      "path": "incoming/integrations/anthropic-skills/mcp-builder",
+      "repository": "https://github.com/anthropics/skills",
+      "snapshot_sha256": "bcba4a055b0df914b1f8d45cb4fa59f2684b10fc33a443f73198cec5da78b15b",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/integrations/anthropic-skills/mcp-builder/SKILL.md",
+          "frontmatter": "name: mcp-builder\ndescription: Guide for creating high-quality MCP (Model Context Protocol) servers that enable LLMs to interact with external services through well-designed tools. Use when building MCP servers to integrate external APIs or services, whether in Python (FastMCP) or Node/TypeScript (MCP SDK).\nlicense: Complete terms in LICENSE.txt",
+          "sha256": "0f4592dcb53cf2b5d6b7febee6b4152018b565551a1c29e3c612f57b218ab295"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.technology-selection-and-integration"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "go-best-practices",
+      "category": "languages",
+      "bundle": "0xbigboss-claude-code",
+      "path": "incoming/languages/0xbigboss-claude-code/go-best-practices",
+      "repository": "https://github.com/0xbigboss/claude-code",
+      "snapshot_sha256": "6fa2764eed07851d4224d5dedf3fe7d4a29183708d966bd3e9608cfab50c6e2a",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/languages/0xbigboss-claude-code/go-best-practices/SKILL.md",
+          "frontmatter": "name: go-best-practices\ndescription: Use when reading or writing Go files (.go, go.mod).",
+          "sha256": "884ef41b4cdd0172c39e48b7cf8d284646072d4ae9654c6a045b06d3c9ed91c1"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.language-engineering"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "python-best-practices",
+      "category": "languages",
+      "bundle": "0xbigboss-claude-code",
+      "path": "incoming/languages/0xbigboss-claude-code/python-best-practices",
+      "repository": "https://github.com/0xbigboss/claude-code",
+      "snapshot_sha256": "7f9cd2e70dcef93d44f068ca00ca3977b113c7a71f0e7af27c324914a130eab0",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/languages/0xbigboss-claude-code/python-best-practices/SKILL.md",
+          "frontmatter": "name: python-best-practices\ndescription: Use when reading or writing Python files (.py, pyproject.toml, requirements.txt).",
+          "sha256": "be327c181e4ad7befed3670b33c94f5a5dcf80f8b873f1a6ad24fdc80b36b6ac"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.language-engineering"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "c-pro",
+      "category": "languages",
+      "bundle": "antigravity-skills",
+      "path": "incoming/languages/antigravity-skills/c-pro",
+      "repository": "https://github.com/rmyndharis/antigravity-skills",
+      "snapshot_sha256": "8cef492f384a65638d2c7a956cb927c3718bd4fc8ce02b4324f485ade8324e77",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/languages/antigravity-skills/c-pro/SKILL.md",
+          "frontmatter": "name: c-pro\ndescription: Write efficient C code with proper memory management, pointer\n  arithmetic, and system calls. Handles embedded systems, kernel modules, and\n  performance-critical code. Use PROACTIVELY for C optimization, memory issues,\n  or system programming.\nmetadata:\n  model: opus",
+          "sha256": "d4733fabc0f1546f905ceba384fa4baddba45e0f86b84b7d32c447c582281368"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.language-engineering"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "cpp-pro",
+      "category": "languages",
+      "bundle": "antigravity-skills",
+      "path": "incoming/languages/antigravity-skills/cpp-pro",
+      "repository": "https://github.com/rmyndharis/antigravity-skills",
+      "snapshot_sha256": "781198c2240a1cb578cf1c6493d56e468c054c06e99439bf6f1d60483c928ddc",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/languages/antigravity-skills/cpp-pro/SKILL.md",
+          "frontmatter": "name: cpp-pro\ndescription: Write idiomatic C++ code with modern features, RAII, smart\n  pointers, and STL algorithms. Handles templates, move semantics, and\n  performance optimization. Use PROACTIVELY for C++ refactoring, memory safety,\n  or complex C++ patterns.\nmetadata:\n  model: opus",
+          "sha256": "2460942b743cc44a2e622fdf81881a9e2b64a2d12636544ecba489319257bf5c"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.language-engineering"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "java-pro",
+      "category": "languages",
+      "bundle": "antigravity-skills",
+      "path": "incoming/languages/antigravity-skills/java-pro",
+      "repository": "https://github.com/rmyndharis/antigravity-skills",
+      "snapshot_sha256": "db5a1a8d7a9ab81a7e235ad7dd53ca889d9217f463368484e4214c50297328b4",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/languages/antigravity-skills/java-pro/SKILL.md",
+          "frontmatter": "name: java-pro\ndescription: Master Java 21+ with modern features like virtual threads, pattern\n  matching, and Spring Boot 3.x. Expert in the latest Java ecosystem including\n  GraalVM, Project Loom, and cloud-native patterns. Use PROACTIVELY for Java\n  development, microservices architecture, or performance optimization.\nmetadata:\n  model: opus",
+          "sha256": "51997a38eb3f12194558879daac2e654e629faf5fa42987571d743f43382b092"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.language-engineering"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "javascript-pro",
+      "category": "languages",
+      "bundle": "antigravity-skills",
+      "path": "incoming/languages/antigravity-skills/javascript-pro",
+      "repository": "https://github.com/rmyndharis/antigravity-skills",
+      "snapshot_sha256": "fbc1869fb6e80ec717f3a8aa940a0146a538dfe40337d8a210c6eec214634c26",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/languages/antigravity-skills/javascript-pro/SKILL.md",
+          "frontmatter": "name: javascript-pro\ndescription: Master modern JavaScript with ES6+, async patterns, and Node.js\n  APIs. Handles promises, event loops, and browser/Node compatibility. Use\n  PROACTIVELY for JavaScript optimization, async debugging, or complex JS\n  patterns.\nmetadata:\n  model: inherit",
+          "sha256": "c745414161fea0be3837e714d575e69c220abc33aa0d2ad30e24f3edd66209a2"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.language-engineering"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "dotnet-csharp",
+      "category": "languages",
+      "bundle": "dotnet-artisan",
+      "path": "incoming/languages/dotnet-artisan/dotnet-csharp",
+      "repository": "https://github.com/novotnyllc/dotnet-artisan",
+      "snapshot_sha256": "832457d09f9470b49ab1611746fa3e0003de0333a02d959f24fbd875bc915ef9",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/languages/dotnet-artisan/dotnet-csharp/SKILL.md",
+          "frontmatter": "name: dotnet-csharp\ndescription: Baseline C# skill loaded for every .NET code path. Guides language patterns (records, pattern matching, primary constructors, C# 8-15), coding standards, async/await, DI, LINQ, serialization, domain modeling, concurrency, Roslyn analyzers, globalization, native interop (P/Invoke, LibraryImport, ComWrappers), WASM interop (JSImport/JSExport), and type design. Spans 25 topics. Do not use for ASP.NET endpoint architecture, UI framework patterns, or CI/CD guidance.\nlicense: MIT\nuser-invocable: false",
+          "sha256": "30b7e321d81107f7c9be5e4465264be416124175c9c6814f183e11d11ae12b56"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.language-engineering"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "rust",
+      "category": "languages",
+      "bundle": "mindrally-skills",
+      "path": "incoming/languages/mindrally-skills/rust",
+      "repository": "https://github.com/mindrally/skills",
+      "snapshot_sha256": "28325a1f862c09448bf1d8ec5603a9e582897eb41b9d6c484e5346cb61f5494a",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/languages/mindrally-skills/rust/SKILL.md",
+          "frontmatter": "name: rust\ndescription: Expert in Rust development with focus on safety, performance, and async programming\nmetadata:\n  maintainer: Mindrally\n  source: https://github.com/Mindrally/skills",
+          "sha256": "8c3e1db4a427a5cbd82582fbadc9170184bcbcca3a1aabe8e4b0ac5b9eca1e49"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.language-engineering"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "sota-c-cpp",
+      "category": "languages",
+      "bundle": "sota-skills",
+      "path": "incoming/languages/sota-skills/sota-c-cpp",
+      "repository": "https://github.com/martinholovsky/SOTA-skills",
+      "snapshot_sha256": "ce8e5cbaa309d02dfb30111e0dc2eeea2fdc676ddc4f1db3e99494c979bcfd27",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/languages/sota-skills/sota-c-cpp/SKILL.md",
+          "frontmatter": "name: sota-c-cpp\ndescription: >-\n  State-of-the-art C and C++ engineering rules that Claude\n  applies when writing or auditing C/C++. Covers modern idioms (RAII, value\n  semantics, smart pointers, C++23), memory safety (lifetimes, bounds,\n  sanitizers, hardening flags), undefined behavior, security (SEI CERT C/C++,\n  MISRA, integer/buffer/format-string, injection), concurrency (C/C++ memory\n  model, atomics, data races), build/tooling/CI (CMake, clang-tidy, cppcheck,\n  ASan/UBSan/TSan, vcpkg/Conan, supply chain), and performance. Trigger keywords\n  - C, C++, RAII, smart pointer, unique_ptr, shared_ptr, undefined\n  behavior, UB, buffer overflow, use-after-free, sanitizer, ASan,\n  UBSan, TSan, valgrind, CMake, clang-tidy, cppcheck, MISRA, CERT\n  C, memory safety, std::thread, atomics, std::move. Use for BOTH building\n  C/C++ libraries/systems and reviewing or auditing them. Owns firmware's LANGUAGE\n  layer; does NOT own its SYSTEMS layer — ISRs, DMA coherency, MMIO, RTOS\n  scheduling, priority inversion, WCET, linker scripts — unowned library-wide.",
+          "sha256": "9fc456be513d68b59840cbf4785e306e281f52264f349d111f003e950d6e66be"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.language-engineering"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "sota-dotnet",
+      "category": "languages",
+      "bundle": "sota-skills",
+      "path": "incoming/languages/sota-skills/sota-dotnet",
+      "repository": "https://github.com/martinholovsky/SOTA-skills",
+      "snapshot_sha256": "f3e96a0b771a5549636eafe27a6493c4610fa997620ff7c257607c1e32041c09",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/languages/sota-skills/sota-dotnet/SKILL.md",
+          "frontmatter": "name: sota-dotnet\ndescription: >-\n  State-of-the-art C# / .NET engineering rules (.NET LTS releases, modern\n  C#) that Claude applies when writing or auditing .NET code. Covers modern\n  idioms (records, nullable reference types, pattern matching, spans, file-scoped\n  namespaces), API/null/immutability/`IDisposable` design, async/await &\n  concurrency (ConfigureAwait, channels, cancellation, TPL), security (OWASP\n  .NET, deserialization — BinaryFormatter removed in .NET 9, EF/Dapper SQL\n  injection, ASP.NET Core auth, Data Protection, crypto), performance (GC,\n  Span and Memory, BenchmarkDotNet, Native AOT), and build/tooling/CI (dotnet\n  CLI, NuGet lockfiles & supply chain, Roslyn analyzers, nullable). Trigger\n  keywords - C#, .NET, dotnet, ASP.NET Core, async, await, Task, record,\n  nullable reference types, Span, EF Core, Dapper, LINQ, NuGet, Roslyn analyzer,\n  BinaryFormatter, Native AOT, BenchmarkDotNet, IDisposable, ConfigureAwait. Use\n  for BOTH building .NET services/libraries and auditing them.",
+          "sha256": "c904e6d292831ead11f1ed4a8febfc7f3bae76ef70794cbf8c8dd02891b8b881"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.language-engineering"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "sota-jvm",
+      "category": "languages",
+      "bundle": "sota-skills",
+      "path": "incoming/languages/sota-skills/sota-jvm",
+      "repository": "https://github.com/martinholovsky/SOTA-skills",
+      "snapshot_sha256": "df1e5efea02adfd3715415e8bb2bf5e5817f2dc0fae7c0656c48457f0ddd7921",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/languages/sota-skills/sota-jvm/SKILL.md",
+          "frontmatter": "name: sota-jvm\ndescription: >-\n  State-of-the-art JVM engineering rules for Java and Kotlin\n  that Claude applies when writing or auditing JVM code. Java LTS releases\n  (virtual threads final since 21; structured concurrency still preview),\n  modern Kotlin. Covers modern idioms (records, sealed types, pattern matching,\n  Kotlin null-safety/coroutines), API/null/immutability design, concurrency\n  (virtual threads, JMM, java.util.concurrent, coroutines), security\n  (deserialization/gadget chains, XXE, JNDI/Log4Shell-class, injection, JCA\n  crypto; SEI CERT Oracle Java + OWASP), performance (G1/ZGC, JFR, GraalVM),\n  and build/tooling/CI (Maven/Gradle, dependency-check, Error Prone/NullAway,\n  SpotBugs, ktlint/detekt). Trigger keywords - Java, Kotlin, JVM, JDK,\n  Spring, record, sealed, virtual thread, Loom, coroutine, suspend,\n  ObjectInputStream, deserialization, XXE, JNDI, Log4Shell, Maven, Gradle,\n  G1, ZGC, GraalVM, JMH, Optional, null-safety. Use for BOTH building JVM\n  services/libraries and reviewing or auditing them.",
+          "sha256": "8e196d278db5c19666f8603b19bc2041ac6834257987efc2586cb820f258831c"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.language-engineering"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "sota-rust",
+      "category": "languages",
+      "bundle": "sota-skills",
+      "path": "incoming/languages/sota-skills/sota-rust",
+      "repository": "https://github.com/martinholovsky/SOTA-skills",
+      "snapshot_sha256": "43fe98b035c4cf4fda0bb67c1cd4932638028db91e9d12fe884d7d2f80f362b5",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/languages/sota-skills/sota-rust/SKILL.md",
+          "frontmatter": "name: sota-rust\ndescription: >-\n  State-of-the-art Rust engineering (2026) for writing and auditing Rust code.\n  Covers idiomatic ownership and API design, error handling and panic policy,\n  unsafe discipline with Miri, async/tokio (cancellation safety, structured\n  concurrency, graceful shutdown), security and supply chain (cargo\n  audit/deny/vet, integer overflow, serde hardening, zeroize), performance\n  (profiling, allocation reduction, release profiles), and tooling/CI (clippy\n  policy, nextest, MSRV, feature hygiene, edition 2024). Use when writing new\n  Rust code, reviewing or auditing existing Rust, designing crate APIs,\n  debugging borrow checker or Send/Sync errors, or hardening Rust services.\n  Triggers: Rust, cargo, crate, tokio, unsafe, lifetime, borrow checker,\n  clippy, async Rust, Cargo.toml, thiserror, anyhow, serde, Miri, MSRV,\n  std::process::Command, subprocess, spawn a process.",
+          "sha256": "76b5cd9e01c9dba417d180fdc20775937e3bb0a4bf10035aa21fd4e462555927"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.language-engineering"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "async-python-patterns",
+      "category": "languages",
+      "bundle": "wshobson-agents",
+      "path": "incoming/languages/wshobson-agents/async-python-patterns",
+      "repository": "https://github.com/wshobson/agents",
+      "snapshot_sha256": "6859d4c14db21311c50766421af4ef95bb29fd16c62b97f5aa35d9e63c592dff",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/languages/wshobson-agents/async-python-patterns/SKILL.md",
+          "frontmatter": "name: async-python-patterns\ndescription: Master Python asyncio, concurrent programming, and async/await patterns for high-performance applications. Use when building async APIs, concurrent systems, or I/O-bound applications requiring non-blocking operations.",
+          "sha256": "c2da0b41953cda62a960d37126c0a5cb387b8f8b0093e3f71cc1c78455cb815a"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.language-engineering"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "python-design-patterns",
+      "category": "languages",
+      "bundle": "wshobson-agents",
+      "path": "incoming/languages/wshobson-agents/python-design-patterns",
+      "repository": "https://github.com/wshobson/agents",
+      "snapshot_sha256": "57bd31cd6229f8d24547ef0bf340817a9e61f27237eff6616db222d43f71f782",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/languages/wshobson-agents/python-design-patterns/SKILL.md",
+          "frontmatter": "name: python-design-patterns\ndescription: Python design patterns including KISS, Separation of Concerns, Single Responsibility, and composition over inheritance. Use this skill when designing a new service or component from scratch and choosing how to layer responsibilities, when refactoring a God class or monolithic function that has grown too large, when deciding whether to add a new abstraction or live with duplication, when evaluating a pull request for structural issues like tight coupling or leaking internal types, when choosing between inheritance and composition for a new class hierarchy, or when a codebase is becoming hard to test because of entangled I/O and business logic.",
+          "sha256": "42c99b3bc55a56a65cd3f16aa24ea50672ce0fa4893eb0f34bba0cdb8a0e3319"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.language-engineering"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "rust-async-patterns",
+      "category": "languages",
+      "bundle": "wshobson-agents",
+      "path": "incoming/languages/wshobson-agents/rust-async-patterns",
+      "repository": "https://github.com/wshobson/agents",
+      "snapshot_sha256": "3f47c224019a3664f079e056c4b30e5309f4873c6a3e065a1733752a555ac8b5",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/languages/wshobson-agents/rust-async-patterns/SKILL.md",
+          "frontmatter": "name: rust-async-patterns\ndescription: Master Rust async programming with Tokio, async traits, error handling, and concurrent patterns. Use when building async Rust applications, implementing concurrent systems, or debugging async code.",
+          "sha256": "8e9a951c21bb1ee671dd2e7391b193e8e3d362b95ef29c470915837d73bf87df"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.language-engineering"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "typescript-advanced-types",
+      "category": "languages",
+      "bundle": "wshobson-agents",
+      "path": "incoming/languages/wshobson-agents/typescript-advanced-types",
+      "repository": "https://github.com/wshobson/agents",
+      "snapshot_sha256": "9b113bfc72a4a254c49f43cf917cda8d70b88d7bdde403da3d14931b85ecbeed",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/languages/wshobson-agents/typescript-advanced-types/SKILL.md",
+          "frontmatter": "name: typescript-advanced-types\ndescription: Master TypeScript's advanced type system including generics, conditional types, mapped types, template literals, and utility types for building type-safe applications. Use when implementing complex type logic, creating reusable type utilities, or ensuring compile-time type safety in TypeScript projects.",
+          "sha256": "c32101c65134d94ef1a3305ef486020b57be6408f97ed952c9c560e3fe04188d"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.language-engineering"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "physical-ai-infrastructure-setup-and-resilient-scaling",
+      "category": "physical-ai",
+      "bundle": "nvidia-skills",
+      "path": "incoming/physical-ai/nvidia-skills/physical-ai-infrastructure-setup-and-resilient-scaling",
+      "repository": "https://github.com/NVIDIA/skills",
+      "snapshot_sha256": "d87a4b1ccb951516fe4c5355a9e233f9c66b672076ee541091ce496370c8252b",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/physical-ai/nvidia-skills/physical-ai-infrastructure-setup-and-resilient-scaling/SKILL.md",
+          "frontmatter": "name: physical-ai-infrastructure-setup-and-resilient-scaling\ndescription: >-\n  Use when the user wants to set up, scale, validate, or harden NVIDIA\n  physical AI infrastructure for synthetic data generation workflows across\n  local MicroK8s or Azure AKS, including Kubernetes clusters, inference endpoint\n  deployment, OSMO deployment, workload submission readiness, and infrastructure\n  failure recovery. Trigger keywords: physical ai infrastructure, resilient\n  scaling, SDG infrastructure, microk8s, azure aks, NVCF deployment,\n  NIM Operator, OSMO deploy, workflow scaling. Don't trigger for: OSMO log\n  summarization or workload-only operations unless infrastructure setup, scaling,\n  validation, or recovery is requested.\nlicense: Apache-2.0\nversion: \"1.0.0\"\ntools:\n  - Read\n  - Shell\ncompatibility: >-\n  Requires the selected component prerequisites, usually kubectl plus either\n  MicroK8s or Azure CLI/Terraform, and OSMO or inference credentials for the\n  chosen target.\nmetadata:\n  author: NVIDIA Physical AI\n  tags:\n    - physical-ai\n    - infrastructure\n    - kubernetes\n    - azure\n    - microk8s\n    - osmo\n    - nim-operator\n    - scaling\n  domain: ai-ml\n  languages:\n    - bash\n    - hcl\n    - yaml",
+          "sha256": "ee96598544cb3e7399c0e12c245e94104aea847bcb7d647a5b25bcb2320727ba"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.isaac-lab-engineering",
+        "core.isaac-sim-engineering"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "physical-ai-neural-reconstruction",
+      "category": "physical-ai",
+      "bundle": "nvidia-skills",
+      "path": "incoming/physical-ai/nvidia-skills/physical-ai-neural-reconstruction",
+      "repository": "https://github.com/NVIDIA/skills",
+      "snapshot_sha256": "ae144a0154f1f9800976dd94024086266095368f107b8012bfe7027faf0c5c90",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/physical-ai/nvidia-skills/physical-ai-neural-reconstruction/SKILL.md",
+          "frontmatter": "name: physical-ai-neural-reconstruction\ndescription: \"Router for NVIDIA NuRec/NRE: USDZ rendering, NCore conversion, 3DGS, gRPC sensor sim, carline adaptation, PhysicalAI HF datasets. Do NOT use for SimReady or infra setup.\"\nlicense: Apache-2.0\nversion: \"0.4.0\"\ntools:\n  - Read\n  - Shell\ncompatibility: >-\n  Router skill; downstream sibling skills require Linux x86_64, an\n  NVIDIA GPU (Ampere+, CUDA 12.8, >= 24 GB VRAM), Docker >= 23.0.1,\n  NVIDIA Container Toolkit >= 1.13.5, an NGC API key, a Hugging Face\n  token with the relevant gated licenses accepted, Python 3.10+, and\n  `huggingface_hub`. Optional: CARLA / Isaac Sim 5.1 / AlpaSim for\n  simulator integration over `serve-grpc`.\nmetadata:\n  author: NVIDIA Physical AI\n  tags:\n    - physical-ai\n    - nurec\n    - neural-reconstruction\n  upstream:\n    repo: https://github.com/NVIDIA/nurec-skills\n    branch: main\n    skills_dir: skills/\n    skills_dir_alias: .agents/skills/\n    index_skill: skills/nurec-index/SKILL.md\n    index_skill_name: nurec-index\n    sibling_skills:\n      - name: physical-ai-datasets\n        folder: physical-ai-datasets/\n        upstream: https://huggingface.co/nvidia\n      - name: ncore\n        folder: ncore/\n        upstream: https://github.com/NVIDIA/ncore\n        release_tag: \"2026.04\"\n      - name: nre\n        folder: nre/\n        upstream: nvcr.io/nvidia/nre/nre-ga\n        tools_container: nvcr.io/nvidia/nre/nre-tools-ga\n        release_tag: \"26.04\"  # NRE release; NGC image tags are 26.04.01 / 26.04 / 26 / latest (not `release_26.04`)\n      - name: asset-harvester\n        skill_repo: https://github.com/NVIDIA/asset-harvester\n        skill_path: skills/asset-harvester/\n        upstream: https://github.com/NVIDIA/asset-harvester\n        hf_model: https://huggingface.co/nvidia/asset-harvester\n      - name: nurec-fixer\n        folder: nurec-fixer/\n        upstream: https://github.com/NVIDIA/harmonizer\n        hf_model: https://huggingface.co/nvidia/Harmonizer\n        container: nvcr.io/nvidia/pytorch:25.10-py3\n  upstream_clone_path: \"${PHYSICAL_AI_SKILL_HUB_UPSTREAM_ROOT:-$HOME/.physical-ai-skill-hub/upstreams}/nurec-skills\"\n  upstream_override_env: NUREC_SKILLS_UPSTREAM_ROOT",
+          "sha256": "2b619802ecc7ec84f19feff6ac51dcf6b2e28f4c25fe671cb41ed2adfe15d7f9"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.isaac-lab-engineering",
+        "core.isaac-sim-engineering"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "physical-ai-video-data-augmentation",
+      "category": "physical-ai",
+      "bundle": "nvidia-skills",
+      "path": "incoming/physical-ai/nvidia-skills/physical-ai-video-data-augmentation",
+      "repository": "https://github.com/NVIDIA/skills",
+      "snapshot_sha256": "efb2bb4e7ae6e9c12a88f99fbb7df510408d5d4584b20b22ce5c9b690d8780b1",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/physical-ai/nvidia-skills/physical-ai-video-data-augmentation/SKILL.md",
+          "frontmatter": "name: physical-ai-video-data-augmentation\ndescription: >-\n  Use when running video data augmentation and auto-labeling workflows on OSMO:\n  flow selection, preflight, submit-time interpolation, monitoring, and output\n  retrieval. Trigger keywords: video data augmentation, data enrichment, auto\n  labeling, VDA demo, OSMO workflow, pseudo labeling.\nlicense: CC-BY-4.0 AND Apache-2.0\nmetadata:\n  owner: NVIDIA\n  service: data\n  version: 1.0.0\n  reviewed: '2026-05-26'\n  author: NVIDIA\n  tags:\n    - physical-ai\n    - video-data-augmentation\n    - auto-labeling\n    - cosmos",
+          "sha256": "78f6b652e0eba4ea0a141c57f7a1b322bcf01871bc4abdb4be71b7fbc3f48f47"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.isaac-lab-engineering",
+        "core.isaac-sim-engineering"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "e2e",
+      "category": "quality",
+      "bundle": "0xbigboss-claude-code",
+      "path": "incoming/quality/0xbigboss-claude-code/e2e",
+      "repository": "https://github.com/0xbigboss/claude-code",
+      "snapshot_sha256": "0e214ac66036ff326cb5f63bcec410a2e668e4c94bfa97d025c3fe8dbfbbaf5a",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/quality/0xbigboss-claude-code/e2e/SKILL.md",
+          "frontmatter": "name: e2e\ndescription: Use when running e2e tests, debugging test failures, or fixing flaky tests. Covers failure taxonomy, fix rules, and workflow. Never changes source code logic or API without spec backing.",
+          "sha256": "be85925d2f6899cbd9913079824e457cd9867ae9bbd4a8a4b48c39c6442d489a"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.implementation-quality",
+        "core.verify-and-handoff"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "playwright-best-practices",
+      "category": "quality",
+      "bundle": "0xbigboss-claude-code",
+      "path": "incoming/quality/0xbigboss-claude-code/playwright-best-practices",
+      "repository": "https://github.com/0xbigboss/claude-code",
+      "snapshot_sha256": "11769ecb9a0ce36b2db125488667f0e961ecfb317829d4401a76a971c03c5535",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/quality/0xbigboss-claude-code/playwright-best-practices/SKILL.md",
+          "frontmatter": "name: playwright-best-practices\ndescription: Use when writing or modifying Playwright tests (.spec.ts, .test.ts with @playwright/test imports).",
+          "sha256": "87d117ee9a597db083f4ea8c0d4ef70275f8f9f2b6a6dd7b89b3d9a3217fd04e"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.implementation-quality",
+        "core.verify-and-handoff"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "performance-engineer",
+      "category": "quality",
+      "bundle": "antigravity-skills",
+      "path": "incoming/quality/antigravity-skills/performance-engineer",
+      "repository": "https://github.com/rmyndharis/antigravity-skills",
+      "snapshot_sha256": "9e5a477a32ed8900a391b1d1a97c7df3306b4b7167e78e3a59add2f035a12acc",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/quality/antigravity-skills/performance-engineer/SKILL.md",
+          "frontmatter": "name: performance-engineer\ndescription: Expert performance engineer specializing in modern observability,\n  application optimization, and scalable system performance. Masters\n  OpenTelemetry, distributed tracing, load testing, multi-tier caching, Core Web\n  Vitals, and performance monitoring. Handles end-to-end optimization, real user\n  monitoring, and scalability patterns. Use PROACTIVELY for performance\n  optimization, observability, or scalability challenges.\nmetadata:\n  model: inherit",
+          "sha256": "58066f94aa15ce8e25b6b8b213f178ef7c7e6ee9e4ca691ee66b3dcc5e650ca5"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.implementation-quality",
+        "core.verify-and-handoff"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "verify-and-stop",
+      "category": "quality",
+      "bundle": "caveman",
+      "path": "incoming/quality/caveman/verify-and-stop",
+      "repository": "https://github.com/juliusbrussee/caveman",
+      "snapshot_sha256": "b42c06453538f9fb9aead390e93d52a4687b056823cd53d1e5b52272fc74a72e",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/quality/caveman/verify-and-stop/SKILL.md",
+          "frontmatter": "name: verify-and-stop\ndescription: Prove existing work meets acceptance conditions without expanding scope. Use for validation-only tasks, completion checks, focused gate runs, and last-mile proof.",
+          "sha256": "3d5599f49771b864eba94f27f456fda295c48c1a37fa6ba2f65fdcb13cc32acb"
+        }
+      ],
+      "disposition": "adapt_principles",
+      "review_depth": "selected_instruction_portions; no full-package promotion",
+      "core_coverage": [
+        "core.implementation-quality",
+        "core.verify-and-handoff"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "adopted_portion": "reuse current checks and stop optional expansion",
+      "destination": "core.verify-and-handoff",
+      "excluded": "Never skip mandatory checks or discard open material failures."
+    },
+    {
+      "package": "dotnet-debugging",
+      "category": "quality",
+      "bundle": "dotnet-artisan",
+      "path": "incoming/quality/dotnet-artisan/dotnet-debugging",
+      "repository": "https://github.com/novotnyllc/dotnet-artisan",
+      "snapshot_sha256": "1c763d9d065dbf3c43810bb738b4ed33154d20cf4a22d9f1db6237912a632846",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/quality/dotnet-artisan/dotnet-debugging/SKILL.md",
+          "frontmatter": "name: dotnet-debugging\ndescription: Debugs Windows and Linux/macOS applications (native, .NET/CLR, mixed-mode) with WinDbg MCP (crash dumps, !analyze, !syncblk, !dlk, !runaway, !dumpheap, !gcroot, BSOD), dotnet-dump, lldb with SOS, createdump, and container diagnostics (Docker, Kubernetes). Hang/deadlock diagnosis, high CPU triage, memory leak investigation, kernel debugging, and dotnet-monitor for production. Spans 17 topic areas. Do not use for routine .NET SDK profiling, benchmark design, or CI test debugging.\nlicense: MIT\nuser-invocable: false",
+          "sha256": "a4903b2563874eeabe7c2e7437f8cc359e5dbd3ffd7c221165ca5ac85d424eca"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.implementation-quality",
+        "core.verify-and-handoff"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "dotnet-testing",
+      "category": "quality",
+      "bundle": "dotnet-artisan",
+      "path": "incoming/quality/dotnet-artisan/dotnet-testing",
+      "repository": "https://github.com/novotnyllc/dotnet-artisan",
+      "snapshot_sha256": "db50d1baddb12f7b2dcfe66d66e5bf9eb91aebce8339d97f739ae1a3c706b22b",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/quality/dotnet-artisan/dotnet-testing/SKILL.md",
+          "frontmatter": "name: dotnet-testing\ndescription: Defines .NET test strategy and implementation patterns across xUnit v3 (Facts, Theories, fixtures, IAsyncLifetime), integration testing (WebApplicationFactory, Testcontainers), Aspire testing (DistributedApplicationTestingBuilder), snapshot testing (Verify, scrubbing), Playwright E2E browser automation, BenchmarkDotNet microbenchmarks, code coverage (Coverlet), mutation testing (Stryker.NET), UI testing (page objects, selectors), and AOT WASM test compilation. Spans 13 topic areas. Do not use for production API architecture or CI workflow authoring.\nlicense: MIT\nuser-invocable: false",
+          "sha256": "58835b947611a4ed892ab464140aa8317ff5242db4bdf7e0a1e40d6905d5d361"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.implementation-quality",
+        "core.verify-and-handoff"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "code-review",
+      "category": "quality",
+      "bundle": "mattpocock-skills",
+      "path": "incoming/quality/mattpocock-skills/code-review",
+      "repository": "https://github.com/mattpocock/skills",
+      "snapshot_sha256": "9c0fff2668989d8509e31adcdb5edf0bb72638237b81b585b965f76f7b46729f",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/quality/mattpocock-skills/code-review/SKILL.md",
+          "frontmatter": "name: code-review\ndescription: \"Review the changes since a fixed point (commit, branch, tag, or merge-base) along two axes: Standards (does the code follow this repo's documented coding standards?) and Spec (does the code match what the originating issue/spec asked for?). Runs both reviews in parallel sub-agents and reports them side by side. Use when the user wants to review a branch, a PR, work-in-progress changes, or asks to \\\"review since X\\\".\"",
+          "sha256": "09eb147f793e4647949edd32dbad278f0554dfb56e0d46b699cd4c2c55bf0357"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.implementation-quality",
+        "core.verify-and-handoff"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "diagnosing-bugs",
+      "category": "quality",
+      "bundle": "mattpocock-skills",
+      "path": "incoming/quality/mattpocock-skills/diagnosing-bugs",
+      "repository": "https://github.com/mattpocock/skills",
+      "snapshot_sha256": "ebc8263580fa02d1c81a38a41691d811b48650adecb451434be6773a16c15ac9",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/quality/mattpocock-skills/diagnosing-bugs/SKILL.md",
+          "frontmatter": "name: diagnosing-bugs\ndescription: Diagnosis loop for hard bugs and performance regressions. Use when the user says \"diagnose\"/\"debug this\", or reports something broken/throwing/failing/slow.",
+          "sha256": "849198df88cdb65fd0d97236604c1fca7ff2f22d2f705f9724a800d0266b118d"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.implementation-quality",
+        "core.verify-and-handoff"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "tdd",
+      "category": "quality",
+      "bundle": "mattpocock-skills",
+      "path": "incoming/quality/mattpocock-skills/tdd",
+      "repository": "https://github.com/mattpocock/skills",
+      "snapshot_sha256": "bc34c40fa78accf21b0ea518124bfe379ed76dbf9f069f88a0f195797ad938ad",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/quality/mattpocock-skills/tdd/SKILL.md",
+          "frontmatter": "name: tdd\ndescription: Test-driven development. Use when the user wants to build features or fix bugs test-first, mentions \"red-green-refactor\", or wants integration tests.",
+          "sha256": "5505d25bbaa8fc14a79e4d20163936958992a2995b7f1dd1d6197edc9ed722e0"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.implementation-quality",
+        "core.verify-and-handoff"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "requesting-code-review",
+      "category": "quality",
+      "bundle": "superpowers",
+      "path": "incoming/quality/superpowers/requesting-code-review",
+      "repository": "https://github.com/obra/superpowers",
+      "snapshot_sha256": "a9e4991ef931467490d4f76f36e64b8ef841d087320b6557e0e9cc3f42fca5fa",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/quality/superpowers/requesting-code-review/SKILL.md",
+          "frontmatter": "name: requesting-code-review\ndescription: Use when completing tasks, implementing major features, or before merging to verify work meets requirements",
+          "sha256": "2180e14a448e9410bec88e6646a2d1f0ce7fdd58de27388c1e052e929679d2bc"
+        }
+      ],
+      "disposition": "adapt_principles",
+      "review_depth": "selected_instruction_portions; no full-package promotion",
+      "core_coverage": [
+        "core.implementation-quality",
+        "core.verify-and-handoff"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "adopted_portion": "read-only scoped review and actionable evidence",
+      "destination": "core.verify-and-handoff",
+      "excluded": "No automatic scope expansion or redundant review dispatch."
+    },
+    {
+      "package": "systematic-debugging",
+      "category": "quality",
+      "bundle": "superpowers",
+      "path": "incoming/quality/superpowers/systematic-debugging",
+      "repository": "https://github.com/obra/superpowers",
+      "snapshot_sha256": "da481860177031f4399c51fe752f550c28d5430381dd2ed23810185d10747fe3",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/quality/superpowers/systematic-debugging/SKILL.md",
+          "frontmatter": "name: systematic-debugging\ndescription: Use when encountering any bug, test failure, or unexpected behavior, before proposing fixes",
+          "sha256": "51c6435d98c83c42c96ba7c35725a0b2c376cd487fb1a4e6bd0ddbe7e33ef202"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.implementation-quality",
+        "core.verify-and-handoff"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "test-driven-development",
+      "category": "quality",
+      "bundle": "superpowers",
+      "path": "incoming/quality/superpowers/test-driven-development",
+      "repository": "https://github.com/obra/superpowers",
+      "snapshot_sha256": "f7c01d24785bd8df9921f1bdefdca3cf0aa238e32c9bf556ec7a450d6ce8f57d",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/quality/superpowers/test-driven-development/SKILL.md",
+          "frontmatter": "name: test-driven-development\ndescription: Use when implementing any feature or bugfix, before writing implementation code",
+          "sha256": "64b03fce4aee5a97a93160cea8111f3ba13a17b7c001db4bd5836d67fd10705d"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.implementation-quality",
+        "core.verify-and-handoff"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "verification-before-completion",
+      "category": "quality",
+      "bundle": "superpowers",
+      "path": "incoming/quality/superpowers/verification-before-completion",
+      "repository": "https://github.com/obra/superpowers",
+      "snapshot_sha256": "0278982ca35148757036c12f30a7e4963563e7c28ef6453707c70a179e675254",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/quality/superpowers/verification-before-completion/SKILL.md",
+          "frontmatter": "name: verification-before-completion\ndescription: Use when about to claim work is complete, fixed, or passing, before committing or creating PRs - requires running verification commands and confirming output before making any success claims; evidence before assertions always",
+          "sha256": "2befe7fc55bcadaa3d97dd9e8efeb633d2561c0ebe74c5a8b17c4d9e7e4520b3"
+        }
+      ],
+      "disposition": "adapt_principles",
+      "review_depth": "selected_instruction_portions; no full-package promotion",
+      "core_coverage": [
+        "core.implementation-quality",
+        "core.verify-and-handoff"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "adopted_portion": "verification evidence before completion claims",
+      "destination": "core.verify-and-handoff",
+      "excluded": "No redundant reruns when current acceptance evidence suffices."
+    },
+    {
+      "package": "hsb-app",
+      "category": "robotics",
+      "bundle": "nvidia-skills",
+      "path": "incoming/robotics/nvidia-skills/hsb-app",
+      "repository": "https://github.com/NVIDIA/skills",
+      "snapshot_sha256": "6434df6755d296b2a22ead5f949c84bd5c720143d7ec6fef44a7cb5a30d581f0",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/robotics/nvidia-skills/hsb-app/SKILL.md",
+          "frontmatter": "name: hsb-app\ndescription: Discover and run Holoscan Sensor Bridge example applications on a connected devkit. Filters available apps by the user's platform, HSB software version, board type, and sensors. Supports timed execution, failure analysis, code-edit suggestions, and iterative re-runs.\nauthor: \"Holoscan Team <holoscan-team@nvidia.com>\"\nlicense: \"Apache-2.0\"\nversion: \"1.0.0\"\ntags:\n  - holoscan-sensor-bridge\n  - hsb\n  - running-app\ntools:\n  - Read\n  - Write\n  - Edit\n  - Grep\n  - Glob\n  - Bash\ndisable-model-invocation: true\nallowed-tools: Read,Write,Edit,MultiEdit,Grep,Glob,Bash\nmetadata:\n  author: \"Holoscan Team <holoscan-team@nvidia.com>\"\n  team: holoscan\n  tags:\n    - holoscan-sensor-bridge\n    - hsb\n    - running-app\n  agents:\n    - claude-code\n    - codex",
+          "sha256": "4fc440a720536fef741eff824755b190f053496772c2ae25412fb3a3a1261b3d"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.ros2-engineering",
+        "core.moveit-engineering",
+        "core.modbus-engineering"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "hsb-setup",
+      "category": "robotics",
+      "bundle": "nvidia-skills",
+      "path": "incoming/robotics/nvidia-skills/hsb-setup",
+      "repository": "https://github.com/NVIDIA/skills",
+      "snapshot_sha256": "eff6041ef2940021690dc08208985d7a9666b21bd3ee201f40d03ea14fcaadb9",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/robotics/nvidia-skills/hsb-setup/SKILL.md",
+          "frontmatter": "name: hsb-setup\ndescription: Clone the latest NVIDIA Holoscan Sensor Bridge repo, ask which supported devkit is being used, configure the host per platform, build the correct demo container, run it, and verify HSB connectivity by pinging 192.168.0.2. Use for Holoscan Sensor Bridge setup, build, container launch, and first-connectivity bring-up.\nauthor: \"Holoscan Team <holoscan-team@nvidia.com>\"\nlicense: \"Apache-2.0\"\nversion: \"1.0.0\"\ntags:\n  - holoscan-sensor-bridge\n  - hsb\n  - setup\ntools:\n  - Read\n  - Write\n  - Edit\n  - Grep\n  - Glob\n  - Bash\ndisable-model-invocation: true\nallowed-tools: Read,Write,Edit,MultiEdit,Grep,Glob,Bash\nmetadata:\n  author: \"Holoscan Team <holoscan-team@nvidia.com>\"\n  team: holoscan\n  tags:\n    - holoscan-sensor-bridge\n    - hsb\n    - setup\n  agents:\n    - claude-code\n    - codex",
+          "sha256": "479332edc6cbdcd4b571782d208cab4ce08460193b743c39d895b5e2dec5384b"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.ros2-engineering",
+        "core.moveit-engineering",
+        "core.modbus-engineering"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "hsb-test",
+      "category": "robotics",
+      "bundle": "nvidia-skills",
+      "path": "incoming/robotics/nvidia-skills/hsb-test",
+      "repository": "https://github.com/NVIDIA/skills",
+      "snapshot_sha256": "fb7673b043b2ad4951eb03d94068f87466e0162423b27f59217da7bdd983b71d",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/robotics/nvidia-skills/hsb-test/SKILL.md",
+          "frontmatter": "name: hsb-test\ndescription: Execute QA test plans on Holoscan Sensor Bridge hardware. Reads a user-provided test document, filters tests by the user's setup, determines which tests can run automatically, executes them with pass/fail evaluation, and produces a structured test results report.\nauthor: \"Holoscan Team <holoscan-team@nvidia.com>\"\nlicense: \"Apache-2.0\"\nversion: \"1.0.0\"\ntags:\n  - holoscan-sensor-bridge\n  - hsb\n  - testing\ntools:\n  - Read\n  - Write\n  - Edit\n  - Grep\n  - Glob\n  - Bash\ndisable-model-invocation: true\nallowed-tools: Read,Write,Edit,MultiEdit,Grep,Glob,Bash\nmetadata:\n  author: \"Holoscan Team <holoscan-team@nvidia.com>\"\n  team: holoscan\n  tags:\n    - holoscan-sensor-bridge\n    - hsb\n    - testing\n  agents:\n    - claude-code\n    - codex",
+          "sha256": "20281216bbba8139deb34b8a42c0d8bae052001ff259c31fd80dae3d668bffef"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.ros2-engineering",
+        "core.moveit-engineering",
+        "core.modbus-engineering"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "jetson-customize-pinmux",
+      "category": "robotics",
+      "bundle": "nvidia-skills",
+      "path": "incoming/robotics/nvidia-skills/jetson-customize-pinmux",
+      "repository": "https://github.com/NVIDIA/skills",
+      "snapshot_sha256": "68c6cdf9c20d84008ee75606cf3910d25aa67e805be1bcb0f195d7be36b90f49",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/robotics/nvidia-skills/jetson-customize-pinmux/SKILL.md",
+          "frontmatter": "name: jetson-customize-pinmux\ndescription: >-\n  Per-pin SFIO / direction / initial-state configurator for a Jetson\n  Orin or Thor custom carrier from the pinmux XLSM. Do NOT use for\n  kernel-DT overlay or ODMDATA edits.\nversion: 0.0.1\nlicense: \"Apache-2.0\"\nmetadata:\n  data-classification: public\n  author: \"Jetson Team\"\n  tags:\n    - bsp\n    - phase-2\n    - io\n    - pinmux\n  domain: meta",
+          "sha256": "0af6f45689b4498a42f237d1901d08f02caac8128c287d3a5157d167acd33c8e"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.ros2-engineering",
+        "core.moveit-engineering",
+        "core.modbus-engineering"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "jetson-diagnostic",
+      "category": "robotics",
+      "bundle": "nvidia-skills",
+      "path": "incoming/robotics/nvidia-skills/jetson-diagnostic",
+      "repository": "https://github.com/NVIDIA/skills",
+      "snapshot_sha256": "c1501b05ea75d5595ff3ef7f1d777978233b5593f9eb789a44caf8490fc9de20",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/robotics/nvidia-skills/jetson-diagnostic/SKILL.md",
+          "frontmatter": "name: jetson-diagnostic\ndescription: Read-only Jetson health snapshot for identity, memory, GPU, thermal, power, storage, services, and top processes.\nversion: 0.0.1\nlicense: \"Apache-2.0\"\nmetadata:\n  author: \"Jetson Team\"\n  tags: [jetson, diagnostic, telemetry]\n  languages: [bash]\n  data-classification: public",
+          "sha256": "5c2d3242b0d493090c3534c21cb9b087f85214956a216e7fae9525f3fc4cde5c"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.ros2-engineering",
+        "core.moveit-engineering",
+        "core.modbus-engineering"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "c-review",
+      "category": "security",
+      "bundle": "trailofbits-skills",
+      "path": "incoming/security/trailofbits-skills/c-review",
+      "repository": "https://github.com/trailofbits/skills",
+      "snapshot_sha256": "773d6c50a3ccf3c596ce9633a71c7e900efb8a7e35331a39caad217d448e57b2",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/security/trailofbits-skills/c-review/skills/c-review/SKILL.md",
+          "frontmatter": "name: c-review\ndescription: Performs comprehensive C/C++ security review for memory corruption, integer overflows, race conditions, and platform-specific vulnerabilities. Use when auditing native C/C++ applications, reviewing daemons or services for memory safety, or hunting integer overflow / use-after-free / race conditions in userspace code.\nallowed-tools: Workflow AskUserQuestion Bash Read",
+          "sha256": "3fc2fc7f3dba9decd2dd9e449150395cf62ee156c8dd1c48d09a233318f4dc69"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.implementation-quality"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "differential-review",
+      "category": "security",
+      "bundle": "trailofbits-skills",
+      "path": "incoming/security/trailofbits-skills/differential-review",
+      "repository": "https://github.com/trailofbits/skills",
+      "snapshot_sha256": "cce2303ebea35ff3e5bda849bae110925f5e2e48551cfbb85c275b714e5e4b63",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/security/trailofbits-skills/differential-review/skills/differential-review/SKILL.md",
+          "frontmatter": "name: differential-review\ndescription: \"Performs security-focused differential review of code changes. Adapts analysis depth to codebase size, uses git blame for context, calculates blast radius by counting callers, checks test coverage of modified code, and generates a markdown report. Use when reviewing a PR, commit, or diff for security vulnerabilities, checking whether a change re-introduces a previously fixed bug, asking what else a change could break, or finding which modified code has no test covering it.\"\nallowed-tools: Read Write Grep Glob Bash",
+          "sha256": "f9af6a8193fc1a9f8ca3c54bb8d19095a5f20c9472ca6d014488bbde50b67da0"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.implementation-quality"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "rust-review",
+      "category": "security",
+      "bundle": "trailofbits-skills",
+      "path": "incoming/security/trailofbits-skills/rust-review",
+      "repository": "https://github.com/trailofbits/skills",
+      "snapshot_sha256": "68776b2632a79d1b5ae5b673432233a137e299b0a3e6a1f0eaea7bea2b5372c0",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/security/trailofbits-skills/rust-review/skills/rust-review/SKILL.md",
+          "frontmatter": "name: rust-review\ndescription: Performs comprehensive Rust security review for safe/unsafe boundary issues, memory safety in unsafe blocks, concurrency hazards, panic-induced DoS, FFI safety, and async runtime mistakes. Use when auditing Rust crates, services, or libraries — particularly those with `unsafe`, FFI, or concurrent code.\nallowed-tools: Agent AskUserQuestion SendMessage TaskCreate TaskUpdate TaskList Read Write Bash",
+          "sha256": "52ee8b08876b0ad90ecdf4a58de8d41fb2d8627f1e4d259a806a35a6e187ae91"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.implementation-quality"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "sharp-edges",
+      "category": "security",
+      "bundle": "trailofbits-skills",
+      "path": "incoming/security/trailofbits-skills/sharp-edges",
+      "repository": "https://github.com/trailofbits/skills",
+      "snapshot_sha256": "177f167336fcdc49b1889d296a732a8177ebd0fb2d4d85b0e91aabdca5d95463",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/security/trailofbits-skills/sharp-edges/skills/sharp-edges/SKILL.md",
+          "frontmatter": "name: sharp-edges\ndescription: \"Identifies error-prone APIs, dangerous configurations, and footgun designs that enable security mistakes. Use when reviewing API designs, configuration schemas, cryptographic library ergonomics, or evaluating whether code follows 'secure by default' and 'pit of success' principles. Triggers: footgun, misuse-resistant, secure defaults, API usability, dangerous configuration.\"\nallowed-tools: Read Grep Glob",
+          "sha256": "3b69a709c2f8f0cfcf57d40a3186e166f307865cc8ed924be4098e549a121e9c"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.implementation-quality"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "static-analysis",
+      "category": "security",
+      "bundle": "trailofbits-skills",
+      "path": "incoming/security/trailofbits-skills/static-analysis",
+      "repository": "https://github.com/trailofbits/skills",
+      "snapshot_sha256": "62f61d8ab00f4efe7cfda7973236e0930444402235c00653c64c7f9cdafe6591",
+      "skill_count": 3,
+      "metadata": [
+        {
+          "path": "incoming/security/trailofbits-skills/static-analysis/skills/codeql/SKILL.md",
+          "frontmatter": "name: codeql\ndescription: >-\n  Scans a codebase for security vulnerabilities using CodeQL's interprocedural data flow and\n  taint tracking analysis. Triggers on \"run codeql\", \"codeql scan\", \"build codeql database\",\n  \"SAST scan\", \"taint analysis\", \"dataflow analysis\", or \"find vulnerabilities in this repo\".\n  Covers Python, JavaScript/TypeScript, Go, Java/Kotlin, C/C++, C#, Ruby, and Swift. Supports\n  \"run all\" (security-and-quality + security-experimental) and \"important only\"\n  (high-precision) scan modes, and creates data extension models for project-specific sources\n  and sinks. For fast single-file pattern matching, or when no build is available for a\n  compiled language, use the semgrep skill; to parse SARIF that already exists rather than\n  produce it, use the sarif-parsing skill.\nallowed-tools: Bash Read Write Edit Glob Grep AskUserQuestion TaskCreate TaskList TaskUpdate TaskGet",
+          "sha256": "1a6d919ff80f83b262daf650552af6eb6d2c32b19d0c529b70efe0c116b675cf"
+        },
+        {
+          "path": "incoming/security/trailofbits-skills/static-analysis/skills/sarif-parsing/SKILL.md",
+          "frontmatter": "name: sarif-parsing\ndescription: >-\n  Parses and processes SARIF files from static analysis tools like CodeQL, Semgrep, or other\n  scanners. Triggers on \"parse sarif\", \"read scan results\", \"aggregate findings\", \"deduplicate\n  alerts\", or \"process sarif output\". Handles filtering, deduplication, format conversion, and\n  CI/CD integration of SARIF data. Does NOT run scans — use the Semgrep or CodeQL skills for that.\nallowed-tools: Bash Read Glob Grep",
+          "sha256": "cc5f008f40ffb8a1ae03ebd32d7234de43e828293955a0bc251b76ba249554fa"
+        },
+        {
+          "path": "incoming/security/trailofbits-skills/static-analysis/skills/semgrep/SKILL.md",
+          "frontmatter": "name: semgrep\ndescription: >-\n  Runs a Semgrep security scan over a codebase: detects languages, selects\n  rulesets, presents the plan for explicit approval, then runs every approved\n  ruleset through scripts/run-scans.sh, which batches the semgrep processes and\n  writes scans.json, and merges the output to SARIF. Supports two scan modes,\n  \"run all\" for full ruleset coverage and \"important only\" for security\n  findings at medium-to-high confidence and impact. Uses Semgrep Pro for\n  cross-file taint analysis when it is available. Use when asked to scan code\n  for vulnerabilities, run a security audit with Semgrep, find bugs, or perform\n  static analysis. For the same scan without the approval gate, use the\n  /static-analysis:semgrep-scan workflow.\nallowed-tools: Bash Read Glob AskUserQuestion TaskCreate TaskList TaskUpdate",
+          "sha256": "52162605593f871cf45f48f9cf00b7c2d7e0759ccb7507981088442b7cc5d76c"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.implementation-quality"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "testing-handbook-skills",
+      "category": "security",
+      "bundle": "trailofbits-skills",
+      "path": "incoming/security/trailofbits-skills/testing-handbook-skills",
+      "repository": "https://github.com/trailofbits/skills",
+      "snapshot_sha256": "1388a5f95904d97b43be0b3463432718f7baae5436eaf19c8d810cba6c87028b",
+      "skill_count": 15,
+      "metadata": [
+        {
+          "path": "incoming/security/trailofbits-skills/testing-handbook-skills/skills/address-sanitizer/SKILL.md",
+          "frontmatter": "name: address-sanitizer\ntype: technique\ndescription: \"Builds and runs code under AddressSanitizer to catch buffer overflows, use-after-free, and other memory errors during fuzzing or tests. Covers -fsanitize=address builds, ASAN_OPTIONS, reading the crash report, LeakSanitizer, and the overhead and platform trade-offs. Use when fuzzing C/C++ or Rust that has unsafe blocks or FFI, when debugging a memory corruption crash, or when reading an ASan stack trace.\"",
+          "sha256": "eb9ea8210fa55d50477fbe52993a704e320c88739c10d619864b6ce377ebce25"
+        },
+        {
+          "path": "incoming/security/trailofbits-skills/testing-handbook-skills/skills/aflpp/SKILL.md",
+          "frontmatter": "name: aflpp\ntype: fuzzer\ndescription: \"Sets up and runs AFL++ for multi-core fuzzing of C/C++ projects built with afl-clang-fast or afl-gcc-fast. Covers instrumentation modes, parallel main and secondary campaigns, persistent mode, corpus minimization, and crash triage. Use when scaling fuzzing across cores, fuzzing a mature C/C++ codebase, reading the afl-fuzz status screen, or moving on after libFuzzer has plateaued.\"",
+          "sha256": "0a31023527808e68a53b81b89c7a6c10c6f84755a410df820facef44252e518d"
+        },
+        {
+          "path": "incoming/security/trailofbits-skills/testing-handbook-skills/skills/atheris/SKILL.md",
+          "frontmatter": "name: atheris\ntype: fuzzer\ndescription: \"Sets up and runs Atheris, the coverage-guided Python fuzzer built on libFuzzer. Covers TestOneInput harnesses, FuzzedDataProvider, instrumenting both pure Python and native C extensions, and running under AddressSanitizer. Use when fuzzing a Python package, hunting memory corruption in a Python C extension, or choosing between Atheris and Hypothesis for a Python target.\"",
+          "sha256": "133306875d88bb063636a9165c56141ac8b30d3b993db3740f166693dfeecbb5"
+        },
+        {
+          "path": "incoming/security/trailofbits-skills/testing-handbook-skills/skills/cargo-fuzz/SKILL.md",
+          "frontmatter": "name: cargo-fuzz\ntype: fuzzer\ndescription: \"Sets up and runs cargo-fuzz, the standard fuzzing tool for Cargo-based Rust projects. Covers cargo fuzz init, the nightly toolchain requirement, fuzz_target! harnesses, Arbitrary-derived structured inputs, sanitizer options, cargo fuzz coverage, and reproducing a crash artifact. Use when fuzzing a Rust crate, writing a fuzz_target!, exercising unsafe blocks or FFI in Rust, or triaging a cargo fuzz crash.\"",
+          "sha256": "8e8f882604f68c682afde3562ba1bd3828264fd226f427ff7d9ba50617268db1"
+        },
+        {
+          "path": "incoming/security/trailofbits-skills/testing-handbook-skills/skills/constant-time-testing/SKILL.md",
+          "frontmatter": "name: constant-time-testing\ntype: domain\ndescription: \"Measures timing side channels in cryptographic implementations by running them, using dudect for statistical analysis and Timecop over Valgrind for dynamic tracing. Covers the formal, symbolic, dynamic, and statistical tool categories and how to read a result. Use when testing whether a running implementation is constant-time, measuring timing variance on a compiled binary, or investigating a suspected timing attack. Not for statically inspecting compiler output — the constant-time-analysis plugin covers that.\"",
+          "sha256": "d294126ee90dbb949261145fbf1fb05dbbeb1a986320ba597b746fa4068f0028"
+        },
+        {
+          "path": "incoming/security/trailofbits-skills/testing-handbook-skills/skills/coverage-analysis/SKILL.md",
+          "frontmatter": "name: coverage-analysis\ntype: technique\ndescription: \"Measures and interprets what a fuzzing campaign actually reaches, using llvm-cov, lcov, or a fuzzer's own coverage output. Covers baselining a new campaign, reading coverage reports, and turning uncovered regions into harness, seed, or dictionary work. Use when a fuzzer plateaus, when judging whether a harness is effective, after changing a harness, or when asking why some code is never reached.\"",
+          "sha256": "9f71cfaffec44f159aa333924a25cdbe3eebd221cc7c0b0175fb93794d3ecacc"
+        },
+        {
+          "path": "incoming/security/trailofbits-skills/testing-handbook-skills/skills/fuzzing-dictionary/SKILL.md",
+          "frontmatter": "name: fuzzing-dictionary\ntype: technique\ndescription: \"Builds and applies fuzzing dictionaries so a fuzzer can produce the keywords, magic bytes, and tokens a target expects. Covers extracting tokens from source, headers, binaries, and specifications, dictionary syntax, and wiring one into libFuzzer or AFL++. Use when fuzzing a parser, protocol, or file format, when coverage stalls at input validation, or when a target compares against fixed strings.\"",
+          "sha256": "b71fa7cab36ca466647123efa07c665c1968661f6d5060d9ac0cbb7f7599f7e0"
+        },
+        {
+          "path": "incoming/security/trailofbits-skills/testing-handbook-skills/skills/fuzzing-obstacles/SKILL.md",
+          "frontmatter": "name: fuzzing-obstacles\ntype: technique\ndescription: \"Patches past the barriers that stop a fuzzer making progress — checksum and hash verification, magic-value validation, time-based seeds, and other non-deterministic global state. Covers locating the blocking check, neutering it behind a fuzzing build flag, and avoiding the false positives a patch can introduce. Use when a fuzzer is stuck at validation, when coverage shows large regions behind a checksum, or when valid inputs are impractical to generate.\"",
+          "sha256": "7d77500c3e0a2db1ce5fd5dbb0559b802a621c63110dd8fd4664f0bf1634a3b2"
+        },
+        {
+          "path": "incoming/security/trailofbits-skills/testing-handbook-skills/skills/harness-writing/SKILL.md",
+          "frontmatter": "name: harness-writing\ntype: technique\ndescription: \"Designs and improves fuzzing harnesses for C/C++ and Rust. Covers mapping raw bytes onto a target API, generating structured inputs, avoiding non-determinism and false crashes, and deciding what to fuzz together. Use when writing a first LLVMFuzzerTestOneInput or fuzz_target! harness, when a campaign finds nothing or reports crashes that will not reproduce, or when the target API needs structured rather than raw input.\"",
+          "sha256": "8efda12f4ab61a7eef4daae88affc7649695d8db5fb2c2a33a78dab2a3fe36c0"
+        },
+        {
+          "path": "incoming/security/trailofbits-skills/testing-handbook-skills/skills/libafl/SKILL.md",
+          "frontmatter": "name: libafl\ntype: fuzzer\ndescription: \"Builds custom fuzzers with LibAFL, the modular Rust fuzzing library. Covers composing observers, feedbacks, mutators, schedulers, and executors into a fuzzer for targets the standard tools do not fit. Use when writing a bespoke fuzzer or mutator, fuzzing a non-standard target or architecture, implementing a fuzzing research idea, or when libFuzzer and AFL++ lack the control you need.\"",
+          "sha256": "2f7f261439c2d87a15ddbb8a04a387fb8c211b9f20b00baf28b1466e036fc0d5"
+        },
+        {
+          "path": "incoming/security/trailofbits-skills/testing-handbook-skills/skills/libfuzzer/SKILL.md",
+          "frontmatter": "name: libfuzzer\ntype: fuzzer\ndescription: \"Sets up and runs libFuzzer, the coverage-guided fuzzer built into LLVM, on C/C++ code that compiles with Clang. Covers harness structure, -fsanitize=fuzzer builds, corpus and dictionary management, sanitizer integration, and campaign triage. Use when writing or debugging an LLVMFuzzerTestOneInput harness, starting fuzzing on a C/C++ library, choosing between libFuzzer and AFL++, or working out why a libFuzzer run finds nothing.\"",
+          "sha256": "56b2c68b193f7fed4ae00ade6c6395196d44612d140ad51de43d150404dde2eb"
+        },
+        {
+          "path": "incoming/security/trailofbits-skills/testing-handbook-skills/skills/ossfuzz/SKILL.md",
+          "frontmatter": "name: ossfuzz\ntype: technique\ndescription: \"Enrolls a project in OSS-Fuzz, Google's free continuous fuzzing service for open source, and drives it locally. Covers project.yaml, Dockerfile and build.sh setup, the helper scripts, reproducing OSS-Fuzz crash reports, and the acceptance criteria. Use when setting up continuous fuzzing for an open-source project, reproducing an OSS-Fuzz bug report, or testing an OSS-Fuzz build before submitting it.\"",
+          "sha256": "aeb1abbcac5ae5e4a73be4bb923fc9cca20d8d1073630c2e0a1ff37fccbec598"
+        },
+        {
+          "path": "incoming/security/trailofbits-skills/testing-handbook-skills/skills/ruzzy/SKILL.md",
+          "frontmatter": "name: ruzzy\ntype: fuzzer\ndescription: \"Sets up and runs Ruzzy, Trail of Bits' coverage-guided Ruby fuzzer and the only production-ready one for the language. Covers harness structure, fuzzing pure Ruby and the native C extensions in gems, and sanitizer builds. Use when fuzzing a Ruby library or gem, testing a Ruby C extension for memory safety, or asking how to fuzz Ruby at all.\"",
+          "sha256": "46374463b7ff99b028692ed8d30f1c9f488597597e5a2af4ad3919e2a47d6ce9"
+        },
+        {
+          "path": "incoming/security/trailofbits-skills/testing-handbook-skills/skills/testing-handbook-generator/SKILL.md",
+          "frontmatter": "name: testing-handbook-generator\ndescription: \"Generates Claude Code skills from the Trail of Bits Testing Handbook (appsec.guide), analyzing handbook pages and emitting SKILL.md files with the structure each skill type requires. Use when creating or refreshing a skill from handbook content, or when the user names the testing handbook or appsec.guide. Not for answering security testing questions — the generated skills cover those.\"",
+          "sha256": "84d2022bff1675f77f71a219aa3999b01dc3fcfeff1666965177195ecf808aaa"
+        },
+        {
+          "path": "incoming/security/trailofbits-skills/testing-handbook-skills/skills/wycheproof/SKILL.md",
+          "frontmatter": "name: wycheproof\ntype: domain\ndescription: \"Validates cryptographic implementations against Project Wycheproof's test vectors, which encode known attacks and edge cases across AES, RSA, ECDSA, ECDH, and more. Covers loading test vectors, mapping result flags onto pass and fail expectations, and reading a failure. Use when testing a crypto implementation against known attacks, checking a library against standard test vectors, or investigating why two implementations disagree on the same input.\"",
+          "sha256": "d092dc70fbd0f86d1f755857bf57172a6593cae0bff5d052443fc60b8d675a33"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.implementation-quality"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "stride-analysis-patterns",
+      "category": "security",
+      "bundle": "wshobson-agents",
+      "path": "incoming/security/wshobson-agents/stride-analysis-patterns",
+      "repository": "https://github.com/wshobson/agents",
+      "snapshot_sha256": "60608ca3b0f765301e31b5fbe15e8965bb9b4b034d7dae05ab737debc2e60c0a",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/security/wshobson-agents/stride-analysis-patterns/SKILL.md",
+          "frontmatter": "name: stride-analysis-patterns\ndescription: Apply STRIDE methodology to systematically identify threats. Use when analyzing system security, conducting threat modeling sessions, or creating security documentation.",
+          "sha256": "b7cfab85be4d04a81d22f79cc3b0e95aab8aa3ae4dfacbcf44de076dbeb16f1e"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.implementation-quality"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "blender-physics-simulation",
+      "category": "simulation",
+      "bundle": "blender-claude-plugin",
+      "path": "incoming/simulation/blender-claude-plugin/blender-physics-simulation",
+      "repository": "https://github.com/ra100/blender-claude-plugin",
+      "snapshot_sha256": "ddf174664c3fb83724a2fb8137dd5861364faeb774b90201d87da7cb153ba360",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/simulation/blender-claude-plugin/blender-physics-simulation/SKILL.md",
+          "frontmatter": "name: blender-physics-simulation\ndescription: Blender 5.x physics simulations — rigid body, cloth, fluid/smoke/fire (Mantaflow), soft body, particles, force fields, collisions, and simulation baking/caching via Python (bpy).",
+          "sha256": "dfa9d35ee84f086712047ca75d1391ebc242f309e5f1baf36ce30781c6d07912"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.isaac-sim-engineering"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "mujoco-accelerated",
+      "category": "simulation",
+      "bundle": "mujoco",
+      "path": "incoming/simulation/mujoco/mujoco-accelerated",
+      "repository": "https://github.com/google-deepmind/mujoco",
+      "snapshot_sha256": "1823481bb539fdbca1c44b4ee1c656bd0855758f4b2e562aeb4cdf1903ce1ead",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/simulation/mujoco/mujoco-accelerated/SKILL.md",
+          "frontmatter": "name: mujoco-accelerated\ndescription: >-\n  GPU and TPU batch simulation, MJX (JAX), MJWarp (CUDA), parallel rollouts\n  (jax.vmap), trajectory scan (jax.lax.scan), differentiability, device memory\n  (put_model, put_data), static contact sizing (max_contact_points,\n  max_geom_pairs, nconmax, njmax), float32 precision, XLA compilation caching.\n  Use for RL environment batches, GPU rollouts, differentiable physics.\n  Do NOT use for CPU simulation, noslip/PGS solvers (mujoco-python), rendering (mujoco-rendering), or GUI (mujoco-gui).",
+          "sha256": "aa69c3e24a3fadb23274db8266062908cc78351e5cdf48009a7e931cb0120a4d"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.isaac-sim-engineering"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "mujoco-python",
+      "category": "simulation",
+      "bundle": "mujoco",
+      "path": "incoming/simulation/mujoco/mujoco-python",
+      "repository": "https://github.com/google-deepmind/mujoco",
+      "snapshot_sha256": "7bfa06ae7e2ba2ceeb1325cdfc17ce4ec5f54775be4c640c051d79c5c402deeb",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/simulation/mujoco/mujoco-python/SKILL.md",
+          "frontmatter": "name: mujoco-python\ndescription: >-\n  Python simulation lifecycle (MjSpec, MjModel, MjData), simulation stepping\n  (mj_step, mj_step1, mj_step2, mj_forward), named access (data.body, model.geom),\n  bind(), contact and touch sensors, sensordata, keyframe resets, integrators,\n  mju_ spatial math (quaternions, poses), energy diagnostics.\n  Use for Python physics simulation, state access, stepping loops, sensors.\n  Do NOT use for model building/editing (mujoco-spec-editing), headless rendering (mujoco-rendering), GPU/TPU (mujoco-accelerated), or GUI/viewers (mujoco-gui, mujoco-studio).",
+          "sha256": "3b48f1b5b6c6f82026b37e0d1eea28e107c146b6d89da880a7bf95430df6eb2b"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.isaac-sim-engineering"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "omniverse-cad-to-simready",
+      "category": "simulation",
+      "bundle": "nvidia-skills",
+      "path": "incoming/simulation/nvidia-skills/omniverse-cad-to-simready",
+      "repository": "https://github.com/NVIDIA/skills",
+      "snapshot_sha256": "48259c585b7412c14ff5256469684851083db4449d754265be059bde000150df",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/simulation/nvidia-skills/omniverse-cad-to-simready/SKILL.md",
+          "frontmatter": "name: omniverse-cad-to-simready\ndescription: \"Coordinate the end-to-end CAD/source-asset to SimReady workflow. Use for broad requests such as CAD to SimReady, source asset to simulation-ready USD, or prop packaging that require conversion, material/physics assignment, SimReady conformance, validation, and optional package creation; deploy or verify Content Agents services first when property assignment is enabled; route single-stage work through nested references.\"\nversion: \"0.2.0\"\nlicense: Apache-2.0\ntools:\n  - Read\n  - Shell\nallowed-tools: Read Write Bash WebFetch Env\npermissions: [env, file_read, file_write, network, shell]\ncompatibility: >\n  Orchestrator skill. Managed Content Agents deployment requires a configured model provider key matching the selected backend, such as NVIDIA_API_KEY,\n  OPENAI_API_KEY, ANTHROPIC_API_KEY, GOOGLE_API_KEY, or GEMINI_API_KEY,\n  Docker + NVIDIA Container Toolkit + GPU, Python 3.12, and an upstream checkout of\n  nvidia-omniverse/content-agents at the ref pinned in upstream-versions.lock.json.\n  Reused/provided endpoints may instead use explicit endpoint and usage-token environment variables.\n  Linux/macOS only.\nmetadata:\n  author: Omniverse\n  tags:\n    - physical-ai\n    - simready\n    - workflow\n    - cad\n    - conversion\n  domain: ai-ml\n  languages:\n    - python",
+          "sha256": "a7f60b0452e3324d31c3992eb93cf1972aea5be95c41cd3cfa83ce895ddb6ad5"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.isaac-sim-engineering"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "omniverse-realtime-viewer",
+      "category": "simulation",
+      "bundle": "nvidia-skills",
+      "path": "incoming/simulation/nvidia-skills/omniverse-realtime-viewer",
+      "repository": "https://github.com/NVIDIA/skills",
+      "snapshot_sha256": "88ab9b2ad602d1cc6a08657f0d0c1c1674a3f071bd71b2b0f522bf86902b49f8",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/simulation/nvidia-skills/omniverse-realtime-viewer/SKILL.md",
+          "frontmatter": "name: omniverse-realtime-viewer\ndescription: \"Use as the top-level router for Omniverse Realtime Viewer USD app requests and focused viewer reference documents.\"\nversion: \"0.2.0\"\nlicense: Apache-2.0\ntools:\n  - Read\n  - Shell\n  - Write\ncompatibility: >\n  Orchestrator skill. Downstream focused references may require NVIDIA GPUs, ovrtx,\n  ovstream, ovui, OpenUSD, Python, Node/React, Tauri, Electron, C++, or cloud\n  GPU deployment access depending on the selected viewer path.\nmetadata:\n  author: NVIDIA Omniverse\n  tags:\n    - omniverse\n    - usd\n    - viewer\n    - workflow\n  domain: ai-ml\n  languages:\n    - python\n    - typescript\n    - cpp",
+          "sha256": "19ffbd179e7a5873cd2d049a9c2bbea851b193f1b33753dc6d3de7fd6ac2b5da"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.isaac-sim-engineering"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "omniverse-usd-performance-tuning",
+      "category": "simulation",
+      "bundle": "nvidia-skills",
+      "path": "incoming/simulation/nvidia-skills/omniverse-usd-performance-tuning",
+      "repository": "https://github.com/NVIDIA/skills",
+      "snapshot_sha256": "386ec4bed47931eb498c060e6641811a41eb0fdbad5d8041e812a398f3d1739a",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/simulation/nvidia-skills/omniverse-usd-performance-tuning/SKILL.md",
+          "frontmatter": "name: omniverse-usd-performance-tuning\ndescription: \"Top-level workflow skill for USD performance diagnosis and optimization. Handles slow loading, high memory, low FPS, and broad scene-optimization requests; delegates auth/runtime setup to Phase 0 owners.\"\nversion: \"0.4.1\"\nlicense: Apache-2.0\ntools:\n  - Read\n  - Shell\n  - Write\ncompatibility: >\n  Orchestrator skill. Downstream phases may require Kit, Usd Optimize, usd-validation-nvidia, USD Python, writable output paths, and omniverse:// authentication selected by setup-usd-performance-tuning.\nmetadata:\n  author: NVIDIA Omniverse\n  tags:\n    - triage\n    - performance\n    - usd\n    - profiling\n  domain: ai-ml\n  languages:\n    - python",
+          "sha256": "8510299d8ec9b9a924b507b953bd6e677a3f6c67413eeabfc6b1c90120550d69"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.isaac-sim-engineering"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "physical-ai-physics-selection",
+      "category": "simulation",
+      "bundle": "nvidia-skills",
+      "path": "incoming/simulation/nvidia-skills/physical-ai-physics-selection",
+      "repository": "https://github.com/NVIDIA/skills",
+      "snapshot_sha256": "84b3e8add6060493d1083d948b776244384c72288de0fede0f1a8d5f73a8a071",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/simulation/nvidia-skills/physical-ai-physics-selection/SKILL.md",
+          "frontmatter": "name: physical-ai-physics-selection\ndescription: Choose a physics engine and integration for robot learning, manipulation, assembly, differentiable optimization, or other Physical AI simulation. Compare Newton, PhysX, MuJoCo/MJX, Bullet/PyBullet, VSim Robotics, Genesis, and Drake. Evaluate Newton first for suitable new workflows, select ovnewton when supported shared-stage integration adds value, then verify setup. Use for simulator comparisons, migration decisions, and Newton/ovnewton first-run issues; preserve an explicitly chosen engine.\nlicense: Apache-2.0\nmetadata:\n  author: Neelakantan Mani <neelakantanm@nvidia.com>\n  source: https://github.com/neelkm/skills/tree/c820715e84c14b1a0cbc8b249b5a4dfc415f1911/skills/ovnewton/physical-ai-physics-selection\n  version: \"0.2.0\"\n  category: physical-ai",
+          "sha256": "6fc0bcd7e08e26f9a557bbfbdeab593bfa92411513d2b1617fa3162c461ef1de"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.isaac-sim-engineering"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "warp-compile-time-optimizer",
+      "category": "simulation",
+      "bundle": "nvidia-skills",
+      "path": "incoming/simulation/nvidia-skills/warp-compile-time-optimizer",
+      "repository": "https://github.com/NVIDIA/skills",
+      "snapshot_sha256": "9c39aa5bd817d61f9ec33214b41a96c0bcf756a72fa0979d27b6d07458ff470b",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/simulation/nvidia-skills/warp-compile-time-optimizer/SKILL.md",
+          "frontmatter": "name: warp-compile-time-optimizer\ndescription: >-\n  Use when compile time or startup time is the problem in code that uses Warp:\n  a request to improve, optimize, or cut compile times; an app that is slow to\n  start or stalls at the first wp.launch; seconds of compiling before real work\n  begins; JIT modules recompiling on every run or every CI job. Only applies\n  when the code being optimized uses Warp kernels. Not for steady-state kernel\n  runtime, memory, correctness, building Warp itself from source, or nvcc/C++\n  build times.\nlicense: Apache-2.0\ncompatibility: Requires Python 3.10+ and an installed warp-lang package. A CUDA device is needed to diagnose CUDA-specific mechanisms.\nallowed-tools: Bash, Read, Edit, Write, Glob, Grep, env\nmetadata:\n  version: \"0.1.0\"\n  author: \"Warp Team <warp-python@nvidia.com>\"\n  tags:\n    - warp\n    - compilation\n    - cold-start\n    - startup-latency\n    - kernel-cache\n    - gpu",
+          "sha256": "40dc08bf8e5401cb26a9cebd2414d505314ca19e5be8ed4517688a462981c753"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.isaac-sim-engineering"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "warp-debug-gradients",
+      "category": "simulation",
+      "bundle": "nvidia-skills",
+      "path": "incoming/simulation/nvidia-skills/warp-debug-gradients",
+      "repository": "https://github.com/NVIDIA/skills",
+      "snapshot_sha256": "7997eecfc9acdedd29360a92b2f38e1a727272f89589c56b882c7b0b29e33535",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/simulation/nvidia-skills/warp-debug-gradients/SKILL.md",
+          "frontmatter": "name: warp-debug-gradients\ndescription: >-\n  Use to diagnose and fix incorrect gradients in differentiable Warp programs.\n  Anything trained, optimized, calibrated, or fit through Warp kernels depends\n  on wp.Tape gradients, so treat any misbehavior of such a workflow as a\n  gradient problem until proven otherwise — use this when training diverges or\n  NaNs, won't train at all, stalls or plateaus above the expected loss,\n  converges to a wrong or biased answer, is worse than a reference\n  implementation, works at small scale but fails at production scale, or fails\n  a QA/validation recheck. Also for explicit symptoms — exploding, NaN/inf,\n  zero, or subtly wrong gradients, suspected wp.Tape/backward issues, gradcheck\n  failures — but users usually describe only the surface symptom (\"the sim\n  explodes\", \"the fit gets dragged toward outliers\") without mentioning\n  gradients: make that leap. Not for forward-only Warp work, build/install\n  problems, or autograd issues in other frameworks without Warp.\nlicense: Apache-2.0\ncompatibility: Requires a working NVIDIA Warp installation (>= 1.13 minimum; >= 1.17 recommended for reliable verification — copy-adjoint accumulation, overwrite-warning call sites, read-flag lifetime, and gradcheck's restore_inputs changed in 1.17 and are version-caveated in the references; on older versions a fixed bug class still exists and some tools need workarounds). Diagnosis runs the user's reproduction, so a functioning device (CPU or CUDA) is needed.\nmetadata:\n  author: \"Warp Team <warp-python@nvidia.com>\"\n  version: \"0.1.0\"\n  tags:\n  - warp\n  - autodiff\n  - gradients\n  - differentiable-simulation\n  - debugging\n  upstream: https://github.com/NVIDIA/warp",
+          "sha256": "dcecca323f24e88298bb3d9ac2f2283c12f4603bb28e0613ac982fff751fdb34"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.isaac-sim-engineering"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "prd",
+      "category": "workflow",
+      "bundle": "awesome-copilot",
+      "path": "incoming/workflow/awesome-copilot/prd",
+      "repository": "https://github.com/github/awesome-copilot",
+      "snapshot_sha256": "087b40dfbce66d9e7cbf0a2910b9c34935272817d9aa2eea2011028945d3105a",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/workflow/awesome-copilot/prd/SKILL.md",
+          "frontmatter": "name: prd\ndescription: 'Generate high-quality Product Requirements Documents (PRDs) for software systems and AI-powered features. Includes executive summaries, user stories, technical specifications, and risk analysis.'\nlicense: MIT",
+          "sha256": "6772e6f0fcc7110d625c7f4595e4990e1910007676c36d217eda4e779041d5e5"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.workflow-composition",
+        "core.greenfield-planning",
+        "core.brownfield-impact-analysis"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "lean-build",
+      "category": "workflow",
+      "bundle": "caveman",
+      "path": "incoming/workflow/caveman/lean-build",
+      "repository": "https://github.com/juliusbrussee/caveman",
+      "snapshot_sha256": "ef1029d5f8d873fea104d69e79ab32465eb943c4f9b21f7ec90267e44ab63213",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/workflow/caveman/lean-build/SKILL.md",
+          "frontmatter": "name: lean-build\ndescription: Build feature work with high overbuilding risk. Use for new behavior, product slices, or integrations where repository reuse, strict scope, and an explicit stop condition matter.",
+          "sha256": "4d498073c6312858b220e9a04b7456c2485c734edb077f6bb17d88a7ed96ad7a"
+        }
+      ],
+      "disposition": "adapt_principles",
+      "review_depth": "selected_instruction_portions; no full-package promotion",
+      "core_coverage": [
+        "core.workflow-composition",
+        "core.greenfield-planning",
+        "core.brownfield-impact-analysis"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "adopted_portion": "small coherent outcome and explicit non-goals",
+      "destination": "core.implementation-quality",
+      "excluded": "No one-file rule or removal of necessary ownership/design."
+    },
+    {
+      "package": "grill-with-docs",
+      "category": "workflow",
+      "bundle": "mattpocock-skills",
+      "path": "incoming/workflow/mattpocock-skills/grill-with-docs",
+      "repository": "https://github.com/mattpocock/skills",
+      "snapshot_sha256": "97bace4f5b3e85a1072e411e45cbdfebbbf6963fc5dedd8ac90244767a5c1be9",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/workflow/mattpocock-skills/grill-with-docs/SKILL.md",
+          "frontmatter": "name: grill-with-docs\ndescription: A relentless interview to sharpen a plan or design, which also creates docs (ADR's and glossary) as we go.\ndisable-model-invocation: true",
+          "sha256": "7de372c13488f1ee96cc11cd8907b56b6809cc93eef776eeddd37de6b6cbe3fe"
+        }
+      ],
+      "disposition": "adapt_principles",
+      "review_depth": "selected_instruction_portions; no full-package promotion",
+      "core_coverage": [
+        "core.workflow-composition",
+        "core.greenfield-planning",
+        "core.brownfield-impact-analysis"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "adopted_portion": "resolve factual questions from current documents before asking",
+      "destination": "core.intake-and-route",
+      "excluded": "No interrogation loop for already clear reversible tasks."
+    },
+    {
+      "package": "handoff",
+      "category": "workflow",
+      "bundle": "mattpocock-skills",
+      "path": "incoming/workflow/mattpocock-skills/handoff",
+      "repository": "https://github.com/mattpocock/skills",
+      "snapshot_sha256": "bd03848788e63a02b35bae13eb2537096794d7ee7ce8658b95946456c3ba0a33",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/workflow/mattpocock-skills/handoff/SKILL.md",
+          "frontmatter": "name: handoff\ndescription: Compact the current conversation into a handoff document for another agent to pick up.\nargument-hint: \"What will the next session be used for?\"\ndisable-model-invocation: true",
+          "sha256": "4cbb043950dad2ffd3662ff1a5a0b51ae676004b5cae10e3787e8ee7a4ee69d3"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.workflow-composition",
+        "core.greenfield-planning",
+        "core.brownfield-impact-analysis"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "brainstorming",
+      "category": "workflow",
+      "bundle": "superpowers",
+      "path": "incoming/workflow/superpowers/brainstorming",
+      "repository": "https://github.com/obra/superpowers",
+      "snapshot_sha256": "a6b4cb02fd0d93b98a0bbab15003477d6b77464d32fdf1dc70a18be82a47a09f",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/workflow/superpowers/brainstorming/SKILL.md",
+          "frontmatter": "name: brainstorming\ndescription: \"You MUST use this before any creative work - creating features, building components, adding functionality, modifying behavior, or planning anything new, in software or out of it (a talk, a business, a renovation).\"",
+          "sha256": "61a7ef918652108c76a3fd01e02dd92d39996c6b46d4cb2819cbd03f6c45e46a"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.workflow-composition",
+        "core.greenfield-planning",
+        "core.brownfield-impact-analysis"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "dispatching-parallel-agents",
+      "category": "workflow",
+      "bundle": "superpowers",
+      "path": "incoming/workflow/superpowers/dispatching-parallel-agents",
+      "repository": "https://github.com/obra/superpowers",
+      "snapshot_sha256": "2759f62f92260d5a9b4ae8fc5752aa3c246949bb7eac1450ec911d07b05670dc",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/workflow/superpowers/dispatching-parallel-agents/SKILL.md",
+          "frontmatter": "name: dispatching-parallel-agents\ndescription: Use when facing 2+ independent tasks that can be worked on without shared state or sequential dependencies",
+          "sha256": "1968923066f3b707eb01d1992cdf4c42284c3855f70253b9cd5000ff45fca13c"
+        }
+      ],
+      "disposition": "adapt_principles",
+      "review_depth": "selected_instruction_portions; no full-package promotion",
+      "core_coverage": [
+        "core.workflow-composition",
+        "core.greenfield-planning",
+        "core.brownfield-impact-analysis"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "adopted_portion": "independent tasks, focused context and integrated verification",
+      "destination": "core.workflow-composition",
+      "excluded": "No automatic spawning or shared-state mutation."
+    },
+    {
+      "package": "executing-plans",
+      "category": "workflow",
+      "bundle": "superpowers",
+      "path": "incoming/workflow/superpowers/executing-plans",
+      "repository": "https://github.com/obra/superpowers",
+      "snapshot_sha256": "e175ed69b6964620fb3d6d1b68f6e3db9cafa5bcb34293c09f9d32bec76c7b1e",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/workflow/superpowers/executing-plans/SKILL.md",
+          "frontmatter": "name: executing-plans\ndescription: Use when executing an implementation plan in the current session as the implementer yourself — your human partner chose inline execution, or no subagent tool is available",
+          "sha256": "e4649e59880ef2643d1da128e3d607e87e3f969410d72095a5bf65811b6036dc"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.workflow-composition",
+        "core.greenfield-planning",
+        "core.brownfield-impact-analysis"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "subagent-driven-development",
+      "category": "workflow",
+      "bundle": "superpowers",
+      "path": "incoming/workflow/superpowers/subagent-driven-development",
+      "repository": "https://github.com/obra/superpowers",
+      "snapshot_sha256": "5aa87d54c34467b3516bde17f0c6d25563c52038ec8292324bdbf76a1a67483a",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/workflow/superpowers/subagent-driven-development/SKILL.md",
+          "frontmatter": "name: subagent-driven-development\ndescription: Use when executing implementation plans with independent tasks in the current session",
+          "sha256": "ba41f697136cba88a7962d60c8e2f97488ba04a8688b1d0fbeb27f6953808e75"
+        }
+      ],
+      "disposition": "adapt_principles",
+      "review_depth": "selected_instruction_portions; no full-package promotion",
+      "core_coverage": [
+        "core.workflow-composition",
+        "core.greenfield-planning",
+        "core.brownfield-impact-analysis"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "adopted_portion": "separate implementation/review contexts and acceptance checks",
+      "destination": "core.workflow-composition",
+      "excluded": "No fixed models, compulsory per-task reviewers, self-approved material rulings or parked critical defects."
+    },
+    {
+      "package": "using-git-worktrees",
+      "category": "workflow",
+      "bundle": "superpowers",
+      "path": "incoming/workflow/superpowers/using-git-worktrees",
+      "repository": "https://github.com/obra/superpowers",
+      "snapshot_sha256": "a36cf677015cb8f4ffca228045fc681561a16bfb1a34822bfd8fb1f8edb2a66b",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/workflow/superpowers/using-git-worktrees/SKILL.md",
+          "frontmatter": "name: using-git-worktrees\ndescription: Use when starting feature work that needs isolation from current workspace or before executing implementation plans - ensures an isolated workspace exists via native tools or git worktree fallback",
+          "sha256": "8cfb86f121269e8f7f12361e6795c4f6738828340e28964c9229d365666c9edd"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.workflow-composition",
+        "core.greenfield-planning",
+        "core.brownfield-impact-analysis"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "using-superpowers",
+      "category": "workflow",
+      "bundle": "superpowers",
+      "path": "incoming/workflow/superpowers/using-superpowers",
+      "repository": "https://github.com/obra/superpowers",
+      "snapshot_sha256": "6069d06da87295d937355e903921d34f0e1bdd6bba1040f8b85fc88a08dd5b90",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/workflow/superpowers/using-superpowers/SKILL.md",
+          "frontmatter": "name: using-superpowers\ndescription: Use when starting any conversation - establishes how to find and use skills, requiring skill invocation before ANY response including clarifying questions",
+          "sha256": "82c5c8866ad7f5dd4440ce66bd7806ba48a2f13771beae5cf112e53f08fe36ba"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.workflow-composition",
+        "core.greenfield-planning",
+        "core.brownfield-impact-analysis"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "writing-plans",
+      "category": "workflow",
+      "bundle": "superpowers",
+      "path": "incoming/workflow/superpowers/writing-plans",
+      "repository": "https://github.com/obra/superpowers",
+      "snapshot_sha256": "ab32ff72ca5a7fbf2c6abe4e342ad28036ee836933ed8ad3758584ca7390b158",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/workflow/superpowers/writing-plans/SKILL.md",
+          "frontmatter": "name: writing-plans\ndescription: Use when you have a spec or requirements for a multi-step task, before touching code",
+          "sha256": "a6c67c1900064347c2a329990dd3c555657c51c3ec53b259a08aa01a2c26139a"
+        }
+      ],
+      "disposition": "adapt_principles",
+      "review_depth": "selected_instruction_portions; no full-package promotion",
+      "core_coverage": [
+        "core.workflow-composition",
+        "core.greenfield-planning",
+        "core.brownfield-impact-analysis"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "adopted_portion": "bounded acceptance slices and explicit dependencies",
+      "destination": "core.workflow-composition",
+      "excluded": "Do not import a mandatory upstream executor or duplicate planner."
+    },
+    {
+      "package": "writing-skills",
+      "category": "workflow",
+      "bundle": "superpowers",
+      "path": "incoming/workflow/superpowers/writing-skills",
+      "repository": "https://github.com/obra/superpowers",
+      "snapshot_sha256": "f7d63ea3b6dd8c253cce19e2ab59b1481e0eb50b6b526e189d7ac259e0074e12",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/workflow/superpowers/writing-skills/SKILL.md",
+          "frontmatter": "name: writing-skills\ndescription: Use when creating new skills, editing existing skills, or verifying skills work before deployment",
+          "sha256": "8cb3ac68c6d8c4bb46886b998b09af7989643cab8bd0e46ee86dd62e64546bbe"
+        }
+      ],
+      "disposition": "defer_package_review",
+      "review_depth": "metadata_only",
+      "core_coverage": [
+        "core.workflow-composition",
+        "core.greenfield-planning",
+        "core.brownfield-impact-analysis"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+    },
+    {
+      "package": "team-composition-patterns",
+      "category": "workflow",
+      "bundle": "wshobson-agents",
+      "path": "incoming/workflow/wshobson-agents/team-composition-patterns",
+      "repository": "https://github.com/wshobson/agents",
+      "snapshot_sha256": "392b943ca76c3d8ea493eca0fee80e054756603690d3606e9969feea20cf4317",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/workflow/wshobson-agents/team-composition-patterns/SKILL.md",
+          "frontmatter": "name: team-composition-patterns\ndescription: Design optimal agent team compositions with sizing heuristics, preset configurations, and agent type selection. Use this skill when deciding how many agents to spawn for a task, when choosing between a review team versus a feature team versus a debug team, when selecting the correct subagent_type for each role to ensure agents have the tools they need, when configuring display modes (tmux, iTerm2, in-process) for a CI or local environment, or when building a custom team composition for a non-standard workflow such as a migration or security audit.\nversion: 1.0.2",
+          "sha256": "e158dd0e38d875f7efd8d22fc00f800293585c9a44cce7c0715715f87feb164a"
+        }
+      ],
+      "disposition": "adapt_principles",
+      "review_depth": "selected_instruction_portions; no full-package promotion",
+      "core_coverage": [
+        "core.workflow-composition",
+        "core.greenfield-planning",
+        "core.brownfield-impact-analysis"
+      ],
+      "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
+      "runtime_activation": false,
+      "adopted_portion": "minimum roles, explicit ownership and capability matching",
+      "destination": "core.workflow-composition",
+      "excluded": "No Claude-only tool names, tmux configuration or fixed team-size heuristic."
+    }
+  ]
+}

@@ -67,6 +67,12 @@ changing them.
 
 ## 4. Finish with a document record
 
+For a project document workflow, pass purpose, sources and output boundaries to
+`$workflow-composition`. Document-only work uses source/link/claim verification
+and does not activate authored-code quality or every detected language. Preserve
+decision rationale and uncertainty when shortening text. Format-specific
+candidate packages are not active until separately reviewed and registered.
+
 Return the classification, evidence sources, changed or proposed document,
 review status, and this transition. Update trace links when a requirement, API,
 decision, or operational process changed.
