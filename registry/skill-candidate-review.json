@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "reviewed_on": "2026-10-24",
+  "reviewed_on": "2026-10-25",
   "owner": "harness_maintainer",
   "purpose": "Complete candidate inventory and selective core procedure adaptation; not an executable registry",
   "packages": [
@@ -1908,6 +1908,35 @@
       "adopted_portion": "verification evidence before completion claims",
       "destination": "core.verify-and-handoff",
       "excluded": "No redundant reruns when current acceptance evidence suffices."
+    },
+    {
+      "package": "ros2-engineering-skills",
+      "category": "robotics",
+      "bundle": "dbwls99706",
+      "path": "incoming/robotics/dbwls99706/ros2-engineering-skills",
+      "repository": "https://github.com/dbwls99706/ros2-engineering-skills",
+      "ref": "main",
+      "commit": "f0de84dfedd67b067ccc6d2851e681529606930c",
+      "license": "Apache-2.0",
+      "downloaded_on": "2026-10-25",
+      "snapshot_sha256": "dd662d0e3b3715965c52477c1222193a92f423ff723da762a4ca17e31bfd1b29",
+      "skill_count": 1,
+      "metadata": [
+        {
+          "path": "incoming/robotics/dbwls99706/ros2-engineering-skills/SKILL.md",
+          "frontmatter": "name: ros2-engineering-skills\ndescription: >\n  ROS 2 engineering: rclcpp/rclpy, colcon/ament, launch, QoS/DDS, tf2/URDF,\n  ros2_control, Nav2, MoveIt 2, sensors, runtime/artifact provenance, and hardware safety.\n  Use for development, review, debugging, and ROS 1 migration to ROS 2.\n  Not for general C++/Python, unrelated middleware, or web/mobile tasks.\nlicense: Apache-2.0\ncompatibility: >\n  Knowledge files are platform-neutral. Validators require Python 3.10 or\n  newer; YAML checks need PyYAML. ROS builds and runtime tests require the\n  target ROS 2 environment. Claude plugin hooks are client-specific.\nmetadata:\n  author: dbwls99706\n  version: \"1.7.2\"\n  repository: \"https://github.com/dbwls99706/ros2-engineering-skills\"",
+          "sha256": "5d1c83d2c0f350496f98ef200ff8badf46eb6e6aea08c7c42e1c0ca8fc4fc2fe"
+        }
+      ],
+      "disposition": "adapt_principles",
+      "review_depth": "entrypoint_and_selected_procedural_claims",
+      "core_coverage": [
+        "core.ros2-engineering"
+      ],
+      "destination": "core.ros2-engineering",
+      "coverage_limit": "Only runtime provenance, QoS/callback and evidence-boundary procedures rewritten; original scripts/hooks and full references remain inactive and are not a full package audit.",
+      "runtime_activation": false,
+      "reason": "User-authorized scoped ROS2 integration; preserve core gates and use selective references."
     },
     {
       "package": "hsb-app",

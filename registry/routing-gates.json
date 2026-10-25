@@ -117,6 +117,7 @@
     "technology_aliases": {
       "ros 2": "ros2",
       "ros_2": "ros2",
+      "ros-mcp-server": "ros_mcp_server",
       "node": "nodejs",
       "node.js": "nodejs",
       "isaac lab": "isaac_lab",
@@ -436,5 +437,6 @@
     }
   ],
   "work_plan_contract": "plan/08-layered-workflow.md",
-  "work_plan_provider": "scripts/harness_workflow.py"
+  "work_plan_provider": "scripts/harness_workflow.py",
+  "ros2_mcp_reference": "skills/ros2-engineering/references/mcp-inspection.md"
 }

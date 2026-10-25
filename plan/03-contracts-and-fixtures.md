@@ -871,6 +871,10 @@ freshly evidenced when `manual` performs a durable write. It also verifies
 source/target realpath containment, symlink and permission policy, source-tree
 manifest scope (excluding `.git`, `incoming`, state, Python/test caches, and generated metadata),
 and the canonical self-excluded config hash. The source-tree manifest excludes
+the optional ROS MCP `.runtime/`, upstream `build/`, `ros_mcp.egg-info/` and
+`.venv/` under `tools/ros-mcp-server`; these are local dependencies/build output,
+not approved source. The tool's entrypoint, vendored source and lockfile remain
+covered. It also excludes
 its own `registry/adapter-manifest.json` and the mutable
 `registry/active-skills.json`; those two manifests are pinned separately to
 avoid a recursive hash cycle. The adapter manifest hash excludes its own

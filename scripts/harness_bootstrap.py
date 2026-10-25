@@ -64,6 +64,13 @@ def _git_revision(harness_root: Path) -> str:
 
 
 def _is_excluded(relative: str) -> bool:
+    if relative.startswith((
+        "tools/ros-mcp-server/.runtime/",
+        "tools/ros-mcp-server/upstream/build/",
+        "tools/ros-mcp-server/upstream/ros_mcp.egg-info/",
+        "tools/ros-mcp-server/upstream/.venv/",
+    )):
+        return True
     parts = Path(relative).parts
     if any(part in {".DS_Store", "__pycache__", ".pytest_cache"} for part in parts):
         return True

@@ -217,3 +217,11 @@ Full source replacement requires evidence of superiority for the same role,
 compatibility and the normal promotion checks. No current core replacement was
 justified by this update. Additional specialist packages remain available for
 future scoped review rather than being silently discarded or globally loaded.
+
+Optional external tools are stored separately from incoming skills. Their
+original source subset, immutable commit, license, file hashes, dependencies,
+reviewed entrypoint and actual validation limits must be recorded. The ROS 2
+core's `network_access: approved_actions_only` and `optional_tool_profile`
+describe conditional use through a project-scoped action; they do not grant
+network access or register a client. Only the bounded inspection entrypoint is
+supported; downloading upstream's full capabilities does not activate them.

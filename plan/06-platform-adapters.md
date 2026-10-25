@@ -205,6 +205,16 @@ a platform changes:
 | Lifecycle hook | SHOULD for hard gates | probe | probe | explicit block/manual check |
 | MCP | MAY | configured per project | configured per project | no external action |
 
+For ROS MCP, consume `next.tool_profile` only at `core.ros2-engineering`.
+Select the inspected local stdio entrypoint, verify actual tool availability,
+and record the project endpoint and read scope before a live query. Neither
+the routing projection nor tool registration authorizes robot control. The
+default profile exposes graph/type queries only. Missing tools retain offline
+ROS engineering; report the capability gap without claiming live observations.
+Global client configuration is not managed by this harness. Optional tool
+dependencies/build output live outside its source integrity scope; their source
+and lockfile remain covered. See [setup](../tools/ros-mcp-server/README.md).
+
 The installer and adapters MUST preserve the same root-resolution, conflict,
 rollback, state-containment, registry-quarantine, and enforcement semantics;
 only presentation and platform-specific loading may differ.

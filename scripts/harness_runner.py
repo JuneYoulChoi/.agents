@@ -105,6 +105,12 @@ def _next_item(state: dict[str, Any], entries: dict[str, str], harness_root: Pat
         "execution_profile": execution_profile,
         "application_depth": application_depth,
         "work_plan": state["route"].get("work_plan"),
+        "tool_profile": (
+            state["route"].get("ros2_mcp_profile")
+            if skill_id == "core.ros2-engineering"
+            and state["route"].get("ros2_mcp_profile", {}).get("applicable")
+            else None
+        ),
         "expected_result": {
             "schema_version": 1,
             "skill_id": skill_id,

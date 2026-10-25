@@ -32,6 +32,12 @@ external-interface decisions are at least medium risk.
 7. Verify interface/QoS compatibility, unit/component/launch/system behavior,
    shutdown and failure paths, timing/performance QAS, and architecture docs.
 
+For runtime diagnosis, also read
+[references/runtime-evidence.md](references/runtime-evidence.md).
+For an explicitly selected ROS MCP integration, read
+[references/mcp-inspection.md](references/mcp-inspection.md). Do not require
+MCP for ordinary ROS 2 development or infer robot access from skill selection.
+
 ## Result
 
 ```yaml
@@ -47,6 +53,7 @@ ros2:
   language_bindings: []
   configuration_contracts: []
   verification: []
+  mcp_inspection: null # optional; capability and observed evidence, never presumed
   documentation_effects: []
   open_points: []
 transition:

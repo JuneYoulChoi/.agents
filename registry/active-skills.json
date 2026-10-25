@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-24",
+  "generated_at": "2026-10-25",
   "integrity_policy": {
     "core_entries": "harness_source_tree_manifest",
     "adapter_manifest": "registry/adapter-manifest.json",
-    "manifest_revision": "workspace-20261024-428834665227",
+    "manifest_revision": "workspace-20261025-ab9cb9b48688",
     "manifest_hash_scope": "canonical active-skills.json excluding integrity_policy.manifest_sha256",
     "excluded_paths": [
       ".git",
@@ -15,9 +15,13 @@
       "registry/active-skills.json",
       "registry/adapter-manifest.json",
       "__pycache__",
-      ".pytest_cache"
+      ".pytest_cache",
+      "tools/ros-mcp-server/.runtime",
+      "tools/ros-mcp-server/upstream/build",
+      "tools/ros-mcp-server/upstream/ros_mcp.egg-info",
+      "tools/ros-mcp-server/upstream/.venv"
     ],
-    "manifest_sha256": "ab9d9bbf5f2616d768a17dbb5c7d802c36de33e3f39cdc47898fbd4ab8bbcb69"
+    "manifest_sha256": "7d5958f6662266fb1017bc8414764ea426273ce881d130f4f7ecec1ca21d4eda"
   },
   "resolution_order": [
     "project_reviewed",
@@ -224,7 +228,7 @@
     },
     {
       "id": "core.ros2-engineering",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "entry": "skills/ros2-engineering/SKILL.md",
       "trust": "approved",
       "capabilities": [
@@ -232,15 +236,26 @@
         "ros2_interfaces",
         "ros2_qos",
         "ros2_execution",
-        "ros2_verification"
+        "ros2_verification",
+        "ros2_runtime_evidence",
+        "conditional_mcp_inspection"
       ],
-      "network_access": "none",
-      "data_access": "workspace",
+      "network_access": "approved_actions_only",
+      "data_access": "workspace_and_approved_endpoint",
       "mutation": "workspace",
       "platforms": [
         "codex",
         "claude"
-      ]
+      ],
+      "optional_tool_profile": {
+        "id": "ros2-inspect",
+        "entry": "tools/ros-mcp-server/run.sh",
+        "reference": "skills/ros2-engineering/references/mcp-inspection.md",
+        "condition": "ros2_mcp_profile.applicable",
+        "required": false,
+        "mutation": "none",
+        "authority": "project_scoped_read_action"
+      }
     },
     {
       "id": "core.nodejs-engineering",

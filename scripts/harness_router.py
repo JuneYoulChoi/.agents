@@ -88,6 +88,10 @@ def _string_list(context: dict[str, Any], key: str) -> list[str]:
 
 def _load_manifest(path: Path) -> dict[str, Any]:
     manifest = _read_json(path)
+    if manifest.get("ros2_mcp_reference") not in (
+        None, "skills/ros2-engineering/references/mcp-inspection.md"
+    ):
+        raise RouterError("ROS MCP reference must be the reviewed core reference")
     gates = manifest.get("gates")
     edges = manifest.get("forward_edges")
     if manifest.get("model") != "layered_gated_skill_graph":
@@ -789,6 +793,16 @@ def route(context: dict[str, Any], manifest: dict[str, Any]) -> dict[str, Any]:
             )
             events.append({"type": "gate_reopened", "gate_id": item["target_gate"], "forward_revision": item["next_forward_revision"]})
 
+    ros2_mcp_applicable = (
+        target == "project" and is_software and status == "active"
+        and project_state in {"greenfield", "brownfield", "hybrid"}
+        and {"ros2", "ros_mcp_server"} <= tech_selected
+        and "core.ros2-engineering" in all_activated
+        and bool(manifest.get("ros2_mcp_reference"))
+    )
+    if ros2_mcp_applicable:
+        g5 = next(gate for gate in gate_results if gate["gate_id"] == "G5")
+        g5["activated_branches"].append("tool_profile:ros2_mcp_inspection")
     return {
         "schema_version": 1,
         "request_id": request_id,
@@ -797,6 +811,13 @@ def route(context: dict[str, Any], manifest: dict[str, Any]) -> dict[str, Any]:
         "forward_revision": final_revision,
         "execution_profile": execution_profile,
         "work_plan": compose_work_plan(context, status),
+        "ros2_mcp_profile": {
+            "applicable": ros2_mcp_applicable,
+            "reason": "selected_ros2_and_ros_mcp_server" if ros2_mcp_applicable else "not_selected_or_route_not_ready",
+            "reference": manifest.get("ros2_mcp_reference") if ros2_mcp_applicable else None,
+            "execution_authorized": False,
+            "capability_check_required": True,
+        },
         "gate_results": gate_results,
         "activated_skills": list(dict.fromkeys(all_activated)),
         "suppressed_skills": [*g5_suppressed, *g6_suppressed],

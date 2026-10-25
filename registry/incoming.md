@@ -2,7 +2,7 @@
 
 Current layout: `incoming/<category>/<source-bundle>/<package>/`. Packages remain inert candidates. Original licenses are under `incoming/_provenance/`.
 
-110 packages contain 126 SKILL.md entrypoints. See [candidate dispositions](skill-candidate-review.json) and [adoption review](../docs/harness/skill-adoption.md). The candidate inventory is not consulted for executable skill resolution.
+111 packages contain 127 SKILL.md entrypoints. See [candidate dispositions](skill-candidate-review.json) and [adoption review](../docs/harness/skill-adoption.md). The candidate inventory is not consulted for executable skill resolution.
 
 | Category | Packages | Bundles |
 | --- | ---: | --- |
@@ -21,7 +21,7 @@ Current layout: `incoming/<category>/<source-bundle>/<package>/`. Packages remai
 | physical-ai | 3 | nvidia-skills |
 | simulation | 9 | blender-claude-plugin, mujoco, nvidia-skills |
 | 3d | 4 | blender-claude-plugin |
-| robotics | 5 | nvidia-skills |
+| robotics | 6 | dbwls99706, nvidia-skills |
 
 ## Promotion boundary
 

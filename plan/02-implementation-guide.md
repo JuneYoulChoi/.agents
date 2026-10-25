@@ -433,6 +433,19 @@ These arrows describe skill dependency, not automatic product adoption. React
 does not imply a Node.js production server; Docker does not imply Kubernetes;
 ROS 2 does not imply MoveIt/Isaac; and Modbus does not imply a specific bridge.
 
+The optional ROS MCP profile is a conditional reference under the existing
+ROS 2 skill, not a new gate or ecosystem dependency. For a classified target
+software project with an active route, both `ros2` and `ros_mcp_server` must
+be selected/required or materially detected. `ros-mcp-server` normalizes to
+`ros_mcp_server`; generic MCP and candidate-only mentions do not qualify.
+The Router emits `ros2_mcp_profile`, with applicability, the reviewed reference,
+`execution_authorized: false` and a required capability check. Unknown project
+state, blocked routes and harness maintenance do not offer the profile.
+The Runner preserves it and exposes `next.tool_profile` only at the ROS 2
+skill. It never starts a server. See the
+[inspection contract](../skills/ros2-engineering/references/mcp-inspection.md)
+and [optional tool setup](../tools/ros-mcp-server/README.md).
+
 ## International-standard and pattern assembly rule
 
 G2 always emits `standards_applicability` for target software. Resolve only a

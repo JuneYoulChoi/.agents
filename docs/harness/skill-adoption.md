@@ -43,7 +43,7 @@ AI-DLC work outlines and proportional procedure inform `plan/08-layered-workflow
 | physical-ai | 3 | core.isaac-lab-engineering, core.isaac-sim-engineering |
 | simulation | 9 | core.isaac-sim-engineering |
 | 3d | 4 | core.technology-selection-and-integration |
-| robotics | 5 | core.ros2-engineering, core.moveit-engineering, core.modbus-engineering |
+| robotics | 6 | core.ros2-engineering, core.moveit-engineering, core.modbus-engineering |
 
 Coverage identifies the routing owner, not equivalence to every candidate. PDF/Office authoring, Blender, CUDA/model training, vendor sensor setup, specialized security scanners and database-specific guidance are still candidate capabilities. A task needing them requires a scoped review/adaptation or an explicit core fallback. No generic robotics skill is represented as a gripper or force-sensor driver.
 
@@ -54,3 +54,20 @@ The [machine inventory](../../registry/skill-candidate-review.json) records each
 ## Replacement decision
 
 Retain all existing core skills: their authority, portability and result contracts remain needed. Add one `workflow-composition` owner rather than installing overlapping orchestration frameworks. Incorporate planning, design, implementation and review improvements in their existing owners. Claims of lower tokens, shorter elapsed time and better output require representative measurements; none are claimed by this review.
+
+## ROS 2 scoped addition — 2026-10-25
+
+The inventory now contains 111 packages / 127 entrypoints. The original
+[ROS 2 package](../../incoming/robotics/dbwls99706/ros2-engineering-skills/SKILL.md)
+is pinned at `f0de84dfedd67b067ccc6d2851e681529606930c`, Apache-2.0.
+Its entrypoint and selected runtime-provenance, callback/QoS and claim-boundary
+ideas informed the active `core.ros2-engineering` 0.2.0 references. Original
+hooks, validators, install scripts and the full reference corpus remain inert;
+this is selective adaptation, not whole-package promotion or audit. There are
+now 16 packages with selected procedural adaptations.
+
+The separate [ROS MCP tool](../../tools/ros-mcp-server/README.md) preserves a
+pinned original runtime subset and adds an inspected graph-only entrypoint.
+It is outside incoming because it is a tool, not a skill. The user approved
+download, scoped integration, testing and commit. No other MCP skill was
+activated. See [review evidence](ros2-mcp-review-2026-10-25.md).

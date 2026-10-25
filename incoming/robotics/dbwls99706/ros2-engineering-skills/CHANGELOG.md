@@ -1,0 +1,638 @@
+# Changelog
+
+All notable changes are documented here.
+
+## 1.7.2 - 2026-10-19
+
+Source bundle version 1.7.2. Documentation corrections for Isaac ROS 5.0
+(2026-09-21), which moved to ROS 2 Lyrical and replaced NITROS with
+`rosidl::Buffer`. No new tools; the hook-report contract stays at version 1.4.0.
+Checked against the Isaac ROS 5.0 release notes and concept pages, the Lyrical
+buffer-backend documentation, and the Lyrical rclcpp, rosidl, and CUDA backend
+sources. No GPU runtime test was performed: CUDA IPC zero-copy, CPU fallback at
+runtime, and performance remain unverified, and a runnable procedure based on the
+upstream CUDA backend tests is recorded in the release pull request. Client
+activation was measured in one client only (see the activation case below);
+Codex, Cursor, and Gemini were not measured.
+
+- NITROS guidance: `references/perception.md` and `references/simulation.md` no
+  longer present NITROS as the current GPU path. They state that Isaac ROS 4.x and
+  earlier use NITROS, that 5.0 removed the NITROS packages and keeps only
+  `isaac_ros_nitros_bridge_ros2` as deprecated, and they replace "drop-in
+  replacements" with the split between unchanged node interfaces and a
+  source-level migration for code that calls NITROS APIs or types.
+- `references/communication.md` §6 adds a `rosidl::Buffer` subsection: subscriber
+  opt-in through `acceptable_buffer_backends`, CPU fallback (and which faults are
+  not fallback), CUDA backend scope and volatile-only zero-copy, conversion
+  package before direct CUDA backend use, the `"any"` value and CPU always being
+  acceptable, the CUDA backend signatures and handle contract (the `cudaStream_t`
+  argument, `get_ptr()`, events recorded when a handle is destroyed, promoted
+  buffers) and which calls copy, a CPU fallback policy by case (a consumer that
+  supports fallback processes CPU-backed frames, on the CPU or through a
+  `from_input_buffer` host-to-device promotion counted as fallback; an explicitly
+  GPU-only consumer may reject them but documents that limit), CPU-only transport
+  choices, and a verification procedure that does not infer the transfer path from
+  CUDA availability, `.cuda()`, or cross-process pointer values, uses Nsight
+  Systems CUDA tracing for CUDA memory transfers and CPU-side profiling or
+  explicit instrumentation for CPU-to-CPU copies, and reports content-check copies
+  separately from the transport segment.
+- `references/engineering-principles.md` Kilted → Lyrical note adds the
+  `uint8[]` → `rosidl::Buffer<uint8_t>` change and Isaac ROS 5.0's Lyrical
+  packages for Ubuntu 24.04 on Jetson. The `SKILL.md` router's communication row
+  names GPU buffers.
+- Isaac ROS package list: `references/perception.md` follows the 5.0 package
+  list — `isaac_ros_cuvslam` for visual SLAM, `isaac_ros_rtdetr`,
+  `isaac_ros_yolov8`, and `isaac_ros_detectnet` from the object detection
+  repository. `isaac_ros_depth_segmentation` was removed from the list because
+  the 5.0 package list does not include it.
+- Add the `gpu-buffer-shorthand` activation case. The `SKILL.md` description is
+  intentionally unchanged: the case measures whether vocabulary absent from the
+  description still activates the skill, and the description is revised in a
+  later release only if a real client run fails. In seven fresh Claude Code CLI
+  2.1.302 sessions (`claude-sonnet-5-5`, project-scope install of source commit
+  `bae6698`, other installed skills exposed, write tools and MCP disabled) the
+  skill was selected in 3/3 `gpu-buffer-shorthand` runs, 0/3 `ros-mentioned-css`
+  runs, and 1/1 explicit invocation, and each positive run then read
+  `communication.md`. This is routing evidence for one client and one model, not
+  a quality claim. A second probe (Claude Code CLI 2.1.303, same model,
+  `--max-turns 30`, same tool restrictions) was run on three successive revisions
+  of the reference content, the last identical to this release; each repeated 3/3,
+  0/3, and 1/1 and produced a final text response in 7/7 runs. The three GPU
+  answers per revision were graded against eight preregistered static-accuracy
+  criteria, six of them critical. Before the CUDA backend signatures were added to
+  §6, no answer passed every critical criterion: all three failed API correctness
+  (missing `cudaStream_t` argument, handle accessors that do not exist) and all
+  three dropped CPU-backed frames instead of handling the fallback. With the
+  signatures, API correctness passed 3/3, but two answers still dropped CPU-backed
+  frames, so 1/3 passed every critical criterion. With the CPU fallback policy
+  added, 2/3 passed; the remaining answer counted CPU-backed frames without
+  processing them. The API criterion covers C++ calls only; build files still had
+  defects (one nonexistent package name, and the deprecated
+  `ament_target_dependencies` in several answers). No answer was compiled or run,
+  and the grader was not independent of the model family.
+- Add a section-scoped factuality regression class and register the Isaac ROS 5.0
+  and Lyrical buffer-backend sources, the Lyrical rclcpp, rosidl, and CUDA
+  backend source files that define the named APIs, and the NVIDIA Nsight Systems
+  User Guide, with review dates.
+
+## 1.7.1 - 2026-10-14
+
+Source bundle version 1.7.1. Corrections from field use on a Foxy robot fleet (September to October 2026):
+false positives in both hooks, an installer that could delete a client
+configuration directory, validators that misread inputs, and guidance that was
+wrong or missing for Foxy. No new capability. This patch release keeps the hook-report contract at
+version 1.4.0; it is independent of the source bundle version.
+
+Hooks:
+
+- Stop hook: a `*_launch.py` file is validated as a launch file only when it
+  imports a launch package or binds `generate_launch_description`; pytest
+  modules and process stubs that merely end in `_launch.py` are no longer
+  reported as "Missing generate_launch_description". `launch_testing` modules
+  (`generate_test_description`) are recognised. A `.launch.py` file stays
+  strict, and a syntax error in launch code is still reported.
+- Stop hook: `git status` runs with `--no-optional-locks`, so it no longer
+  rewrites `.git/index` at every turn end and no longer makes a concurrent
+  `git add`/`git commit` fail with `index.lock: File exists`.
+- Stop hook: YAML files without a Nav2 marker are not parsed, files above 1 MiB
+  are reported in `checks_skipped` instead of consuming the whole time budget,
+  and a non-UTF-8 source or YAML file is a finding instead of a crash that
+  dropped every other finding. Launch files are decoded as the launch loader
+  does (PEP 263 coding line, strict UTF-8 otherwise).
+- Stop hook: loop bodies and loop `else` clauses are no longer treated as
+  certain module-scope bindings; a loop over an empty literal never binds.
+- Adapter: an unchanged Stop advisory is shown once per session and again only
+  when a finding or one of its files changes; any cache failure, including a
+  symlinked cache directory or undecodable state, shows it as before. `ROS2_SKILL_DISABLE_HOOKS` (`Stop`, `PreToolUse`, `all`) turns an
+  adapter off; a knowledge-only installation (`INSTALL_PROVENANCE.json`)
+  never runs hooks even for a session that registered them before the
+  reinstall. Hooks run Python with `-B` so no `__pycache__` appears in a
+  provenance-tracked installation.
+- PreToolUse: destructive-command words count only in command position
+  (`sudo mkfs`, `ssh host 'rm -rf /'`, a here-doc script line), so `grep mkfs`,
+  `man mkfs.ext4`, a commit message or a sentence in a document are no longer
+  refused with the blocking exit code. Operator patterns (`> /dev/sda`, fork
+  bomb, `Remove-Item -Recurse -Force <root>`) still match anywhere. Pattern
+  flags moved from inline `(?i)` to a `flags` field.
+- PreToolUse: Write/Edit content is checked only for source extensions, the
+  same scope as `check_file()` and manual `--file`; Markdown, shell and
+  parameter files that mention `time.sleep()` or `ROS_LOCALHOST_ONLY` are not
+  nodes.
+- PreToolUse: the `ROS_LOCALHOST_ONLY` warning is suppressed on Foxy, Galactic
+  and Humble, where `ROS_AUTOMATIC_DISCOVERY_RANGE` does not exist and the
+  advice would open discovery to the network; the message now says "since
+  Iron".
+
+Installers and validators:
+
+- `install.sh --force` / `install.ps1 -Force` replace only a previous
+  installation of this skill (`SKILL.md` naming it, `references/`, and a
+  matching `INSTALL_PROVENANCE.json` when present: one JSON object whose
+  `skill_name` is this skill and whose `schema_version` is exactly the
+  integer 1, so `"1"`, `true`, `1.0` or a one-element array are refused on
+  both platforms). Client configuration
+  directories such as `~/.claude`, `~/.codex` or any `skills/` parent are
+  refused even when empty; `--dry-run` applies the same judgement. The
+  directory name itself is not restricted. `--link` explains that a linked
+  checkout may register hooks on a client that scans it. `install_skill.py
+  --verify` names the resolved directory when the target is a symlink.
+  Bundled `scripts/*.py` are executable.
+- `launch_validator.py`: duplicate node names in different branches of one
+  `if` or in different `return` statements of one function are a warning, not
+  an error; duplicates inside one return list stay an error. The entry point
+  is resolved from module-scope bindings (re-exports and aliases count, nested
+  defs do not, loops are conditional) and must be a synchronous callable: an
+  entry point bound to `None`, a literal, a module or an `async def` is an
+  error, the same verdict the Stop hook reaches. Sources are decoded like
+  Python's import, independent of the locale. Directory scans skip `build/`,
+  `install/`, `log/`, hidden directories, and `_launch.py` modules that are
+  not launch code, judged from the syntax tree rather than from a mention in
+  a comment (the raw text decides only when a file cannot be parsed).
+- `rosbag2_qos_checker.py` accepts the bag directory, reads metadata as bytes
+  so a non-UTF-8 locale cannot misread it, and reports invalid YAML or a
+  malformed structure as an error with exit 1 instead of a traceback or a
+  partial result; only an absent `topics_with_message_count` means no
+  topics, while `null`, `""`, `{}`, `0` or `false` is an error. Both metadata
+  layouts and an empty file still parse.
+- `qos_audit.py` reports a scan that found no files (`empty_scan`, a warning
+  on stderr) and fails it under `--strict`.
+- `create_package.py --type python` (plain and `--lifecycle`): the generated
+  `main()` owns SIGINT/SIGTERM. rclpy is initialised with
+  `SignalHandlerOptions.NO` (plain `rclpy.init()` on Foxy), the handler only
+  records the request, and the main thread leaves a `spin_once` loop and
+  removes the node, shuts the executor down, destroys the node and the
+  context once, in that order. rclpy's default handler shuts the context down
+  from its signal thread while the main thread, woken by `KeyboardInterrupt`,
+  is already destroying the node; that race crashed a generated node with
+  SIGSEGV at shutdown on Humble (rclpy 3.3) in the generated-fleet CI gate.
+  This is the pattern `references/nodes-executors.md` section 1 already
+  recommends.
+- `qos_checker.py` warns that a TRANSIENT_LOCAL publisher with a VOLATILE
+  subscriber connects but delivers no history to a late joiner.
+- Test suite: `tests/test_qos_property.py` skips without Hypothesis instead of
+  aborting collection (CI asserts the import); the skill-name test checks the
+  installer's output directory instead of the checkout's name.
+- CI: the ROS 2 runtime container timeout rises from 360 to 600 seconds (outer
+  Docker timeout 630 seconds, GitHub job 35 minutes) to accommodate runner load;
+  per-stage timeouts and failure detection stay unchanged. A regression test
+  checks the nested time budgets.
+- Project presentation: add the README cover and logo under `docs/assets/`.
+
+Guidance (`references/`), with the distribution each statement was verified on:
+
+- `communication.md`: TRANSIENT_LOCAL publisher with VOLATILE subscriber
+  connects but delivers no history; Foxy `ros2 topic echo` has no `--field`.
+- `debugging.md`: `ros2 topic echo` defaults (Foxy `sensor_data` preset,
+  Humble+ adaptive) and latched topics; interface pinning needs the running
+  processes' DDS configuration and an A/B/A check; `pgrep -f` must not match
+  its own shell.
+- `runtime-provenance.md`: `pgrep -f '[c]ontroller_server'` plus `/proc`
+  confirmation; `CYCLONEDDS_URI` and `FASTRTPS_DEFAULT_PROFILES_FILE` in the
+  environment check; copying a symlinked tree with `cp -rL` only after every
+  link resolves inside the tree by whole path components (a string prefix
+  accepts a sibling such as `share-outside`).
+- `lifecycle-components.md`: `component_container_isolated` is executor
+  isolation in one process, not crash isolation, and does not exist on Foxy.
+- `nodes-executors.md`: a Foxy SIGTERM example (handler records, cleanup after
+  the spin); the service-call rule separates callback-group-bound response
+  handling from done callbacks, which belong to no group and need their own
+  locking; "never `call()`" is stated with its conditions; rclpy runs ready
+  timers before waiting subscriptions after a long callback; rclpy cost scales
+  with delivered samples; the log severity of a call site is fixed.
+- `message-types.md` and `testing.md`: ROS_TIME is the wall clock without
+  sim time; the age of a stamp is computed on the node's ROS clock, while
+  time since receipt, timeouts and executor delay use the steady clock, and a
+  stamp is never compared with `time.monotonic()`; wait helpers use
+  `time.monotonic()`; four more test failure causes.
+- `launch-system.md`: SIGTERM to `ros2 launch` cancels without a `Shutdown`
+  event, so `OnShutdown` never runs (launch 0.10.10 and 1.0.14 source).
+- `evidence-progression.md`, `system-bringup.md`, `navigation.md`: find the
+  other check that reads the same quantity; confirm persistent journald before
+  trusting a watchdog reboot; start LIO mapping from rest.
+
+Known limits of this change: `install.ps1` is exercised by CI only (no local
+PowerShell); Foxy-specific statements come from reading the Foxy sources and
+from field runs, not from this repository's CI matrix (Humble and later).
+
+## 1.7.0 - 2026-10-02
+
+Source bundle version 1.7.0. Release publication follows
+`docs/RELEASING.md`. Two new capabilities: a plugin ON/OFF benchmark capture and
+blinded evaluation workflow, and installation provenance with local-drift
+protection. No measured plugin ON/OFF model result is included in this release.
+
+Plugin ON/OFF benchmark capture and blinded evaluation workflow:
+
+- Add `docs/BENCHMARK_RUNBOOK.md`: pin the skill, harness, and suite revisions,
+  isolate the two arms with `CLAUDE_CONFIG_DIR`, install the ON arm from a
+  detached checkout through a local marketplace, run the preregistered suite in
+  a frozen seeded order, grade blind, score per pair and per criterion, and
+  state what the result does not establish. Plugin hook output is evidence that
+  the plugin was available, not that `SKILL.md` was loaded; `skill_loaded` is a
+  diagnostic, and the treatment is the whole plugin.
+- Add `scripts/benchmark_capture.py` (`init`, `add-run`, `status`,
+  `grade-sheet`, `score`): writes schema-2 `capture.json` manifests that pass
+  `scripts/verify_eval_capture.py` unchanged, enforces the frozen run order and
+  the recorded harness revision, binds `skill_revision` to a verified checkout,
+  prevalidates both artifacts before writing either, and excludes failed or
+  contaminated runs from the paired comparison. `grade-sheet` and `score` run
+  the integrity verifier first and read answers only through hash-checked,
+  bundle-contained paths; `grade-sheet` refuses to overwrite recorded grades
+  without `--force`; `score` rejects a `key.json` that does not equal the
+  assignments re-derived from the manifest and seed. `grades.json` is bound to
+  the suite and the exact blinded answer set it graded by `grading_sha256`,
+  which `score` recomputes and enforces; `grade-sheet` refuses symbolic-link
+  output paths, `--force` replaces only its generated files and refuses
+  non-regular ones before removing anything, and JSON files are written through
+  unpredictable temporary names. `score` validates the structure of
+  `grades.json` (every case, blinded id, and criterion present; values
+  `pass`/`fail`/`abstain`/`null`) so a missing row cannot hide as an unknown.
+- Preregister `critical_criteria` labels per case in `evals/benchmark_suite.json`
+  and validate the optional `skill_revision_binding` manifest field.
+
+Generator compatibility:
+
+- `scripts/create_package.py --type hardware_interface` detects the ros2_control
+  hardware component API when CMake configures the generated package, by
+  compiling a probe rather than comparing versions. On Jazzy 4.x and newer it
+  builds the framework-managed path: no `export_*_interfaces()` overrides,
+  handles cached in `on_configure()`, non-blocking handle access in `read()` /
+  `write()`, non-finite commands never taken as targets, and commands synced to
+  the measured position on activation. On Humble 2.x it keeps the manual export
+  path. ros2_control 6.12 (2026-10-07) removed the manual methods and the
+  `double*` handle constructor, which broke the Rolling integration job because
+  that image builds ros2_control from source; the container gates now assert the
+  detected path per distro.
+
+Installation provenance and local-drift protection:
+
+- `scripts/install_skill.py` writes `INSTALL_PROVENANCE.json` into every
+  installation: schema 1, SHA-256 per installed file, the source version, the
+  source commit and whether the copied bytes differed from it (modified,
+  untracked, and ignored files under installed paths; editor backups and caches
+  are never copied), and the installer version. `--verify` compares an installation with
+  its manifest and exits 0 only when clean; symbolic links and special files
+  inside an installation are reported as drift and never opened, and caches
+  generated by running tools are not drift.
+- `--force` now refuses to replace an installation that differs from its
+  manifest or has none, which includes every installation made before this
+  release; `--force --discard-local-changes` replaces it anyway. The manifest is
+  a snapshot for detecting accidental or local drift, not a signed attestation.
+  The installer does not search for custom installation locations.
+- `install.sh` and `install.ps1` refuse to replace a target that is a symbolic
+  link or reparse point instead of deleting the link and creating a separate
+  copy; re-run with the resolved path.
+
+## 1.6.2 - 2026-09-30
+
+Source bundle version 1.6.2. Release publication follows
+`docs/RELEASING.md`. Field-learned guidance corrections generalized from robot
+operation; no new tools, no site-specific values, and no measured model results.
+
+- Separate availability policy from the motion permit in
+  `references/evidence-progression.md`: a lost telemetry, dashboard, or management
+  link is evidence about that link, is classified against the documented policy,
+  and the permit-owning path is identified separately. `references/safety-estop.md`
+  points at the permit owner when a link drops.
+- Add deployment chronology to `references/runtime-provenance.md`: a commit, a
+  build artifact, a deployment event, and the bytes installed now are four claims;
+  an earlier report's hash is not evidence about the current installation, so
+  re-read and re-hash the target after deploying (checklist row 11).
+- Add a verification-ladder rule in `references/testing.md` that a harness,
+  fixture, import, or collection failure means the behavior check did not run and
+  is reported as unperformed, while a required message the system did not produce
+  remains a behavior finding.
+- Add shutdown-signal guidance and an example to `references/nodes-executors.md`:
+  handlers record a request only, the spin ends at a control-flow boundary,
+  cleanup runs once, `ExternalShutdownException` is a normal exit, and a sent
+  cleanup command is not a physical stop. Note that the default context installs
+  SIGINT/SIGTERM handlers on Humble and later and that Foxy predates
+  `SignalHandlerOptions`.
+- State in `references/debugging.md` that a bag still being written is not a
+  finalized recording artifact because rosbag2 writes `metadata.yaml` on writer
+  close; verify with `ros2 bag info` after a clean stop. Correct the MCAP default
+  to Iron onward (Humble stays sqlite3) per `default_storage_id.cpp`.
+- Add black-box controller evidence to `references/system-diagnostics.md`: obtain
+  the vendor decision or fault log and align it with recorded ROS data by
+  timestamp instead of inferring the cause from topics alone.
+- Add counterfactual replay provenance to `references/artifact-lineage.md`: compare
+  against what the executor actually received, state the replay start event, bound
+  results by sensor coverage, and check the instrument with a positive control
+  before concluding about robot behavior.
+- Add string-level regression tests for each rule and register the rclpy and
+  rosbag2 upstream sources with review dates.
+
+## 1.6.1 - 2026-09-30
+
+Source bundle version 1.6.1. Release publication follows
+`docs/RELEASING.md`. Launch best-practice correction prompted by the
+Discourse review of v1.5.0 and verified against ROS 2 documentation, the
+`ros2/launch` implementation, and `ros2_control` behavior.
+
+- Replace the absolute "always use Python launch files" rule in
+  `references/launch-system.md` with declarative-first guidance: prefer XML or
+  YAML for straightforward launch descriptions and use Python when the required
+  behavior cannot be expressed through the frontends or needs lower-level launch
+  APIs, as the ROS 2 migration guide states for typical use cases. Open with a
+  format decision table and the same minimal launch in XML, YAML, and Python;
+  state that launch stays focused on orchestration and that justified Python
+  keeps a declarative, substitution-based description.
+- Show dedicated boolean substitutions (`equals`, `and`, `or`, `not`, `any`,
+  `all`) before `PythonExpression`, note that old or pinned installations may
+  differ, and document `XMLLaunchDescriptionSource`,
+  `YAMLLaunchDescriptionSource`, and `AnyLaunchDescriptionSource` for
+  cross-format includes.
+- State that `OnProcessExit` establishes termination ordering only and does not
+  prove a controller loaded or activated. Gate the spawner chain on
+  `returncode == 0` with `LogInfo` and `Shutdown(reason=...)` on failure, and
+  limit that gate to processes with a failure contract. Show one spawner with
+  several controllers, noting that it is not atomic and that
+  `--activate-as-group` groups activation only.
+- Describe `--show-args`, `--print`, and `ament_xmllint` as load/parse smoke,
+  structural inspection, and XML markup checks; none verifies runtime
+  behavior. `scripts/launch_validator.py` remains Python-only at 0.1.0 and no
+  XML or YAML static validator is added.
+- Rewrite the ROS 1 launch conversion in `references/migration-ros1.md` as
+  ROS 1 XML to ROS 2 XML with a three-column conversion table that keeps the
+  Python API as the justified alternative.
+- Add string-level regression tests for the corrected guidance and register the
+  upstream sources with review dates. The new XML, YAML, and Python examples
+  were reviewed statically; parser smoke not run locally. CI does not execute
+  the reference examples, and no skill on/off model comparison was run.
+
+## 1.6.0 - 2026-09-28
+
+Source bundle version 1.6.0. Release publication follows
+`docs/RELEASING.md`.
+
+- Add `scripts/qos_audit.py` (0.1.0), a static audit that pairs rclpy (AST) and
+  rclcpp (lexical) publisher/subscription declarations by topic and canonical
+  `pkg/msg/Type` across a package or workspace.
+- Pair only identical absolute topics as confirmed; identical relative or private
+  literals are potential; `/scan` and `scan` are never merged. A topic whose
+  publisher and subscription types share nothing is a type conflict; extra types
+  alongside a common one are a multi-type warning.
+- Evaluate compatibility with Humble `rmw_dds_common` semantics as compatible,
+  incompatible, or indeterminate. SYSTEM_DEFAULT/UNKNOWN policies and unspecified
+  durations are preserved, never replaced with concrete values.
+- Report dynamic topics, unparsed QoS arguments, C++ QoS variables, invalid rclpy
+  profiles (KEEP_LAST without depth), and distro-sensitive policies such as
+  BEST_AVAILABLE as unresolved. A type conflict is definite only when no
+  unresolved-type or dynamic-topic endpoint could complete the type sets.
+- Report a pair as indeterminate, keeping the declared result as a baseline, when an
+  endpoint enables `qos_overriding_options` or passes C++ options the audit cannot
+  track. Message types and QoS profiles resolve only through unconditional imports
+  placed before use in the enclosing scope; the two-interface rclcpp free functions
+  are parsed, and an ambiguous overload stays unresolved.
+- List YAML `qos_overrides` as unapplied candidates. Skipped, non-UTF-8, or
+  unparsable files and unreadable directories are reported as an incomplete scan.
+  `--strict` also fails on potential, unresolved, indeterminate, or incomplete-scan
+  results.
+- Route multi-reference questions through section headings, and add a README map
+  separating guidance, tools, client integration, and repository verification.
+
+## 1.5.1 - 2026-09-16
+
+Source bundle version 1.5.1. Release publication follows
+`docs/RELEASING.md`.
+
+- Require controls for self-built diagnostics before interpreting missing evidence;
+  separate agreement with an implementation from independent physical truth and
+  check false positives when broadening a detector.
+- Record requirement-linked metrics for rejected as well as accepted gate changes,
+  including preservation constraints and the limits of the observed dataset.
+- Route offline ROS map/bag investigations to artifact-lineage guidance: distinguish
+  backend execution, caller adoption, saved output, content equality, and historical
+  ancestry; compare identities or multisets rather than only counts.
+- Qualify subset/order optimizations with whole-pipeline semantics. A set-only flag
+  alone proves neither subset dominance nor order independence; retain useful
+  prefix attribution tests and an executable synthetic counterexample.
+- Keep offline verification scoped to the actual claim, without a new readiness
+  ladder. Record retractions when needed and correct dependent conclusions while
+  preserving the original evidence and optional reporting format.
+- Add four synthetic review scenarios and structural/counterexample regressions.
+  These are evaluation inputs, not measured model improvements or a reproduction
+  of a production recording. Existing CLI, hook-report, and CI contracts remain
+  unchanged.
+
+## 1.5.0 - 2026-09-10
+
+- Correct SROS2 participant/enclave semantics, Enforce-only authorization
+  checks, certificate lifetime and staged rotation; align image stride, depth,
+  camera projection, Foxy quaternion, and Domain ID guidance with upstream.
+- Replace unsourced SROS2 and VPN latency figures with target-path measurement
+  criteria; require the threat model to permit disclosure before using `SIGN`.
+- Preserve the previous SIGINT handler atomically during launch-supervisor
+  teardown and cover a real signal arriving inside the restoration boundary.
+- Separate orderly lifecycle finalization from the active-state SIGINT probe so
+  Humble shutdown behavior cannot race lifecycle-node destruction in the fleet gate.
+- Centralize verification levels in the testing reference and keep authorization
+  details in evidence progression. Remove repository-connector incidents and the
+  unrelated Git completion benchmark from the domain skill.
+- Add simulation, real-time, SROS2, micro-ROS, and fleet routing scenarios; remove
+  rubric hints from progression questions. These are evaluation inputs, not
+  measured activation or model-quality results.
+- Repair the security threat table and multiline QoS help example; accept quoted
+  and unquoted ISO dates consistently in evaluation metadata.
+- Ship a POSIX launch supervisor that preserves ready callbacks across SIGINT
+  and records an interrupt before launch starts. Exercise real signals and real
+  ROS CLI argument parsing; preserve the fleet shutdown deadline and child checks.
+- Correct launch namespace resolution, permit-generation/reset guidance, SROS2
+  rejection outcomes, and exception-safe lifecycle teardown guidance.
+
+- Correct quaternion normalization and IMU covariance guidance against upstream
+  definitions; execute the normalization example in regression tests.
+- Label evaluation reports and history as lexical coverage with answer quality
+  unassessed; matching captured answers require review instead of receiving a
+  pass, including perfect matches and critical-criterion matches.
+- Select Stop-hook candidates from Git before scanning, handle package subdirectory
+  workspaces, and use one bounded scan when the Git change set is unavailable.
+- Align detailed reporting guidance, source-review scope, release-version policy,
+  and the README's evaluation inventory with the current contracts.
+
+- Scope verification-level reporting to ROS behavior and hardware-readiness
+  claims, and physical-test authorization tracking to physical tests. Keep
+  prose-only reports proportional without weakening required checks or stop proof.
+
+- Fail fleet verification on completed service errors, cancelled/empty/late
+  replies, and exhausted readiness budgets; retry only unanswered read requests
+  and retire their pending futures on all exit paths.
+- Keep Claude invocation/tool-approval controls separate from Codex metadata;
+  document model-upgrade comparisons without adding portable permission grants,
+  forced model choices, or unconditional skill routing.
+
+- Retire unanswered lifecycle state reads within the existing startup deadline
+  and retry only the idempotent query; activation remains one-shot. Preserve
+  lost-response and persistent-failure regression cases.
+
+- Make environment discovery, reference reading, and local validation proportional
+  to the task while retaining mandatory CI and physical-safety boundaries.
+- Add task-scope cases to the paired capture suite, expand routing
+  negatives, and document controlled model/skill-upgrade comparisons.
+- Reject FIFOs and other non-regular capture inputs without blocking; bound reads
+  and verify artifact hashes and text from one snapshot.
+- Keep missing, partial, and damaged model captures separate from scored results;
+  require valid ON/OFF pairs before reporting a parity delta. Confine evaluation
+  inputs and history to their declared directories and reject malformed manifests.
+- Scope parity history to the runner, suite, fixtures, version, and scoring rules;
+  do not count absent data or repeated captures as new deprecation evidence.
+  Add explicit capture-completeness gates and critical lexical criteria while
+  retaining the requirement for independent semantic review.
+- Bound physical-test approval by its attempt budget as well as its session and
+  envelope. Recheck readiness before execution; a failed or ambiguous command is
+  not an automatic retry, and reviewing a gate does not authorize bypassing it.
+- Align controlled-motion verification levels and clarify independent measurements;
+  fix the container CI example's shell and remove its stale ROS-prefix cache.
+
+- Add evidence-driven progression rules for acceptance gates: review threshold
+  provenance, measured quantity, uncertainty, error-budget relevance, and clearing
+  conditions instead of treating existing code as automatic authority or tuning
+  criteria merely to make a failed run pass.
+- Separate user authorization, authorization validity, execution authority,
+  supervised-test readiness, L0-L6 evidence, and operational readiness. Preserve
+  unchanged, unexpired, unrevoked approvals without turning permission into proof
+  or overriding client, product, site, or safety execution policy.
+- Give L5 and L6 distinct execution preconditions, retain operator-only execution
+  for high-risk physical fault injection, and repair stale numbered-principle links
+  so detailed references point to the engineering-principles source of truth.
+- Turn repeated blockers into concrete resolution plans with independent variables,
+  required evidence, pass/fail criteria, and stop conditions; distinguish current
+  healthy observations from latched historical failures and prevent stale-command
+  replay during recovery.
+- Add canonical progression behavior fixtures for gate-policy review, supervised
+  test authorization, latched localization recovery, and sensor-metric separation.
+  Public calibration examples are explicitly synthetic, and the structural runner
+  remains clearly separated from real model-output judging.
+- Correct perception and deployment reference guidance: qualify image transport
+  and copy-avoidance claims, check timestamp/clock evidence before queue tuning,
+  complete the health-monitor example, and distinguish real device
+  acknowledgements from fixed shutdown sleeps.
+- Stabilize generated-fleet readiness acceptance by retrying idempotent read
+  services within bounds, requiring a brief stable-active window, and keeping
+  sibling transition churn out of the transition-event-loss negative control.
+
+## 1.4.0 - 2026-09-08
+
+- Make generated lifecycle startup independent of transition-event delivery: query
+  the named node's actual state, request activation once after configuration, and
+  fail with its last observed state if startup cannot complete within the deadline.
+  Apply the same behavior to single-node and multi-robot launch files. See the
+  [startup regression](docs/LIFECYCLE_STARTUP.md).
+- Exercise real fleet startup with transition-event callbacks deliberately
+  discarded, while retaining service, parameter, sibling-isolation, and child-exit
+  assertions. Keep the original runtime checks and time limits.
+- Align skill, plugin, marketplace, eval configuration, and manual report versions
+  at 1.4.0. Standalone tool-interface versions and newly scaffolded user package
+  versions retain their separate version schemes.
+
+- Repair Python fleet launch installation, required lifecycle namespaces, scoped
+  startup transitions, and parameter-file matching after fleet remapping.
+- Declare the generated C++ configuration parameter and delegate generated
+  C++/Python lifecycle transitions to managed entities, preserving their failures.
+- Reject nonfinite/out-of-range plain-node timer rates, unsafe package symlinks,
+  and metadata newlines before they can produce invalid code or overwrite files.
+- Detect a missing literal lifecycle namespace in the launch validator without
+  guessing the contents of dynamic keyword arguments.
+- Add live three-variant fleet checks, actual managed-publisher tests, and
+  structured child start/exit evidence; a zero launcher exit alone is not a pass.
+
+- Isolate the never-activated runtime control from later active inputs so queued
+  pre-activation samples are not mistaken for inactive publication.
+
+- Execute the documented lifecycle examples against real ROS: delegate C++
+  publisher activation/deactivation to the base callbacks and unregister Python
+  lifecycle publishers on cleanup, shutdown, and transition error recovery.
+- Keep repeatable runtime regressions for actual filtered output and released
+  publisher objects; a successful lifecycle state transition alone is not a pass.
+
+- Fix generated C++ component target linkage and exercise component builds in
+  the ROS distribution matrix, alongside Python lifecycle variants.
+- Make generated lifecycle configuration repeatable, reject invalid timer rates,
+  and release ordinary timers on deactivation, cleanup, shutdown, and errors.
+- Add real generated-node lifecycle acceptance checks, including positive timer
+  controls, repeated transitions, rejected rates, and recovery after rejection.
+- Provide a transferable Humble runtime for local tests; isolate modern developer
+  pytest dependencies from the distribution's ROS testing plugins.
+
+- Preserve measured position targets on hardware-template deactivation instead
+  of confusing a zero position command with stopping an actuator.
+
+- Handle already-shut-down contexts and external shutdown in generated Python
+  entry points; clean up after constructor or node-destruction failures too.
+- Require generated smoke-test processes to exit cleanly after discovery instead
+  of accepting an exception or forced termination during shutdown.
+
+- Keep the ROS smoke observer and its executor on the same initialized context;
+  verify cleanup after initialization, discovery, and shutdown failures.
+
+- Resolve generated package manifest schemas through a pinned, hash-checked local
+  XML catalog so network-isolated ROS tests retain real xmllint validation.
+  Require positive and negative schema controls instead of disabling the linter.
+
+- Reduce eagerly selected instructions while retaining detailed principles and all
+  pitfall entries; preserve factual regressions and test every direct route.
+- Add explicit selected-body byte/line limits and named BPE-tokenizer measurements
+  that fail visibly when tokenizer data is unavailable or the budget is exceeded.
+- Add capture schema 2 to retain missed activations, failed/timed-out attempts,
+  absent responses, and actual empty outputs without inventing benchmark results.
+- Enforce hook input limits in UTF-8 bytes and reject ambiguous JSON, invalid
+  working-directory types, and non-Boolean Stop continuation flags.
+- Bound unit-test execution and retain environment, JUnit, coverage, and timeout
+  diagnostics; use concise parameter IDs for oversized-input regressions.
+
+- Separate dependency-image builds from uncached ROS test execution; use isolated
+  BuildKit and bounded, named runtime containers with retained diagnostics.
+- Replace daemon-based smoke discovery with unique graph names and owned process
+  groups; preserve all stable ROS gates and explicit Rolling runtime exclusions.
+- Require local ROS runners to execute tests, not merely build an image, and add
+  a CI summary gate that rejects failed, cancelled, skipped, or missing jobs.
+- Preserve recoverable installation backups even when both replacement and
+  rollback fail; serialize portable installers and report retained backups.
+- Align portable Agent Skills metadata with the public specification.
+- Add a standard Claude Code plugin manifest and hook location.
+- Qualify unsupported ROS 2 generalizations in the core guidance.
+- Replace the speculative README diagnosis with an evidence-first example.
+- Add contribution, security, conduct, and roadmap documents.
+- Make dependency vulnerability auditing a required CI gate.
+- Clarify validator Python coverage and refresh roadmap items.
+- Add a documented Claude hook protocol adapter with bounded execution,
+  NotebookEdit handling, warning context, and non-blocking Stop notices.
+- Add a read-only skill/package/source-date validator and Codex display metadata.
+- Add staged knowledge-only installation for Codex, Claude Code, Cursor, and Gemini.
+- Document current primary-source client rules and separate verified gates from
+  uncollected authenticated activation and model-quality evidence.
+- Preregister activation and paired quality cases; reject missing, reused, or
+  tampered capture artifacts without inventing model results.
+- Add regression tests, individual validator coverage gates, Python 3.13/3.14
+  matrix targets, portable Windows smoke checks, and a controlled QoS experiment.
+- Preserve existing ROS distro builds and explicitly retain Rolling runtime limits.
+- Add isolated live Codex/Gemini discovery probes with pinned versions, negative
+  controls, resolved installation paths, and retained CI evidence.
+
+### Known limitations
+
+- One local Cyclone DDS immediate-shutdown attempt timed out and was not
+  reproduced in subsequent diagnostic trials. This is separate from the repaired
+  startup path; its root cause remains unconfirmed. See [local evidence](docs/LOCAL_RUNTIME.md).
+- Rolling's documented runtime exclusions remain in place; successful build jobs
+  do not establish the excluded runtime behavior.
+- Client discovery and isolated ROS software tests are not authenticated
+  multi-client quality benchmarks or physical robot safety certification.
+
+## 1.3.0
+
+- Added runtime provenance and cross-layer system diagnosis references.
+- Added explicit L0-L6 verification levels.
+- Expanded end-to-end stop-path and field-diagnosis guidance.
+- Updated the documented ROS 2 distribution matrix.
+
+## 1.2.0
+
+- Corrected Nav2 distribution naming and recovery-safety guidance.
+- Added manual validation modes and factual regression tests.
+- Reduced duplicated always-loaded eval metadata.
+
+## 1.1.0
+
+- Hardened path handling and clarified validation boundaries.
+- Added dependency vulnerability awareness in CI.

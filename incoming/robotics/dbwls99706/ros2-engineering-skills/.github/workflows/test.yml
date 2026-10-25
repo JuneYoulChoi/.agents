@@ -1,0 +1,406 @@
+name: Test
+
+on:
+  push:
+    branches:
+      - main
+      - master
+      - 'feat/**'
+      - 'fix/**'
+      - 'docs/**'
+      - 'test/**'
+      - 'ci/**'
+      - 'chore/**'
+      - 'refactor/**'
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: test-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Install dev dependencies
+        run: pip install -r requirements-dev.txt
+      - name: flake8
+        run: flake8 scripts/ tests/ examples/
+      - name: mypy
+        run: mypy scripts/ --ignore-missing-imports
+      - name: pip-audit (current environment)
+        run: pip-audit --desc
+
+  plugin-validation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+      - name: Install Claude Code
+        run: npm install --global @anthropic-ai/claude-code@2.1.241
+      - name: Validate plugin with Claude Code
+        run: claude plugin validate . --strict
+      - name: Verify loaded plugin components
+        run: |
+          claude --plugin-dir . plugin list --json | tee /tmp/plugin-list.json
+          python3 - <<'PYCODE'
+          import json
+          from pathlib import Path
+
+          data = json.loads(Path('/tmp/plugin-list.json').read_text())
+          assert 'ros2-engineering' in json.dumps(data)
+          PYCODE
+          claude --plugin-dir . plugin details ros2-engineering@inline \
+            | tee /tmp/plugin-details.txt
+          grep -F 'ros2-engineering-skills' /tmp/plugin-details.txt
+          grep -F 'PreToolUse' /tmp/plugin-details.txt
+          grep -F 'Stop' /tmp/plugin-details.txt
+
+  unit-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.10', '3.11', '3.12', '3.13', '3.14']
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dev dependencies
+        run: pip install -r requirements-dev.txt
+      - name: Property tests must actually run
+        # tests/test_qos_property.py skips itself without Hypothesis so a
+        # local run without dev dependencies still collects; CI must have it.
+        run: python -c "import hypothesis, setuptools"
+      - name: Run tests with coverage
+        run: |
+          set -o pipefail
+          timeout --signal=TERM --kill-after=10s 8m \
+            python -m pytest tests/ -ra --tb=short --durations=15 \
+              -o faulthandler_timeout=60 --junitxml=pytest-results.xml \
+              --cov=scripts --cov-report=term-missing --cov-report=xml \
+              --cov-fail-under=90 2>&1 | tee pytest-output.log
+      - name: Enforce individual validator coverage
+        run: |
+          for module in skill_validate_hook skill_stop_hook claude_hook validate_skill install_skill verify_eval_capture benchmark_capture measure_context; do
+            python -m coverage report --include="*/${module}.py" --fail-under=90
+          done
+      - name: Upload coverage
+        if: matrix.python-version == '3.12'
+        uses: actions/upload-artifact@v6
+        with:
+          name: coverage-report
+          path: coverage.xml
+
+      - name: Record test environment
+        if: always()
+        run: |
+          { python --version; python -m pip freeze; git rev-parse HEAD; } > test-environment.txt
+      - name: Retain unit test and timeout diagnostics
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: unit-evidence-${{ matrix.python-version }}
+          path: |
+            pytest-output.log
+            pytest-results.xml
+            test-environment.txt
+            coverage.xml
+          if-no-files-found: error
+          retention-days: 14
+
+  windows-installer:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Exercise PowerShell installer
+        shell: pwsh
+        run: |
+          $target = Join-Path $env:RUNNER_TEMP 'ros2-engineering-skills'
+          .\install.ps1 -Target $target -DryRun
+          if (Test-Path -LiteralPath $target) { throw 'DryRun created the target' }
+          .\install.ps1 -Target $target
+          if (-not (Test-Path -LiteralPath (Join-Path $target 'SKILL.md') -PathType Leaf)) {
+            throw 'SKILL.md was not installed'
+          }
+          if (-not (Test-Path -LiteralPath (Join-Path $target 'references') -PathType Container)) {
+            throw 'references was not installed'
+          }
+          Set-Content -LiteralPath (Join-Path $target 'stale.txt') -Value 'stale'
+          .\install.ps1 -Target $target -Force
+          if (Test-Path -LiteralPath (Join-Path $target 'stale.txt')) {
+            throw 'Force did not replace the existing target'
+          }
+      - name: Refuse to replace anything that is not this skill
+        shell: pwsh
+        run: |
+          # -Force must only ever remove a previous installation of this skill.
+          $fakeHome = Join-Path $env:RUNNER_TEMP 'fakehome'
+          $claude = Join-Path $fakeHome '.claude'
+          New-Item -ItemType Directory -Path (Join-Path $claude 'skills/other') -Force | Out-Null
+          Set-Content -LiteralPath (Join-Path $claude 'skills/other/SKILL.md') -Value "---`nname: other`n---"
+          Set-Content -LiteralPath (Join-Path $claude 'settings.json') -Value '{}'
+          New-Item -ItemType Directory -Path (Join-Path $fakeHome '.codex/skills') -Force | Out-Null
+          $noRefs = Join-Path $env:RUNNER_TEMP 'norefs'
+          New-Item -ItemType Directory -Path $noRefs -Force | Out-Null
+          Set-Content -LiteralPath (Join-Path $noRefs 'SKILL.md') -Value "---`nname: ros2-engineering-skills`n---"
+          $cases = @(
+            @{ Target = $claude; Reason = 'client configuration directory' },
+            @{ Target = (Join-Path $claude 'skills'); Reason = 'client configuration directory' },
+            @{ Target = (Join-Path $fakeHome '.codex/skills'); Reason = 'client configuration directory' },
+            @{ Target = (Join-Path $claude 'skills/other'); Reason = 'not an existing ros2-engineering-skills installation' },
+            @{ Target = $noRefs; Reason = 'not an existing ros2-engineering-skills installation' },
+            @{ Target = (Join-Path $claude 'settings.json'); Reason = 'not an existing ros2-engineering-skills installation' }
+          )
+          foreach ($case in $cases) {
+            foreach ($dryRun in @($false, $true)) {
+              $rejected = $false
+              try {
+                if ($dryRun) { .\install.ps1 -Target $case.Target -Force -DryRun }
+                else { .\install.ps1 -Target $case.Target -Force }
+                throw "Expected installer to refuse $($case.Target)"
+              }
+              catch {
+                if ($_.Exception.Message -notmatch [regex]::Escape($case.Reason)) { throw }
+                $rejected = $true
+              }
+              if (-not $rejected) { throw "Installer did not refuse $($case.Target)" }
+            }
+          }
+          if ((Get-Content -LiteralPath (Join-Path $claude 'settings.json')) -ne '{}') { throw 'settings.json was modified' }
+          if (-not (Test-Path -LiteralPath (Join-Path $claude 'skills/other/SKILL.md'))) { throw 'another skill was deleted' }
+          if (-not (Test-Path -LiteralPath (Join-Path $fakeHome '.codex/skills'))) { throw 'empty skills parent was deleted' }
+          if (-not (Test-Path -LiteralPath (Join-Path $noRefs 'SKILL.md'))) { throw 'directory without references/ was deleted' }
+      - name: Refuse a provenance manifest that does not describe this skill
+        shell: pwsh
+        run: |
+          # A wrong or mistyped manifest must never authorise -Force to delete
+          # the directory: another skill, an unsupported schema, "1"/true/1.0
+          # for 1, and a one-element array that ConvertFrom-Json would unroll.
+          $skill = Join-Path $env:RUNNER_TEMP 'manifest-check/ros2-engineering-skills'
+          New-Item -ItemType Directory -Path (Join-Path $skill 'references') -Force | Out-Null
+          Set-Content -LiteralPath (Join-Path $skill 'SKILL.md') -Value "---`nname: ros2-engineering-skills`n---"
+          Set-Content -LiteralPath (Join-Path $skill 'stale.txt') -Value 'stale'
+          $manifest = Join-Path $skill 'INSTALL_PROVENANCE.json'
+          $bad = @(
+            '{"schema_version": 1, "skill_name": "other"}',
+            '{"schema_version": 2, "skill_name": "ros2-engineering-skills"}',
+            '{"schema_version": "1", "skill_name": "ros2-engineering-skills"}',
+            '{"schema_version": true, "skill_name": "ros2-engineering-skills"}',
+            '{"schema_version": 1.0, "skill_name": "ros2-engineering-skills"}',
+            '[{"schema_version": 1, "skill_name": "ros2-engineering-skills"}]',
+            '{not json'
+          )
+          foreach ($text in $bad) {
+            Set-Content -LiteralPath $manifest -Value $text -NoNewline
+            foreach ($dryRun in @($false, $true)) {
+              $rejected = $false
+              try {
+                if ($dryRun) { .\install.ps1 -Target $skill -Force -DryRun }
+                else { .\install.ps1 -Target $skill -Force }
+                throw "Expected installer to refuse manifest: $text"
+              }
+              catch {
+                if ($_.Exception.Message -notmatch 'provenance manifest does not describe this skill') { throw }
+                $rejected = $true
+              }
+              if (-not $rejected) { throw "Installer did not refuse manifest: $text" }
+              if (-not (Test-Path -LiteralPath (Join-Path $skill 'stale.txt'))) { throw "Installation deleted for manifest: $text" }
+            }
+          }
+          Set-Content -LiteralPath $manifest -Value '{"schema_version": 1, "skill_name": "ros2-engineering-skills"}'
+          .\install.ps1 -Target $skill -Force
+          if (Test-Path -LiteralPath (Join-Path $skill 'stale.txt')) { throw 'A valid manifest did not allow replacement' }
+          if (-not (Test-Path -LiteralPath (Join-Path $skill 'SKILL.md') -PathType Leaf)) { throw 'SKILL.md missing after replacement' }
+      - name: Refuse to replace a reparse-point target
+        shell: pwsh
+        run: |
+          # A directory junction carries the ReparsePoint attribute without
+          # needing symbolic-link privileges on the runner.
+          $real = Join-Path $env:RUNNER_TEMP 'linked-real'
+          $link = Join-Path $env:RUNNER_TEMP 'linked/ros2-engineering-skills'
+          New-Item -ItemType Directory -Path $real -Force | Out-Null
+          Set-Content -LiteralPath (Join-Path $real 'marker.txt') -Value 'keep'
+          New-Item -ItemType Directory -Path (Split-Path -Parent $link) -Force | Out-Null
+          New-Item -ItemType Junction -Path $link -Target $real | Out-Null
+          $rejected = $false
+          try {
+            .\install.ps1 -Target $link -Force
+            throw 'Expected installer to reject the reparse point'
+          }
+          catch {
+            if ($_.Exception.Message -notmatch 'reparse point') { throw }
+            $rejected = $true
+          }
+          if (-not $rejected) { throw 'Reparse point was not rejected' }
+          $item = Get-Item -LiteralPath $link -Force
+          if (-not ($item.Attributes -band [System.IO.FileAttributes]::ReparsePoint)) {
+            throw 'Junction was replaced by a directory'
+          }
+          if ((Get-Content -LiteralPath (Join-Path $real 'marker.txt')) -ne 'keep') {
+            throw 'Linked target was modified'
+          }
+      - name: Exercise the benchmark helper's JSON writes on Windows
+        shell: pwsh
+        run: |
+          # save_json() uses mkstemp + os.replace and must not depend on POSIX-only
+          # calls; run the tests that write capture.json, order.json, grades.json
+          # and key.json through it (symlink-based tests stay on Linux).
+          python -m pip install -r requirements-dev.txt
+          python -m pytest tests/test_benchmark_capture.py -ra --tb=short -p no:cacheprovider `
+            -k "save_json or TestInit or test_score_keeps_unknowns_and_separates_execution_failures"
+          if ($LASTEXITCODE -ne 0) { throw 'Benchmark JSON writes failed on Windows' }
+      - name: Exercise knowledge-only installation on Windows
+        shell: pwsh
+        run: |
+          python -m pip install -r requirements.txt
+          $target = Join-Path $env:RUNNER_TEMP 'portable/ros2-engineering-skills'
+          python scripts/install_skill.py --client codex --target $target
+          if ($LASTEXITCODE -ne 0) { throw 'Portable installation failed' }
+          python scripts/validate_skill.py --root $target --installed --portable
+          if ($LASTEXITCODE -ne 0) { throw 'Portable validation failed' }
+          if (Test-Path -LiteralPath (Join-Path $target '.claude-plugin')) {
+            throw 'Knowledge-only installation unexpectedly contains a plugin manifest'
+          }
+
+  ros2-integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    strategy:
+      fail-fast: false
+      matrix:
+        ros_distro: [humble, jazzy, kilted, lyrical, rolling]
+    steps:
+      - uses: actions/checkout@v6
+      - name: Build and execute isolated ROS 2 ${{ matrix.ros_distro }} gates
+        env:
+          ROS_TEST_LOG_DIR: ${{ runner.temp }}/ros2-test-evidence
+        run: bash tests/run_ros2_tests.sh "${{ matrix.ros_distro }}"
+      - name: Retain ROS build, runtime, and cleanup evidence
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: ros2-evidence-${{ matrix.ros_distro }}
+          path: ${{ runner.temp }}/ros2-test-evidence/
+          if-no-files-found: error
+          retention-days: 14
+
+  markdown-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: markdownlint
+        uses: DavidAnson/markdownlint-cli2-action@v19
+        with:
+          globs: |
+            references/*.md
+            docs/*.md
+            *.md
+
+  lint-scripts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Check scripts syntax
+        run: |
+          python -m py_compile scripts/*.py examples/*.py
+          bash -n install.sh
+          for script in tests/*.sh; do bash -n "$script"; done
+      - name: Verify user-facing versions
+        run: |
+          python scripts/create_package.py --version
+          python scripts/qos_checker.py --version
+          python scripts/qos_audit.py --version
+          python scripts/launch_validator.py --version
+          python scripts/benchmark_capture.py --version
+          python scripts/install_skill.py --version
+      - name: Validate plugin JSON
+        run: |
+          python -m json.tool .claude-plugin/plugin.json > /dev/null
+          python -m json.tool .claude-plugin/marketplace.json > /dev/null
+          python -m json.tool hooks/hooks.json > /dev/null
+      - name: Run launch validator on generated packages
+        run: |
+          mkdir -p /tmp/test_pkgs
+          python scripts/create_package.py test_cpp --type cpp --dest /tmp/test_pkgs
+          python scripts/create_package.py test_py --type python --dest /tmp/test_pkgs
+          python scripts/launch_validator.py /tmp/test_pkgs/
+      - name: Install dev dependencies
+        run: pip install -r requirements-dev.txt
+      - name: Validate skill and plugin packaging
+        run: |
+          python scripts/validate_skill.py --check-sources
+          python -m pytest tests/test_skills2_frontmatter.py tests/test_repo_conventions.py \
+            tests/test_installers.py tests/test_skill_contract.py tests/test_portable_installer.py \
+            tests/test_protocol_integration.py tests/test_evidence_suites.py -q
+      - name: Exercise installed portable bundle
+        run: |
+          target="$RUNNER_TEMP/portable/ros2-engineering-skills"
+          python scripts/install_skill.py --target "$target"
+          python scripts/validate_skill.py --root "$target" --installed --portable
+      - name: Run eval fixture smoke check
+        run: python scripts/eval_runner.py
+      - name: Install reference tokenizers
+        run: python -m pip install 'tiktoken>=0.12,<1'
+      - name: Enforce measured selected-body token budgets
+        run: |
+          set -o pipefail
+          timeout --signal=TERM --kill-after=5s 60s \
+            python scripts/measure_context.py | tee context-budget.json
+      - name: Retain named tokenizer measurements
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: context-budget
+          path: context-budget.json
+          if-no-files-found: warn
+          retention-days: 14
+
+  ci-gate:
+    name: Required test gates
+    if: always()
+    needs: [lint, plugin-validation, unit-tests, windows-installer, ros2-integration, markdown-lint, lint-scripts]
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Reject missing, failed, cancelled, or skipped required jobs
+        env:
+          JOB_RESULTS: ${{ toJSON(needs) }}
+        run: |
+          python3 - <<'PYCODE'
+          import json
+          import os
+          import sys
+
+          results = json.loads(os.environ['JOB_RESULTS'])
+          required = {'lint', 'plugin-validation', 'unit-tests', 'windows-installer',
+                      'ros2-integration', 'markdown-lint', 'lint-scripts'}
+          bad = {name: results.get(name, {}).get('result', 'missing')
+                 for name in required
+                 if results.get(name, {}).get('result') != 'success'}
+          print(json.dumps({'required_jobs': results, 'non_success': bad}, indent=2))
+          sys.exit(bool(bad))
+          PYCODE

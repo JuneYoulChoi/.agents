@@ -1,0 +1,30 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "ros2-engineering-skills",
+  "description": "ROS 2 engineering plugins maintained by dbwls99706",
+  "owner": {
+    "name": "YuJin Hong",
+    "email": "yujinhong3@gmail.com"
+  },
+  "plugins": [
+    {
+      "name": "ros2-engineering",
+      "version": "1.7.2",
+      "description": "Production-grade ROS 2 engineering guidance and validation tools",
+      "author": {
+        "name": "YuJin Hong",
+        "email": "yujinhong3@gmail.com"
+      },
+      "source": "./",
+      "category": "development",
+      "homepage": "https://github.com/dbwls99706/ros2-engineering-skills#readme",
+      "keywords": [
+        "ros2",
+        "robotics",
+        "agent-skills",
+        "nav2",
+        "ros2-control"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,167 @@
+# Dockerfile for testing ROS 2 code examples across distros.
+#
+# Build args:
+#   ROS_DISTRO  — humble | jazzy | kilted | lyrical | rolling (default: jazzy)
+#
+# Usage:
+#   docker build -f tests/Dockerfile.ros2-test --build-arg ROS_DISTRO=humble -t ros2-test:humble .
+#   docker run --rm --init --network none ros2-test:humble
+
+ARG ROS_DISTRO=jazzy
+FROM osrf/ros:${ROS_DISTRO}-desktop
+
+# Re-declare ARG after FROM (Docker scoping rules)
+ARG ROS_DISTRO
+ENV ROS_DISTRO=${ROS_DISTRO}
+ENV DEBIAN_FRONTEND=noninteractive
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+# osrf/ros:*-desktop already includes pytest, colcon, rclcpp, rosidl, etc.
+# Install ros2_control for hardware_interface package testing.
+# PIP_BREAK_SYSTEM_PACKAGES is honored by newer pip and ignored by older pip.
+# git/curl/python3-vcstool/python3-yaml are needed for the rolling-only
+# source overlay below.
+#
+# On rolling we additionally upgrade every pre-baked `ros-rolling-*` package
+# in the base image. Reason: the base image was built with an older rclcpp
+# (and friends) baked in, but the newly-installed downstream packages
+# (e.g. pal_statistics, diagnostic_updater, control_msgs, hardware_interface)
+# have already been rebuilt against a newer rclcpp ABI on packages.ros.org.
+# Without this upgrade, downstream link steps fail with "undefined reference
+# to rclcpp::ok(...)" / "rclcpp::experimental::IntraProcessManager::..." —
+# the new binaries reference symbols the old rclcpp doesn't export. The
+# upgrade brings every pre-baked ROS apt package up to its current published
+# version so the whole installed set is mutually consistent.
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends python3-pytest python3-pip \
+       git ca-certificates build-essential cmake curl libxml2-utils \
+       python3-vcstool python3-yaml \
+       ros-${ROS_DISTRO}-hardware-interface \
+       ros-${ROS_DISTRO}-ros2-control \
+    && if [ "${ROS_DISTRO}" = "rolling" ]; then \
+         echo "[apt] upgrading pre-baked ros-rolling-* packages to current"; \
+         pkgs=$(dpkg-query -W -f='${Package}\n' | grep '^ros-rolling-' || true); \
+         if [ -n "$pkgs" ]; then \
+           DEBIAN_FRONTEND=noninteractive apt-get install -y --only-upgrade $pkgs; \
+         fi; \
+       fi \
+    && PIP_BREAK_SYSTEM_PACKAGES=1 python3 -m pip install --no-cache-dir 'hypothesis>=6.100,<7' \
+    && rm -rf /var/lib/apt/lists/*
+
+# Generated package.xml files reference a public schema. Runtime has no network:
+# retain the original manifests and resolve their schema via a local XML catalog.
+# The referenced common schema is needed too. Pins and hashes are independent of
+# a moving download.ros.org endpoint; a missing or changed schema fails the build.
+COPY tests/schema/catalog.xml /opt/ros2-test-schemas/catalog.xml
+ENV XML_CATALOG_FILES=/opt/ros2-test-schemas/catalog.xml
+RUN set -e; \
+    for file in package_format3.xsd package_common.xsd; do \
+      curl --fail --location --proto '=https' --proto-redir '=https' \
+        --max-time 60 --retry 2 \
+        "https://raw.githubusercontent.com/ros-infrastructure/rep/11ca24a41f31480dfb9562ba99f2a5b93d3ebda5/xsd/$file" \
+        -o "/opt/ros2-test-schemas/$file"; \
+    done; \
+    cd /opt/ros2-test-schemas; \
+    printf '%s\n' \
+      'f096a197ed6d7878984bb2501a55f7f1bd4895d254399fb7857e154bfb644f41  package_format3.xsd' \
+      '941ea8645344f3c4b7b9d7e68799898309d65a18225fa9cbef4169d95d1a3211  package_common.xsd' \
+      > SHA256SUMS; \
+    sha256sum --check SHA256SUMS
+
+# Replace broken rolling binary CMake configs by source-overlaying their
+# upstream source trees on top of /opt/ros/rolling.
+#
+# Why: as of late April 2026, `ros-rolling-control-msgs` (>= 6.9.0) and
+# `ros-rolling-hardware-interface` (>= 6.7.0) were rebuilt against a new
+# rosidl ABI that exports link-interface targets `rosidl_buffer::*` and
+# `rosidl_buffer_backend::*`, but companion packages providing those
+# targets are not yet released as standalone debs. The official
+# `snapshots.ros.org` service does not publish the URL pattern apt
+# expects for date-pinned rolling, so we cannot snapshot-pin reliably.
+# Instead, we rebuild every package whose binary Config.cmake is broken
+# from its current upstream source tree, in one workspace, so the new
+# Config.cmake files reference each other consistently. The
+# `--merge-install --install-base /opt/ros/rolling` flags overlay the
+# regenerated cmake/ trees on top of the apt-installed tree.
+#
+# Sources:
+#   * canonical ros2.repos manifest, filtered to repos with `rosidl` in
+#     their name — supplies rosidl_buffer, rosidl_buffer_backend, and
+#     every other rosidl sub-package the new ABI references.
+#   * ros-controls/control_msgs — supplies the new control_msgs
+#     Config.cmake compiled against the source rosidl.
+#   * ros-controls/ros2_control — supplies the new hardware_interface
+#     (plus controller_interface, transmission_interface, …)
+#     Config.cmake compiled against the source control_msgs and rosidl.
+#
+# After overlay, verify that a downstream `find_package(hardware_interface)`
+# resolves cleanly in a throwaway CMake project — if it does not, fail
+# fast at this layer with the actionable error rather than later in the
+# user-package build.
+#
+# Humble/Jazzy/Kilted/Lyrical are no-ops here because their released
+# apt repos are internally consistent.
+RUN if [ "${ROS_DISTRO}" = "rolling" ]; then \
+      set -e; \
+      { source /opt/ros/${ROS_DISTRO}/setup.bash; } > /dev/null 2>&1; \
+      echo "[overlay] ROS environment sourced"; \
+      mkdir -p /tmp/overlay_ws/src; \
+      cd /tmp/overlay_ws; \
+      echo "[overlay] fetching ros2.repos"; \
+      curl -fsSL https://raw.githubusercontent.com/ros2/ros2/rolling/ros2.repos -o ros2.repos; \
+      python3 -c "import yaml; \
+d = yaml.safe_load(open('ros2.repos')); \
+allow = lambda k: ('rosidl' in k.lower() or 'ament_cmake' in k.lower()) and 'typesupport' not in k.lower() and 'rosidl_python' not in k.lower() and 'rosidl_runtime_py' not in k.lower() and 'rosidl_dds' not in k.lower(); \
+keep = {k: v for k, v in d.get('repositories', {}).items() if allow(k)}; \
+yaml.safe_dump({'repositories': keep}, open('rosidl.repos', 'w')); \
+print('overlay repos (typesupport/python/dds excluded to preserve binary ABI):', list(keep.keys()))"; \
+      echo "[overlay] vcs import"; \
+      vcs import src < rosidl.repos; \
+      echo "[overlay] cloning ros-controls repos"; \
+      git clone --quiet --depth=1 https://github.com/ros-controls/ros2_control_cmake.git src/ros2_control_cmake; \
+      git clone --quiet --depth=1 https://github.com/ros-controls/control_msgs.git src/control_msgs; \
+      git clone --quiet --depth=1 https://github.com/ros-controls/ros2_control.git src/ros2_control; \
+      vcs export --exact src > /opt/ros/${ROS_DISTRO}/ci-overlay.repos; \
+      echo "[overlay] packages staged in src/:"; \
+      ls src; \
+      echo "[overlay] colcon build (output redirected to /tmp/colcon.log; summary printed at end)"; \
+      # --packages-up-to hardware_interface: we only need find_package(hardware_interface) \
+      # to resolve in test_hw_pkg. Building controller_manager / ros2_control_node etc. \
+      # exposes us to ABI mismatches in unrelated binary apt packages (e.g. \
+      # libdiagnostic_updater rebuilt against unreleased rclcpp symbols). Limiting the \
+      # build closes that surface entirely. \
+      colcon build --merge-install \
+        --install-base /opt/ros/${ROS_DISTRO} \
+        --packages-up-to hardware_interface \
+        --event-handlers console_direct- console_cohesion- console_start_end+ console_stderr+ status- summary+ \
+        --cmake-args -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF \
+        > /tmp/colcon.log 2>&1 \
+        || { rc=$?; \
+             echo "[overlay] colcon build FAILED (rc=$rc)"; \
+             echo "=== last 300 lines of /tmp/colcon.log ==="; \
+             tail -300 /tmp/colcon.log; \
+             echo "=== per-package logs containing 'error' (tail -120 each) ==="; \
+             for f in log/latest_build/*/stdout_stderr.log; do \
+               [ -f "$f" ] && grep -liE '(^|[^a-z])error|cmake error|fatal' "$f" > /dev/null \
+                 && { echo "--- $f ---"; tail -120 "$f"; }; \
+             done; \
+             exit "$rc"; }; \
+      echo "[overlay] colcon build OK — last 30 lines of /tmp/colcon.log:"; \
+      tail -30 /tmp/colcon.log; \
+      rm -f /tmp/colcon.log; \
+      cd / && rm -rf /tmp/overlay_ws; \
+      echo "[overlay] verifying find_package(hardware_interface)"; \
+      mkdir -p /tmp/fp_check && cd /tmp/fp_check; \
+      printf 'cmake_minimum_required(VERSION 3.16)\nproject(fp_check LANGUAGES CXX)\nfind_package(hardware_interface REQUIRED)\nmessage(STATUS "hardware_interface OK")\n' > CMakeLists.txt; \
+      cmake -S . -B build -DCMAKE_BUILD_TYPE=Release; \
+      cd / && rm -rf /tmp/fp_check; \
+      echo "[overlay] OK"; \
+    fi
+
+WORKDIR /ws/ros2-engineering-skills
+COPY . .
+
+# Tests deliberately execute at container runtime, not in BuildKit RUN layers.
+# A cached image build is never test evidence, and DDS processes must not live
+# inside an image exporter. The default command runs the complete test suite.
+CMD ["bash", "tests/run_ros2_container_tests.sh"]
