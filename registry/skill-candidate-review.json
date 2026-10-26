@@ -316,16 +316,37 @@
         }
       ],
       "disposition": "adapt_principles",
-      "review_depth": "selected_instruction_portions; no full-package promotion",
+      "review_depth": "selected_entrypoint_and_adopted_references; original scripts/hooks not executed or promoted",
       "core_coverage": [
         "core.architecture-baseline-and-design",
         "core.architecture-and-design-patterns"
       ],
       "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
       "runtime_activation": false,
-      "adopted_portion": "small meaningful interfaces and localized complexity",
+      "adopted_portion": "cohesive ownership, complete interface obligations and contract testability",
       "destination": "core.architecture-and-design-patterns",
-      "excluded": "No mandated vocabulary, exactly-one-interface rule or two-adapter threshold."
+      "excluded": "No mandatory terminology, one-interface or two-adapter rule, or parallel design contest.",
+      "commit": "5beb35b040e3de97e54fa9e386d7e42d15c295c2",
+      "ref": "5beb35b040e3de97e54fa9e386d7e42d15c295c2",
+      "upstream_path": "skills/engineering/codebase-design",
+      "downloaded_on": "2026-10-25",
+      "license": "MIT",
+      "license_path": "incoming/_provenance/mattpocock__skills/5beb35b040e3de97e54fa9e386d7e42d15c295c2/LICENSE",
+      "popularity_evidence": {
+        "provider": "skills.sh",
+        "url": "https://www.skills.sh/mattpocock/skills/codebase-design",
+        "metric": "Installs",
+        "display": "854.7K",
+        "observed_on": "2026-10-25",
+        "window": "Not specified by the displayed page",
+        "precision": "rounded display; not unique users or GitHub stars",
+        "owner": "harness maintainer",
+        "revisit_trigger": "source upgrade or same-role replacement request"
+      },
+      "approved_references": [
+        "skills/architecture-and-design-patterns/references/module-design.md"
+      ],
+      "selection_role": "preferred_source_for_reviewed_portion"
     },
     {
       "package": "domain-modeling",
@@ -370,16 +391,37 @@
         }
       ],
       "disposition": "adapt_principles",
-      "review_depth": "selected_instruction_portions; no full-package promotion",
+      "review_depth": "selected_entrypoint_and_adopted_references; original scripts/hooks not executed or promoted",
       "core_coverage": [
         "core.architecture-baseline-and-design",
         "core.architecture-and-design-patterns"
       ],
       "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
       "runtime_activation": false,
-      "adopted_portion": "evidenced structural friction before refactoring",
-      "destination": "core.brownfield-impact-analysis",
-      "excluded": "No blanket architecture scan, mandatory subagent, CDN report or browser launch."
+      "adopted_portion": "scoped evidence of architectural friction before structural change",
+      "destination": "core.architecture-and-design-patterns",
+      "excluded": "No full scan, CDN report, browser launch, sibling dispatch or automatic glossary mutation.",
+      "commit": "5beb35b040e3de97e54fa9e386d7e42d15c295c2",
+      "ref": "5beb35b040e3de97e54fa9e386d7e42d15c295c2",
+      "upstream_path": "skills/engineering/improve-codebase-architecture",
+      "downloaded_on": "2026-10-25",
+      "license": "MIT",
+      "license_path": "incoming/_provenance/mattpocock__skills/5beb35b040e3de97e54fa9e386d7e42d15c295c2/LICENSE",
+      "popularity_evidence": {
+        "provider": "skills.sh",
+        "url": "https://www.skills.sh/mattpocock/skills/improve-codebase-architecture",
+        "metric": "Installs",
+        "display": "1.2M",
+        "observed_on": "2026-10-25",
+        "window": "Not specified by the displayed page",
+        "precision": "rounded display; not unique users or GitHub stars",
+        "owner": "harness maintainer",
+        "revisit_trigger": "source upgrade or same-role replacement request"
+      },
+      "approved_references": [
+        "skills/architecture-and-design-patterns/references/module-design.md"
+      ],
+      "selection_role": "preferred_source_for_reviewed_portion"
     },
     {
       "package": "dotnet-api",
@@ -1678,7 +1720,23 @@
       "runtime_activation": false,
       "adopted_portion": "reuse current checks and stop optional expansion",
       "destination": "core.verify-and-handoff",
-      "excluded": "Never skip mandatory checks or discard open material failures."
+      "excluded": "Never skip mandatory checks or discard open material failures.",
+      "popularity_evidence": {
+        "provider": "skills.sh",
+        "url": "https://www.skills.sh/juliusbrussee/caveman/verify-and-stop",
+        "metric": "Installs",
+        "display": "103.0K",
+        "observed_on": "2026-10-25",
+        "window": "Not specified by displayed page",
+        "precision": "rounded display; not unique users or GitHub stars",
+        "owner": "harness maintainer",
+        "revisit_trigger": "source upgrade or same-role replacement request"
+      },
+      "selection_comparison": {
+        "preferred_source": "verification-before-completion",
+        "reason": "higher-use source for completion evidence; retain complementary current-check reuse and stopping principles",
+        "download_refreshed_this_review": false
+      }
     },
     {
       "package": "dotnet-debugging",
@@ -1745,15 +1803,38 @@
           "sha256": "09eb147f793e4647949edd32dbad278f0554dfb56e0d46b699cd4c2c55bf0357"
         }
       ],
-      "disposition": "defer_package_review",
-      "review_depth": "metadata_only",
+      "disposition": "adapt_principles",
+      "review_depth": "selected_entrypoint_and_adopted_references; original scripts/hooks not executed or promoted",
       "core_coverage": [
         "core.implementation-quality",
         "core.verify-and-handoff"
       ],
       "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
       "runtime_activation": false,
-      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+      "commit": "5beb35b040e3de97e54fa9e386d7e42d15c295c2",
+      "ref": "5beb35b040e3de97e54fa9e386d7e42d15c295c2",
+      "upstream_path": "skills/engineering/code-review",
+      "downloaded_on": "2026-10-25",
+      "license": "MIT",
+      "license_path": "incoming/_provenance/mattpocock__skills/5beb35b040e3de97e54fa9e386d7e42d15c295c2/LICENSE",
+      "popularity_evidence": {
+        "provider": "skills.sh",
+        "url": "https://www.skills.sh/mattpocock/skills/code-review",
+        "metric": "Installs",
+        "display": "794.0K",
+        "observed_on": "2026-10-25",
+        "window": "Not specified by the displayed page",
+        "precision": "rounded display; not unique users or GitHub stars",
+        "owner": "harness maintainer",
+        "revisit_trigger": "source upgrade or same-role replacement request"
+      },
+      "destination": "core.verify-and-handoff",
+      "adopted_portion": "separate request coverage from project conventions on a pinned actual diff",
+      "excluded": "No mandatory tracker setup, parallel reviewers, HEAD-only omission of uncommitted work or automatic smell fixes.",
+      "approved_references": [
+        "skills/verify-and-handoff/references/acceptance-review.md"
+      ],
+      "selection_role": "preferred_source_for_reviewed_portion"
     },
     {
       "package": "diagnosing-bugs",
@@ -1770,15 +1851,39 @@
           "sha256": "849198df88cdb65fd0d97236604c1fca7ff2f22d2f705f9724a800d0266b118d"
         }
       ],
-      "disposition": "defer_package_review",
-      "review_depth": "metadata_only",
+      "disposition": "adapt_principles",
+      "review_depth": "selected_entrypoint_and_adopted_references; original scripts/hooks not executed or promoted",
       "core_coverage": [
         "core.implementation-quality",
-        "core.verify-and-handoff"
+        "core.verify-and-handoff",
+        "core.brownfield-impact-analysis"
       ],
       "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
       "runtime_activation": false,
-      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+      "commit": "5beb35b040e3de97e54fa9e386d7e42d15c295c2",
+      "ref": "5beb35b040e3de97e54fa9e386d7e42d15c295c2",
+      "upstream_path": "skills/engineering/diagnosing-bugs",
+      "downloaded_on": "2026-10-25",
+      "license": "MIT",
+      "license_path": "incoming/_provenance/mattpocock__skills/5beb35b040e3de97e54fa9e386d7e42d15c295c2/LICENSE",
+      "popularity_evidence": {
+        "provider": "skills.sh",
+        "url": "https://www.skills.sh/mattpocock/skills/diagnosing-bugs",
+        "metric": "Installs",
+        "display": "839.5K",
+        "observed_on": "2026-10-25",
+        "window": "Not specified by the displayed page",
+        "precision": "rounded display; not unique users or GitHub stars",
+        "owner": "harness maintainer",
+        "revisit_trigger": "source upgrade or same-role replacement request"
+      },
+      "destination": "core.brownfield-impact-analysis",
+      "adopted_portion": "bounded symptom reproduction, falsifiable causes and original-scenario regression",
+      "excluded": "No mandatory scripts, fixed hypothesis count, indefinite minimization or stress, or automatic production access.",
+      "approved_references": [
+        "skills/brownfield-impact-analysis/references/diagnosis.md"
+      ],
+      "selection_role": "preferred_source_for_reviewed_portion"
     },
     {
       "package": "tdd",
@@ -1795,15 +1900,38 @@
           "sha256": "5505d25bbaa8fc14a79e4d20163936958992a2995b7f1dd1d6197edc9ed722e0"
         }
       ],
-      "disposition": "defer_package_review",
-      "review_depth": "metadata_only",
+      "disposition": "adapt_principles",
+      "review_depth": "selected_entrypoint_and_adopted_references; original scripts/hooks not executed or promoted",
       "core_coverage": [
         "core.implementation-quality",
         "core.verify-and-handoff"
       ],
       "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
       "runtime_activation": false,
-      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+      "commit": "5beb35b040e3de97e54fa9e386d7e42d15c295c2",
+      "ref": "5beb35b040e3de97e54fa9e386d7e42d15c295c2",
+      "upstream_path": "skills/engineering/tdd",
+      "downloaded_on": "2026-10-25",
+      "license": "MIT",
+      "license_path": "incoming/_provenance/mattpocock__skills/5beb35b040e3de97e54fa9e386d7e42d15c295c2/LICENSE",
+      "popularity_evidence": {
+        "provider": "skills.sh",
+        "url": "https://www.skills.sh/mattpocock/skills/tdd",
+        "metric": "Installs",
+        "display": "1.1M",
+        "observed_on": "2026-10-25",
+        "window": "Not specified by the displayed page",
+        "precision": "rounded display; not unique users or GitHub stars",
+        "owner": "harness maintainer",
+        "revisit_trigger": "source upgrade or same-role replacement request"
+      },
+      "destination": "core.implementation-quality",
+      "adopted_portion": "independent test oracle and coherent behavior slices with useful regression evidence",
+      "excluded": "No duplicate boundary approval, mandatory sibling review, blanket internal-test ban or deletion of existing work.",
+      "approved_references": [
+        "skills/implementation-quality/references/behavior-tests.md"
+      ],
+      "selection_role": "preferred_source_for_reviewed_portion"
     },
     {
       "package": "requesting-code-review",
@@ -1855,7 +1983,23 @@
       ],
       "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
       "runtime_activation": false,
-      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review.",
+      "popularity_evidence": {
+        "provider": "skills.sh",
+        "url": "https://www.skills.sh/obra/superpowers/systematic-debugging",
+        "metric": "Installs",
+        "display": "307.3K",
+        "observed_on": "2026-10-25",
+        "window": "Not specified by displayed page",
+        "precision": "rounded display; not unique users or GitHub stars",
+        "owner": "harness maintainer",
+        "revisit_trigger": "source upgrade or same-role replacement request"
+      },
+      "selection_comparison": {
+        "preferred_source": "diagnosing-bugs",
+        "reason": "same-role primary has higher displayed installs and compatible bounded diagnosis principles",
+        "download_refreshed_this_review": false
+      }
     },
     {
       "package": "test-driven-development",
@@ -1880,7 +2024,23 @@
       ],
       "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
       "runtime_activation": false,
-      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review.",
+      "popularity_evidence": {
+        "provider": "skills.sh",
+        "url": "https://www.skills.sh/obra/superpowers/test-driven-development",
+        "metric": "Installs",
+        "display": "260.0K",
+        "observed_on": "2026-10-25",
+        "window": "Not specified by displayed page",
+        "precision": "rounded display; not unique users or GitHub stars",
+        "owner": "harness maintainer",
+        "revisit_trigger": "source upgrade or same-role replacement request"
+      },
+      "selection_comparison": {
+        "preferred_source": "tdd",
+        "reason": "same-role primary has higher displayed installs and behavior-oriented test guidance",
+        "download_refreshed_this_review": false
+      }
     },
     {
       "package": "verification-before-completion",
@@ -1898,16 +2058,37 @@
         }
       ],
       "disposition": "adapt_principles",
-      "review_depth": "selected_instruction_portions; no full-package promotion",
+      "review_depth": "selected_entrypoint_and_adopted_references; original scripts/hooks not executed or promoted",
       "core_coverage": [
         "core.implementation-quality",
         "core.verify-and-handoff"
       ],
       "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
       "runtime_activation": false,
-      "adopted_portion": "verification evidence before completion claims",
+      "adopted_portion": "claim-specific current evidence and honest incomplete verification",
       "destination": "core.verify-and-handoff",
-      "excluded": "No redundant reruns when current acceptance evidence suffices."
+      "excluded": "No repeated execution per message when matching evidence remains valid; no inference that tests prove all requirements.",
+      "commit": "2ce8aa15d05bd57213e6f746f953aafb7ded7a8b",
+      "ref": "2ce8aa15d05bd57213e6f746f953aafb7ded7a8b",
+      "upstream_path": "skills/verification-before-completion",
+      "downloaded_on": "2026-10-25",
+      "license": "MIT",
+      "license_path": "incoming/_provenance/obra__superpowers/2ce8aa15d05bd57213e6f746f953aafb7ded7a8b/LICENSE",
+      "popularity_evidence": {
+        "provider": "skills.sh",
+        "url": "https://www.skills.sh/obra/superpowers/verification-before-completion",
+        "metric": "Installs",
+        "display": "252.3K",
+        "observed_on": "2026-10-25",
+        "window": "Not specified by the displayed page",
+        "precision": "rounded display; not unique users or GitHub stars",
+        "owner": "harness maintainer",
+        "revisit_trigger": "source upgrade or same-role replacement request"
+      },
+      "approved_references": [
+        "skills/verify-and-handoff/references/acceptance-review.md"
+      ],
+      "selection_role": "preferred_source_for_reviewed_portion"
     },
     {
       "package": "ros2-engineering-skills",
@@ -2584,7 +2765,23 @@
       "runtime_activation": false,
       "adopted_portion": "small coherent outcome and explicit non-goals",
       "destination": "core.implementation-quality",
-      "excluded": "No one-file rule or removal of necessary ownership/design."
+      "excluded": "No one-file rule or removal of necessary ownership/design.",
+      "popularity_evidence": {
+        "provider": "skills.sh",
+        "url": "https://www.skills.sh/juliusbrussee/caveman/lean-build",
+        "metric": "Installs",
+        "display": "100.0K",
+        "observed_on": "2026-10-25",
+        "window": "Not specified by displayed page",
+        "precision": "rounded display; not unique users or GitHub stars",
+        "owner": "harness maintainer",
+        "revisit_trigger": "source upgrade or same-role replacement request"
+      },
+      "selection_comparison": {
+        "preferred_source": null,
+        "reason": "complementary simplicity principles retained; not interchangeable with design or TDD",
+        "download_refreshed_this_review": false
+      }
     },
     {
       "package": "grill-with-docs",
@@ -2612,7 +2809,23 @@
       "runtime_activation": false,
       "adopted_portion": "resolve factual questions from current documents before asking",
       "destination": "core.intake-and-route",
-      "excluded": "No interrogation loop for already clear reversible tasks."
+      "excluded": "No interrogation loop for already clear reversible tasks.",
+      "popularity_evidence": {
+        "provider": "skills.sh",
+        "url": "https://www.skills.sh/mattpocock/skills/grill-with-docs",
+        "metric": "Installs",
+        "display": "1.2M",
+        "observed_on": "2026-10-25",
+        "window": "Not specified by displayed page",
+        "precision": "rounded display; not unique users or GitHub stars",
+        "owner": "harness maintainer",
+        "revisit_trigger": "source upgrade or same-role replacement request"
+      },
+      "selection_comparison": {
+        "preferred_source": null,
+        "reason": "current entry delegates to sibling skills; preserve prior factual-discovery adaptation without adding an interview chain",
+        "download_refreshed_this_review": false
+      }
     },
     {
       "package": "handoff",
@@ -2655,8 +2868,8 @@
           "sha256": "61a7ef918652108c76a3fd01e02dd92d39996c6b46d4cb2819cbd03f6c45e46a"
         }
       ],
-      "disposition": "defer_package_review",
-      "review_depth": "metadata_only",
+      "disposition": "adapt_principles",
+      "review_depth": "selected_entrypoint_and_adopted_references; original scripts/hooks not executed or promoted",
       "core_coverage": [
         "core.workflow-composition",
         "core.greenfield-planning",
@@ -2664,7 +2877,30 @@
       ],
       "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
       "runtime_activation": false,
-      "reason": "No evidenced replacement advantage for this workflow upgrade; retain source for a scoped package/license/dependency review."
+      "commit": "2ce8aa15d05bd57213e6f746f953aafb7ded7a8b",
+      "ref": "2ce8aa15d05bd57213e6f746f953aafb7ded7a8b",
+      "upstream_path": "skills/brainstorming",
+      "downloaded_on": "2026-10-25",
+      "license": "MIT",
+      "license_path": "incoming/_provenance/obra__superpowers/2ce8aa15d05bd57213e6f746f953aafb7ded7a8b/LICENSE",
+      "popularity_evidence": {
+        "provider": "skills.sh",
+        "url": "https://www.skills.sh/obra/superpowers/brainstorming",
+        "metric": "Installs",
+        "display": "405.2K",
+        "observed_on": "2026-10-25",
+        "window": "Not specified by the displayed page",
+        "precision": "rounded display; not unique users or GitHub stars",
+        "owner": "harness maintainer",
+        "revisit_trigger": "source upgrade or same-role replacement request"
+      },
+      "destination": "core.greenfield-planning",
+      "adopted_portion": "material requirements clarification without redundant questions",
+      "excluded": "No mandatory interview, builder subagent, visual server or repeated approval.",
+      "approved_references": [
+        "skills/workflow-composition/references/task-contract.md"
+      ],
+      "selection_role": "preferred_source_for_reviewed_portion"
     },
     {
       "package": "dispatching-parallel-agents",
@@ -2816,7 +3052,7 @@
         }
       ],
       "disposition": "adapt_principles",
-      "review_depth": "selected_instruction_portions; no full-package promotion",
+      "review_depth": "selected_entrypoint_and_adopted_references; original scripts/hooks not executed or promoted",
       "core_coverage": [
         "core.workflow-composition",
         "core.greenfield-planning",
@@ -2824,9 +3060,30 @@
       ],
       "coverage_limit": "Core capability overlap is not package equivalence; specialized tools, formats, versions and dependencies still require scoped review.",
       "runtime_activation": false,
-      "adopted_portion": "bounded acceptance slices and explicit dependencies",
+      "adopted_portion": "compact accepted contract and independently meaningful slices",
       "destination": "core.workflow-composition",
-      "excluded": "Do not import a mandatory upstream executor or duplicate planner."
+      "excluded": "No upstream executor, automatic commit, mandatory reviewer or duplicate plan.",
+      "commit": "2ce8aa15d05bd57213e6f746f953aafb7ded7a8b",
+      "ref": "2ce8aa15d05bd57213e6f746f953aafb7ded7a8b",
+      "upstream_path": "skills/writing-plans",
+      "downloaded_on": "2026-10-25",
+      "license": "MIT",
+      "license_path": "incoming/_provenance/obra__superpowers/2ce8aa15d05bd57213e6f746f953aafb7ded7a8b/LICENSE",
+      "popularity_evidence": {
+        "provider": "skills.sh",
+        "url": "https://www.skills.sh/obra/superpowers/writing-plans",
+        "metric": "Installs",
+        "display": "283.5K",
+        "observed_on": "2026-10-25",
+        "window": "Not specified by the displayed page",
+        "precision": "rounded display; not unique users or GitHub stars",
+        "owner": "harness maintainer",
+        "revisit_trigger": "source upgrade or same-role replacement request"
+      },
+      "approved_references": [
+        "skills/workflow-composition/references/task-contract.md"
+      ],
+      "selection_role": "preferred_source_for_reviewed_portion"
     },
     {
       "package": "writing-skills",

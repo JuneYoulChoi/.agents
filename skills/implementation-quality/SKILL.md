@@ -75,6 +75,11 @@ when it meets the same acceptance criteria.
 
 ## 3. Produce a focused result
 
+For authored behavior requiring tests, a bug regression or requested TDD, load
+[behavior-focused tests](references/behavior-tests.md). It refines the current
+core verification strategy, not the profile enum or routing graph. Omit it for
+documentation/cosmetic work and avoid tests that only restate the implementation.
+
 Consume the accepted `WORK-*` plan without repeating G3 planning. Implement one
 coherent acceptance slice; a small diff is not sufficient if it hides root cause
 or breaks ownership. A simplicity review checks unnecessary modes, dependencies,

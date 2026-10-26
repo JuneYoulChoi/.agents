@@ -31,6 +31,11 @@ artifact revisions, conditions and scope. A small task may use one compact
 record. Reducing documents never weakens quality, SOLID/GRASP where applicable,
 security, architecture applicability or the acceptance contract.
 
+For material multi-step work, load the
+[compact task contract](references/task-contract.md) and reuse the current
+requirements/acceptance record. Keep ordinary local work compact; do not add
+a second planner, automatic reviewer or upstream execution chain.
+
 ## Choose roles only after dependencies
 
 Default to one agent. For independent work, define bounded units with goal,

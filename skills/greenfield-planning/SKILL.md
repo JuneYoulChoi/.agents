@@ -25,6 +25,11 @@ proposals, not confirmed requirements.
 
 ## 2. Define the smallest useful requirements set
 
+For material new capabilities or unresolved requirements, use the
+[compact task contract](../workflow-composition/references/task-contract.md).
+Resolve only material gaps and carry the same accepted record into composition;
+do not create duplicate specifications or repeat settled approvals.
+
 Create stable IDs and a concise trace:
 
 ```text

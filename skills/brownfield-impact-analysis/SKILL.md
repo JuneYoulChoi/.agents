@@ -34,6 +34,11 @@ as characterization evidence. Do not fabricate a passing baseline.
 
 ## 2. Resolve source-of-truth conflicts
 
+For a reported bug, failing test or performance regression, load the
+[bounded diagnosis reference](references/diagnosis.md). Gather the exact symptom,
+reproduction evidence and falsifiable cause before proposing a fix; authorized
+implementation remains with its execution owner. Other changes skip this reference.
+
 Use this default order unless the project defines an override:
 
 ```text

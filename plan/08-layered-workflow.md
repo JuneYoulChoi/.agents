@@ -147,6 +147,21 @@ seams and structural friction in existing G2/G5; minimal coherent implementation
 in G6; independent evidence, reusable checks and stopping rules in G7. The
 adoption record identifies the specific sources, exclusions and destinations.
 
+## Popular source skills without an installed workflow
+
+The [2026-10-25 source review](../docs/harness/popular-skills-2026-10-25.md)
+records role-matched skills.sh install displays, immutable downloads and selected
+procedure mappings. Popularity informs source selection, never gate activation
+or trust. Originals remain in incoming; approved skills load only their scoped,
+reviewed references. No CLI, hooks, new active skill or second router is added.
+
+G3 reuses one compact acceptance/design/proof contract; bug work adds bounded
+reproduction and cause evidence. G5 adds module-interface reasoning only for
+an already activated structural review. G6 uses independent test oracles when
+behavior warrants tests. G7 separates request coverage from project standards
+and ties completion claims to matching execution evidence. Each reference stays
+with its existing owner, default single-agent execution and stopping rules.
+
 ## Verification boundary
 
 W-FLOW fixtures cover normal profiles, conditional parallel planning and serial

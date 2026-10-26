@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-25",
+  "generated_at": "2026-10-26",
   "integrity_policy": {
     "core_entries": "harness_source_tree_manifest",
     "adapter_manifest": "registry/adapter-manifest.json",
-    "manifest_revision": "workspace-20261025-ab9cb9b48688",
+    "manifest_revision": "workspace-20261026-c6e5af5d0f0c",
     "manifest_hash_scope": "canonical active-skills.json excluding integrity_policy.manifest_sha256",
     "excluded_paths": [
       ".git",
@@ -21,7 +21,7 @@
       "tools/ros-mcp-server/upstream/ros_mcp.egg-info",
       "tools/ros-mcp-server/upstream/.venv"
     ],
-    "manifest_sha256": "7d5958f6662266fb1017bc8414764ea426273ce881d130f4f7ecec1ca21d4eda"
+    "manifest_sha256": "fbb454736e5df4a9f3de2a305da84157f01a89de41dab244f956747ad95f03e1"
   },
   "resolution_order": [
     "project_reviewed",
@@ -51,7 +51,7 @@
     },
     {
       "id": "core.greenfield-planning",
-      "version": "0.4.0",
+      "version": "0.5.0",
       "entry": "skills/greenfield-planning/SKILL.md",
       "trust": "approved",
       "capabilities": [
@@ -93,7 +93,7 @@
     },
     {
       "id": "core.brownfield-impact-analysis",
-      "version": "0.4.0",
+      "version": "0.5.0",
       "entry": "skills/brownfield-impact-analysis/SKILL.md",
       "trust": "approved",
       "capabilities": [
@@ -189,7 +189,7 @@
     },
     {
       "id": "core.architecture-and-design-patterns",
-      "version": "0.4.0",
+      "version": "0.5.0",
       "entry": "skills/architecture-and-design-patterns/SKILL.md",
       "trust": "approved",
       "capabilities": [
@@ -209,7 +209,7 @@
     },
     {
       "id": "core.implementation-quality",
-      "version": "0.2.0",
+      "version": "0.3.0",
       "entry": "skills/implementation-quality/SKILL.md",
       "trust": "approved",
       "capabilities": [
@@ -457,7 +457,7 @@
     },
     {
       "id": "core.verify-and-handoff",
-      "version": "0.4.0",
+      "version": "0.5.0",
       "entry": "skills/verify-and-handoff/SKILL.md",
       "trust": "approved",
       "capabilities": [
@@ -515,7 +515,7 @@
     },
     {
       "id": "core.workflow-composition",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "entry": "skills/workflow-composition/SKILL.md",
       "trust": "approved",
       "capabilities": [

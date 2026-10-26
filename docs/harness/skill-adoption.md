@@ -71,3 +71,14 @@ pinned original runtime subset and adds an inspected graph-only entrypoint.
 It is outside incoming because it is a tool, not a skill. The user approved
 download, scoped integration, testing and commit. No other MCP skill was
 activated. See [review evidence](ros2-mcp-review-2026-10-25.md).
+
+## Popularity-informed source refresh — 2026-10-25
+
+Eight existing packages were downloaded again from pinned current official
+commits; all 26 source files match their previous bytes. The
+[source-selection review](popular-skills-2026-10-25.md) records install displays,
+same-role alternatives, licenses and exact active-reference mappings.
+Brainstorming, diagnosing-bugs, tdd and code-review now have scoped procedural
+adaptations, bringing the total to 20 adapted sources; no package is promoted.
+The inventory remains 111 packages / 127 entrypoints. The new short references
+strengthen existing owners instead of running both upstream frameworks.

@@ -26,3 +26,12 @@ Current layout: `incoming/<category>/<source-bundle>/<package>/`. Packages remai
 ## Promotion boundary
 
 Download popularity does not grant execution. A full promotion requires provenance and license review, required resources and scripts reviewed, tool/network/data scope, compatibility, typed transitions, verification and rollback. Selected procedural adaptations do not promote their source packages. Original sources are preserved.
+
+## Role-matched popularity review — 2026-10-25
+
+Eight existing Superpowers/Matt Pocock packages were refreshed from pinned
+official commits, preserving all 26 original files. Their bytes were already
+current. Commit, license, raw-file hashes and rounded skills.sh install displays
+are now recorded per package. Twenty packages have selected adaptations; all
+source packages remain inactive. See the
+[selection and connection report](../docs/harness/popular-skills-2026-10-25.md).

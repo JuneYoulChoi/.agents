@@ -38,6 +38,10 @@ work, name existing patterns and violations as `observed`, `inferred`, or
 
 ## 2. Evaluate only the relevant pattern family
 
+When the activated scope changes module responsibilities or interfaces, use
+[module design](references/module-design.md). Apply it to Greenfield and
+Brownfield alike; an ordinary local fix does not activate it.
+
 For new modules, inspect how much callers must know, where implementation
 complexity is contained, and whether tests exercise the actual contract. For
 Brownfield work, first establish concrete structural friction; retain existing
