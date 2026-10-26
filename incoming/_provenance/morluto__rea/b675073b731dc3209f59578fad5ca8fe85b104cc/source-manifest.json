@@ -1,0 +1,27 @@
+{
+  "repository": "morluto/rea",
+  "requested_repository": "morluto/rea",
+  "commit": "b675073b731dc3209f59578fad5ca8fe85b104cc",
+  "committed_at": "2026-10-26T11:50:12Z",
+  "stars": 388302,
+  "license": {
+    "key": "mit",
+    "name": "MIT License",
+    "spdx_id": "MIT",
+    "url": "https://api.github.com/licenses/mit",
+    "node_id": "MDc6TGljZW5zZTEz"
+  },
+  "retrieved_on": "2026-10-26",
+  "scope": "Canonical skill directories, original license/readme files, and Addy shared references. No runtime install or activation.",
+  "packages": [
+    {
+      "repository": "morluto/rea",
+      "commit": "b675073b731dc3209f59578fad5ca8fe85b104cc",
+      "upstream_path": ".agents/skills/reverse-engineer-anything",
+      "path": "incoming/security/rea/reverse-engineer-anything",
+      "files": 8,
+      "refreshed": false
+    }
+  ],
+  "shared_reference_root": null
+}

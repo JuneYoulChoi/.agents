@@ -1,0 +1,2507 @@
+{
+  "repository": "affaan-m/ECC",
+  "requested_repository": "affaan-m/ECC",
+  "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+  "committed_at": "2026-10-26T04:03:57Z",
+  "stars": 289233,
+  "license": {
+    "key": "mit",
+    "name": "MIT License",
+    "spdx_id": "MIT",
+    "url": "https://api.github.com/licenses/mit",
+    "node_id": "MDc6TGljZW5zZTEz"
+  },
+  "retrieved_on": "2026-10-26",
+  "scope": "Canonical skill directories, original license/readme files, and Addy shared references. No runtime install or activation.",
+  "packages": [
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/accessibility",
+      "path": "incoming/frontend/everything-claude-code/accessibility",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/agent-architecture-audit",
+      "path": "incoming/architecture/everything-claude-code/agent-architecture-audit",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/agent-eval",
+      "path": "incoming/quality/everything-claude-code/agent-eval",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/agent-harness-construction",
+      "path": "incoming/workflow/everything-claude-code/agent-harness-construction",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/agent-introspection-debugging",
+      "path": "incoming/quality/everything-claude-code/agent-introspection-debugging",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/agent-payment-x402",
+      "path": "incoming/workflow/everything-claude-code/agent-payment-x402",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/agent-runtime-gateway-smoke-test",
+      "path": "incoming/quality/everything-claude-code/agent-runtime-gateway-smoke-test",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/agent-security-hardening",
+      "path": "incoming/security/everything-claude-code/agent-security-hardening",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/agent-self-evaluation",
+      "path": "incoming/quality/everything-claude-code/agent-self-evaluation",
+      "files": 7,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/agent-sort",
+      "path": "incoming/workflow/everything-claude-code/agent-sort",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/agentic-engineering",
+      "path": "incoming/ai/everything-claude-code/agentic-engineering",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/agentic-os",
+      "path": "incoming/ai/everything-claude-code/agentic-os",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/ai-first-engineering",
+      "path": "incoming/ai/everything-claude-code/ai-first-engineering",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/ai-regression-testing",
+      "path": "incoming/quality/everything-claude-code/ai-regression-testing",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/android-clean-architecture",
+      "path": "incoming/architecture/everything-claude-code/android-clean-architecture",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/angular-developer",
+      "path": "incoming/frontend/everything-claude-code/angular-developer",
+      "files": 36,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/api-connector-builder",
+      "path": "incoming/integrations/everything-claude-code/api-connector-builder",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/api-design",
+      "path": "incoming/architecture/everything-claude-code/api-design",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/architecture-decision-records",
+      "path": "incoming/architecture/everything-claude-code/architecture-decision-records",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/article-writing",
+      "path": "incoming/documentation/everything-claude-code/article-writing",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/automation-audit-ops",
+      "path": "incoming/workflow/everything-claude-code/automation-audit-ops",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/autonomous-agent-harness",
+      "path": "incoming/workflow/everything-claude-code/autonomous-agent-harness",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/autonomous-loops",
+      "path": "incoming/workflow/everything-claude-code/autonomous-loops",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/backend-patterns",
+      "path": "incoming/backend/everything-claude-code/backend-patterns",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/benchmark-methodology",
+      "path": "incoming/quality/everything-claude-code/benchmark-methodology",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/benchmark-optimization-loop",
+      "path": "incoming/quality/everything-claude-code/benchmark-optimization-loop",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/benchmark",
+      "path": "incoming/quality/everything-claude-code/benchmark",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/bengali-nlp",
+      "path": "incoming/ai/everything-claude-code/bengali-nlp",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/blender-motion-state-inspection",
+      "path": "incoming/3d/everything-claude-code/blender-motion-state-inspection",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/blueprint",
+      "path": "incoming/architecture/everything-claude-code/blueprint",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/brand-discovery",
+      "path": "incoming/documentation/everything-claude-code/brand-discovery",
+      "files": 9,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/brand-voice",
+      "path": "incoming/documentation/everything-claude-code/brand-voice",
+      "files": 2,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/brownfield-retrospective",
+      "path": "incoming/workflow/everything-claude-code/brownfield-retrospective",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/browser-qa",
+      "path": "incoming/frontend/everything-claude-code/browser-qa",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/bun-runtime",
+      "path": "incoming/languages/everything-claude-code/bun-runtime",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/canary-watch",
+      "path": "incoming/quality/everything-claude-code/canary-watch",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/carrier-relationship-management",
+      "path": "incoming/workflow/everything-claude-code/carrier-relationship-management",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/change-impact",
+      "path": "incoming/quality/everything-claude-code/change-impact",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/cisco-ios-patterns",
+      "path": "incoming/devops/everything-claude-code/cisco-ios-patterns",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/ck",
+      "path": "incoming/workflow/everything-claude-code/ck",
+      "files": 10,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/claude-devfleet",
+      "path": "incoming/workflow/everything-claude-code/claude-devfleet",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/click-path-audit",
+      "path": "incoming/quality/everything-claude-code/click-path-audit",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/clickhouse-io",
+      "path": "incoming/backend/everything-claude-code/clickhouse-io",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/code-tour",
+      "path": "incoming/documentation/everything-claude-code/code-tour",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/codebase-onboarding",
+      "path": "incoming/context/everything-claude-code/codebase-onboarding",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/codehealth-mcp",
+      "path": "incoming/integrations/everything-claude-code/codehealth-mcp",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/coding-standards",
+      "path": "incoming/quality/everything-claude-code/coding-standards",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/competitive-platform-analysis",
+      "path": "incoming/workflow/everything-claude-code/competitive-platform-analysis",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/competitive-report-structure",
+      "path": "incoming/documentation/everything-claude-code/competitive-report-structure",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/compose-multiplatform-patterns",
+      "path": "incoming/frontend/everything-claude-code/compose-multiplatform-patterns",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/config-gc",
+      "path": "incoming/workflow/everything-claude-code/config-gc",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/configure-ecc",
+      "path": "incoming/workflow/everything-claude-code/configure-ecc",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/connections-optimizer",
+      "path": "incoming/workflow/everything-claude-code/connections-optimizer",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/content-engine",
+      "path": "incoming/documentation/everything-claude-code/content-engine",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/content-hash-cache-pattern",
+      "path": "incoming/documentation/everything-claude-code/content-hash-cache-pattern",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/context-and-decisions",
+      "path": "incoming/context/everything-claude-code/context-and-decisions",
+      "files": 2,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/context-budget",
+      "path": "incoming/context/everything-claude-code/context-budget",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/continuous-agent-loop",
+      "path": "incoming/workflow/everything-claude-code/continuous-agent-loop",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/continuous-learning-v2",
+      "path": "incoming/workflow/everything-claude-code/continuous-learning-v2",
+      "files": 12,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/continuous-learning",
+      "path": "incoming/workflow/everything-claude-code/continuous-learning",
+      "files": 3,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/contract-first",
+      "path": "incoming/architecture/everything-claude-code/contract-first",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/conventional-commit-review",
+      "path": "incoming/quality/everything-claude-code/conventional-commit-review",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/cost-aware-llm-pipeline",
+      "path": "incoming/ai/everything-claude-code/cost-aware-llm-pipeline",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/cost-tracking",
+      "path": "incoming/workflow/everything-claude-code/cost-tracking",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/council-multi-model",
+      "path": "incoming/ai/everything-claude-code/council-multi-model",
+      "files": 2,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/council",
+      "path": "incoming/workflow/everything-claude-code/council",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/counterparty-channel-discipline",
+      "path": "incoming/workflow/everything-claude-code/counterparty-channel-discipline",
+      "files": 3,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/cpp-coding-standards",
+      "path": "incoming/languages/everything-claude-code/cpp-coding-standards",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/cpp-testing",
+      "path": "incoming/languages/everything-claude-code/cpp-testing",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/crosspost",
+      "path": "incoming/workflow/everything-claude-code/crosspost",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/csharp-testing",
+      "path": "incoming/languages/everything-claude-code/csharp-testing",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/customer-billing-ops",
+      "path": "incoming/workflow/everything-claude-code/customer-billing-ops",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/customs-trade-compliance",
+      "path": "incoming/workflow/everything-claude-code/customs-trade-compliance",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/dart-flutter-patterns",
+      "path": "incoming/frontend/everything-claude-code/dart-flutter-patterns",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/dashboard-builder",
+      "path": "incoming/frontend/everything-claude-code/dashboard-builder",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/data-scraper-agent",
+      "path": "incoming/integrations/everything-claude-code/data-scraper-agent",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/data-throughput-accelerator",
+      "path": "incoming/workflow/everything-claude-code/data-throughput-accelerator",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/database-migrations",
+      "path": "incoming/backend/everything-claude-code/database-migrations",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/deep-research",
+      "path": "incoming/documentation/everything-claude-code/deep-research",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/deepseek-harness-setup",
+      "path": "incoming/workflow/everything-claude-code/deepseek-harness-setup",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/defi-amm-security",
+      "path": "incoming/security/everything-claude-code/defi-amm-security",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/delivery-gate",
+      "path": "incoming/workflow/everything-claude-code/delivery-gate",
+      "files": 2,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/deployment-patterns",
+      "path": "incoming/devops/everything-claude-code/deployment-patterns",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/design-system",
+      "path": "incoming/frontend/everything-claude-code/design-system",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/dev-team",
+      "path": "incoming/workflow/everything-claude-code/dev-team",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/django-celery",
+      "path": "incoming/backend/everything-claude-code/django-celery",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/django-patterns",
+      "path": "incoming/backend/everything-claude-code/django-patterns",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/django-security",
+      "path": "incoming/security/everything-claude-code/django-security",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/django-tdd",
+      "path": "incoming/backend/everything-claude-code/django-tdd",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/django-verification",
+      "path": "incoming/backend/everything-claude-code/django-verification",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/dmux-workflows",
+      "path": "incoming/workflow/everything-claude-code/dmux-workflows",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/docker-patterns",
+      "path": "incoming/devops/everything-claude-code/docker-patterns",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/docs-governance",
+      "path": "incoming/documentation/everything-claude-code/docs-governance",
+      "files": 4,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/documentation-lookup",
+      "path": "incoming/documentation/everything-claude-code/documentation-lookup",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/dotnet-patterns",
+      "path": "incoming/backend/everything-claude-code/dotnet-patterns",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/dynamic-workflow-mode",
+      "path": "incoming/workflow/everything-claude-code/dynamic-workflow-mode",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/e2e-testing",
+      "path": "incoming/quality/everything-claude-code/e2e-testing",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/ecc-guide",
+      "path": "incoming/workflow/everything-claude-code/ecc-guide",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/ecc-recipes",
+      "path": "incoming/workflow/everything-claude-code/ecc-recipes",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/ecc-tools-cost-audit",
+      "path": "incoming/workflow/everything-claude-code/ecc-tools-cost-audit",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/email-ops",
+      "path": "incoming/workflow/everything-claude-code/email-ops",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/energy-procurement",
+      "path": "incoming/workflow/everything-claude-code/energy-procurement",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/enterprise-agent-ops",
+      "path": "incoming/workflow/everything-claude-code/enterprise-agent-ops",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/error-handling",
+      "path": "incoming/quality/everything-claude-code/error-handling",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/esign-field-placement",
+      "path": "incoming/workflow/everything-claude-code/esign-field-placement",
+      "files": 2,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/eval-harness",
+      "path": "incoming/quality/everything-claude-code/eval-harness",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/evm-token-decimals",
+      "path": "incoming/backend/everything-claude-code/evm-token-decimals",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/exa-search",
+      "path": "incoming/integrations/everything-claude-code/exa-search",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/fal-ai-media",
+      "path": "incoming/ai/everything-claude-code/fal-ai-media",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/fastapi-patterns",
+      "path": "incoming/backend/everything-claude-code/fastapi-patterns",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/finance-billing-ops",
+      "path": "incoming/workflow/everything-claude-code/finance-billing-ops",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/flox-environments",
+      "path": "incoming/devops/everything-claude-code/flox-environments",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/flutter-dart-code-review",
+      "path": "incoming/quality/everything-claude-code/flutter-dart-code-review",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/foundation-models-on-device",
+      "path": "incoming/ai/everything-claude-code/foundation-models-on-device",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/frontend-a11y",
+      "path": "incoming/frontend/everything-claude-code/frontend-a11y",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/frontend-design-direction",
+      "path": "incoming/frontend/everything-claude-code/frontend-design-direction",
+      "files": 2,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/frontend-patterns",
+      "path": "incoming/frontend/everything-claude-code/frontend-patterns",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/frontend-slides",
+      "path": "incoming/documentation/everything-claude-code/frontend-slides",
+      "files": 7,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/fsharp-testing",
+      "path": "incoming/quality/everything-claude-code/fsharp-testing",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/gan-style-harness",
+      "path": "incoming/workflow/everything-claude-code/gan-style-harness",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/gateguard",
+      "path": "incoming/security/everything-claude-code/gateguard",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/generating-python-installer",
+      "path": "incoming/languages/everything-claude-code/generating-python-installer",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/git-workflow",
+      "path": "incoming/devops/everything-claude-code/git-workflow",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/github-ops",
+      "path": "incoming/integrations/everything-claude-code/github-ops",
+      "files": 2,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/golang-patterns",
+      "path": "incoming/languages/everything-claude-code/golang-patterns",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/golang-testing",
+      "path": "incoming/languages/everything-claude-code/golang-testing",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/google-workspace-ops",
+      "path": "incoming/integrations/everything-claude-code/google-workspace-ops",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/growth-log",
+      "path": "incoming/workflow/everything-claude-code/growth-log",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/healthcare-cdss-patterns",
+      "path": "incoming/workflow/everything-claude-code/healthcare-cdss-patterns",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/healthcare-emr-patterns",
+      "path": "incoming/workflow/everything-claude-code/healthcare-emr-patterns",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/healthcare-eval-harness",
+      "path": "incoming/quality/everything-claude-code/healthcare-eval-harness",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/healthcare-phi-compliance",
+      "path": "incoming/security/everything-claude-code/healthcare-phi-compliance",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/hermes-imports",
+      "path": "incoming/workflow/everything-claude-code/hermes-imports",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/hexagonal-architecture",
+      "path": "incoming/architecture/everything-claude-code/hexagonal-architecture",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/hipaa-compliance",
+      "path": "incoming/security/everything-claude-code/hipaa-compliance",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/homelab-network-readiness",
+      "path": "incoming/devops/everything-claude-code/homelab-network-readiness",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/homelab-network-setup",
+      "path": "incoming/devops/everything-claude-code/homelab-network-setup",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/homelab-pihole-dns",
+      "path": "incoming/devops/everything-claude-code/homelab-pihole-dns",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/homelab-vlan-segmentation",
+      "path": "incoming/devops/everything-claude-code/homelab-vlan-segmentation",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/homelab-wireguard-vpn",
+      "path": "incoming/devops/everything-claude-code/homelab-wireguard-vpn",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/hookify-rules",
+      "path": "incoming/workflow/everything-claude-code/hookify-rules",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/i18n-sync",
+      "path": "incoming/documentation/everything-claude-code/i18n-sync",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/inherit-legacy-style",
+      "path": "incoming/workflow/everything-claude-code/inherit-legacy-style",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/intent-driven-development",
+      "path": "incoming/workflow/everything-claude-code/intent-driven-development",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/inventory-demand-planning",
+      "path": "incoming/workflow/everything-claude-code/inventory-demand-planning",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/investor-materials",
+      "path": "incoming/documentation/everything-claude-code/investor-materials",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/investor-outreach",
+      "path": "incoming/workflow/everything-claude-code/investor-outreach",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/ios-icon-gen",
+      "path": "incoming/frontend/everything-claude-code/ios-icon-gen",
+      "files": 3,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/iterative-retrieval",
+      "path": "incoming/context/everything-claude-code/iterative-retrieval",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/ito-baskets",
+      "path": "incoming/workflow/everything-claude-code/ito-baskets",
+      "files": 3,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/ito-compute",
+      "path": "incoming/ai/everything-claude-code/ito-compute",
+      "files": 2,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/ito-inference",
+      "path": "incoming/ai/everything-claude-code/ito-inference",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/ito-training",
+      "path": "incoming/ai/everything-claude-code/ito-training",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/java-coding-standards",
+      "path": "incoming/languages/everything-claude-code/java-coding-standards",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/jira-integration",
+      "path": "incoming/integrations/everything-claude-code/jira-integration",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/jpa-patterns",
+      "path": "incoming/backend/everything-claude-code/jpa-patterns",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/knowledge-ops",
+      "path": "incoming/context/everything-claude-code/knowledge-ops",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/kotlin-coroutines-flows",
+      "path": "incoming/languages/everything-claude-code/kotlin-coroutines-flows",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/kotlin-exposed-patterns",
+      "path": "incoming/languages/everything-claude-code/kotlin-exposed-patterns",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/kotlin-ktor-patterns",
+      "path": "incoming/languages/everything-claude-code/kotlin-ktor-patterns",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/kotlin-patterns",
+      "path": "incoming/languages/everything-claude-code/kotlin-patterns",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/kotlin-testing",
+      "path": "incoming/languages/everything-claude-code/kotlin-testing",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/kubernetes-patterns",
+      "path": "incoming/devops/everything-claude-code/kubernetes-patterns",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/laravel-patterns",
+      "path": "incoming/backend/everything-claude-code/laravel-patterns",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/laravel-plugin-discovery",
+      "path": "incoming/backend/everything-claude-code/laravel-plugin-discovery",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/laravel-security",
+      "path": "incoming/security/everything-claude-code/laravel-security",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/laravel-tdd",
+      "path": "incoming/backend/everything-claude-code/laravel-tdd",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/laravel-verification",
+      "path": "incoming/backend/everything-claude-code/laravel-verification",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/latency-critical-systems",
+      "path": "incoming/workflow/everything-claude-code/latency-critical-systems",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/lead-intelligence",
+      "path": "incoming/workflow/everything-claude-code/lead-intelligence",
+      "files": 5,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/liquid-glass-design",
+      "path": "incoming/frontend/everything-claude-code/liquid-glass-design",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/living-docs-governance",
+      "path": "incoming/documentation/everything-claude-code/living-docs-governance",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/llm-trading-agent-security",
+      "path": "incoming/security/everything-claude-code/llm-trading-agent-security",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/logistics-exception-management",
+      "path": "incoming/workflow/everything-claude-code/logistics-exception-management",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/loop-design-check",
+      "path": "incoming/frontend/everything-claude-code/loop-design-check",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/mailtrap-email-integration",
+      "path": "incoming/integrations/everything-claude-code/mailtrap-email-integration",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/make-interfaces-feel-better",
+      "path": "incoming/frontend/everything-claude-code/make-interfaces-feel-better",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/manim-video",
+      "path": "incoming/workflow/everything-claude-code/manim-video",
+      "files": 2,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/market-research",
+      "path": "incoming/documentation/everything-claude-code/market-research",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/marketing-campaign",
+      "path": "incoming/workflow/everything-claude-code/marketing-campaign",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/master-agreement-generator",
+      "path": "incoming/documentation/everything-claude-code/master-agreement-generator",
+      "files": 4,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/mcp-dependency-review",
+      "path": "incoming/integrations/everything-claude-code/mcp-dependency-review",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/mcp-server-patterns",
+      "path": "incoming/integrations/everything-claude-code/mcp-server-patterns",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/messages-ops",
+      "path": "incoming/workflow/everything-claude-code/messages-ops",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/ml-adoption-playbook",
+      "path": "incoming/ai/everything-claude-code/ml-adoption-playbook",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/mle-workflow",
+      "path": "incoming/ai/everything-claude-code/mle-workflow",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/module-regression",
+      "path": "incoming/quality/everything-claude-code/module-regression",
+      "files": 2,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/motion-advanced",
+      "path": "incoming/frontend/everything-claude-code/motion-advanced",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/motion-foundations",
+      "path": "incoming/frontend/everything-claude-code/motion-foundations",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/motion-patterns",
+      "path": "incoming/frontend/everything-claude-code/motion-patterns",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/mybatis-patterns",
+      "path": "incoming/backend/everything-claude-code/mybatis-patterns",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/mysql-patterns",
+      "path": "incoming/backend/everything-claude-code/mysql-patterns",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/nanoclaw-repl",
+      "path": "incoming/workflow/everything-claude-code/nanoclaw-repl",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/nasiko-control-plane",
+      "path": "incoming/workflow/everything-claude-code/nasiko-control-plane",
+      "files": 2,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/nestjs-patterns",
+      "path": "incoming/backend/everything-claude-code/nestjs-patterns",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/netmiko-ssh-automation",
+      "path": "incoming/devops/everything-claude-code/netmiko-ssh-automation",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/network-bgp-diagnostics",
+      "path": "incoming/devops/everything-claude-code/network-bgp-diagnostics",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/network-config-validation",
+      "path": "incoming/quality/everything-claude-code/network-config-validation",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/network-interface-health",
+      "path": "incoming/quality/everything-claude-code/network-interface-health",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/nextjs-turbopack",
+      "path": "incoming/frontend/everything-claude-code/nextjs-turbopack",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/nodejs-keccak256",
+      "path": "incoming/backend/everything-claude-code/nodejs-keccak256",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/nutrient-document-processing",
+      "path": "incoming/documentation/everything-claude-code/nutrient-document-processing",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/nuxt4-patterns",
+      "path": "incoming/frontend/everything-claude-code/nuxt4-patterns",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/openclaw-persona-forge",
+      "path": "incoming/workflow/everything-claude-code/openclaw-persona-forge",
+      "files": 9,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/opensource-pipeline",
+      "path": "incoming/workflow/everything-claude-code/opensource-pipeline",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/operator-approval-loop",
+      "path": "incoming/workflow/everything-claude-code/operator-approval-loop",
+      "files": 3,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/orch-add-feature",
+      "path": "incoming/workflow/everything-claude-code/orch-add-feature",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/orch-build-mvp",
+      "path": "incoming/workflow/everything-claude-code/orch-build-mvp",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/orch-change-feature",
+      "path": "incoming/workflow/everything-claude-code/orch-change-feature",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/orch-fix-defect",
+      "path": "incoming/workflow/everything-claude-code/orch-fix-defect",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/orch-pipeline",
+      "path": "incoming/workflow/everything-claude-code/orch-pipeline",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/orch-refine-code",
+      "path": "incoming/workflow/everything-claude-code/orch-refine-code",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/osint-investigation",
+      "path": "incoming/security/everything-claude-code/osint-investigation",
+      "files": 2,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/parallel-execution-optimizer",
+      "path": "incoming/workflow/everything-claude-code/parallel-execution-optimizer",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/perl-patterns",
+      "path": "incoming/languages/everything-claude-code/perl-patterns",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/perl-security",
+      "path": "incoming/security/everything-claude-code/perl-security",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/perl-testing",
+      "path": "incoming/quality/everything-claude-code/perl-testing",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/plan-canvas",
+      "path": "incoming/documentation/everything-claude-code/plan-canvas",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/plan-orchestrate",
+      "path": "incoming/workflow/everything-claude-code/plan-orchestrate",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/plankton-code-quality",
+      "path": "incoming/quality/everything-claude-code/plankton-code-quality",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/postgres-patterns",
+      "path": "incoming/backend/everything-claude-code/postgres-patterns",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/prediction-market-oracle-research",
+      "path": "incoming/documentation/everything-claude-code/prediction-market-oracle-research",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/prediction-market-risk-review",
+      "path": "incoming/quality/everything-claude-code/prediction-market-risk-review",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/prisma-patterns",
+      "path": "incoming/backend/everything-claude-code/prisma-patterns",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/product-capability",
+      "path": "incoming/workflow/everything-claude-code/product-capability",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/product-lens",
+      "path": "incoming/workflow/everything-claude-code/product-lens",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/production-audit",
+      "path": "incoming/quality/everything-claude-code/production-audit",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/production-scheduling",
+      "path": "incoming/workflow/everything-claude-code/production-scheduling",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/project-flow-ops",
+      "path": "incoming/workflow/everything-claude-code/project-flow-ops",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/prompt-caching-strategy",
+      "path": "incoming/ai/everything-claude-code/prompt-caching-strategy",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/prompt-optimizer",
+      "path": "incoming/context/everything-claude-code/prompt-optimizer",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/python-patterns",
+      "path": "incoming/languages/everything-claude-code/python-patterns",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/python-testing",
+      "path": "incoming/languages/everything-claude-code/python-testing",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/pytorch-patterns",
+      "path": "incoming/ai/everything-claude-code/pytorch-patterns",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/quality-nonconformance",
+      "path": "incoming/quality/everything-claude-code/quality-nonconformance",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/quarkus-patterns",
+      "path": "incoming/backend/everything-claude-code/quarkus-patterns",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/quarkus-security",
+      "path": "incoming/security/everything-claude-code/quarkus-security",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/quarkus-tdd",
+      "path": "incoming/quality/everything-claude-code/quarkus-tdd",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/quarkus-verification",
+      "path": "incoming/quality/everything-claude-code/quarkus-verification",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/rails-patterns",
+      "path": "incoming/backend/everything-claude-code/rails-patterns",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/ralphinho-rfc-pipeline",
+      "path": "incoming/workflow/everything-claude-code/ralphinho-rfc-pipeline",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/react-native-patterns",
+      "path": "incoming/frontend/everything-claude-code/react-native-patterns",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/react-patterns",
+      "path": "incoming/frontend/everything-claude-code/react-patterns",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/react-performance",
+      "path": "incoming/frontend/everything-claude-code/react-performance",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/react-testing",
+      "path": "incoming/frontend/everything-claude-code/react-testing",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/recsys-pipeline-architect",
+      "path": "incoming/ai/everything-claude-code/recsys-pipeline-architect",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/recursive-decision-ledger",
+      "path": "incoming/context/everything-claude-code/recursive-decision-ledger",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/redis-patterns",
+      "path": "incoming/backend/everything-claude-code/redis-patterns",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/regex-vs-llm-structured-text",
+      "path": "incoming/ai/everything-claude-code/regex-vs-llm-structured-text",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/remotion-video-creation",
+      "path": "incoming/workflow/everything-claude-code/remotion-video-creation",
+      "files": 32,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/repo-scan",
+      "path": "incoming/context/everything-claude-code/repo-scan",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/research-ops",
+      "path": "incoming/documentation/everything-claude-code/research-ops",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/returns-reverse-logistics",
+      "path": "incoming/workflow/everything-claude-code/returns-reverse-logistics",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/rules-distill",
+      "path": "incoming/context/everything-claude-code/rules-distill",
+      "files": 3,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/rust-patterns",
+      "path": "incoming/languages/everything-claude-code/rust-patterns",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/rust-testing",
+      "path": "incoming/languages/everything-claude-code/rust-testing",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/safety-guard",
+      "path": "incoming/security/everything-claude-code/safety-guard",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/santa-method",
+      "path": "incoming/workflow/everything-claude-code/santa-method",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/scientific-db-pubmed-database",
+      "path": "incoming/workflow/everything-claude-code/scientific-db-pubmed-database",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/scientific-db-uspto-database",
+      "path": "incoming/workflow/everything-claude-code/scientific-db-uspto-database",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/scientific-pkg-gget",
+      "path": "incoming/workflow/everything-claude-code/scientific-pkg-gget",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/scientific-thinking-literature-review",
+      "path": "incoming/documentation/everything-claude-code/scientific-thinking-literature-review",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/scientific-thinking-scholar-evaluation",
+      "path": "incoming/quality/everything-claude-code/scientific-thinking-scholar-evaluation",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/search-first",
+      "path": "incoming/documentation/everything-claude-code/search-first",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/security-bounty-hunter",
+      "path": "incoming/security/everything-claude-code/security-bounty-hunter",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/security-review",
+      "path": "incoming/security/everything-claude-code/security-review",
+      "files": 2,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/security-scan",
+      "path": "incoming/security/everything-claude-code/security-scan",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/seo",
+      "path": "incoming/workflow/everything-claude-code/seo",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/skill-comply",
+      "path": "incoming/workflow/everything-claude-code/skill-comply",
+      "files": 23,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/skill-host-compat",
+      "path": "incoming/workflow/everything-claude-code/skill-host-compat",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/skill-scout",
+      "path": "incoming/workflow/everything-claude-code/skill-scout",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/skill-stocktake",
+      "path": "incoming/workflow/everything-claude-code/skill-stocktake",
+      "files": 4,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/social-graph-ranker",
+      "path": "incoming/workflow/everything-claude-code/social-graph-ranker",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/social-publisher",
+      "path": "incoming/workflow/everything-claude-code/social-publisher",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/springboot-patterns",
+      "path": "incoming/backend/everything-claude-code/springboot-patterns",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/springboot-security",
+      "path": "incoming/security/everything-claude-code/springboot-security",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/springboot-tdd",
+      "path": "incoming/backend/everything-claude-code/springboot-tdd",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/springboot-verification",
+      "path": "incoming/backend/everything-claude-code/springboot-verification",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/story-lifecycle",
+      "path": "incoming/workflow/everything-claude-code/story-lifecycle",
+      "files": 2,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/strategic-compact",
+      "path": "incoming/context/everything-claude-code/strategic-compact",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/swift-actor-persistence",
+      "path": "incoming/languages/everything-claude-code/swift-actor-persistence",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/swift-concurrency-6-2",
+      "path": "incoming/languages/everything-claude-code/swift-concurrency-6-2",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/swift-protocol-di-testing",
+      "path": "incoming/languages/everything-claude-code/swift-protocol-di-testing",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/swiftui-patterns",
+      "path": "incoming/frontend/everything-claude-code/swiftui-patterns",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/taste-application",
+      "path": "incoming/frontend/everything-claude-code/taste-application",
+      "files": 81,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/taste-distillation",
+      "path": "incoming/frontend/everything-claude-code/taste-distillation",
+      "files": 15,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/taste",
+      "path": "incoming/frontend/everything-claude-code/taste",
+      "files": 2,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/tasteforge-video",
+      "path": "incoming/workflow/everything-claude-code/tasteforge-video",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/tdd-workflow",
+      "path": "incoming/quality/everything-claude-code/tdd-workflow",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/team-agent-orchestration",
+      "path": "incoming/workflow/everything-claude-code/team-agent-orchestration",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/team-builder",
+      "path": "incoming/workflow/everything-claude-code/team-builder",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/terminal-opener",
+      "path": "incoming/workflow/everything-claude-code/terminal-opener",
+      "files": 3,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/terminal-ops",
+      "path": "incoming/workflow/everything-claude-code/terminal-ops",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/test-collaboration",
+      "path": "incoming/quality/everything-claude-code/test-collaboration",
+      "files": 2,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/tinystruct-patterns",
+      "path": "incoming/backend/everything-claude-code/tinystruct-patterns",
+      "files": 7,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/token-budget-advisor",
+      "path": "incoming/context/everything-claude-code/token-budget-advisor",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/token-card",
+      "path": "incoming/context/everything-claude-code/token-card",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/ui-demo",
+      "path": "incoming/frontend/everything-claude-code/ui-demo",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/ui-to-vue",
+      "path": "incoming/frontend/everything-claude-code/ui-to-vue",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/uncloud",
+      "path": "incoming/devops/everything-claude-code/uncloud",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/unified-memory",
+      "path": "incoming/context/everything-claude-code/unified-memory",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/unified-notifications-ops",
+      "path": "incoming/workflow/everything-claude-code/unified-notifications-ops",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/verification-loop",
+      "path": "incoming/quality/everything-claude-code/verification-loop",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/video-editing",
+      "path": "incoming/workflow/everything-claude-code/video-editing",
+      "files": 13,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/videodb",
+      "path": "incoming/workflow/everything-claude-code/videodb",
+      "files": 12,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/visa-doc-translate",
+      "path": "incoming/documentation/everything-claude-code/visa-doc-translate",
+      "files": 2,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/vite-patterns",
+      "path": "incoming/frontend/everything-claude-code/vite-patterns",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/vue-patterns",
+      "path": "incoming/frontend/everything-claude-code/vue-patterns",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/windows-desktop-e2e",
+      "path": "incoming/quality/everything-claude-code/windows-desktop-e2e",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/workspace-surface-audit",
+      "path": "incoming/workflow/everything-claude-code/workspace-surface-audit",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "affaan-m/ECC",
+      "commit": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
+      "upstream_path": "skills/x-api",
+      "path": "incoming/integrations/everything-claude-code/x-api",
+      "files": 1,
+      "refreshed": false
+    }
+  ],
+  "shared_reference_root": null
+}

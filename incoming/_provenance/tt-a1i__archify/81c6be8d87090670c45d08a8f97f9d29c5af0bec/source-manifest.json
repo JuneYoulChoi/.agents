@@ -1,0 +1,27 @@
+{
+  "repository": "tt-a1i/archify",
+  "requested_repository": "tt-a1i/archify",
+  "commit": "81c6be8d87090670c45d08a8f97f9d29c5af0bec",
+  "committed_at": "2026-10-25T15:52:06Z",
+  "stars": 89544,
+  "license": {
+    "key": "apache-2.0",
+    "name": "Apache License 2.0",
+    "spdx_id": "Apache-2.0",
+    "url": "https://api.github.com/licenses/apache-2.0",
+    "node_id": "MDc6TGljZW5zZTI="
+  },
+  "retrieved_on": "2026-10-26",
+  "scope": "Canonical skill directories, original license/readme files, and Addy shared references. No runtime install or activation.",
+  "packages": [
+    {
+      "repository": "tt-a1i/archify",
+      "commit": "81c6be8d87090670c45d08a8f97f9d29c5af0bec",
+      "upstream_path": "archify",
+      "path": "incoming/documentation/archify/archify",
+      "files": 206,
+      "refreshed": false
+    }
+  ],
+  "shared_reference_root": null
+}

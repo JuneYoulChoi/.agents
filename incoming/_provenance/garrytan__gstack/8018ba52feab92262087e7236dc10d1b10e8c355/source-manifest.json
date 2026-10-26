@@ -1,0 +1,483 @@
+{
+  "repository": "garrytan/gstack",
+  "requested_repository": "garrytan/gstack",
+  "commit": "8018ba52feab92262087e7236dc10d1b10e8c355",
+  "committed_at": "2026-10-26T12:00:20Z",
+  "stars": 137776,
+  "license": {
+    "key": "mit",
+    "name": "MIT License",
+    "spdx_id": "MIT",
+    "url": "https://api.github.com/licenses/mit",
+    "node_id": "MDc6TGljZW5zZTEz"
+  },
+  "retrieved_on": "2026-10-26",
+  "scope": "Canonical skill directories, original license/readme files, and Addy shared references. No runtime install or activation.",
+  "packages": [
+    {
+      "repository": "garrytan/gstack",
+      "commit": "8018ba52feab92262087e7236dc10d1b10e8c355",
+      "upstream_path": ".",
+      "path": "incoming/workflow/gstack/gstack",
+      "files": 1,
+      "refreshed": false
+    },
+    {
+      "repository": "garrytan/gstack",
+      "commit": "8018ba52feab92262087e7236dc10d1b10e8c355",
+      "upstream_path": "autoplan",
+      "path": "incoming/workflow/gstack/autoplan",
+      "files": 25,
+      "refreshed": false
+    },
+    {
+      "repository": "garrytan/gstack",
+      "commit": "8018ba52feab92262087e7236dc10d1b10e8c355",
+      "upstream_path": "benchmark",
+      "path": "incoming/quality/gstack/benchmark",
+      "files": 2,
+      "refreshed": false
+    },
+    {
+      "repository": "garrytan/gstack",
+      "commit": "8018ba52feab92262087e7236dc10d1b10e8c355",
+      "upstream_path": "benchmark-models",
+      "path": "incoming/quality/gstack/benchmark-models",
+      "files": 2,
+      "refreshed": false
+    },
+    {
+      "repository": "garrytan/gstack",
+      "commit": "8018ba52feab92262087e7236dc10d1b10e8c355",
+      "upstream_path": "browse",
+      "path": "incoming/integrations/gstack/browse",
+      "files": 324,
+      "refreshed": false
+    },
+    {
+      "repository": "garrytan/gstack",
+      "commit": "8018ba52feab92262087e7236dc10d1b10e8c355",
+      "upstream_path": "canary",
+      "path": "incoming/quality/gstack/canary",
+      "files": 2,
+      "refreshed": false
+    },
+    {
+      "repository": "garrytan/gstack",
+      "commit": "8018ba52feab92262087e7236dc10d1b10e8c355",
+      "upstream_path": "careful",
+      "path": "incoming/workflow/gstack/careful",
+      "files": 5,
+      "refreshed": false
+    },
+    {
+      "repository": "garrytan/gstack",
+      "commit": "8018ba52feab92262087e7236dc10d1b10e8c355",
+      "upstream_path": "codex",
+      "path": "incoming/workflow/gstack/codex",
+      "files": 9,
+      "refreshed": false
+    },
+    {
+      "repository": "garrytan/gstack",
+      "commit": "8018ba52feab92262087e7236dc10d1b10e8c355",
+      "upstream_path": "context-restore",
+      "path": "incoming/context/gstack/context-restore",
+      "files": 2,
+      "refreshed": false
+    },
+    {
+      "repository": "garrytan/gstack",
+      "commit": "8018ba52feab92262087e7236dc10d1b10e8c355",
+      "upstream_path": "context-save",
+      "path": "incoming/context/gstack/context-save",
+      "files": 2,
+      "refreshed": false
+    },
+    {
+      "repository": "garrytan/gstack",
+      "commit": "8018ba52feab92262087e7236dc10d1b10e8c355",
+      "upstream_path": "cso",
+      "path": "incoming/workflow/gstack/cso",
+      "files": 6,
+      "refreshed": false
+    },
+    {
+      "repository": "garrytan/gstack",
+      "commit": "8018ba52feab92262087e7236dc10d1b10e8c355",
+      "upstream_path": "design-consultation",
+      "path": "incoming/frontend/gstack/design-consultation",
+      "files": 5,
+      "refreshed": false
+    },
+    {
+      "repository": "garrytan/gstack",
+      "commit": "8018ba52feab92262087e7236dc10d1b10e8c355",
+      "upstream_path": "design-html",
+      "path": "incoming/frontend/gstack/design-html",
+      "files": 12,
+      "refreshed": false
+    },
+    {
+      "repository": "garrytan/gstack",
+      "commit": "8018ba52feab92262087e7236dc10d1b10e8c355",
+      "upstream_path": "design-review",
+      "path": "incoming/frontend/gstack/design-review",
+      "files": 2,
+      "refreshed": false
+    },
+    {
+      "repository": "garrytan/gstack",
+      "commit": "8018ba52feab92262087e7236dc10d1b10e8c355",
+      "upstream_path": "design-shotgun",
+      "path": "incoming/frontend/gstack/design-shotgun",
+      "files": 5,
+      "refreshed": false
+    },
+    {
+      "repository": "garrytan/gstack",
+      "commit": "8018ba52feab92262087e7236dc10d1b10e8c355",
+      "upstream_path": "deslop-shared-libs",
+      "path": "incoming/workflow/gstack/deslop-shared-libs",
+      "files": 2,
+      "refreshed": false
+    },
+    {
+      "repository": "garrytan/gstack",
+      "commit": "8018ba52feab92262087e7236dc10d1b10e8c355",
+      "upstream_path": "devex-review",
+      "path": "incoming/quality/gstack/devex-review",
+      "files": 2,
+      "refreshed": false
+    },
+    {
+      "repository": "garrytan/gstack",
+      "commit": "8018ba52feab92262087e7236dc10d1b10e8c355",
+      "upstream_path": "diagram",
+      "path": "incoming/documentation/gstack/diagram",
+      "files": 2,
+      "refreshed": false
+    },
+    {
+      "repository": "garrytan/gstack",
+      "commit": "8018ba52feab92262087e7236dc10d1b10e8c355",
+      "upstream_path": "document-generate",
+      "path": "incoming/documentation/gstack/document-generate",
+      "files": 2,
+      "refreshed": false
+    },
+    {
+      "repository": "garrytan/gstack",
+      "commit": "8018ba52feab92262087e7236dc10d1b10e8c355",
+      "upstream_path": "document-release",
+      "path": "incoming/documentation/gstack/document-release",
+      "files": 7,
+      "refreshed": false
+    },
+    {
+      "repository": "garrytan/gstack",
+      "commit": "8018ba52feab92262087e7236dc10d1b10e8c355",
+      "upstream_path": "eval-plan",
+      "path": "incoming/quality/gstack/eval-plan",
+      "files": 2,
+      "refreshed": false
+    },
+    {
+      "repository": "garrytan/gstack",
+      "commit": "8018ba52feab92262087e7236dc10d1b10e8c355",
+      "upstream_path": "freeze",
+      "path": "incoming/workflow/gstack/freeze",
+      "files": 4,
+      "refreshed": false
+    },
+    {
+      "repository": "garrytan/gstack",
+      "commit": "8018ba52feab92262087e7236dc10d1b10e8c355",
+      "upstream_path": "gstack-upgrade",
+      "path": "incoming/workflow/gstack/gstack-upgrade",
+      "files": 18,
+      "refreshed": false
+    },
+    {
+      "repository": "garrytan/gstack",
+      "commit": "8018ba52feab92262087e7236dc10d1b10e8c355",
+      "upstream_path": "guard",
+      "path": "incoming/workflow/gstack/guard",
+      "files": 2,
+      "refreshed": false
+    },
+    {
+      "repository": "garrytan/gstack",
+      "commit": "8018ba52feab92262087e7236dc10d1b10e8c355",
+      "upstream_path": "health",
+      "path": "incoming/quality/gstack/health",
+      "files": 2,
+      "refreshed": false
+    },
+    {
+      "repository": "garrytan/gstack",
+      "commit": "8018ba52feab92262087e7236dc10d1b10e8c355",
+      "upstream_path": "investigate",
+      "path": "incoming/quality/gstack/investigate",
+      "files": 13,
+      "refreshed": false
+    },
+    {
+      "repository": "garrytan/gstack",
+      "commit": "8018ba52feab92262087e7236dc10d1b10e8c355",
+      "upstream_path": "ios-clean",
+      "path": "incoming/devops/gstack/ios-clean",
+      "files": 2,
+      "refreshed": false
+    },
+    {
+      "repository": "garrytan/gstack",
+      "commit": "8018ba52feab92262087e7236dc10d1b10e8c355",
+      "upstream_path": "ios-design-review",
+      "path": "incoming/frontend/gstack/ios-design-review",
+      "files": 2,
+      "refreshed": false
+    },
+    {
+      "repository": "garrytan/gstack",
+      "commit": "8018ba52feab92262087e7236dc10d1b10e8c355",
+      "upstream_path": "ios-fix",
+      "path": "incoming/quality/gstack/ios-fix",
+      "files": 2,
+      "refreshed": false
+    },
+    {
+      "repository": "garrytan/gstack",
+      "commit": "8018ba52feab92262087e7236dc10d1b10e8c355",
+      "upstream_path": "ios-qa",
+      "path": "incoming/quality/gstack/ios-qa",
+      "files": 43,
+      "refreshed": false
+    },
+    {
+      "repository": "garrytan/gstack",
+      "commit": "8018ba52feab92262087e7236dc10d1b10e8c355",
+      "upstream_path": "ios-sync",
+      "path": "incoming/devops/gstack/ios-sync",
+      "files": 2,
+      "refreshed": false
+    },
+    {
+      "repository": "garrytan/gstack",
+      "commit": "8018ba52feab92262087e7236dc10d1b10e8c355",
+      "upstream_path": "land-and-deploy",
+      "path": "incoming/devops/gstack/land-and-deploy",
+      "files": 9,
+      "refreshed": false
+    },
+    {
+      "repository": "garrytan/gstack",
+      "commit": "8018ba52feab92262087e7236dc10d1b10e8c355",
+      "upstream_path": "landing-report",
+      "path": "incoming/documentation/gstack/landing-report",
+      "files": 2,
+      "refreshed": false
+    },
+    {
+      "repository": "garrytan/gstack",
+      "commit": "8018ba52feab92262087e7236dc10d1b10e8c355",
+      "upstream_path": "learn",
+      "path": "incoming/workflow/gstack/learn",
+      "files": 2,
+      "refreshed": false
+    },
+    {
+      "repository": "garrytan/gstack",
+      "commit": "8018ba52feab92262087e7236dc10d1b10e8c355",
+      "upstream_path": "make-pdf",
+      "path": "incoming/documentation/gstack/make-pdf",
+      "files": 52,
+      "refreshed": false
+    },
+    {
+      "repository": "garrytan/gstack",
+      "commit": "8018ba52feab92262087e7236dc10d1b10e8c355",
+      "upstream_path": "office-hours",
+      "path": "incoming/workflow/gstack/office-hours",
+      "files": 9,
+      "refreshed": false
+    },
+    {
+      "repository": "garrytan/gstack",
+      "commit": "8018ba52feab92262087e7236dc10d1b10e8c355",
+      "upstream_path": "open-gstack-browser",
+      "path": "incoming/frontend/gstack/open-gstack-browser",
+      "files": 2,
+      "refreshed": false
+    },
+    {
+      "repository": "garrytan/gstack",
+      "commit": "8018ba52feab92262087e7236dc10d1b10e8c355",
+      "upstream_path": "pair-agent",
+      "path": "incoming/workflow/gstack/pair-agent",
+      "files": 2,
+      "refreshed": false
+    },
+    {
+      "repository": "garrytan/gstack",
+      "commit": "8018ba52feab92262087e7236dc10d1b10e8c355",
+      "upstream_path": "plan-ceo-review",
+      "path": "incoming/workflow/gstack/plan-ceo-review",
+      "files": 9,
+      "refreshed": false
+    },
+    {
+      "repository": "garrytan/gstack",
+      "commit": "8018ba52feab92262087e7236dc10d1b10e8c355",
+      "upstream_path": "plan-design-review",
+      "path": "incoming/frontend/gstack/plan-design-review",
+      "files": 7,
+      "refreshed": false
+    },
+    {
+      "repository": "garrytan/gstack",
+      "commit": "8018ba52feab92262087e7236dc10d1b10e8c355",
+      "upstream_path": "plan-devex-review",
+      "path": "incoming/workflow/gstack/plan-devex-review",
+      "files": 8,
+      "refreshed": false
+    },
+    {
+      "repository": "garrytan/gstack",
+      "commit": "8018ba52feab92262087e7236dc10d1b10e8c355",
+      "upstream_path": "plan-eng-review",
+      "path": "incoming/workflow/gstack/plan-eng-review",
+      "files": 7,
+      "refreshed": false
+    },
+    {
+      "repository": "garrytan/gstack",
+      "commit": "8018ba52feab92262087e7236dc10d1b10e8c355",
+      "upstream_path": "plan-tune",
+      "path": "incoming/workflow/gstack/plan-tune",
+      "files": 2,
+      "refreshed": false
+    },
+    {
+      "repository": "garrytan/gstack",
+      "commit": "8018ba52feab92262087e7236dc10d1b10e8c355",
+      "upstream_path": "qa",
+      "path": "incoming/quality/gstack/qa",
+      "files": 20,
+      "refreshed": false
+    },
+    {
+      "repository": "garrytan/gstack",
+      "commit": "8018ba52feab92262087e7236dc10d1b10e8c355",
+      "upstream_path": "qa-only",
+      "path": "incoming/quality/gstack/qa-only",
+      "files": 7,
+      "refreshed": false
+    },
+    {
+      "repository": "garrytan/gstack",
+      "commit": "8018ba52feab92262087e7236dc10d1b10e8c355",
+      "upstream_path": "retro",
+      "path": "incoming/workflow/gstack/retro",
+      "files": 5,
+      "refreshed": false
+    },
+    {
+      "repository": "garrytan/gstack",
+      "commit": "8018ba52feab92262087e7236dc10d1b10e8c355",
+      "upstream_path": "review",
+      "path": "incoming/quality/gstack/review",
+      "files": 25,
+      "refreshed": false
+    },
+    {
+      "repository": "garrytan/gstack",
+      "commit": "8018ba52feab92262087e7236dc10d1b10e8c355",
+      "upstream_path": "scrape",
+      "path": "incoming/integrations/gstack/scrape",
+      "files": 2,
+      "refreshed": false
+    },
+    {
+      "repository": "garrytan/gstack",
+      "commit": "8018ba52feab92262087e7236dc10d1b10e8c355",
+      "upstream_path": "setup-browser-cookies",
+      "path": "incoming/frontend/gstack/setup-browser-cookies",
+      "files": 2,
+      "refreshed": false
+    },
+    {
+      "repository": "garrytan/gstack",
+      "commit": "8018ba52feab92262087e7236dc10d1b10e8c355",
+      "upstream_path": "setup-deploy",
+      "path": "incoming/devops/gstack/setup-deploy",
+      "files": 2,
+      "refreshed": false
+    },
+    {
+      "repository": "garrytan/gstack",
+      "commit": "8018ba52feab92262087e7236dc10d1b10e8c355",
+      "upstream_path": "setup-gbrain",
+      "path": "incoming/workflow/gstack/setup-gbrain",
+      "files": 12,
+      "refreshed": false
+    },
+    {
+      "repository": "garrytan/gstack",
+      "commit": "8018ba52feab92262087e7236dc10d1b10e8c355",
+      "upstream_path": "ship",
+      "path": "incoming/devops/gstack/ship",
+      "files": 33,
+      "refreshed": false
+    },
+    {
+      "repository": "garrytan/gstack",
+      "commit": "8018ba52feab92262087e7236dc10d1b10e8c355",
+      "upstream_path": "skillify",
+      "path": "incoming/workflow/gstack/skillify",
+      "files": 2,
+      "refreshed": false
+    },
+    {
+      "repository": "garrytan/gstack",
+      "commit": "8018ba52feab92262087e7236dc10d1b10e8c355",
+      "upstream_path": "spec",
+      "path": "incoming/workflow/gstack/spec",
+      "files": 5,
+      "refreshed": false
+    },
+    {
+      "repository": "garrytan/gstack",
+      "commit": "8018ba52feab92262087e7236dc10d1b10e8c355",
+      "upstream_path": "sync-gbrain",
+      "path": "incoming/workflow/gstack/sync-gbrain",
+      "files": 2,
+      "refreshed": false
+    },
+    {
+      "repository": "garrytan/gstack",
+      "commit": "8018ba52feab92262087e7236dc10d1b10e8c355",
+      "upstream_path": "test-audit",
+      "path": "incoming/quality/gstack/test-audit",
+      "files": 2,
+      "refreshed": false
+    },
+    {
+      "repository": "garrytan/gstack",
+      "commit": "8018ba52feab92262087e7236dc10d1b10e8c355",
+      "upstream_path": "unfreeze",
+      "path": "incoming/workflow/gstack/unfreeze",
+      "files": 2,
+      "refreshed": false
+    },
+    {
+      "repository": "garrytan/gstack",
+      "commit": "8018ba52feab92262087e7236dc10d1b10e8c355",
+      "upstream_path": "browser-skills/hackernews-frontpage",
+      "path": "incoming/integrations/gstack/hackernews-frontpage",
+      "files": 5,
+      "refreshed": false
+    }
+  ],
+  "shared_reference_root": null
+}

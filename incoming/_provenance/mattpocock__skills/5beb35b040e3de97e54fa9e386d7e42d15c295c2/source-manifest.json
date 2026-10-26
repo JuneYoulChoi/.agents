@@ -1,0 +1,323 @@
+{
+  "repository": "mattpocock/skills",
+  "requested_repository": "mattpocock/skills",
+  "commit": "5beb35b040e3de97e54fa9e386d7e42d15c295c2",
+  "committed_at": "2026-10-19T15:51:40Z",
+  "stars": 303677,
+  "license": {
+    "key": "mit",
+    "name": "MIT License",
+    "spdx_id": "MIT",
+    "url": "https://api.github.com/licenses/mit",
+    "node_id": "MDc6TGljZW5zZTEz"
+  },
+  "retrieved_on": "2026-10-26",
+  "scope": "Canonical skill directories, original license/readme files, and Addy shared references. No runtime install or activation.",
+  "packages": [
+    {
+      "repository": "mattpocock/skills",
+      "commit": "5beb35b040e3de97e54fa9e386d7e42d15c295c2",
+      "upstream_path": "skills/engineering/ask-matt",
+      "path": "incoming/workflow/mattpocock-skills/ask-matt",
+      "files": 3,
+      "refreshed": false
+    },
+    {
+      "repository": "mattpocock/skills",
+      "commit": "5beb35b040e3de97e54fa9e386d7e42d15c295c2",
+      "upstream_path": "skills/engineering/code-review",
+      "path": "incoming/quality/mattpocock-skills/code-review",
+      "files": 2,
+      "refreshed": true
+    },
+    {
+      "repository": "mattpocock/skills",
+      "commit": "5beb35b040e3de97e54fa9e386d7e42d15c295c2",
+      "upstream_path": "skills/engineering/codebase-design",
+      "path": "incoming/architecture/mattpocock-skills/codebase-design",
+      "files": 4,
+      "refreshed": true
+    },
+    {
+      "repository": "mattpocock/skills",
+      "commit": "5beb35b040e3de97e54fa9e386d7e42d15c295c2",
+      "upstream_path": "skills/engineering/diagnosing-bugs",
+      "path": "incoming/quality/mattpocock-skills/diagnosing-bugs",
+      "files": 3,
+      "refreshed": true
+    },
+    {
+      "repository": "mattpocock/skills",
+      "commit": "5beb35b040e3de97e54fa9e386d7e42d15c295c2",
+      "upstream_path": "skills/engineering/domain-modeling",
+      "path": "incoming/architecture/mattpocock-skills/domain-modeling",
+      "files": 4,
+      "refreshed": true
+    },
+    {
+      "repository": "mattpocock/skills",
+      "commit": "5beb35b040e3de97e54fa9e386d7e42d15c295c2",
+      "upstream_path": "skills/engineering/grill-with-docs",
+      "path": "incoming/workflow/mattpocock-skills/grill-with-docs",
+      "files": 2,
+      "refreshed": true
+    },
+    {
+      "repository": "mattpocock/skills",
+      "commit": "5beb35b040e3de97e54fa9e386d7e42d15c295c2",
+      "upstream_path": "skills/engineering/implement-spec",
+      "path": "incoming/workflow/mattpocock-skills/implement-spec",
+      "files": 2,
+      "refreshed": false
+    },
+    {
+      "repository": "mattpocock/skills",
+      "commit": "5beb35b040e3de97e54fa9e386d7e42d15c295c2",
+      "upstream_path": "skills/engineering/implement",
+      "path": "incoming/workflow/mattpocock-skills/implement",
+      "files": 2,
+      "refreshed": false
+    },
+    {
+      "repository": "mattpocock/skills",
+      "commit": "5beb35b040e3de97e54fa9e386d7e42d15c295c2",
+      "upstream_path": "skills/engineering/improve-codebase-architecture",
+      "path": "incoming/architecture/mattpocock-skills/improve-codebase-architecture",
+      "files": 3,
+      "refreshed": true
+    },
+    {
+      "repository": "mattpocock/skills",
+      "commit": "5beb35b040e3de97e54fa9e386d7e42d15c295c2",
+      "upstream_path": "skills/engineering/pr",
+      "path": "incoming/workflow/mattpocock-skills/pr",
+      "files": 3,
+      "refreshed": false
+    },
+    {
+      "repository": "mattpocock/skills",
+      "commit": "5beb35b040e3de97e54fa9e386d7e42d15c295c2",
+      "upstream_path": "skills/engineering/prototype",
+      "path": "incoming/workflow/mattpocock-skills/prototype",
+      "files": 4,
+      "refreshed": false
+    },
+    {
+      "repository": "mattpocock/skills",
+      "commit": "5beb35b040e3de97e54fa9e386d7e42d15c295c2",
+      "upstream_path": "skills/engineering/research",
+      "path": "incoming/documentation/mattpocock-skills/research",
+      "files": 2,
+      "refreshed": false
+    },
+    {
+      "repository": "mattpocock/skills",
+      "commit": "5beb35b040e3de97e54fa9e386d7e42d15c295c2",
+      "upstream_path": "skills/engineering/retro",
+      "path": "incoming/workflow/mattpocock-skills/retro",
+      "files": 2,
+      "refreshed": false
+    },
+    {
+      "repository": "mattpocock/skills",
+      "commit": "5beb35b040e3de97e54fa9e386d7e42d15c295c2",
+      "upstream_path": "skills/engineering/setup-matt-pocock-skills",
+      "path": "incoming/workflow/mattpocock-skills/setup-matt-pocock-skills",
+      "files": 7,
+      "refreshed": false
+    },
+    {
+      "repository": "mattpocock/skills",
+      "commit": "5beb35b040e3de97e54fa9e386d7e42d15c295c2",
+      "upstream_path": "skills/engineering/tdd",
+      "path": "incoming/quality/mattpocock-skills/tdd",
+      "files": 4,
+      "refreshed": true
+    },
+    {
+      "repository": "mattpocock/skills",
+      "commit": "5beb35b040e3de97e54fa9e386d7e42d15c295c2",
+      "upstream_path": "skills/engineering/to-spec",
+      "path": "incoming/architecture/mattpocock-skills/to-spec",
+      "files": 2,
+      "refreshed": false
+    },
+    {
+      "repository": "mattpocock/skills",
+      "commit": "5beb35b040e3de97e54fa9e386d7e42d15c295c2",
+      "upstream_path": "skills/engineering/to-tickets",
+      "path": "incoming/workflow/mattpocock-skills/to-tickets",
+      "files": 2,
+      "refreshed": false
+    },
+    {
+      "repository": "mattpocock/skills",
+      "commit": "5beb35b040e3de97e54fa9e386d7e42d15c295c2",
+      "upstream_path": "skills/engineering/triage",
+      "path": "incoming/workflow/mattpocock-skills/triage",
+      "files": 4,
+      "refreshed": false
+    },
+    {
+      "repository": "mattpocock/skills",
+      "commit": "5beb35b040e3de97e54fa9e386d7e42d15c295c2",
+      "upstream_path": "skills/engineering/wayfinder",
+      "path": "incoming/workflow/mattpocock-skills/wayfinder",
+      "files": 2,
+      "refreshed": false
+    },
+    {
+      "repository": "mattpocock/skills",
+      "commit": "5beb35b040e3de97e54fa9e386d7e42d15c295c2",
+      "upstream_path": "skills/engineering/wizard",
+      "path": "incoming/workflow/mattpocock-skills/wizard",
+      "files": 3,
+      "refreshed": false
+    },
+    {
+      "repository": "mattpocock/skills",
+      "commit": "5beb35b040e3de97e54fa9e386d7e42d15c295c2",
+      "upstream_path": "skills/in-progress/chief-of-staff",
+      "path": "incoming/workflow/mattpocock-skills/chief-of-staff",
+      "files": 2,
+      "refreshed": false
+    },
+    {
+      "repository": "mattpocock/skills",
+      "commit": "5beb35b040e3de97e54fa9e386d7e42d15c295c2",
+      "upstream_path": "skills/in-progress/claude-handoff",
+      "path": "incoming/context/mattpocock-skills/claude-handoff",
+      "files": 2,
+      "refreshed": false
+    },
+    {
+      "repository": "mattpocock/skills",
+      "commit": "5beb35b040e3de97e54fa9e386d7e42d15c295c2",
+      "upstream_path": "skills/in-progress/loop-me",
+      "path": "incoming/workflow/mattpocock-skills/loop-me",
+      "files": 2,
+      "refreshed": false
+    },
+    {
+      "repository": "mattpocock/skills",
+      "commit": "5beb35b040e3de97e54fa9e386d7e42d15c295c2",
+      "upstream_path": "skills/in-progress/setup-ts-deep-modules",
+      "path": "incoming/languages/mattpocock-skills/setup-ts-deep-modules",
+      "files": 3,
+      "refreshed": false
+    },
+    {
+      "repository": "mattpocock/skills",
+      "commit": "5beb35b040e3de97e54fa9e386d7e42d15c295c2",
+      "upstream_path": "skills/in-progress/writing-beats",
+      "path": "incoming/documentation/mattpocock-skills/writing-beats",
+      "files": 2,
+      "refreshed": false
+    },
+    {
+      "repository": "mattpocock/skills",
+      "commit": "5beb35b040e3de97e54fa9e386d7e42d15c295c2",
+      "upstream_path": "skills/in-progress/writing-fragments",
+      "path": "incoming/documentation/mattpocock-skills/writing-fragments",
+      "files": 2,
+      "refreshed": false
+    },
+    {
+      "repository": "mattpocock/skills",
+      "commit": "5beb35b040e3de97e54fa9e386d7e42d15c295c2",
+      "upstream_path": "skills/in-progress/writing-shape",
+      "path": "incoming/documentation/mattpocock-skills/writing-shape",
+      "files": 2,
+      "refreshed": false
+    },
+    {
+      "repository": "mattpocock/skills",
+      "commit": "5beb35b040e3de97e54fa9e386d7e42d15c295c2",
+      "upstream_path": "skills/misc/git-guardrails-claude-code",
+      "path": "incoming/workflow/mattpocock-skills/git-guardrails-claude-code",
+      "files": 3,
+      "refreshed": false
+    },
+    {
+      "repository": "mattpocock/skills",
+      "commit": "5beb35b040e3de97e54fa9e386d7e42d15c295c2",
+      "upstream_path": "skills/misc/migrate-to-shoehorn",
+      "path": "incoming/languages/mattpocock-skills/migrate-to-shoehorn",
+      "files": 2,
+      "refreshed": false
+    },
+    {
+      "repository": "mattpocock/skills",
+      "commit": "5beb35b040e3de97e54fa9e386d7e42d15c295c2",
+      "upstream_path": "skills/misc/scaffold-exercises",
+      "path": "incoming/workflow/mattpocock-skills/scaffold-exercises",
+      "files": 2,
+      "refreshed": false
+    },
+    {
+      "repository": "mattpocock/skills",
+      "commit": "5beb35b040e3de97e54fa9e386d7e42d15c295c2",
+      "upstream_path": "skills/misc/setup-pre-commit",
+      "path": "incoming/devops/mattpocock-skills/setup-pre-commit",
+      "files": 2,
+      "refreshed": false
+    },
+    {
+      "repository": "mattpocock/skills",
+      "commit": "5beb35b040e3de97e54fa9e386d7e42d15c295c2",
+      "upstream_path": "skills/productivity/grill-me",
+      "path": "incoming/workflow/mattpocock-skills/grill-me",
+      "files": 2,
+      "refreshed": false
+    },
+    {
+      "repository": "mattpocock/skills",
+      "commit": "5beb35b040e3de97e54fa9e386d7e42d15c295c2",
+      "upstream_path": "skills/productivity/grilling",
+      "path": "incoming/workflow/mattpocock-skills/grilling",
+      "files": 2,
+      "refreshed": false
+    },
+    {
+      "repository": "mattpocock/skills",
+      "commit": "5beb35b040e3de97e54fa9e386d7e42d15c295c2",
+      "upstream_path": "skills/productivity/handoff",
+      "path": "incoming/workflow/mattpocock-skills/handoff",
+      "files": 2,
+      "refreshed": true
+    },
+    {
+      "repository": "mattpocock/skills",
+      "commit": "5beb35b040e3de97e54fa9e386d7e42d15c295c2",
+      "upstream_path": "skills/productivity/teach",
+      "path": "incoming/workflow/mattpocock-skills/teach",
+      "files": 6,
+      "refreshed": false
+    },
+    {
+      "repository": "mattpocock/skills",
+      "commit": "5beb35b040e3de97e54fa9e386d7e42d15c295c2",
+      "upstream_path": "skills/productivity/to-questionnaire",
+      "path": "incoming/workflow/mattpocock-skills/to-questionnaire",
+      "files": 2,
+      "refreshed": false
+    },
+    {
+      "repository": "mattpocock/skills",
+      "commit": "5beb35b040e3de97e54fa9e386d7e42d15c295c2",
+      "upstream_path": "skills/productivity/wait-what",
+      "path": "incoming/workflow/mattpocock-skills/wait-what",
+      "files": 2,
+      "refreshed": false
+    },
+    {
+      "repository": "mattpocock/skills",
+      "commit": "5beb35b040e3de97e54fa9e386d7e42d15c295c2",
+      "upstream_path": "skills/productivity/writing-for-agents",
+      "path": "incoming/documentation/mattpocock-skills/writing-for-agents",
+      "files": 3,
+      "refreshed": false
+    }
+  ],
+  "shared_reference_root": null
+}
