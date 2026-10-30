@@ -86,6 +86,16 @@ reverse and explicitly recorded.
 Resolve factual questions from current source documents first; do not ask the
 user to restate facts already available. Preserve material user-owned decisions.
 
+For the current slice, check only choices that affect acceptance or design:
+users/data ownership, persistence, external integration, and date/time meaning
+when relevant. Reuse answers from the request and confirmed project evidence.
+Label proposals and assumptions inline; neither is a confirmed user decision.
+Record remaining material questions in optional `open_decisions: ["..."]`.
+A nonempty list makes G1 wait for clarification even if `material_ambiguity` is
+absent or false. Use an empty list when nothing material is open; do not add
+questions about excluded or later work. The Router consumes these annotations;
+it does not discover omitted questions from natural language.
+
 Ask the user before material work when product concept, priority, success
 criteria, audience, trade-off, authority, or acceptable scope is unknown. Ask
 at most three related questions using this form:

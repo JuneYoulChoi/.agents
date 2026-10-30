@@ -519,8 +519,13 @@ def route(context: dict[str, Any], manifest: dict[str, Any]) -> dict[str, Any]:
     intake_skill = "core.intake-and-route"
     all_activated.append(intake_skill)
     g1_blocked = []
-    if context.get("material_ambiguity", False):
+    open_decisions = _string_list(context, "open_decisions")
+    if any(not decision.strip() for decision in open_decisions):
+        raise RouterError("open_decisions must contain non-empty strings")
+    if context.get("material_ambiguity", False) or open_decisions:
         g1_blocked.append({"reason": "material_clarification_required"})
+        if open_decisions:
+            g1_blocked[-1]["open_decisions"] = open_decisions
     gate_results.append(_gate_result(
         "G1",
         revision,

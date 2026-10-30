@@ -38,6 +38,14 @@ a second planner, automatic reviewer or upstream execution chain.
 
 ## Choose roles only after dependencies
 
+Keep one small coherent slice (including ordinary greeting/calendar CRUD), a
+local fix or a text change on one agent; leave `delegation.requested` false.
+Several fields or persona labels alone do not justify splitting. Delegate only
+bounded independent investigations, work with settled contracts and exclusive
+ownership, or an explicitly needed independent review/test. Explain the benefit
+against sequential work in the existing benefit evidence; merge duplicate checks.
+Do not infer token savings from parallel execution or invent usage counters.
+
 Default to one agent. For independent work, define bounded units with goal,
 input revision, dependencies, read/write paths, shared resources, evidence,
 allowed tools, output and acceptance. Personas are responsibilities:

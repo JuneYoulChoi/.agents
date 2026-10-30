@@ -276,6 +276,8 @@ def validate_intake(
         _require_string(intent, "goal")
         _string_array(intent, "success_criteria")
         _string_array(intent, "constraints")
+    if any(not decision.strip() for decision in _string_array(value, "open_decisions")):
+        raise ContractError("open_decisions must contain non-empty strings")
     fields = _string_array(value, "fields")
     unknown_fields = set(fields) - field_ids(taxonomy_path)
     if unknown_fields:

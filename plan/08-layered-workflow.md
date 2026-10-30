@@ -191,3 +191,16 @@ or total parent+worker cost. No budget is inferred from skill depth.
 See the [native-work contract and commands](../skills/workflow-composition/references/native-work.md).
 Adapter attestations still require trustworthy host enforcement; result IDs and
 hash echoes are not independent proof of provider behavior or artifact validity.
+
+## Minimal intake and delegation checks
+
+`open_decisions` optionally lists material unresolved questions for the current
+slice. G1 waits when the list is nonempty, independently of material_ambiguity.
+Adapters check relevant identity/data ownership, persistence, external integration,
+date/time semantics and acceptance, reusing confirmed evidence and labeling
+proposals/assumptions. This is a structured handoff, not automatic prose parsing.
+Clear local changes and excluded/later decisions do not require new questions.
+Small coherent slices default to existing single-agent execution. Only bounded
+independent work or a specifically needed review/test justifies delegation,
+with the existing authority/capability/benefit evidence. No new scheduling policy,
+team-size calculation or estimated token-savings claim is introduced.
