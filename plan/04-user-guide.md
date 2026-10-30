@@ -377,3 +377,13 @@ require measurement. Downloaded packages remain candidates; source affiliation
 and storage category do not make them active. See the
 [workflow guide](08-layered-workflow.md) and
 [candidate review](../registry/skill-candidate-review.json).
+
+## Native-work receipt extension
+
+Declared work uses Runner `prepare-work` and `record-work`, both guarded by
+expected_revision and the existing state lock. Unit skill_id binds execution to
+a pending skill; missing owner bindings must be resolved at composition. See
+[native work packets, receipts and usage](../skills/workflow-composition/references/native-work.md).
+The extension preserves the serial skill queue and adds no process executor.
+Existing no-unit workflows retain their result contract. Existing plans with
+units must produce receipts rather than completing by skill status alone.

@@ -84,6 +84,10 @@ For material code handoff or requested code review, use
 Reuse the existing review/check results instead of stacking source workflows;
 include uncommitted work when it belongs to the reviewed change.
 
+For declared work units, require successful Runner receipts before skill
+completion. Check worker usage coverage; unavailable counters are not zero and
+reported worker totals do not establish overall token savings.
+
 For a composed workflow, verify the `WORK-*` outline, unit dependencies, actual
 delegate/capability resolution, ownership, joins and integrated revision. A
 role label, plan or successful child report is not integration evidence. Record

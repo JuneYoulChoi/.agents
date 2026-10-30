@@ -61,6 +61,9 @@ serial; native adapters may execute approved units within a current skill and
 must join them before submitting one skill result. No adapter capability means
 sequential work, not an invented multi-agent success.
 
+For declared units, follow [native work receipts](references/native-work.md):
+bind owners, prepare a focused packet, and record verified terminal results.
+
 ## Join and hand off
 
 Require every required result to match its input snapshot, scope and acceptance.

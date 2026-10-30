@@ -62,3 +62,8 @@ independent units with current authority, capability and benefit evidence.
 Recheck owned paths, shared resources, tools and revisions before execution.
 The Runner stays serial; native adapters join approved units within the current
 skill. Preserve required quality and user decisions, then verify integration.
+
+For declared units, use the Runner's prepare-work/record-work boundary and the
+native-work reference under workflow-composition. Send only focused packets to
+fresh worker contexts. Confirm termination and verified joins before advancing;
+report token counters as unavailable when the provider does not expose them.

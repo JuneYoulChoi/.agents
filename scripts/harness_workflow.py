@@ -61,6 +61,8 @@ def validate_workflow_input(context: dict[str, Any]) -> None:
         if unit["id"] in seen:
             raise WorkflowError("duplicate work unit id")
         seen.add(unit["id"])
+        if "skill_id" in unit and (not isinstance(unit["skill_id"], str) or not unit["skill_id"].startswith("core.")):
+            raise WorkflowError("work unit skill_id must name a core skill")
         if (not isinstance(unit.get("role"), str) or unit["role"] not in ROLES
                 or not isinstance(unit.get("mutation"), str)
                 or unit["mutation"] not in {"none", "workspace"}):
@@ -93,7 +95,7 @@ def validate_workflow_input(context: dict[str, Any]) -> None:
     for key in ("requested", "authorized", "available"):
         if key in delegation and type(delegation[key]) is not bool:
             raise WorkflowError(f"delegation.{key} must be boolean")
-    for key in ("max_workers", "timeout_seconds"):
+    for key in ("max_workers", "timeout_seconds", "worker_token_budget"):
         if key in delegation and (type(delegation[key]) is not int or delegation[key] < 1):
             raise WorkflowError(f"delegation.{key} must be a positive integer")
     for key in ("benefit_evidence_ids", "authorization_evidence_ids", "capability_evidence_ids"):

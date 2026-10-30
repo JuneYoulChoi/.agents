@@ -230,3 +230,13 @@ only accepted units within the current skill; the serial Runner never spawns
 processes. Return one joined skill result and integration evidence. Unsupported
 or unauthorized delegation uses serial execution. This capability is separate
 from the model/reasoning resolution, hook enforcement and task-state writer.
+
+## Native-work receipt extension
+
+Declared work uses Runner `prepare-work` and `record-work`, both guarded by
+expected_revision and the existing state lock. Unit skill_id binds execution to
+a pending skill; missing owner bindings must be resolved at composition. See
+[native work packets, receipts and usage](../skills/workflow-composition/references/native-work.md).
+The extension preserves the serial skill queue and adds no process executor.
+Existing no-unit workflows retain their result contract. Existing plans with
+units must produce receipts rather than completing by skill status alone.

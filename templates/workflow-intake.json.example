@@ -57,7 +57,8 @@
         "src/a"
       ],
       "write_paths": [],
-      "shared_resources": []
+      "shared_resources": [],
+      "skill_id": "core.react-engineering"
     },
     {
       "id": "b",
@@ -80,7 +81,8 @@
         "src/b"
       ],
       "write_paths": [],
-      "shared_resources": []
+      "shared_resources": [],
+      "skill_id": "core.react-engineering"
     },
     {
       "id": "join",
@@ -106,7 +108,8 @@
         "src/join"
       ],
       "write_paths": [],
-      "shared_resources": []
+      "shared_resources": [],
+      "skill_id": "core.react-engineering"
     }
   ],
   "delegation": {

@@ -10,6 +10,7 @@ from pathlib import Path
 from typing import Any, Iterable
 
 from harness_router import _load_manifest, route
+from harness_delegation import prepare, record, require_join, usage_summary, validate_bindings
 from harness_state import StateError, StateStore, utc_now
 from harness_workflow import WorkflowError, compose_work_plan
 from harness_validator import (
@@ -141,6 +142,8 @@ def _response(state: dict[str, Any], entries: dict[str, str], harness_root: Path
         "status": state["status"],
         "stage": state["stage"],
         "next": next_item,
+        **({"worker_usage": usage_summary(state)}
+           if state["execution"].get("work_records") else {}),
         "queue_progress": {
             "completed": state["execution"]["cursor"],
             "total": len(state["execution"]["queue"]),
@@ -175,6 +178,7 @@ def start(
             "next": None,
         }
     queue, stages, gates = _execution_queue(route_result)
+    validate_bindings(route_result.get("work_plan", {}), queue, allow_unbound=True)
     if route_result["status"] == "waiting_user":
         state_stage = "clarification"
     elif route_result["status"] == "blocked":
@@ -280,9 +284,15 @@ def submit(
         raise RunnerError(
             f"out-of-order skill result: expected {next_item['skill_id']}, got {result['skill_id']}"
         )
+    if any(r["status"] == "running" for r in current["execution"].get("work_records", {}).values()):
+        raise RunnerError("record worker termination before any skill transition")
+    if result["status"] in {"completed", "not_applicable"}:
+        require_join(current, result["skill_id"])
     updated_plan = None
     workflow_update = result.get("workflow_update")
     if workflow_update is not None:
+        if current["execution"].get("work_records"):
+            raise RunnerError("cannot replace a work plan after preparation; use responsible-gate recovery")
         if (result["skill_id"] != "core.workflow-composition" or result["status"] != "completed"
                 or not isinstance(workflow_update, dict) or set(workflow_update) != {"work_units"}):
             raise RunnerError("only completed composition may update work_units; authority cannot change")
@@ -294,6 +304,10 @@ def submit(
             )
         except WorkflowError as exc:
             raise RunnerError(str(exc)) from exc
+    if result["skill_id"] == "core.workflow-composition" and result["status"] in {"completed", "not_applicable"}:
+        validate_bindings(updated_plan or current["route"]["work_plan"],
+                          current["execution"]["queue"], current["execution"]["cursor"] + 1,
+                          current["execution"].get("work_records", {}))
     resolution = result["execution_resolution"]
     if resolution["adapter"] != current["selected_adapter"]:
         raise RunnerError("execution resolution adapter does not match the task adapter")
@@ -395,6 +409,24 @@ def submit(
     return _response(updated, _registry_entries(registry_path), harness_root)
 
 
+
+def work_event(target_root: Path, task_id: str, expected_revision: int,
+               request_path: Path, command: str, harness_root: Path,
+               registry_path: Path) -> dict[str, Any]:
+    request = read_object(request_path)
+    store = StateStore(target_root, harness_root=harness_root)
+    output: dict[str, Any] = {}
+
+    def mutate(state: dict[str, Any]) -> None:
+        if command == "prepare-work":
+            output.update(prepare(state, request, target_root))
+        else:
+            record(state, request)
+
+    updated = store.update(task_id, expected_revision, command.replace("-", "_"), mutate)
+    return {**_response(updated, _registry_entries(registry_path), harness_root), **output}
+
+
 def main(argv: Iterable[str] | None = None) -> int:
     harness_root = Path(__file__).resolve().parents[1]
     registry = harness_root / "registry" / "active-skills.json"
@@ -421,6 +453,13 @@ def main(argv: Iterable[str] | None = None) -> int:
     submit_parser.add_argument("--expected-revision", required=True, type=int)
     submit_parser.add_argument("--result", required=True, type=Path)
 
+    for command in ("prepare-work", "record-work"):
+        work_parser = subparsers.add_parser(command)
+        work_parser.add_argument("--target-root", required=True, type=Path)
+        work_parser.add_argument("--task-id", required=True)
+        work_parser.add_argument("--expected-revision", required=True, type=int)
+        work_parser.add_argument("--request", required=True, type=Path)
+
     parser.add_argument("--output", type=Path)
     args = parser.parse_args(argv)
     try:
@@ -436,6 +475,9 @@ def main(argv: Iterable[str] | None = None) -> int:
                 taxonomy,
                 manifest,
             )
+        elif args.command in {"prepare-work", "record-work"}:
+            result = work_event(args.target_root, args.task_id, args.expected_revision,
+                                args.request, args.command, harness_root, registry)
         elif args.command == "submit":
             result = submit(
                 args.target_root,

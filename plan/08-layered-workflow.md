@@ -170,3 +170,24 @@ capability/authority loss and Runner propagation. Documentation checks verify
 active skill placement, candidate coverage, source links and inventory hashes.
 Passing these proves planning and contract behavior, not native parallel agent
 execution, hardware safety, product correctness or token savings.
+
+## Checked native-work receipts (2026-10-30)
+
+The Runner now offers prepare-work/record-work as a small adapter boundary;
+it still never spawns workers. Units may be unbound at intake, but composition
+must bind pending units to reachable later skills before completion. Preparation
+is restricted to the current owner and joined dependencies. Active records
+reserve ownership/capacity. Terminal receipts require adapter-confirmed worker
+termination; late success becomes timed_out. Running work blocks any skill
+transition, and missing/failed/timed-out work blocks its owner's completion and G7.
+Plan replacement after preparation is rejected. Recovery goes through the owning
+gate rather than silently deleting required work.
+
+Use focused packets (16 KiB) and concise receipts (8 KiB), with detailed evidence
+referenced locally; never truncate acceptance or uncertainty to fit. Token usage
+is provider-reported per worker or unavailable. Optional worker_token_budget
+limits new dispatch based on known worker totals, not provider in-flight billing
+or total parent+worker cost. No budget is inferred from skill depth.
+See the [native-work contract and commands](../skills/workflow-composition/references/native-work.md).
+Adapter attestations still require trustworthy host enforcement; result IDs and
+hash echoes are not independent proof of provider behavior or artifact validity.
