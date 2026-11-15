@@ -36,7 +36,23 @@ For material multi-step work, load the
 requirements/acceptance record. Keep ordinary local work compact; do not add
 a second planner, automatic reviewer or upstream execution chain.
 
-## Choose roles only after dependencies
+## Actively assess expertise, then choose bounded roles
+
+At intake and each current skill, reconsider delegation when evidence exposes
+independent unknowns, conflicting explanations, distinct specialist boundaries,
+or a verification risk shared by the producer and its tests. Do not wait for
+the user to ask for a team. For such a trigger, record the concrete question,
+expected additional evidence, and dispatch or a specific fallback reason in
+the existing task/skill result. Reuse current authority; a trigger does not
+grant it. Small clear work needs no separate assessment artifact.
+
+Use a focused worker when the question is independent and current authority,
+capability and expected quality or time benefit justify its context/join cost.
+Otherwise perform the bounded check serially and state why for a material
+trigger. Field count, depth and persona names alone are not benefit evidence.
+G1 assessment is adapter-owned read-only reasoning before the structured intake;
+the Runner skips intake and does not execute G1 work units. Never bind units to
+that skipped owner. G2 onward uses current-skill preparation and checked joins.
 
 Keep one small coherent slice (including ordinary greeting/calendar CRUD), a
 local fix or a text change on one agent; leave `delegation.requested` false.
@@ -46,14 +62,28 @@ ownership, or an explicitly needed independent review/test. Explain the benefit
 against sequential work in the existing benefit evidence; merge duplicate checks.
 Do not infer token savings from parallel execution or invent usage counters.
 
-Default to one agent. For independent work, define bounded units with goal,
+Keep clear local work on one agent. For independent work, define bounded units with goal,
 input revision, dependencies, read/write paths, shared resources, evidence,
 allowed tools, output and acceptance. Personas are responsibilities:
 analyst, designer, implementer, reviewer, verifier, documenter. A single agent
 may perform several roles sequentially. A simplicity reviewer checks justified
 complexity; it must preserve required ownership, error and lifecycle boundaries.
 
-Request parallel execution only when evidence supports a net time benefit,
+Pair a domain responsibility with an optional `reasoning_lens` when a distinct
+question warrants it; do not create duplicate workers solely to fill both rows:
+
+| Lens | Required contribution |
+| --- | --- |
+| `meticulous` (꼼꼼한 똑똑함) | Missing requirements, counterexamples and relevant boundary failures, with evidence and unresolved decisions |
+| `minimal_sufficient` (게으른 똑똑함) | Least redundant sufficient path, reusable evidence, removable optional work and stopping conditions; all acceptance and required checks preserved |
+
+These lenses complement analyst/designer/reviewer and other roles; they neither
+select a model nor change reasoning effort or authority. At join, compare new
+supported findings, shared evidence and justified disagreement. Resolve by
+evidence, not vote count. Do not repeat equivalent reviews after acceptance.
+
+Request parallel execution only when evidence supports a quality or time benefit
+that justifies coordination cost,
 native capability is available, delegation is authorized and a bounded worker
 limit/timeout exists. Never derive a team size from depth or field count alone.
 Serialize shared files, databases, hardware and other shared resources; split
@@ -70,7 +100,9 @@ must join them before submitting one skill result. No adapter capability means
 sequential work, not an invented multi-agent success.
 
 For declared units, follow [native work receipts](references/native-work.md):
-bind owners, prepare a focused packet, and record verified terminal results.
+bind owners and only needed skill references, clamp to observed worker capacity,
+prepare a focused packet with the current skill instructions and role, and record
+verified terminal results. Parallel batches must share the current skill owner.
 
 ## Join and hand off
 
@@ -89,7 +121,9 @@ downloaded scripts. Stop optional expansion once acceptance evidence is complete
 When baseline/impact evidence refines provisional intake units, submit
 `workflow_update: {"work_units": [...]}` with the completed result and its
 artifact/evidence IDs. The Runner recomputes the plan without changing existing
-authority or capabilities. A change to intent, work type or authority goes back
+authority or capabilities. Retain every prepared unit unchanged with a completed
+receipt; refine only unprepared future units and preserve owner/dependency order.
+Failed work needs responsible-gate recovery. A change to intent, work type or authority goes back
 through the responsible routing gate instead.
 
 ```yaml
@@ -98,3 +132,9 @@ transition:
   next_skill: ''
   entry_conditions: [bounded_work_plan_recorded]
 ```
+
+Check dependency owners against serial skill order before dispatch: a unit cannot
+wait for a later skill. Supply compact hashed context_artifacts for prerequisite
+decisions and evidence. Mandatory registry references are added automatically;
+select only evidenced conditional references. Use concrete acceptance evidence
+for completion as specified by the native-work contract.

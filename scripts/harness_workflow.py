@@ -17,6 +17,7 @@ PROFILES = {
     "maintenance": ["harness_baseline", "approved_change", "fixtures", "document_sync", "handoff"],
 }
 ROLES = {"analyst", "designer", "implementer", "reviewer", "verifier", "documenter"}
+REASONING_LENSES = {"meticulous", "minimal_sufficient"}
 
 
 class WorkflowError(ValueError):
@@ -48,6 +49,11 @@ def validate_workflow_input(context: dict[str, Any]) -> None:
     profile = context.get("work_type", "standard")
     if not isinstance(profile, str) or profile not in PROFILES:
         raise WorkflowError(f"unsupported work_type: {profile}")
+    characteristics = _strings(context, "change_characteristics")
+    only = set(characteristics) & {"documentation_only", "generated_code_only"}
+    if only and (len(only) > 1 or "authored_code" in characteristics
+                 or context.get("language_scope") == "authored_in_scope"):
+        raise WorkflowError("only-content classification conflicts with authored code or another only flag")
     units = context.get("work_units", [])
     if not isinstance(units, list):
         raise WorkflowError("work_units must be an array")
@@ -69,11 +75,15 @@ def validate_workflow_input(context: dict[str, Any]) -> None:
             raise WorkflowError("invalid unit role or mutation")
         if unit["role"] in {"analyst", "designer", "reviewer", "verifier"} and unit["mutation"] != "none":
             raise WorkflowError("analysis and review personas are read-only")
+        if "reasoning_lens" in unit and (not isinstance(unit["reasoning_lens"], str)
+                or unit["reasoning_lens"] not in REASONING_LENSES):
+            raise WorkflowError("unsupported reasoning_lens")
         _strings(unit, "depends_on")
         _strings(unit, "evidence_ids", required=True)
         _strings(unit, "acceptance", required=True)
         _strings(unit, "allowed_tools", required=True)
         _strings(unit, "shared_resources")
+        _paths(unit, "skill_references")
         _paths(unit, "read_paths")
         writes = _paths(unit, "write_paths")
         if (unit["mutation"] == "workspace") != bool(writes):
@@ -98,6 +108,8 @@ def validate_workflow_input(context: dict[str, Any]) -> None:
     for key in ("max_workers", "timeout_seconds", "worker_token_budget"):
         if key in delegation and (type(delegation[key]) is not int or delegation[key] < 1):
             raise WorkflowError(f"delegation.{key} must be a positive integer")
+    if "native_worker_capacity" in delegation and (type(delegation["native_worker_capacity"]) is not int or delegation["native_worker_capacity"] < 0):
+        raise WorkflowError("native_worker_capacity must be a nonnegative integer")
     for key in ("benefit_evidence_ids", "authorization_evidence_ids", "capability_evidence_ids"):
         _strings(delegation, key)
 
@@ -127,6 +139,9 @@ def validate_work_plan(plan: Any, route_status: str) -> None:
             raise WorkflowError("invalid work_plan batch")
         if set(batch) - units.keys() or set(batch) & done:
             raise WorkflowError("unknown or repeated batch unit")
+        if len(batch) > 1 and (not units[batch[0]].get("skill_id") or
+                len({units[key].get("skill_id") for key in batch}) != 1):
+            raise WorkflowError("concurrent units require the same bound skill")
         for i, key in enumerate(batch):
             if not set(units[key].get("depends_on", [])) <= done:
                 raise WorkflowError("work_plan dependency not joined")
@@ -186,7 +201,11 @@ def compose_work_plan(context: dict[str, Any], route_status: str) -> dict[str, A
         reasons.append("fewer_than_two_units")
     if route_status != "active":
         reasons.append("route_not_active")
-    limit = delegation.get("max_workers", 1) if not reasons else 1
+    if not delegation.get("native_worker_capacity"):
+        reasons.append("native_worker_capacity_unconfirmed_or_zero")
+    if "worker_token_budget" in delegation:
+        reasons.append("worker_token_budget_requires_reported_usage_before_next_dispatch")
+    limit = min(delegation.get("max_workers", 1), delegation.get("native_worker_capacity", 1)) if not reasons else 1
     remaining = list(units)
     done: set[str] = set()
     batches = []
@@ -194,7 +213,9 @@ def compose_work_plan(context: dict[str, Any], route_status: str) -> dict[str, A
         ready = [u for u in remaining if set(u.get("depends_on", [])) <= done]
         batch: list[dict] = []
         for unit in ready:
-            if len(batch) < limit and not any(_conflict(unit, selected) for selected in batch):
+            if (len(batch) < limit
+                    and (not batch or (unit.get("skill_id") and unit.get("skill_id") == batch[0].get("skill_id")))
+                    and not any(_conflict(unit, selected) for selected in batch)):
                 batch.append(unit)
         batches.append([u["id"] for u in batch])
         done.update(batches[-1])

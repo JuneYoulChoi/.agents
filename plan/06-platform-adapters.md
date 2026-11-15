@@ -240,3 +240,27 @@ a pending skill; missing owner bindings must be resolved at composition. See
 The extension preserves the serial skill queue and adds no process executor.
 Existing no-unit workflows retain their result contract. Existing plans with
 units must produce receipts rather than completing by skill status alone.
+
+
+The 2026-11-01 native-work contract adds observed `native_worker_capacity` to
+intake delegation and fresh native prepare requests, same-owner batches, and
+packet `skill_context` (approved body/hash, selected reference paths/hashes,
+role guidance, depth and execution profile). Missing capacity is serial in a
+proposal and blocks native preparation. Completed receipts now require concrete verification files, instruction evidence
+and actual model/reasoning resolution; incomplete legacy receipts must be updated.
+See [the canonical contract](../skills/workflow-composition/references/native-work.md).
+
+
+The boundary corrections require criterion-to-file verification at G7 and worker
+completion, hashed prerequisite context, unconditional registry references,
+source-integrity checks, owner-order validation and consistent only-content
+classification. Unknown discovery cannot advance into implementation. Interrupted
+work uses a new start linked by supersedes_task_id, preserving history and
+re-evaluating authority. The detailed shapes, limits and examples remain in the
+[native-work contract](../skills/workflow-composition/references/native-work.md).
+
+Adapters apply the [expertise policy](../skills/workflow-composition/SKILL.md#actively-assess-expertise-then-choose-bounded-roles)
+at intake and each current skill, recording dispatch or a concrete fallback for
+material triggers. G1 assessments precede Runner start and are read-only; G1 is
+not a queued worker owner. Deliver optional reasoning_lens guidance without
+changing portable effort, authority or acceptance.

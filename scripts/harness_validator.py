@@ -195,6 +195,45 @@ def field_ids(taxonomy_path: Path) -> set[str]:
     return result
 
 
+def validate_evidence_files(value: Any, target_root: Path) -> list[dict[str, str]]:
+    """Check concrete local evidence without claiming its contents prove correctness."""
+    if not isinstance(value, list) or not value:
+        raise ContractError("nonempty evidence files required")
+    checked = []
+    seen = set()
+    for item in value:
+        if not isinstance(item, dict):
+            raise ContractError("evidence file must be an object")
+        relative = item.get("path")
+        path = contained_path(target_root, relative, "evidence.path", must_exist=True)
+        if (path != target_root.resolve() / relative or not path.is_file()
+                or path.stat().st_size == 0 or relative in seen):
+            raise ContractError("evidence requires unique canonical nonempty files")
+        digest = sha256_bytes(path.read_bytes())
+        if item.get("sha256") != digest:
+            raise ContractError("evidence file hash mismatch")
+        seen.add(relative)
+        checked.append({"path": relative, "sha256": digest})
+    return checked
+
+
+def validate_acceptance_evidence(value: Any, criteria: list[str], target_root: Path) -> None:
+    if (not criteria or len(set(criteria)) != len(criteria)
+            or any(not isinstance(c, str) or not c.strip() for c in criteria)):
+        raise ContractError("nonempty unique acceptance criteria required")
+    if not isinstance(value, list) or len(value) != len(criteria):
+        raise ContractError("verification must cover every acceptance criterion")
+    covered = []
+    for check in value:
+        if not isinstance(check, dict) or check.get("status") != "passed":
+            raise ContractError("each acceptance check must be passed")
+        criterion = check.get("criterion")
+        if criterion not in criteria or criterion in covered:
+            raise ContractError("verification criterion is unknown or repeated")
+        validate_evidence_files(check.get("evidence"), target_root)
+        covered.append(criterion)
+
+
 def active_skill_ids(registry_path: Path) -> set[str]:
     registry = read_object(registry_path)
     skills = registry.get("skills")
@@ -274,7 +313,9 @@ def validate_intake(
         if not isinstance(intent, dict):
             raise ContractError("durable intake requires an intent object")
         _require_string(intent, "goal")
-        _string_array(intent, "success_criteria")
+        criteria = _string_array(intent, "success_criteria")
+        if not criteria or any(not c.strip() for c in criteria) or len(set(criteria)) != len(criteria):
+            raise ContractError("durable intake requires nonempty unique success criteria")
         _string_array(intent, "constraints")
     if any(not decision.strip() for decision in _string_array(value, "open_decisions")):
         raise ContractError("open_decisions must contain non-empty strings")
@@ -505,6 +546,27 @@ def validate_skill_result(value: dict[str, Any], approved_skills: set[str]) -> d
     if resolution_status == "unavailable" and status not in {"blocked", "failed"}:
         raise ContractError("unavailable execution capability requires a blocked or failed result")
     return value
+
+
+def validate_resolution_binding(resolution: dict, adapter: str, expected: str) -> None:
+    if resolution["adapter"] != adapter:
+        raise ContractError("execution resolution adapter does not match the task adapter")
+    expected_reasoning = expected
+    actual_reasoning = resolution["reasoning"]
+    resolution_status = resolution["status"]
+    rank = {"low": 0, "medium": 1, "high": 2}
+    if resolution_status == "exact" and actual_reasoning != expected_reasoning:
+        raise ContractError("exact execution resolution must match recommended reasoning")
+    if resolution_status == "upgraded" and (
+        actual_reasoning == "unknown" or rank[actual_reasoning] <= rank[expected_reasoning]
+    ):
+        raise ContractError("upgraded execution resolution must exceed recommended reasoning")
+    if resolution_status == "degraded" and (
+        actual_reasoning == "unknown" or rank[actual_reasoning] >= rank[expected_reasoning]
+    ):
+        raise ContractError("degraded execution resolution must be below recommended reasoning")
+    if resolution_status in {"exact", "upgraded", "degraded"} and actual_reasoning == "unknown":
+        raise ContractError("known execution resolution status requires a known reasoning level")
 
 
 def validate_pattern_review(value: dict[str, Any]) -> dict[str, Any]:

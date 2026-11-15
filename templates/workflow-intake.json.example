@@ -126,7 +126,8 @@
     ],
     "capability_evidence_ids": [
       "EVD-native-probe"
-    ]
+    ],
+    "native_worker_capacity": 2
   },
   "confidence": "high",
   "intent": {

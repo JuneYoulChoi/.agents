@@ -1,6 +1,7 @@
 """Behavioral regression coverage for work composition and adapter boundaries."""
 
 import copy
+import hashlib
 import json
 import sys
 import tempfile
@@ -11,7 +12,8 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from harness_router import RouterError, _load_manifest, route
-from harness_runner import RunnerError, _execution_queue, start, submit
+from harness_runner import RunnerError, _execution_queue, start, submit, work_event
+from harness_state import StateStore
 from harness_bootstrap import source_tree_hash
 from harness_workflow import WorkflowError, compose_work_plan, validate_work_plan, validate_workflow_input
 from harness_validator import ContractError, active_skill_ids, validate_intake, validate_route_result
@@ -182,3 +184,182 @@ class WorkflowTests(unittest.TestCase):
             self.assertEqual(source_tree_hash(root), expected)
             (root / "source.py").write_text("changed = True\n")
             self.assertNotEqual(source_tree_hash(root), expected)
+
+    def test_observed_capacity_clamps_requested_workers(self):
+        c = context(); c['delegation'].update(max_workers=20, native_worker_capacity=1)
+        self.assertEqual(compose_work_plan(c, 'active')['max_workers'], 1)
+        for capacity in (0, None):
+            if capacity is None:
+                c['delegation'].pop('native_worker_capacity', None)
+            else:
+                c['delegation']['native_worker_capacity'] = capacity
+            self.assertEqual(compose_work_plan(c, 'active')['mode'], 'single')
+
+    def test_mixed_or_unbound_owners_cannot_project_parallel_execution(self):
+        for owner in ('core.nodejs-engineering', None):
+            c = context()
+            if owner is None:
+                for u in c['work_units']:
+                    u.pop('skill_id')
+            else:
+                c['work_units'][1]['skill_id'] = owner
+            plan = compose_work_plan(c, 'active')
+            self.assertEqual(plan['batches'], [['a'], ['b'], ['join']])
+            validate_work_plan(plan, 'active')
+            plan['batches'] = [['a', 'b'], ['join']]; plan['max_workers'] = 2; plan['mode'] = 'parallel'
+            with self.assertRaises(WorkflowError):
+                validate_work_plan(plan, 'active')
+
+    def test_small_fullstack_and_document_work_default_to_one_agent(self):
+        for fields in (['frontend', 'backend', 'ui_ux'], ['documentation'], ['implementation']):
+            c = context(); c.update(fields=fields, work_units=[], delegation={})
+            plan = compose_work_plan(c, 'active')
+            self.assertEqual(plan['mode'], 'single')
+            self.assertEqual(plan['batches'], [])
+            self.assertEqual(plan['mandatory_gate_checks'], [f'G{i}' for i in range(8)])
+
+    def test_six_same_owner_units_queue_three_at_a_time(self):
+        c = context(); original = c['work_units'][0]
+        c['work_units'] = [{**original, 'id': str(i), 'read_paths': [f'src/{i}']} for i in range(6)]
+        c['delegation'].update(max_workers=10, native_worker_capacity=3)
+        self.assertEqual(compose_work_plan(c, 'active')['batches'], [['0','1','2'], ['3','4','5']])
+        for u in c['work_units']:
+            u['shared_resources'] = ['physical-robot']
+        self.assertEqual(compose_work_plan(c, 'active')['max_workers'], 1)
+
+
+class WorkflowRefinementTests(unittest.TestCase):
+    """Refine future work through real Runner transitions and durable receipts."""
+
+    def setUp(self):
+        temp = tempfile.TemporaryDirectory()
+        self.addCleanup(temp.cleanup)
+        self.root = Path(temp.name)
+        self.registry = ROOT / 'registry/active-skills.json'
+        self.task = 'TASK-FUTURE-REFINEMENT'
+        self.file = self.root / 'request.json'
+        proof = self.root / 'proof.md'
+        proof.write_text('Synthetic current baseline, impact and acceptance evidence.')
+        self.proof = {'path': 'proof.md', 'sha256': hashlib.sha256(proof.read_bytes()).hexdigest()}
+        self.ctx = context()
+        a, b, future = self.ctx['work_units']
+        a['skill_id'] = 'core.architecture-baseline-and-design'
+        b.update(skill_id='core.brownfield-impact-analysis', depends_on=['a'])
+        future.pop('skill_id')  # Composition binds provisional future work.
+        for unit in self.ctx['work_units']:
+            unit['context_artifacts'] = [self.proof]
+        self.file.write_text(json.dumps(self.ctx))
+        self.response = start(self.root, self.task, self.file, 'codex', 'test', ROOT,
+                              self.registry, ROOT / 'registry/taxonomy.json', ROOT / 'registry/routing-gates.json')
+        self.store = StateStore(self.root, harness_root=ROOT)
+
+    def skill_result(self):
+        item = self.response['next']
+        return {'schema_version': 1, 'skill_id': item['skill_id'], 'status': 'completed',
+                'artifact_ids': ['WORK-TEST'], 'evidence_ids': ['EVD-TEST'],
+                'transition': {'next_stage': 'assembly'}, 'error': None,
+                'execution_resolution': {'adapter': 'codex', 'model': 'fixture',
+                    'reasoning': item['execution_profile']['reasoning'], 'native_reasoning': 'fixture',
+                    'status': 'exact', 'evidence_ids': ['EVD-MODEL']}}
+
+    def submit_result(self, result):
+        self.file.write_text(json.dumps(result))
+        self.response = submit(self.root, self.task, self.response['revision'], self.file, ROOT, self.registry)
+
+    def run_unit(self, unit_id, status='completed'):
+        request = {'unit_id': unit_id, 'input_revision': 'source-001', 'mode': 'serial',
+                   'checks': dict.fromkeys(['authority', 'capability', 'revision', 'ownership', 'tools'], True),
+                   'evidence_ids': ['EVD-CHECK']}
+        self.file.write_text(json.dumps(request))
+        prepared = work_event(self.root, self.task, self.response['revision'], self.file,
+                              'prepare-work', ROOT, self.registry)
+        packet = prepared['packet']
+        instruction = packet['skill_context']
+        result = {'unit_id': unit_id, 'input_revision': 'source-001', 'packet_hash': prepared['packet_hash'],
+                  'status': status, 'worker_stopped': True, 'acceptance_verified': True,
+                  'artifact_ids': ['ART-UNIT'], 'evidence_ids': ['EVD-UNIT'],
+                  'usage': {'status': 'reported', 'input_tokens': 10, 'output_tokens': 5, 'source': 'fixture'},
+                  'verification': [{'criterion': c, 'status': 'passed', 'evidence': [self.proof]}
+                                   for c in packet['unit']['acceptance']],
+                  'instruction_evidence': {'instruction_hash': instruction['sha256'],
+                      'reference_hashes': [r['sha256'] for r in instruction['references']]},
+                  'execution_resolution': self.skill_result()['execution_resolution']}
+        self.file.write_text(json.dumps(result))
+        self.response = work_event(self.root, self.task, prepared['revision'], self.file,
+                                   'record-work', ROOT, self.registry)
+
+    def reach_composition(self):
+        for unit_id in ('a', 'b'):
+            self.run_unit(unit_id)
+            self.submit_result(self.skill_result())
+        self.assertEqual(self.response['next']['skill_id'], 'core.workflow-composition')
+
+    def refinement(self):
+        units = copy.deepcopy(self.ctx['work_units'])
+        units[-1].update(skill_id='core.react-engineering', goal='Review impact-informed React behavior')
+        return {**self.skill_result(), 'workflow_update': {'work_units': units}}
+
+    def test_completed_early_work_preserves_receipts_and_allows_future_refinement(self):
+        self.reach_composition()
+        before = self.store.read(self.task)
+        result = self.refinement()
+        extra = {**copy.deepcopy(result['workflow_update']['work_units'][-1]), 'id': 'extra', 'depends_on': ['join']}
+        result['workflow_update']['work_units'].append(extra)
+        self.submit_result(result)
+        after = self.store.read(self.task)
+        self.assertEqual(after['execution']['work_records'], before['execution']['work_records'])
+        self.assertEqual(after['intake']['delegation'], before['intake']['delegation'])
+        self.assertEqual(after['route']['work_plan']['units'], result['workflow_update']['work_units'])
+        self.assertEqual(after['intake']['work_units'], result['workflow_update']['work_units'])
+        self.assertEqual(after['route']['work_plan']['batches'], [['a'], ['b'], ['join'], ['extra']])
+
+    def test_prepared_unit_removal_or_change_does_not_advance_state(self):
+        self.reach_composition()
+        before = self.store.read(self.task)
+        for change in ('remove', 'goal', 'skill_id', 'acceptance', 'context_artifacts'):
+            with self.subTest(change=change):
+                result = self.refinement()
+                units = result['workflow_update']['work_units']
+                if change == 'remove':
+                    units.pop(0)
+                    for unit in units:
+                        unit['depends_on'] = [d for d in unit['depends_on'] if d != 'a']
+                else:
+                    units[0][change] = {'goal': 'Changed goal', 'skill_id': 'core.react-engineering',
+                                       'acceptance': ['Different acceptance'], 'context_artifacts': []}[change]
+                with self.assertRaisesRegex(RunnerError, 'preserve every prepared'):
+                    self.submit_result(result)
+                self.assertEqual(self.store.read(self.task), before)
+
+    def test_pending_owner_must_still_be_subsequent(self):
+        self.reach_composition()
+        before = self.store.read(self.task)
+        for owner in ('core.architecture-baseline-and-design', 'core.workflow-composition', 'core.nonexistent'):
+            with self.subTest(owner=owner):
+                result = self.refinement()
+                result['workflow_update']['work_units'][-1]['skill_id'] = owner
+                with self.assertRaisesRegex(ContractError, 'reachable pending skill'):
+                    self.submit_result(result)
+                self.assertEqual(self.store.read(self.task), before)
+
+    def test_unsuccessful_prior_work_cannot_be_laundered_by_refinement(self):
+        self.reach_composition()
+        for status in ('failed', 'cancelled', 'timed_out'):
+            with self.subTest(status=status):
+                # Defensive persisted-state fixture: normal owner joins already prevent
+                # advancing this far after failure. Exercise submit's recovery boundary too.
+                def retain_failure(state):
+                    receipt = state['execution']['work_records']['a']
+                    receipt['status'] = receipt['result']['status'] = status
+                state = self.store.update(self.task, self.response['revision'], 'fixture_failure', retain_failure)
+                self.response['revision'] = state['revision']
+                with self.assertRaisesRegex(RunnerError, 'unsuccessful receipts'):
+                    self.submit_result(self.refinement())
+                self.assertEqual(self.store.read(self.task), state)
+
+    def test_real_failed_worker_blocks_its_owner_before_composition(self):
+        self.run_unit('a', 'failed')
+        before = self.store.read(self.task)
+        with self.assertRaisesRegex(ContractError, 'successfully joined'):
+            self.submit_result(self.skill_result())
+        self.assertEqual(self.store.read(self.task), before)

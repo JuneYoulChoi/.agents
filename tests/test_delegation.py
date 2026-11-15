@@ -1,5 +1,6 @@
 """Real Runner joins and bounded worker admission, without spawning providers."""
 import copy
+import hashlib
 import json
 from pathlib import Path
 import sys
@@ -15,13 +16,41 @@ from harness_validator import ContractError
 
 
 class DelegationTests(unittest.TestCase):
+    def test_lenses_reach_worker_without_changing_acceptance_or_authority(self):
+        packets = []
+        for lens in ('meticulous', 'minimal_sufficient'):
+            state = copy.deepcopy(self.state)
+            unit = state['route']['work_plan']['units'][0]
+            unit['reasoning_lens'] = lens
+            packet = prepare(state, self.request(), self.target, 0)['packet']
+            self.assertEqual(packet['unit']['acceptance'], unit['acceptance'])
+            self.assertEqual(packet['unit']['mutation'], 'none')
+            self.assertEqual(packet['unit']['allowed_tools'], unit['allowed_tools'])
+            self.assertTrue(packet['skill_context']['lens_guidance'])
+            packets.append(packet)
+        self.assertNotEqual(packets[0]['skill_context']['lens_guidance'],
+                            packets[1]['skill_context']['lens_guidance'])
+        self.assertEqual(packets[0]['skill_context']['execution_profile'],
+                         packets[1]['skill_context']['execution_profile'])
+
+    def test_legacy_units_keep_role_without_invented_lens(self):
+        packet = prepare(self.state, self.request(), self.target, 0)['packet']
+        self.assertIsNone(packet['skill_context']['lens_guidance'])
+        self.assertNotIn('reasoning_lens', packet['unit'])
+
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
         self.target = Path(self.temp.name)
         self.registry = ROOT / 'registry/active-skills.json'
         self.ctx = json.loads((ROOT / 'templates/workflow-intake.json.example').read_text())
+        context_file = self.target / 'context.md'
+        context_file.write_text('Synthetic baseline: bounded review; no product or external authority. Input snapshot and acceptance are fixture-only.')
+        self.context_file = {'path': 'context.md', 'sha256': hashlib.sha256(context_file.read_bytes()).hexdigest()}
+        self.proof = self.target / 'proof.md'
+        self.proof.write_text('Fixture evidence for contract tests; does not claim product correctness.')
         for unit in self.ctx['work_units']:
+            unit['context_artifacts'] = [self.context_file]
             unit['skill_id'] = 'core.architecture-baseline-and-design'
         f = self.target / 'intake.json'
         f.write_text(json.dumps(self.ctx))
@@ -31,14 +60,25 @@ class DelegationTests(unittest.TestCase):
         self.state = self.store.read('TASK-RECEIPTS')
 
     def request(self, unit='a', mode='native'):
-        return {'unit_id': unit, 'input_revision': 'source-001', 'mode': mode,
+        return {'unit_id': unit, 'input_revision': 'source-001', 'mode': mode, 'native_worker_capacity': 3,
                 'checks': dict.fromkeys(['authority', 'capability', 'revision', 'ownership', 'tools'], True),
                 'evidence_ids': ['EVD-CHECK']}
 
+    def record(self, result, now):
+        return record(self.state, result, now, target=self.target)
+
     def result(self, packet, unit='a', usage=None):
+        context = packet['packet']['skill_context']
         return {'unit_id': unit, 'input_revision': 'source-001', 'packet_hash': packet['packet_hash'],
                 'status': 'completed', 'worker_stopped': True, 'acceptance_verified': True, 'artifact_ids': ['ART-1'],
-                'evidence_ids': ['EVD-1'], 'usage': usage or {'status': 'unavailable'}}
+                'evidence_ids': ['EVD-1'], 'usage': usage or {'status': 'unavailable'},
+                'verification': [{'criterion': c, 'status': 'passed', 'evidence': [
+                    {'path': 'proof.md', 'sha256': hashlib.sha256(self.proof.read_bytes()).hexdigest()}]}
+                    for c in packet['packet']['unit']['acceptance']],
+                'instruction_evidence': {'instruction_hash': context['sha256'],
+                    'reference_hashes': [r['sha256'] for r in context['references']]},
+                'execution_resolution': {'adapter': 'codex', 'model': 'fixture', 'reasoning': 'unknown',
+                    'native_reasoning': 'unknown', 'status': 'platform_default', 'evidence_ids': ['EVD-fixture']}}
 
     def test_dependencies_capacity_and_verified_join(self):
         a = prepare(self.state, self.request(), self.target, 0)
@@ -47,10 +87,10 @@ class DelegationTests(unittest.TestCase):
             prepare(self.state, self.request('join'), self.target, 1)
         with self.assertRaises(ContractError):
             require_join(self.state, 'core.architecture-baseline-and-design')
-        record(self.state, self.result(a), 1)
-        record(self.state, self.result(b, 'b'), 1)
+        self.record(self.result(a), 1)
+        self.record(self.result(b, 'b'), 1)
         join = prepare(self.state, self.request('join'), self.target, 2)
-        record(self.state, self.result(join, 'join'), 3)
+        self.record(self.result(join, 'join'), 3)
         require_join(self.state, 'core.verify-and-handoff')
 
     def test_missing_checks_future_skill_and_no_delegation(self):
@@ -71,12 +111,12 @@ class DelegationTests(unittest.TestCase):
 
     def test_late_completion_is_timeout_not_success(self):
         a = prepare(self.state, self.request(), self.target, 0)
-        record(self.state, self.result(a), 301)
+        self.record(self.result(a), 301)
         self.assertEqual(self.state['execution']['work_records']['a']['status'], 'timed_out')
         with self.assertRaises(ContractError):
             require_join(self.state, 'core.architecture-baseline-and-design')
         with self.assertRaises(ContractError):
-            record(self.state, self.result(a), 302)
+            self.record(self.result(a), 302)
 
     def test_stale_duplicate_and_unverified_results_rejected(self):
         a = prepare(self.state, self.request(), self.target, 0)
@@ -84,17 +124,17 @@ class DelegationTests(unittest.TestCase):
                            ('acceptance_verified', False), ('worker_stopped', False), ('artifact_ids', []), ('evidence_ids', [])]:
             result = self.result(a); result[key] = value
             with self.assertRaises(ContractError):
-                record(self.state, result, 1)
-        record(self.state, self.result(a), 1)
+                self.record(result, 1)
+        self.record(self.result(a), 1)
         with self.assertRaises(ContractError):
-            record(self.state, self.result(a), 2)
+            self.record(self.result(a), 2)
 
     def test_context_is_focused_bounded_and_does_not_silently_truncate(self):
         self.state['intake']['conversation'] = 'history' * 100000
         a = prepare(self.state, self.request(), self.target, 0)
         self.assertNotIn('conversation', json.dumps(a))
         self.assertNotIn('work_plan', a['packet'])
-        self.assertLess(len(json.dumps(a).encode()), 3000)
+        self.assertLess(len(json.dumps(a).encode()), 16384)
         self.state['intent']['constraints'] = ['required constraint' * 2000]
         with self.assertRaises(ContractError):
             prepare(self.state, self.request('b'), self.target, 0)
@@ -104,7 +144,7 @@ class DelegationTests(unittest.TestCase):
         a = prepare(self.state, self.request(), self.target, 0)
         with self.assertRaises(ContractError):
             prepare(self.state, self.request('b'), self.target, 1)
-        record(self.state, self.result(a, usage={'status': 'reported', 'input_tokens': 70,
+        self.record(self.result(a, usage={'status': 'reported', 'input_tokens': 70,
                    'output_tokens': 30, 'source': 'provider receipt'}), 2)
         self.assertEqual(usage_summary(self.state)['reported']['input_tokens'], 70)
         with self.assertRaises(ContractError):
@@ -114,8 +154,8 @@ class DelegationTests(unittest.TestCase):
         a = prepare(self.state, self.request(), self.target, 0)
         bad = self.result(a, usage={'status': 'unavailable', 'input_tokens': 0})
         with self.assertRaises(ContractError):
-            record(self.state, bad, 1)
-        record(self.state, self.result(a), 1)
+            self.record(bad, 1)
+        self.record(self.result(a), 1)
         self.assertEqual(usage_summary(self.state)['unavailable_or_pending'], 1)
         self.assertEqual(usage_summary(self.state)['savings'], 'not_measured')
 
@@ -151,7 +191,7 @@ class DelegationTests(unittest.TestCase):
         packet = prepare(self.state, self.request(), self.target, 0)
         result = self.result(packet); result['worker_stopped'] = False
         with self.assertRaises(ContractError):
-            record(self.state, result, 301)
+            self.record(result, 301)
         self.assertEqual(self.state['execution']['work_records']['a']['status'], 'running')
         with self.assertRaises(ContractError):
             prepare(self.state, self.request('b'), self.target, 302)
@@ -182,7 +222,7 @@ class DelegationTests(unittest.TestCase):
             with self.assertRaises(WorkflowError):
                 validate_workflow_input(self.ctx)
         packet = prepare(self.state, self.request(), self.target, 0)
-        record(self.state, self.result(packet), 1)
+        self.record(self.result(packet), 1)
         self.assertIsNone(usage_summary(self.state)['total_worker_tokens'])
         self.assertEqual(usage_summary(self.state)['reported_units'], 0)
 
@@ -198,3 +238,79 @@ class DelegationTests(unittest.TestCase):
         with self.assertRaises(ContractError):
             submit(self.target, 'TASK-RECEIPTS', 2, f, ROOT, self.registry)
         self.assertEqual(self.store.read('TASK-RECEIPTS')['status'], 'active')
+
+    def test_packet_contains_current_skill_body_profile_and_persona(self):
+        packet = prepare(self.state, self.request(), self.target, 0)['packet']
+        context = packet['skill_context']
+        self.assertEqual(context['instructions'], (ROOT / context['entry']).read_text())
+        self.assertEqual(context['application_depth'], self.response['next']['application_depth'])
+        self.assertEqual(context['execution_profile'], self.response['next']['execution_profile'])
+        self.assertIn('hypotheses', context['role_guidance'])
+        self.assertEqual(context['references'], [])
+
+    def test_only_selected_current_skill_references_are_allowed(self):
+        unit = self.state['route']['work_plan']['units'][0]
+        refs = list((ROOT / 'skills/architecture-baseline-and-design/references').rglob('*.md'))
+        self.assertTrue(refs)
+        unit['skill_references'] = [str(refs[0].relative_to(ROOT))]
+        packet = prepare(copy.deepcopy(self.state), self.request(), self.target, 0)['packet']
+        self.assertEqual(len(packet['skill_context']['references']), 1)
+        unit['skill_references'] = ['skills/react-engineering/SKILL.md']
+        with self.assertRaisesRegex(ContractError, 'current skill'):
+            prepare(self.state, self.request(), self.target, 0)
+
+    def test_unapproved_worker_skill_is_not_loaded(self):
+        registry = json.loads(self.registry.read_text())
+        for skill in registry['skills']:
+            if skill['id'] == 'core.architecture-baseline-and-design':
+                skill['trust'] = 'unverified'
+        path = self.target / 'registry.json'; path.write_text(json.dumps(registry))
+        with self.assertRaises(ContractError):
+            prepare(self.state, self.request(), self.target, 0, registry_path=path)
+        self.assertFalse(self.state['execution']['work_records'])
+
+    def test_current_host_capacity_is_required_and_can_shrink(self):
+        for value in (None, True, -1, '3', 0):
+            req = self.request(); req['native_worker_capacity'] = value
+            with self.subTest(value=value), self.assertRaises(ContractError):
+                prepare(copy.deepcopy(self.state), req, self.target, 0)
+        prepare(self.state, self.request(), self.target, 0)
+        req = self.request('b'); req['native_worker_capacity'] = 1
+        with self.assertRaisesRegex(ContractError, 'capacity'):
+            prepare(self.state, req, self.target, 1)
+
+    def test_worker_counters_never_imply_total_task_savings(self):
+        packet = prepare(self.state, self.request(), self.target, 0)
+        self.record(self.result(packet, usage={'status': 'reported', 'input_tokens': 20,
+               'output_tokens': 10, 'source': 'fixture provider receipt'}), 1)
+        summary = usage_summary(self.state)
+        self.assertEqual(summary['total_worker_tokens'], 30)
+        self.assertIsNone(summary['total_task_tokens'])
+        self.assertEqual(summary['parent_usage'], 'unavailable')
+        self.assertEqual(summary['savings'], 'not_measured')
+
+    def test_missing_or_changed_context_blocks_preparation(self):
+        unit = self.state['route']['work_plan']['units'][0]
+        unit.pop('context_artifacts')
+        with self.assertRaisesRegex(ContractError, 'evidence files'):
+            prepare(self.state, self.request(), self.target, 0)
+        unit['context_artifacts'] = [self.context_file]
+        (self.target/'context.md').write_text('changed baseline')
+        with self.assertRaisesRegex(ContractError, 'hash mismatch'):
+            prepare(self.state, self.request(), self.target, 0)
+
+    def test_worker_completion_requires_instruction_resolution_and_acceptance_evidence(self):
+        packet = prepare(self.state, self.request(), self.target, 0)
+        for key in ('instruction_evidence', 'execution_resolution', 'verification'):
+            result = self.result(packet); result.pop(key)
+            with self.subTest(key=key), self.assertRaises(ContractError): self.record(result, 1)
+        self.record(self.result(packet), 1)
+
+    def test_unconditional_references_are_included_even_when_omitted(self):
+        state = copy.deepcopy(self.state)
+        skill = 'core.react-engineering'
+        state['execution']['cursor'] = state['execution']['queue'].index(skill)
+        state['route']['work_plan']['units'][0]['skill_id'] = skill
+        packet = prepare(state, self.request(), self.target, 0)['packet']
+        self.assertEqual(len(packet['skill_context']['references']), 1)
+        self.assertTrue(packet['skill_context']['references'][0]['path'].endswith('references/engineering-practices.md'))

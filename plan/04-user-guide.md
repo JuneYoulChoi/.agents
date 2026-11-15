@@ -338,9 +338,14 @@ If a session ends unexpectedly, start a new session in the same project and say
 repair path, and does not guess a new state. If you want to abandon the task,
 say `Cancel TASK-<id> because <reason>`.
 
-Gate results are immutable history. A resumed run continues from the latest
-forward revision and pending feedback record rather than relying on the prior
-conversation or recomputing unaffected branches.
+Gate results are immutable history. An active session continues its current
+step through status/next. A waiting_user, blocked or failed task uses ordinary
+start with a new task ID and revised intake containing supersedes_task_id.
+The prior task stays unchanged; intent, authority and gates are checked afresh.
+Stop and record existing workers first. The adapter may reuse unchanged evidence
+explicitly but the Runner does not automatically replay prior results.
+Unknown project discovery uses this path after factual reclassification.
+See [the exact evidence and restart contract](../skills/workflow-composition/references/native-work.md).
 
 ## Safe answers to common questions
 
@@ -366,7 +371,9 @@ baseline and necessary quality requirements even for a quick fix.
 
 The five views are request/context → work composition → routing/gates →
 execution → verification/feedback; routing and authority apply throughout.
-One agent is the default. Independent evidence collection, implementation with
+Clear local work stays on one agent. The coordinator actively assesses expert
+help for independent uncertainty, conflicting evidence and verification gaps.
+Independent evidence collection, implementation with
 confirmed contracts and separate ownership, or focused review may be delegated
 when capability, authorization and benefit are established. Existing valid
 permission is reused. Sequential fallback is normal, not failure.
@@ -387,3 +394,10 @@ a pending skill; missing owner bindings must be resolved at composition. See
 The extension preserves the serial skill queue and adds no process executor.
 Existing no-unit workflows retain their result contract. Existing plans with
 units must produce receipts rather than completing by skill status alone.
+
+Experts use concrete meticulous or minimal-sufficient questions, not persona
+labels alone. Optional additions are excluded; necessary dependencies are
+explained and unresolved user-owned choices are asked before dependent work.
+A configured worker token budget permits only sequential admission and may
+block further work if usage is unavailable. Total token savings remain unmeasured
+without parent-plus-worker counters and a comparable baseline.

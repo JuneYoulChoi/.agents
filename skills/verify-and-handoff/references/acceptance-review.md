@@ -5,7 +5,7 @@ review evidence. Review once along two distinct questions:
 
 | Question | Evidence |
 | --- | --- |
-| Does it implement the request? | Accepted requirements, actual diff, observable behavior and omissions |
+| Does it implement the request? | Original user request, confirmed decisions, accepted requirements, actual diff, observable behavior and omissions |
 | Does it fit the project? | Existing architecture, coding conventions, ownership and applicable quality rules |
 
 Pin the comparison and include work in scope: committed branch changes,
@@ -13,6 +13,13 @@ staged/unstaged edits and relevant untracked additions as applicable. A
 `base...HEAD` diff alone cannot review work that has not been committed. Do not
 ask for an issue tracker when the user request or local task record already
 supplies the acceptance contract.
+
+Check the original request against the recorded criteria before checking their
+proof: an omitted outcome can otherwise pass every recorded criterion. Separate
+requested work, necessary dependencies and optional additions. A claimed
+dependency needs a concrete requirement/invariant; optional improvements do not
+justify unrequested changes or blocking questions. Read evidence contents,
+not just hashes or a producer's passed labels.
 
 For each material finding, give the requirement/rule, location, failure
 condition and consequence. Keep missing features, wrong behavior and scope
@@ -25,9 +32,11 @@ not integration evidence. Reuse a recorded pass only when revision, environment
 and scope still match. Otherwise rerun the affected check, read its result and
 report failed, not_run or blocked honestly.
 
-Use one agent by default. Independent review is conditional on request or
-material risk/uncertainty, authority, capability and cost benefit; no automatic
-two-agent review or separate model call is introduced. When the user defers
+Actively assess independent review for material uncertainty, conflicting evidence
+or shared producer/test assumptions using the
+[composition policy](../../workflow-composition/SKILL.md#actively-assess-expertise-then-choose-bounded-roles).
+Use a bounded reviewer when justified or record the concrete fallback; clear
+local work stays serial. When the user defers
 model evaluation, report it as not_run. Do not quietly run it or call it passed.
 Stop optional review expansion when required acceptance is evidenced; unresolved
 material defects still go through bounded feedback.

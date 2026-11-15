@@ -7,7 +7,9 @@ import time
 from pathlib import Path
 from typing import Any
 
-from harness_validator import ContractError
+from harness_validator import (ContractError, active_skill_ids, read_object,
+                               validate_evidence_files, validate_acceptance_evidence, validate_skill_result,
+                               validate_resolution_binding)
 from harness_workflow import _conflict
 
 CONTEXT_BYTES = 16384
@@ -40,10 +42,64 @@ def usage_summary(state: dict) -> dict:
             'unavailable_or_pending': unknown,
             'reported_units': len(records) - unknown,
             'total_worker_tokens': None if unknown else sum(totals.values()),
+            'parent_usage': 'unavailable', 'total_task_tokens': None,
             'savings': 'not_measured'}
 
 
-def prepare(state: dict, request: dict, target: Path, now: float | None = None) -> dict:
+ROLE_GUIDANCE = {
+    'analyst': 'Collect scoped evidence and distinguish observations from hypotheses.',
+    'designer': 'Explain scoped contracts and trade-offs; preserve user-owned decisions.',
+    'implementer': 'Implement accepted behavior only within owned paths; verify the change.',
+    'reviewer': 'Check correctness and necessary complexity against current evidence.',
+    'verifier': 'Check acceptance independently on the pinned revision; report failed or missing checks.',
+    'documenter': 'Write clear source-grounded documentation; preserve uncertainty and traceability.',
+}
+
+LENS_GUIDANCE = {
+    'meticulous': 'Find missing requirements, counterexamples and boundary failures within the unit scope. Separate observed facts from assumptions; cite evidence and necessary unresolved decisions. Do not expand scope.',
+    'minimal_sufficient': 'Find the least redundant path satisfying every acceptance criterion. Reuse current evidence, identify unnecessary work and state stopping conditions. Never omit required checks, ownership or error handling.',
+}
+
+
+def skill_context(state: dict, unit: dict, harness_root: Path, registry_path: Path) -> dict:
+    """Resolve only the current approved skill; references remain explicit bounded reads."""
+    skill = current_skill(state)
+    if skill not in active_skill_ids(registry_path):
+        raise ContractError('worker skill is not approved')
+    metadata = next(s for s in read_object(registry_path)['skills'] if s['id'] == skill)
+    entry = metadata['entry']
+    root = harness_root.resolve(strict=True)
+    path = (root / entry).resolve(strict=True)
+    if root not in path.parents or 'incoming' in path.relative_to(root).parts:
+        raise ContractError('worker skill escapes approved source')
+    body = path.read_bytes()
+    references = []
+    required = metadata.get('required_worker_references', [])
+    selected = unit.get('skill_references', [])
+    if skill == 'core.language-engineering':
+        language_refs = {f'skills/language-engineering/references/{lang}.md'
+                         for lang in state['intake'].get('languages', [])}
+        if not selected or not set(selected) <= language_refs:
+            raise ContractError('language worker requires only evidenced language references')
+    for relative in dict.fromkeys([*required, *selected]):
+        ref = (root / relative).resolve(strict=True)
+        if path.parent / 'references' not in ref.parents or ref != root / relative:
+            raise ContractError('worker reference must be canonical and belong to the current skill')
+        references.append({'path': str(ref), 'sha256': hashlib.sha256(ref.read_bytes()).hexdigest()})
+    gate_id = state['execution']['skill_gates'][skill]
+    gate = next(g for g in state['route']['gate_results'] if g['gate_id'] == gate_id)
+    profile = next(p for p in state['route']['execution_profile']['gate_profiles'] if p['gate_id'] == gate_id)
+    return {'entry': entry, 'path': str(path), 'sha256': hashlib.sha256(body).hexdigest(),
+            'instructions': body.decode('utf-8'), 'references': references,
+            'application_depth': gate.get('application_depths', {}).get(skill, state['classification']['depth']),
+            'execution_profile': profile,
+            'role_guidance': ROLE_GUIDANCE[unit['role']],
+            'lens_guidance': LENS_GUIDANCE.get(unit.get('reasoning_lens')),
+            'application_rule': 'Apply these instructions only to the unit scope. Read and verify selected references before work; stop if required context is missing. Do not run another skill or expand authority. Record actual model/reasoning resolution and instruction evidence in the result artifact.'}
+
+
+def prepare(state: dict, request: dict, target: Path, now: float | None = None,
+            harness_root: Path | None = None, registry_path: Path | None = None) -> dict:
     """Mutate a locked state copy and return the only context to send a worker."""
     now = time.time() if now is None else now
     skill = current_skill(state)
@@ -79,7 +135,14 @@ def prepare(state: dict, request: dict, target: Path, now: float | None = None) 
     running = [r for r in records.values() if r['status'] == 'running']
     if any(now >= r['deadline'] for r in running):
         raise ContractError('expired work must be recorded and cancelled before more dispatch')
-    capacity = plan['max_workers'] if mode == 'native' else 1
+    capacity = 1
+    if mode == 'native':
+        # Fresh capacity excludes the primary and unrelated agents, but includes
+        # this task's already running workers. The adapter observes host state.
+        observed = request.get('native_worker_capacity')
+        if type(observed) is not int or observed < 0:
+            raise ContractError('fresh native_worker_capacity required')
+        capacity = min(plan['max_workers'], observed)
     if len(running) >= capacity or any(r['mode'] == 'serial' for r in running):
         raise ContractError('worker capacity exceeded')
     if any(_conflict(unit, units[r['unit_id']]) for r in running):
@@ -97,7 +160,10 @@ def prepare(state: dict, request: dict, target: Path, now: float | None = None) 
     if budget is not None and (usage['unavailable_or_pending'] or
             sum(usage['reported'].values()) >= budget):
         raise ContractError('worker token budget exhausted or usage unknown; no further dispatch')
-    packet = {'schema_version': 1, 'task_id': state['task_id'], 'skill_id': skill,
+    context_files = validate_evidence_files(unit.get('context_artifacts'), target)
+    root = harness_root or Path(__file__).resolve().parents[1]
+    binding = skill_context(state, unit, root, registry_path or root / 'registry/active-skills.json')
+    packet = {'context_artifacts': context_files, 'target_root': str(target), 'skill_context': binding, 'schema_version': 1, 'task_id': state['task_id'], 'skill_id': skill,
               'unit': unit, 'task_goal': state['intent']['goal'], 'constraints': state['intent'].get('constraints', []),
               'context_policy': 'fresh_context_no_history_no_recursive_delegation',
               'result_max_bytes': RESULT_BYTES,
@@ -109,11 +175,15 @@ def prepare(state: dict, request: dict, target: Path, now: float | None = None) 
     records[unit['id']] = {'unit_id': unit['id'], 'skill_id': skill,
         'input_revision': unit['input_revision'], 'packet_hash': packet_hash,
         'status': 'running', 'mode': mode, 'started_at': now, 'deadline': now + timeout,
-        'adapter_evidence_ids': evidence}
+        'adapter_evidence_ids': evidence, 'admitted_capacity': capacity,
+        'native_worker_capacity': request.get('native_worker_capacity') if mode == 'native' else None,
+        'instruction_hash': binding['sha256'],
+        'reference_hashes': [r['sha256'] for r in binding['references']],
+        'context_artifacts': context_files, 'expected_reasoning': binding['execution_profile']['reasoning']}
     return {'packet': packet, 'packet_hash': packet_hash}
 
 
-def record(state: dict, result: dict, now: float | None = None) -> None:
+def record(state: dict, result: dict, now: float | None = None, target: Path | None = None) -> None:
     """Record one terminal result; timed-out work can never become successful."""
     now = time.time() if now is None else now
     skill = current_skill(state)
@@ -144,6 +214,23 @@ def record(state: dict, result: dict, now: float | None = None) -> None:
                 raise ContractError('completed work requires ' + key)
         if result.get('acceptance_verified') is not True:
             raise ContractError('coordinator must verify unit acceptance before joining')
+        if target is None:
+            raise ContractError('completion requires the target root for evidence validation')
+        unit = next(u for u in state['route']['work_plan']['units'] if u['id'] == item['unit_id'])
+        validate_evidence_files(item['context_artifacts'], target)
+        validate_acceptance_evidence(result.get('verification'), unit['acceptance'], target)
+        instruction = result.get('instruction_evidence', {})
+        if not isinstance(instruction, dict):
+            raise ContractError('instruction_evidence must be an object')
+        if (instruction.get('instruction_hash') != item['instruction_hash']
+                or instruction.get('reference_hashes') != item['reference_hashes']):
+            raise ContractError('worker must report current instruction and reference evidence')
+        # Reuse the existing resolution contract instead of another worker schema.
+        validate_skill_result({'schema_version': 1, 'skill_id': skill, 'status': 'completed',
+            'artifact_ids': result['artifact_ids'], 'evidence_ids': result['evidence_ids'],
+            'transition': {'next_stage': 'verification'},
+            'execution_resolution': result.get('execution_resolution')}, {skill})
+        validate_resolution_binding(result['execution_resolution'], state['selected_adapter'], item['expected_reasoning'])
     usage = result.get('usage')
     if not isinstance(usage, dict) or usage.get('status') not in ('reported', 'unavailable'):
         raise ContractError('work usage must be reported or unavailable')
@@ -170,7 +257,8 @@ def validate_bindings(plan: dict, queue: list[str], cursor: int = 0,
                       records: dict | None = None, allow_unbound: bool = False) -> None:
     """Unbound intake units are provisional until composition, never dispatchable."""
     records = records or {}
-    for unit in plan.get('units', []):
+    units = {u['id']: u for u in plan.get('units', [])}
+    for unit in units.values():
         owner = unit.get('skill_id')
         if owner is None and allow_unbound:
             continue
@@ -178,3 +266,12 @@ def validate_bindings(plan: dict, queue: list[str], cursor: int = 0,
             continue
         if owner not in queue[cursor:]:
             raise ContractError('work unit must bind to a reachable pending skill: ' + unit['id'])
+
+        for dependency in unit.get('depends_on', []):
+            if records.get(dependency, {}).get('status') == 'completed':
+                continue
+            predecessor = units[dependency].get('skill_id')
+            if predecessor is None and allow_unbound:
+                continue
+            if predecessor not in queue or queue.index(predecessor) > queue.index(owner):
+                raise ContractError('dependency owner must precede or equal unit owner: ' + unit['id'])

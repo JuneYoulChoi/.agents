@@ -60,7 +60,8 @@
           "src/a"
         ],
         "write_paths": [],
-        "shared_resources": []
+        "shared_resources": [],
+        "skill_id": "core.react-engineering"
       },
       {
         "id": "b",
@@ -83,7 +84,8 @@
           "src/b"
         ],
         "write_paths": [],
-        "shared_resources": []
+        "shared_resources": [],
+        "skill_id": "core.react-engineering"
       }
     ],
     "delegation": {
@@ -100,7 +102,8 @@
       ],
       "capability_evidence_ids": [
         "EVD-native-probe"
-      ]
+      ],
+      "native_worker_capacity": 2
     }
   },
   "expected": {

@@ -155,3 +155,16 @@ transition:
   next_skill: ''
   entry_conditions: []
 ```
+
+For native work, verify that each result artifact identifies the packet's current
+skill instructions, selected references and actual model/reasoning resolution.
+Check observed capacity and same-owner joins. Worker-only token totals do not
+measure task cost: parent usage and a comparable serial baseline are required
+before claiming savings; otherwise leave total task usage unknown.
+
+The reference Runner requires completed G7 results to include `verification`
+covering every exact task success_criteria string with passed evidence files
+(path plus SHA-256). See the [native-work evidence contract](../workflow-composition/references/native-work.md).
+One compact report may cover multiple checks. Read its contents: hashes and IDs
+alone never establish product correctness. Unmet/waived criteria cannot pass the
+current machine contract; resolve them or record an authorized revised intake.

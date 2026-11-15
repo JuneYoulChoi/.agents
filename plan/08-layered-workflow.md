@@ -71,7 +71,7 @@ Personas are bounded responsibilities, not claims of human credentials:
 | documenter | source-grounded ordinary documents | workspace or none |
 
 `delegation` has booleans `requested`, `authorized`, `available`, positive
-integers `max_workers`, `timeout_seconds`, and arrays `benefit_evidence_ids`,
+integers `max_workers`, `timeout_seconds`, nonnegative `native_worker_capacity`, and arrays `benefit_evidence_ids`,
 `authorization_evidence_ids`, `capability_evidence_ids`. Missing evidence,
 missing timeout, a blocked route, insufficient units or unavailable capability
 selects serial execution. Authorization may come from an existing applicable
@@ -180,8 +180,10 @@ is restricted to the current owner and joined dependencies. Active records
 reserve ownership/capacity. Terminal receipts require adapter-confirmed worker
 termination; late success becomes timed_out. Running work blocks any skill
 transition, and missing/failed/timed-out work blocks its owner's completion and G7.
-Plan replacement after preparation is rejected. Recovery goes through the owning
-gate rather than silently deleting required work.
+Composition may refine unprepared future units after all prepared work completed.
+Prepared definitions and receipts remain unchanged; removing or changing them,
+or carrying failed/cancelled/timed-out work through refinement, is rejected.
+Recovery goes through the owning gate rather than silently deleting required work.
 
 Use focused packets (16 KiB) and concise receipts (8 KiB), with detailed evidence
 referenced locally; never truncate acceptance or uncertainty to fit. Token usage
@@ -204,3 +206,70 @@ Small coherent slices default to existing single-agent execution. Only bounded
 independent work or a specifically needed review/test justifies delegation,
 with the existing authority/capability/benefit evidence. No new scheduling policy,
 team-size calculation or estimated token-savings claim is introduced.
+
+
+## Focused skill delivery and executable capacity (2026-11-01)
+
+Preparation now embeds the current approved SKILL.md, its hash, application
+depth, execution profile and one bounded role instruction. Units may name only
+needed `skill_references` beneath that skill's references directory; workers
+verify/read the supplied paths and report instruction evidence and actual
+model/reasoning resolution. Scope and authority remain those of the unit.
+
+Proposed concurrency is capped by observed native_worker_capacity (excluding
+primary/unrelated agents). Unknown capacity or unbound owners stays serial;
+batches never combine different skill owners. Native prepare requires a fresh
+capacity observation and caps admission again. Host queries and race handling
+remain adapter responsibilities, not an automatic provider integration.
+
+Small coherent work remains single-agent. Worker usage summaries explicitly
+leave parent usage unavailable and total task tokens null. Savings require
+comparable serial and total parent+worker measurements; no automatic benchmark,
+extra reviewer, or numeric savings estimate is added.
+
+
+## Enforced boundaries after scenario review
+
+Completion requires current nonempty local evidence files for each task/unit
+criterion, not only labels. Current registry/source pins are checked at Runner
+execution boundaries. Dependency owners must follow the existing serial skill
+order. Contradictory authored/only-content classifications fail validation;
+unknown discovery cannot advance past G2 until a new linked intake reclassifies
+it. Worker packets contain hashed prerequisite context and required registry
+references in addition to selected references. Interrupted tasks use an ordinary
+new start with supersedes_task_id and fresh gates; no automatic replay or new
+orchestration layer is introduced. See the canonical native-work contract above.
+
+## Evidence-driven expert assessment (2026-11-15)
+
+The user-approved refinement actively assesses delegation at intake and each
+current skill for independent uncertainty, conflicting evidence, distinct
+expertise or shared producer/test assumptions. The detailed policy has one owner:
+[workflow-composition](../skills/workflow-composition/SKILL.md#actively-assess-expertise-then-choose-bounded-roles).
+Record a bounded question, expected evidence and actual dispatch or specific
+fallback in the existing result; clear local work remains serial. G1 assessment
+is adapter-owned before structured intake, not a Runner work unit. Native work
+from G2 onward retains current-skill preparation and join requirements.
+
+Optional unit `reasoning_lens` is `meticulous` or `minimal_sufficient`; unknown
+values fail validation. The packet delivers the corresponding guidance with
+its domain role. Lenses do not change model effort, skills, tools or acceptance.
+Use distinct questions rather than duplicate committees. Review original-request
+coverage, necessary dependencies and excluded/optional work before declaring
+no open decisions; G1 still consumes annotations rather than interpreting prose.
+
+Completed composition can refine only unprepared future units. Every prepared
+unit must remain identical and completed, with its receipt retained. New pending
+owners and dependencies must satisfy existing serial queue order. Authority,
+intent, risk and capabilities remain immutable through workflow_update.
+
+A configured worker_token_budget projects single-worker batches with an explicit
+reason because admission waits for prior usage. Unavailable usage still blocks
+further dispatch; the budget is not an in-flight or total-task billing ceiling.
+
+Use the opt-in [behavior scenarios](../fixtures/behavior/expert-intake.md) to
+exercise actual request interpretation separately from structured router tests.
+Report essential omissions, unnecessary questions, scope additions and supported
+new findings; compare acceptance-matched runs before claiming quality or cost
+improvements. Parent plus worker provider usage is needed for token savings;
+packet bytes, role names and passing unit tests are not substitutes.

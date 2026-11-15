@@ -96,6 +96,24 @@ absent or false. Use an empty list when nothing material is open; do not add
 questions about excluded or later work. The Router consumes these annotations;
 it does not discover omitted questions from natural language.
 
+Before setting `open_decisions` empty, compare the original request and confirmed
+source decisions with the acceptance criteria. Distinguish requested outcomes,
+necessary dependencies (cite the outcome or invariant that needs them), and
+optional improvements. Include every requested outcome in acceptance; a criteria
+list written by the agent is not proof of request coverage. Do not silently
+promote a proposal or convenient default into a confirmed decision.
+
+Ask about a necessary dependency only when its unresolved choice changes
+acceptance, scope or user-owned trade-offs; explain that dependency. Resolve
+facts from sources first. Optional/excluded work must neither be implemented
+nor create blocking questions. Continue independent authorized work while a
+dependent decision waits. Small clear changes need only a compact coverage check.
+
+For material independent uncertainty or conflicting evidence, apply the
+[expertise assessment](../workflow-composition/SKILL.md#actively-assess-expertise-then-choose-bounded-roles)
+before finalizing intake; record the bounded review or concrete fallback.
+This is adapter-owned assessment, not activation of later implementation skills.
+
 Ask the user before material work when product concept, priority, success
 criteria, audience, trade-off, authority, or acceptable scope is unknown. Ask
 at most three related questions using this form:
@@ -190,3 +208,10 @@ transition:
 Do not claim completion. Do not choose a product direction on the user's
 behalf. For detailed state, event, and approval contracts, follow the adjacent
 `plan/03-contracts-and-fixtures.md` when it is available.
+
+For the reference Runner, never combine authored_code/authored_in_scope with
+`documentation_only` or `generated_code_only`; use the documentation field for
+mixed code-and-document work. Unknown projects stay read-only and cannot advance
+past baseline discovery. Reclassify using current evidence and a new linked
+intake (`supersedes_task_id`) after a waiting/blocked result; preserve user-owned
+decisions and prior history. Required success criteria must be nonempty and unique.

@@ -1,16 +1,16 @@
 {
   "schema_version": 1,
   "manifest_id": "adapter-template-manifest-v1",
-  "source_revision": "workspace-20261030-484a46a340f3",
-  "source_tree_sha256": "484a46a340f3b83ca2396fac343432cb53aff2f9a498a67afdddf2abb763a453",
+  "source_revision": "workspace-20261115-437fcc904c1a",
+  "source_tree_sha256": "437fcc904c1ac143507640b51da1ff33e4ec084d37b5e8a4b0aa75a3b07f7296",
   "templates": [
     {
       "id": "codex.bootstrap",
       "platform": "codex",
       "path": "adapters/codex/AGENTS.md.tmpl",
       "rendered_name": "AGENTS.md",
-      "version": "0.7.0",
-      "sha256": "4beadf834c35b56d03fa24294d6f4b6982c5d4582162cdfaf10eae8b9e7aedab",
+      "version": "0.9.0",
+      "sha256": "e141dd3b7504f97897d9e9e8fc6d614e7c0185e7a36873bf6420b723c1e162d0",
       "max_bytes": 32768
     },
     {
@@ -18,8 +18,8 @@
       "platform": "claude",
       "path": "adapters/claude/CLAUDE.md.tmpl",
       "rendered_name": "CLAUDE.md",
-      "version": "0.7.0",
-      "sha256": "9635054db0c09d11203590f780c589b5854a47a07128a2d25b9a043e070bc066",
+      "version": "0.9.0",
+      "sha256": "a82baff360f63248238e5729ea6b36730f6102e17210157b1afa57e5b751d864",
       "max_bytes": 32768
     }
   ],

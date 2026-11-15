@@ -508,6 +508,9 @@ def route(context: dict[str, Any], manifest: dict[str, Any]) -> dict[str, Any]:
     all_activated: list[str] = []
 
     g0_blocked = []
+    if is_software and project_state == "unknown" and any(
+            u.get("mutation") == "workspace" for u in context.get("work_units", [])):
+        g0_blocked.append({"reason": "unknown_project_discovery_is_read_only"})
     if enforcement == "unsupported" and action in {"implement", "change", "approve"}:
         g0_blocked.append({"reason": "unsupported_enforcement_is_read_only"})
     if enforcement == "manual" and action in {"implement", "change", "approve"} and not context.get(
@@ -554,6 +557,8 @@ def route(context: dict[str, Any], manifest: dict[str, Any]) -> dict[str, Any]:
     if is_software and target == "project":
         g2_skills.append("core.architecture-baseline-and-design")
         g2_branches.append("standards_applicability")
+        if project_state == "unknown" and action not in {"investigate", "review"}:
+            g2_blocked.append({"reason": "project_reclassification_required_before_material_work"})
         if architecture_status == "conflicted":
             g2_blocked.append({"reason": "architecture_baseline_conflicted"})
         for standard in sorted(set(normalized_standards) & set(standard_profiles)):

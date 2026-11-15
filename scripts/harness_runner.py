@@ -9,6 +9,7 @@ import sys
 from pathlib import Path
 from typing import Any, Iterable
 
+from harness_bootstrap import verify_source
 from harness_router import _load_manifest, route
 from harness_delegation import prepare, record, require_join, usage_summary, validate_bindings
 from harness_state import StateError, StateStore, utc_now
@@ -20,6 +21,8 @@ from harness_validator import (
     root_fingerprint,
     sha256_bytes,
     validate_intake,
+    validate_acceptance_evidence,
+    validate_resolution_binding,
     validate_route_result,
     validate_skill_result,
     write_object,
@@ -162,7 +165,20 @@ def start(
     taxonomy_path: Path,
     manifest_path: Path,
 ) -> dict[str, Any]:
+    verified_revision = verify_source(harness_root, registry_path)
+    if (taxonomy_path.resolve() != (harness_root / 'registry/taxonomy.json').resolve()
+            or manifest_path.resolve() != (harness_root / 'registry/routing-gates.json').resolve()):
+        raise RunnerError('execution requires pinned taxonomy and routing manifest')
     intake = validate_intake(read_object(intake_path), taxonomy_path, require_intent=True)
+    previous = None
+    if intake.get('supersedes_task_id') is not None:
+        prior = StateStore(target_root, harness_root=harness_root).read(intake['supersedes_task_id'])
+        if prior['task_id'] == task_id or prior['status'] not in {'waiting_user', 'blocked', 'failed'}:
+            raise RunnerError('restart requires a distinct interrupted task')
+        if any(r['status'] == 'running' for r in prior['execution'].get('work_records', {}).values()):
+            raise RunnerError('terminate and record prior workers before restart')
+        previous = {'task_id': prior['task_id'], 'revision': prior['revision'], 'status': prior['status']}
+
     approved = active_skill_ids(registry_path)
     route_result = validate_route_result(route(intake, _load_manifest(manifest_path)), approved)
     durable_allowed = intake.get("enforcement_mode") == "hook" or (
@@ -195,7 +211,8 @@ def start(
         "revision": 1,
         "target_root_fingerprint": root_fingerprint(target_root),
         "harness_root_fingerprint": root_fingerprint(harness_root),
-        "harness_source_revision": harness_revision,
+        "harness_source_revision": verified_revision,
+        "supersedes": previous,
         "selected_adapter": adapter,
         "status": route_result["status"],
         "stage": state_stage,
@@ -271,6 +288,7 @@ def submit(
     harness_root: Path,
     registry_path: Path,
 ) -> dict[str, Any]:
+    verify_source(harness_root, registry_path)
     approved = active_skill_ids(registry_path)
     result = validate_skill_result(read_object(result_path), approved)
     store = StateStore(target_root, harness_root=harness_root)
@@ -288,11 +306,17 @@ def submit(
         raise RunnerError("record worker termination before any skill transition")
     if result["status"] in {"completed", "not_applicable"}:
         require_join(current, result["skill_id"])
+    if result['skill_id'] == 'core.verify-and-handoff' and result['status'] == 'completed':
+        if not result['artifact_ids'] or not result['evidence_ids']:
+            raise RunnerError('completion requires artifact and evidence IDs')
+        validate_acceptance_evidence(result.get('verification'), current['intent']['success_criteria'], target_root)
+    if (current['project_state'] == 'unknown'
+            and result['skill_id'] == 'core.architecture-baseline-and-design'
+            and result['status'] in {'completed', 'not_applicable'}):
+        raise RunnerError('unknown project requires a discovery result as waiting_user or blocked, then linked reclassification')
     updated_plan = None
     workflow_update = result.get("workflow_update")
     if workflow_update is not None:
-        if current["execution"].get("work_records"):
-            raise RunnerError("cannot replace a work plan after preparation; use responsible-gate recovery")
         if (result["skill_id"] != "core.workflow-composition" or result["status"] != "completed"
                 or not isinstance(workflow_update, dict) or set(workflow_update) != {"work_units"}):
             raise RunnerError("only completed composition may update work_units; authority cannot change")
@@ -304,29 +328,22 @@ def submit(
             )
         except WorkflowError as exc:
             raise RunnerError(str(exc)) from exc
+        previous_units = {u["id"]: u for u in current["route"]["work_plan"]["units"]}
+        updated_units = {u["id"]: u for u in updated_plan["units"]}
+        for unit_id, receipt in current["execution"].get("work_records", {}).items():
+            if receipt["status"] != "completed":
+                raise RunnerError("cannot refine work with unsuccessful receipts; use responsible-gate recovery")
+            if unit_id not in previous_units or updated_units.get(unit_id) != previous_units[unit_id]:
+                raise RunnerError("workflow_update must preserve every prepared work unit unchanged")
     if result["skill_id"] == "core.workflow-composition" and result["status"] in {"completed", "not_applicable"}:
         validate_bindings(updated_plan or current["route"]["work_plan"],
                           current["execution"]["queue"], current["execution"]["cursor"] + 1,
                           current["execution"].get("work_records", {}))
-    resolution = result["execution_resolution"]
-    if resolution["adapter"] != current["selected_adapter"]:
-        raise RunnerError("execution resolution adapter does not match the task adapter")
-    expected_reasoning = next_item["execution_profile"]["reasoning"]
-    actual_reasoning = resolution["reasoning"]
-    resolution_status = resolution["status"]
-    rank = {"low": 0, "medium": 1, "high": 2}
-    if resolution_status == "exact" and actual_reasoning != expected_reasoning:
-        raise RunnerError("exact execution resolution must match recommended reasoning")
-    if resolution_status == "upgraded" and (
-        actual_reasoning == "unknown" or rank[actual_reasoning] <= rank[expected_reasoning]
-    ):
-        raise RunnerError("upgraded execution resolution must exceed recommended reasoning")
-    if resolution_status == "degraded" and (
-        actual_reasoning == "unknown" or rank[actual_reasoning] >= rank[expected_reasoning]
-    ):
-        raise RunnerError("degraded execution resolution must be below recommended reasoning")
-    if resolution_status in {"exact", "upgraded", "degraded"} and actual_reasoning == "unknown":
-        raise RunnerError("known execution resolution status requires a known reasoning level")
+    try:
+        validate_resolution_binding(result['execution_resolution'], current['selected_adapter'],
+                                    next_item['execution_profile']['reasoning'])
+    except ContractError as exc:
+        raise RunnerError(str(exc)) from exc
     if result["skill_id"] == "core.verify-and-handoff" and result["status"] == "not_applicable":
         raise RunnerError("verify-and-handoff cannot be marked not_applicable")
 
@@ -413,15 +430,16 @@ def submit(
 def work_event(target_root: Path, task_id: str, expected_revision: int,
                request_path: Path, command: str, harness_root: Path,
                registry_path: Path) -> dict[str, Any]:
+    verify_source(harness_root, registry_path)
     request = read_object(request_path)
     store = StateStore(target_root, harness_root=harness_root)
     output: dict[str, Any] = {}
 
     def mutate(state: dict[str, Any]) -> None:
         if command == "prepare-work":
-            output.update(prepare(state, request, target_root))
+            output.update(prepare(state, request, target_root, harness_root=harness_root, registry_path=registry_path))
         else:
-            record(state, request)
+            record(state, request, target=target_root)
 
     updated = store.update(task_id, expected_revision, command.replace("-", "_"), mutate)
     return {**_response(updated, _registry_entries(registry_path), harness_root), **output}

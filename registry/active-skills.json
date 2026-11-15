@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-30",
+  "generated_at": "2026-11-15",
   "integrity_policy": {
     "core_entries": "harness_source_tree_manifest",
     "adapter_manifest": "registry/adapter-manifest.json",
-    "manifest_revision": "workspace-20261030-484a46a340f3",
+    "manifest_revision": "workspace-20261115-437fcc904c1a",
     "manifest_hash_scope": "canonical active-skills.json excluding integrity_policy.manifest_sha256",
     "excluded_paths": [
       ".git",
@@ -21,7 +21,7 @@
       "tools/ros-mcp-server/upstream/ros_mcp.egg-info",
       "tools/ros-mcp-server/upstream/.venv"
     ],
-    "manifest_sha256": "6f33c1f9f05951592bd6ddaeb7c6779eca3440dff10bd65f7f05cd88f04131c7"
+    "manifest_sha256": "0ad7ab6f99556301abfdbbf7d667f90be0ba4c74d43795a918e072f67152f5ba"
   },
   "resolution_order": [
     "project_reviewed",
@@ -32,7 +32,7 @@
   "skills": [
     {
       "id": "core.intake-and-route",
-      "version": "0.5.0",
+      "version": "0.6.0",
       "entry": "skills/intake-and-route/SKILL.md",
       "trust": "approved",
       "capabilities": [
@@ -224,6 +224,9 @@
       "platforms": [
         "codex",
         "claude"
+      ],
+      "required_worker_references": [
+        "skills/implementation-quality/references/core.md"
       ]
     },
     {
@@ -255,7 +258,10 @@
         "required": false,
         "mutation": "none",
         "authority": "project_scoped_read_action"
-      }
+      },
+      "required_worker_references": [
+        "skills/ros2-engineering/references/engineering-practices.md"
+      ]
     },
     {
       "id": "core.nodejs-engineering",
@@ -274,6 +280,9 @@
       "platforms": [
         "codex",
         "claude"
+      ],
+      "required_worker_references": [
+        "skills/nodejs-engineering/references/engineering-practices.md"
       ]
     },
     {
@@ -294,6 +303,9 @@
       "platforms": [
         "codex",
         "claude"
+      ],
+      "required_worker_references": [
+        "skills/react-engineering/references/engineering-practices.md"
       ]
     },
     {
@@ -313,6 +325,9 @@
       "platforms": [
         "codex",
         "claude"
+      ],
+      "required_worker_references": [
+        "skills/grpc-engineering/references/engineering-practices.md"
       ]
     },
     {
@@ -333,6 +348,9 @@
       "platforms": [
         "codex",
         "claude"
+      ],
+      "required_worker_references": [
+        "skills/isaac-lab-engineering/references/engineering-practices.md"
       ]
     },
     {
@@ -353,6 +371,9 @@
       "platforms": [
         "codex",
         "claude"
+      ],
+      "required_worker_references": [
+        "skills/docker-engineering/references/engineering-practices.md"
       ]
     },
     {
@@ -373,6 +394,9 @@
       "platforms": [
         "codex",
         "claude"
+      ],
+      "required_worker_references": [
+        "skills/isaac-sim-engineering/references/engineering-practices.md"
       ]
     },
     {
@@ -393,6 +417,9 @@
       "platforms": [
         "codex",
         "claude"
+      ],
+      "required_worker_references": [
+        "skills/moveit-engineering/references/engineering-practices.md"
       ]
     },
     {
@@ -413,6 +440,9 @@
       "platforms": [
         "codex",
         "claude"
+      ],
+      "required_worker_references": [
+        "skills/kubernetes-engineering/references/engineering-practices.md"
       ]
     },
     {
@@ -433,6 +463,9 @@
       "platforms": [
         "codex",
         "claude"
+      ],
+      "required_worker_references": [
+        "skills/modbus-engineering/references/engineering-practices.md"
       ]
     },
     {
@@ -453,11 +486,14 @@
       "platforms": [
         "codex",
         "claude"
+      ],
+      "required_worker_references": [
+        "skills/colcon-workspace-engineering/references/engineering-practices.md"
       ]
     },
     {
       "id": "core.verify-and-handoff",
-      "version": "0.6.0",
+      "version": "0.8.0",
       "entry": "skills/verify-and-handoff/SKILL.md",
       "trust": "approved",
       "capabilities": [
@@ -473,6 +509,9 @@
       "platforms": [
         "codex",
         "claude"
+      ],
+      "required_worker_references": [
+        "skills/verify-and-handoff/references/acceptance-review.md"
       ]
     },
     {
@@ -515,7 +554,7 @@
     },
     {
       "id": "core.workflow-composition",
-      "version": "0.4.0",
+      "version": "0.6.0",
       "entry": "skills/workflow-composition/SKILL.md",
       "trust": "approved",
       "capabilities": [

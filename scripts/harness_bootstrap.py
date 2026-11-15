@@ -93,6 +93,24 @@ def source_tree_hash(harness_root: Path) -> str:
     return sha256_bytes(canonical_json_bytes(records))
 
 
+def verify_source(harness_root: Path, registry_path: Path) -> str:
+    """Enforce the existing local pins at execution boundaries, without network I/O."""
+    registry = read_object(registry_path)
+    policy = registry.get("integrity_policy", {})
+    claimed = policy.get("manifest_sha256")
+    unsigned = {**registry, "integrity_policy": {k: v for k, v in policy.items() if k != "manifest_sha256"}}
+    if claimed != sha256_bytes(canonical_json_bytes(unsigned)):
+        raise ContractError("active registry integrity mismatch")
+    adapter = read_object(harness_root / "registry/adapter-manifest.json")
+    if (policy.get("manifest_revision") != adapter.get("source_revision")
+            or source_tree_hash(harness_root) != adapter.get("source_tree_sha256")):
+        raise ContractError("harness source integrity mismatch; approved repin required")
+    # The reviewed registry is pinned separately from the self-excluded source tree.
+    if registry != read_object(harness_root / "registry/active-skills.json"):
+        raise ContractError("execution requires the pinned active registry")
+    return adapter["source_revision"]
+
+
 def _template_content(harness_root: Path, relative: str) -> str:
     path = harness_root / relative
     try:

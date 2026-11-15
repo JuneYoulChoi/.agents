@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import hashlib
 import sys
 import tempfile
 import unittest
@@ -205,6 +206,8 @@ class RuntimeTests(unittest.TestCase):
     def test_completion_requires_successful_verification_and_writes_handoff(self) -> None:
         response = self.start_task()
         result_path = self.target / "skill-result.json"
+        proof = self.target / 'verification.txt'
+        proof.write_text('Fixture verifies ordered architecture-before-implementation transitions.')
         for _ in range(30):
             next_item = response.get("next")
             if next_item is None:
@@ -216,6 +219,9 @@ class RuntimeTests(unittest.TestCase):
                     "schema_version": 1,
                     "skill_id": skill_id,
                     "status": "completed",
+                    "verification": [{"criterion": criterion, "status": "passed", "evidence": [
+                        {"path": "verification.txt", "sha256": hashlib.sha256(proof.read_bytes()).hexdigest()}]}
+                        for criterion in intake()['intent']['success_criteria']],
                     "artifact_ids": [f"ART-{next_item['position']:03d}"],
                     "evidence_ids": [f"EV-{next_item['position']:03d}"],
                     "transition": {

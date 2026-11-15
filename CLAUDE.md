@@ -57,8 +57,15 @@ external/destructive actions must stop until the user approves a safe path.
 Use the five-layer view in `plan/08-layered-workflow.md` without replacing
 G0–G7. For target work, run `workflow-composition` after G3 impact/requirements;
 keep work type separate from fields and risk. Consume the route's `work_plan`
-(or `next.work_plan`) as a proposal. Default to one agent; delegate only bounded
-independent units with current authority, capability and benefit evidence.
+(or `next.work_plan`) as a proposal. At intake and each current skill, actively
+assess bounded expert delegation using workflow-composition's expertise policy.
+For independent uncertainty, conflicting evidence or shared verification
+assumptions, dispatch a focused expert with current authority/capability/benefit
+evidence or record a concrete fallback. Keep clear local work serial. Pair domain
+roles with meticulous or minimal_sufficient reasoning lenses when useful; retain
+all acceptance criteria and avoid duplicate reviews. Check original-request
+coverage and separate requested work, necessary dependencies and optional extras;
+ask only unresolved user-owned choices necessary to complete the current scope.
 Recheck owned paths, shared resources, tools and revisions before execution.
 The Runner stays serial; native adapters join approved units within the current
 skill. Preserve required quality and user decisions, then verify integration.
