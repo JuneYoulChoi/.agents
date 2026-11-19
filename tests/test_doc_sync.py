@@ -16,6 +16,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'scripts'))
 from harness_code_docs import extract_header, header_fields
 from harness_doc_sync import check, main, parse_module_map
+from harness_overview import is_current, source_fingerprint
 
 MAP = ('# 모듈 맵\n\n| 모듈 | 컴포넌트 | 책임 | 코드 경로 |\n| --- | --- | --- | --- |\n'
        '| 주문 (order) | 결제 | 결제를 검증한다 | `src/order/payment` |\n'
@@ -133,6 +134,31 @@ class DocumentSyncCheckTests(unittest.TestCase):
         self.assertEqual(report['checked_files'], ['src/order/repo.py', added])
         self.assertEqual(kinds(report), [('unknown_component', added)])
         self.assertIn(('header_missing_labels', 'vendor/lib/x.py'), kinds(check(self.root, base='HEAD')))
+
+
+class HarnessSelfConsistencyTests(unittest.TestCase):
+    def test_harness_code_headers_match_the_harness_module_map(self):
+        """
+        역할: 한글 헤더가 달린 하네스 코드 파일이 모두 하네스 모듈 맵과 일치하고, 맵의 경로가 모두 존재하는지 확인한다.
+        """
+        files = []
+        for path in sorted([*ROOT.glob('scripts/*.py'), *ROOT.glob('tests/*.py'), *ROOT.glob('adapters/**/*.py')]):
+            if '모듈' in header_fields(extract_header(path.read_text(encoding='utf-8'), 'python')):
+                files.append(path.relative_to(ROOT).as_posix())
+        self.assertGreaterEqual(len(files), 8)
+        report = check(ROOT, files, module_map='docs/harness/module-map.md')
+        self.assertEqual(report['violations'], [])
+        mapped = {p for entry in parse_module_map((ROOT / 'docs/harness/module-map.md').read_text()) for p in entry.paths}
+        code = {p.relative_to(ROOT).as_posix() for p in [*ROOT.glob('scripts/*.py'), *ROOT.glob('tests/*.py')]}
+        self.assertEqual(code - mapped, set(), 'code file without a module map row')
+
+    def test_overview_was_reviewed_against_the_current_sources(self):
+        """
+        역할: plan·라우팅·스킬 목록이 바뀐 뒤 HTML 개요를 검토하고 스탬프를 갱신했는지 확인한다.
+        """
+        self.assertEqual(len(source_fingerprint(ROOT)), 64)
+        self.assertTrue(is_current(ROOT), 'plan/routing/skills changed: review docs/harness/index.html, '
+                                          'then run scripts/harness_overview.py write')
 
 
 if __name__ == '__main__':

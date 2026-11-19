@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "manifest_id": "adapter-template-manifest-v1",
-  "source_revision": "workspace-20261119-4879df8a23f4",
-  "source_tree_sha256": "4879df8a23f45af92629813d8614e93f124916ed11e17be91fd6023b19e1eb7d",
+  "source_revision": "workspace-20261119-4e5ef378947d",
+  "source_tree_sha256": "4e5ef378947dfe7281840656d95f69146603a6e3962d3fcf82e2381ef8cfd167",
   "templates": [
     {
       "id": "codex.bootstrap",
@@ -48,7 +48,9 @@
       "transport": "json_files_with_input_output_arguments",
       "workflow": "scripts/harness_workflow.py",
       "delegation": "scripts/harness_delegation.py",
-      "code_docs": "scripts/harness_code_docs.py"
+      "code_docs": "scripts/harness_code_docs.py",
+      "doc_sync": "scripts/harness_doc_sync.py",
+      "overview_stamp": "scripts/harness_overview.py"
     },
     "execution_profile": {
       "policy_id": "adaptive_v1",
