@@ -1010,6 +1010,8 @@ Runner command: `resume --target-root <project> --task-id <id>
 `implementation_quality` adds, when `status` is `completed`:
 `readability_standard` (non-empty string) and `documentation_check`
 (`files`: unique project-relative code paths; `base_revision`: optional Git
-revision). The Runner executes `scripts/harness_code_docs.py --target-root
-<project> [--base <rev>] <files>`; a `failed` report blocks completion. The
-checker's own CLI exits 0 on pass, 1 on violations and 2 on usage errors.
+revision; `module_map`: optional project-relative map path; `exempt_paths`:
+optional generated or vendored prefixes). The Runner executes
+`scripts/harness_code_docs.py` and `scripts/harness_doc_sync.py` with those
+values; a `failed` report from either blocks completion. Both CLIs exit 0 on
+pass, 1 on violations and 2 on usage errors.

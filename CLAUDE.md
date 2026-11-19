@@ -104,3 +104,9 @@ readability standard first (project formatter/linter, else the language guide
 plus the harness defaults). Run `scripts/harness_code_docs.py` before
 completing G6; the Runner re-runs it. See
 `skills/implementation-quality/references/readability-and-documentation.md`.
+
+Keep documents and code in agreement: documents state structure, not code
+detail; one owner per fact; edit the existing sentence in place by keyword.
+Headers must match `docs/architecture/module-map.md`, checked by
+`scripts/harness_doc_sync.py` at G6. See
+`skills/architecture-baseline-and-design/references/doc-code-sync.md`.

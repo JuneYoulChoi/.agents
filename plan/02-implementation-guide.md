@@ -458,7 +458,8 @@ load every standard or make a certification claim.
 
 G5 activates `architecture-and-design-patterns` for an explicit pattern scope,
 an `architecture_structure` change characteristic, a `design_interaction`
-change characteristic, or an explicit architecture design/review request.
+change characteristic, an architecture define/plan/design/review request, or
+any Greenfield design.
 Action `implement` or `change` alone is insufficient. Derive scope
 (`architecture`, `design`, or both) and candidates from UC/FA/QAS,
 constraints, affected modules, existing Brownfield patterns, and selected

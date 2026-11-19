@@ -4,7 +4,7 @@
   "integrity_policy": {
     "core_entries": "harness_source_tree_manifest",
     "adapter_manifest": "registry/adapter-manifest.json",
-    "manifest_revision": "workspace-20261119-4e5ef378947d",
+    "manifest_revision": "workspace-20261119-24d365526011",
     "manifest_hash_scope": "canonical active-skills.json excluding integrity_policy.manifest_sha256",
     "excluded_paths": [
       ".git",
@@ -21,7 +21,7 @@
       "tools/ros-mcp-server/upstream/ros_mcp.egg-info",
       "tools/ros-mcp-server/upstream/.venv"
     ],
-    "manifest_sha256": "8512d10495db53ef9c945d3b873caf9953371e49ccd83e376c06b5cefb9026db"
+    "manifest_sha256": "53630d76ba69217a3273264939af098c80203cb2262b24b72cf9825d1eba0254"
   },
   "resolution_order": [
     "project_reviewed",
@@ -116,7 +116,7 @@
     },
     {
       "id": "core.document-purpose",
-      "version": "0.3.0",
+      "version": "0.4.0",
       "entry": "skills/document-purpose/SKILL.md",
       "trust": "approved",
       "capabilities": [
@@ -500,7 +500,7 @@
     },
     {
       "id": "core.verify-and-handoff",
-      "version": "0.9.0",
+      "version": "0.10.0",
       "entry": "skills/verify-and-handoff/SKILL.md",
       "trust": "approved",
       "capabilities": [

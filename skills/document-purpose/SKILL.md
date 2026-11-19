@@ -45,6 +45,11 @@ needed document is absent or stale, create or update the smallest
 fit-for-purpose artifact only if type, purpose, audience, location, and owner
 are known. Otherwise record the gap and ask.
 
+For a document that describes code, follow
+[doc and code sync](../architecture-baseline-and-design/references/doc-code-sync.md):
+describe structure rather than code detail, keep one owner per fact and link
+elsewhere, and change the existing sentence in place instead of appending.
+
 Treat policy, compliance, externally published, legally significant, or
 owner-controlled documents as protected; request the required approval before
 changing them.

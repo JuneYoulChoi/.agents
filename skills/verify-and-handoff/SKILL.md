@@ -26,7 +26,9 @@ attempt. When the route sets `independent_context`, G7 completion requires
 Require the intake record, task acceptance contract, and applicable architecture
 record. For software work, inspect `docs/architecture/` and check that changed
 UC, FA, QA/QAS, HLD, LLD, ADR, views, and diagrams are synchronized or have an
-explicit documented waiver. If the architecture baseline is conflicted or a
+explicit documented waiver. For changed code, rerun `scripts/harness_doc_sync.py`
+on the final revision and search the documents for every removed or renamed
+component, interface and path name. If the architecture baseline is conflicted or a
 material boundary is still unconfirmed, do not mark the task complete.
 
 ## 1. Pin the target and acceptance contract
