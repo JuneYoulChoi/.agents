@@ -429,6 +429,42 @@ def generic_functions(lines: list[str], language: str) -> list[FunctionInfo]:
     return found
 
 
+def extract_header(source: str, language: str) -> str:
+    """
+    역할: 언어에 맞는 방법으로 파일 맨 위의 헤더 주석 원문을 추출한다.
+
+    입력:
+        source: 파일 원문
+        language: 언어 이름
+    출력:
+        헤더 원문. 헤더가 없거나 Python 문법 오류면 빈 문자열
+    """
+    if language == "python":
+        try:
+            return python_header(source, ast.parse(source))
+        except SyntaxError:
+            return ""
+    return leading_comment(source.splitlines(), language)
+
+
+def header_fields(header: str) -> dict[str, str]:
+    """
+    역할: 헤더 주석에서 모듈·컴포넌트·역할 라벨의 값을 뽑는다.
+
+    입력:
+        header: 헤더 주석 원문
+    출력:
+        라벨(콜론 제외)을 키로, 그 줄의 값을 값으로 하는 딕셔너리. 없는 라벨은 빠진다.
+    """
+    fields: dict[str, str] = {}
+    for raw in header.splitlines():
+        line = raw.strip().lstrip("/*#!<-").strip()
+        for label in HEADER_LABELS:
+            if line.startswith(label) and label[:-1] not in fields:
+                fields[label[:-1]] = " ".join(line[len(label):].replace("*/", "").replace("-->", "").split())
+    return fields
+
+
 # ---------- 변경 범위 ----------
 
 def changed_lines(root: Path, relative: str, base: str) -> set[int] | None:
