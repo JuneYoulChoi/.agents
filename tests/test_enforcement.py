@@ -49,6 +49,101 @@ def intake(**changes) -> dict:
     return value
 
 
+class EditGuardTests(unittest.TestCase):
+    def setUp(self):
+        """
+        역할: 대상 폴더 app 을 가진 임시 프로젝트 루트를 준비한다.
+        """
+        temp = tempfile.TemporaryDirectory(); self.addCleanup(temp.cleanup)
+        self.root = Path(temp.name).resolve()
+        (self.root / 'app/src').mkdir(parents=True)
+        (self.root / '.claude').mkdir()
+
+    def edit(self, relative: str) -> dict:
+        """
+        역할: 프로젝트 기준 경로를 편집하는 훅 이벤트를 만든다.
+
+        입력:
+            relative: 프로젝트 기준 파일 경로
+        출력:
+            훅 이벤트 딕셔너리
+        """
+        return {'tool_name': 'Edit', 'tool_input': {'file_path': str(self.root / relative)}}
+
+    def configure(self, value) -> None:
+        """
+        역할: 가드 설정 파일을 쓴다.
+
+        입력:
+            value: JSON으로 쓸 설정 값, 또는 그대로 쓸 문자열
+        """
+        text = value if isinstance(value, str) else json.dumps(value)
+        (self.root / '.claude/harness-guard.json').write_text(text)
+
+    def set_status(self, status: str) -> None:
+        """
+        역할: 강제에 묶인 작업의 상태 파일을 주어진 상태로 쓴다.
+
+        입력:
+            status: 작업 상태 문자열
+        """
+        task = self.root / 'app/.agents/state/TASK-1'
+        task.mkdir(parents=True, exist_ok=True)
+        (task / 'state.json').write_text(json.dumps({'task_id': 'TASK-1', 'status': status}))
+
+    def allowed(self, relative: str) -> bool:
+        """
+        역할: 프로젝트 기준 경로의 편집이 허용되는지 묻는다.
+
+        입력:
+            relative: 프로젝트 기준 파일 경로
+        출력:
+            허용이면 True
+        """
+        return decide(self.edit(relative), self.root)[0]
+
+    def test_guard_is_dormant_until_a_task_is_bound(self):
+        """
+        역할: 설정이 없거나 enforce 항목이 없으면 모든 편집과 설정 파일 수정이 통과하는지 확인한다.
+        """
+        self.assertTrue(self.allowed('app/src/a.py'))
+        self.configure({'exempt_paths': ['legacy']})
+        self.assertTrue(self.allowed('app/src/a.py'))
+        self.assertTrue(self.allowed('.claude/harness-guard.json'))
+        self.assertTrue(decide({'tool_name': 'Read', 'tool_input': {}}, self.root)[0])
+
+    def test_bound_task_controls_target_edits_and_expires_when_finished(self):
+        """
+        역할: 작업이 묶이면 대상 폴더 편집이 작업 상태를 따르고, 완료·취소되면 저절로 휴면으로 돌아가는지 확인한다.
+        """
+        self.configure({'exempt_paths': ['app/vendor'], 'enforce': {'task_id': 'TASK-1', 'target_root': 'app'}})
+        self.assertFalse(self.allowed('app/src/a.py'))            # 아직 시작 전
+        self.assertTrue(self.allowed('app/.agents/state/TASK-1/intake.json'))
+        self.assertTrue(self.allowed('other/b.py'))               # 대상 밖
+        self.assertTrue(self.allowed('app/vendor/lib.py'))        # 예외 경로
+        self.assertFalse(self.allowed('.claude/harness-guard.json'))
+        self.assertFalse(decide({'tool_name': 'Write', 'tool_input': {}}, self.root)[0])
+        self.set_status('active')
+        self.assertTrue(self.allowed('app/src/a.py'))
+        for status in ('waiting_user', 'blocked', 'failed'):
+            self.set_status(status)
+            self.assertFalse(self.allowed('app/src/a.py'), status)
+        for status in ('complete', 'cancelled'):
+            self.set_status(status)
+            self.assertTrue(self.allowed('app/src/a.py'), status)
+            self.assertTrue(self.allowed('.claude/harness-guard.json'), status)
+
+    def test_broken_configuration_denies_instead_of_allowing(self):
+        """
+        역할: 설정이 깨졌거나 형식·경로가 틀리면 편집을 허용하지 않고 거부하는지 확인한다.
+        """
+        for bad in ('{broken', {'exempt_paths': 'all'}, {'exempt_paths': ['../x']}, {'enforce': {'task_id': 'T'}},
+                    {'enforce': {'task_id': 'bad id', 'target_root': 'app'}},
+                    {'enforce': {'task_id': 'TASK-1', 'target_root': '../outside'}}, []):
+            self.configure(bad)
+            self.assertFalse(self.allowed('app/src/a.py'), bad)
+
+
 class FinishCheckTests(unittest.TestCase):
     def setUp(self):
         """

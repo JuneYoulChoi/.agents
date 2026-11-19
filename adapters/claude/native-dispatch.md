@@ -72,23 +72,33 @@ record it as `usage.status: reported` with that source, otherwise
 same acceptance scope once serially and once delegated and compare parent plus
 worker usage; until then the Runner reports `savings: not_measured`.
 
-## Lifecycle hook (opt-in)
+## Edit guard hook (dormant until a task is bound)
 
 `adapters/claude/hooks/harness_guard.py` is a PreToolUse hook for Edit, Write
-and NotebookEdit. It denies a project file edit unless the target has an
-active Runner task, and always allows writes under `.agents/state/` and outside
-the project. Enable it by merging `hooks/settings.example.json` into the
-target's `.claude/settings.json`, replacing `<harness-source>` with the path of
-this harness on that machine (the shared source never records a project path); only then may intake record
-`enforcement_mode: hook`. Without it the mode is `manual` and mutation needs a
-manual guard. The hook checks task existence, not the correctness of the edit.
+and NotebookEdit. Register it once by merging `hooks/settings.example.json`
+into the project's `.claude/settings.json`, replacing `<harness-source>` with
+the path of this harness on that machine (the shared source never records a
+project path). Registered, it is dormant and allows every edit.
 
-A project may exempt existing material that is not harness-managed by listing
-literal project-relative files or directories in
-`.claude/harness-guard.json` (`{"exempt_paths": ["legacy", "notes.md"]}`).
-Exempt paths are edited freely; everything else still needs an active task.
-Globs, absolute paths and paths outside the project are rejected, an unreadable
-list denies edits instead of allowing them, and the agent cannot edit the list
-itself through the guarded tools. When the shared harness is nested in the
-project, exempt its directory: harness changes are governed by their own
-approval gate and the source is not a task store.
+Temporary enforcement for a major change:
+
+1. Intake routes the change to `waiting_user` with
+   `temporary_enforcement_requested`. Ask the user.
+2. On approval, add `"enforce": {"task_id": "<id>", "target_root": "<project
+   folder>"}` to `.claude/harness-guard.json`, record `enforcement_mode: hook`
+   and start the task with the Runner. On refusal, record
+   `enforcement_waiver_evidence_ids` and continue at the advisory level.
+3. While the task is bound, edits under the target are allowed only while it is
+   `active`; `waiting_user`, `blocked`, `failed` or a task not yet started deny
+   them. Task-state writes, exempt paths and files outside the target pass, and
+   the guard file itself cannot be edited.
+4. When the task is `complete` or `cancelled` the guard is dormant again without
+   any cleanup. Only the project owner can clear a binding earlier.
+
+`exempt_paths` in the same file lists literal project-relative files or
+directories that stay editable under enforcement (generated, vendored or
+unmanaged material). An unreadable or malformed file denies edits instead of
+allowing them. The target must be a project folder whose `.agents/` is not the
+shared harness: task state never lives inside the harness source. The guard
+checks task status, not the correctness of an edit, and does not cover shell
+commands that write files.
