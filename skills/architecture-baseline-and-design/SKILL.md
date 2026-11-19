@@ -111,8 +111,9 @@ identify:
 - HLD boundaries and dependencies;
 - technology capabilities, existing/candidate ecosystems, versions/bindings,
   and integration/compatibility boundaries;
-- LLD/module candidates and ownership, with module and component names that
-  code file headers will cite (`모듈:` / `컴포넌트:`);
+- LLD/module candidates and ownership, recorded as rows of the
+  [module map](references/doc-code-sync.md) (`docs/architecture/module-map.md`)
+  whose module and component names code file headers cite;
 - relevant layer, infrastructure, C&C, runtime, class, and sequence views;
 - stakeholders, concerns, viewpoints, model kinds, and correspondence rules
   needed to explain why each architecture view exists;
@@ -132,6 +133,11 @@ Options: A ... / B ...
 Recommendation: ...
 Safe default: keep draft and do not start material implementation
 ```
+
+Write and change architecture documents by the
+[doc and code sync](references/doc-code-sync.md) rules: structure only, one
+owner per fact, edit in place by keyword. Create the module map when it is
+missing; G6 cannot complete without it.
 
 ## 5. Greenfield and Brownfield modes
 
@@ -169,6 +175,7 @@ architecture:
   conformance_evidence: []
   artifacts_read: []
   artifacts_created_or_updated: []
+  module_map: docs/architecture/module-map.md
   entities: []
   interfaces: []
   use_cases: []

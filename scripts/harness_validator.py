@@ -710,7 +710,7 @@ def validate_pattern_review(value: dict[str, Any]) -> dict[str, Any]:
 def validate_implementation_quality(value: dict[str, Any]) -> dict[str, Any]:
     """
     역할: G6 구현 품질 기록의 프로파일 적용 근거와, 완료 시 필요한 가독성 기준·
-          코드 문서화 검사 대상을 검증한다.
+          코드 문서화 검사 대상·모듈 맵 경로·제외 경로를 검증한다.
 
     입력:
         value: implementation_quality 기록
@@ -800,6 +800,10 @@ def validate_implementation_quality(value: dict[str, Any]) -> dict[str, Any]:
             safe_relative_path(path, f"documentation_check.files[{index}]")
         if "base_revision" in documentation and documentation["base_revision"] is not None:
             _require_string(documentation, "base_revision")
+        if documentation.get("module_map") is not None:
+            safe_relative_path(documentation["module_map"], "documentation_check.module_map")
+        for index, path in enumerate(_string_array(documentation, "exempt_paths")):
+            safe_relative_path(path, f"documentation_check.exempt_paths[{index}]")
     return value
 
 

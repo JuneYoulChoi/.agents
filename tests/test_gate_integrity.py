@@ -61,6 +61,8 @@ SAMPLE_SOURCE = (
     '    return a + b\n'
 )
 DOCUMENTATION_CHECK = {'files': ['src/sample.py']}
+MODULE_MAP = ('| 모듈 | 컴포넌트 | 책임 | 코드 경로 |\n| --- | --- | --- | --- |\n'
+              '| 테스트 대상 | 샘플 | 예시 | `src` |\n')
 QUALITY_RECORD = {'schema_version': 1, 'status': 'completed', 'authored_boundaries': ['src'],
     'activated_profiles': [{'id': 'core', 'depth': 'light', 'authored_boundaries': ['src'],
         'evidence_ids': ['EVD-q'], 'expected_outcomes': ['behavior preserved'], 'verification_ids': ['VER-q']}],
@@ -77,6 +79,8 @@ class RunnerGateClosureTests(unittest.TestCase):
         self.target = Path(temp.name)
         (self.target / 'src').mkdir()
         (self.target / 'src/sample.py').write_text(SAMPLE_SOURCE)
+        (self.target / 'docs/architecture').mkdir(parents=True)
+        (self.target / 'docs/architecture/module-map.md').write_text(MODULE_MAP)
         self.intake = base_intake()
         self.intake['change_characteristics'] = ['authored_code', 'architecture_structure']
         self.proof = self.target / 'proof.txt'
@@ -164,6 +168,12 @@ class RunnerGateClosureTests(unittest.TestCase):
         for files in (['src/undocumented.py'], ['../outside.py'], ['src/missing.py']):
             record = {**QUALITY_RECORD, 'documentation_check': {'files': files}}
             self.assert_rejected(response, self.result(response, implementation_quality=record))
+        (self.target / 'src/sample.py').write_text(SAMPLE_SOURCE.replace('컴포넌트: 샘플', '컴포넌트: 없는 이름'))
+        self.assert_rejected(response, self.result(response))  # 헤더가 모듈 맵에 없는 컴포넌트를 가리킴
+        (self.target / 'src/sample.py').write_text(SAMPLE_SOURCE)
+        (self.target / 'docs/architecture/module-map.md').unlink()
+        self.assert_rejected(response, self.result(response))  # 모듈 맵 문서가 없음
+        (self.target / 'docs/architecture/module-map.md').write_text(MODULE_MAP)
         self.assertEqual(self.send(response, self.result(response))['next']['skill_id'], VERIFY)
 
     def test_user_decision_resumes_the_same_skill_without_replaying_earlier_gates(self):

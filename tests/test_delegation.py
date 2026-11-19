@@ -1,4 +1,8 @@
-"""Real Runner joins and bounded worker admission, without spawning providers."""
+"""
+모듈: 하네스 테스트 (tests)
+컴포넌트: 기존 회귀 테스트
+역할: 실제 Runner로 작업 단위의 준비·합류·워커 수용 한도를 검증한다(공급자 실행 없음).
+"""
 import copy
 import hashlib
 import json
@@ -240,13 +244,16 @@ class DelegationTests(unittest.TestCase):
         self.assertEqual(self.store.read('TASK-RECEIPTS')['status'], 'active')
 
     def test_packet_contains_current_skill_body_profile_and_persona(self):
+        """
+        역할: 워커 패킷이 현재 스킬 본문·적용 깊이·실행 프로파일·역할 지침과, 스킬의 필수 참조 문서만 담는지 확인한다.
+        """
         packet = prepare(self.state, self.request(), self.target, 0)['packet']
         context = packet['skill_context']
         self.assertEqual(context['instructions'], (ROOT / context['entry']).read_text())
         self.assertEqual(context['application_depth'], self.response['next']['application_depth'])
         self.assertEqual(context['execution_profile'], self.response['next']['execution_profile'])
         self.assertIn('hypotheses', context['role_guidance'])
-        self.assertEqual(context['references'], [])
+        self.assertEqual([Path(r['path']).name for r in context['references']], ['doc-code-sync.md'])
 
     def test_only_selected_current_skill_references_are_allowed(self):
         unit = self.state['route']['work_plan']['units'][0]

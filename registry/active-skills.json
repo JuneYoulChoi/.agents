@@ -4,7 +4,7 @@
   "integrity_policy": {
     "core_entries": "harness_source_tree_manifest",
     "adapter_manifest": "registry/adapter-manifest.json",
-    "manifest_revision": "workspace-20261119-e321c17fbb4a",
+    "manifest_revision": "workspace-20261119-4879df8a23f4",
     "manifest_hash_scope": "canonical active-skills.json excluding integrity_policy.manifest_sha256",
     "excluded_paths": [
       ".git",
@@ -21,7 +21,7 @@
       "tools/ros-mcp-server/upstream/ros_mcp.egg-info",
       "tools/ros-mcp-server/upstream/.venv"
     ],
-    "manifest_sha256": "7c9c0ec446b74c6b9da3beb4fe41f6b27fe343296807cb6bba74307ddec42096"
+    "manifest_sha256": "52cedb630eb8b99906a2ab4e84a092b62253d5618c905f28ad2f4a38dbcc5c8f"
   },
   "resolution_order": [
     "project_reviewed",
@@ -70,7 +70,7 @@
     },
     {
       "id": "core.architecture-baseline-and-design",
-      "version": "0.5.0",
+      "version": "0.6.0",
       "entry": "skills/architecture-baseline-and-design/SKILL.md",
       "trust": "approved",
       "capabilities": [
@@ -81,7 +81,8 @@
         "viewpoints",
         "views",
         "diagrams",
-        "architecture_sync"
+        "architecture_sync",
+        "module_map_ownership"
       ],
       "network_access": "none",
       "data_access": "workspace",
@@ -89,6 +90,9 @@
       "platforms": [
         "codex",
         "claude"
+      ],
+      "required_worker_references": [
+        "skills/architecture-baseline-and-design/references/doc-code-sync.md"
       ]
     },
     {
@@ -210,7 +214,7 @@
     },
     {
       "id": "core.implementation-quality",
-      "version": "0.5.0",
+      "version": "0.6.0",
       "entry": "skills/implementation-quality/SKILL.md",
       "trust": "approved",
       "capabilities": [

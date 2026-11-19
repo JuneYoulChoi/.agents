@@ -114,6 +114,8 @@ implementation_quality:
   documentation_check:            # required when completed; the Runner re-runs it
     files: []                     # authored code files created or modified
     base_revision: null           # optional Git revision limiting function checks
+    module_map: null              # optional; default docs/architecture/module-map.md
+    exempt_paths: []              # generated or vendored prefixes skipped with base_revision
 transition:
   next_stage: clarification | execution | verification
   next_skill: ''
@@ -124,7 +126,8 @@ Submit this record as `implementation_quality` (with `schema_version: 1`) in
 the Runner skill result; its `status` must equal the result status. The Runner
 rejects a `completed` result without it, without a `readability_standard`, or
 when `scripts/harness_code_docs.py` reports a missing or incomplete Korean
-header or function comment in `documentation_check.files`.
+header or function comment in `documentation_check.files`, or when
+`scripts/harness_doc_sync.py` finds a header that disagrees with the module map.
 
 ## Exit gate
 

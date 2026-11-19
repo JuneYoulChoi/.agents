@@ -16,6 +16,7 @@ from typing import Any, Iterable
 
 from harness_bootstrap import verify_source
 from harness_code_docs import check as check_code_docs
+from harness_doc_sync import DEFAULT_MAP, check as check_doc_sync
 from harness_router import _load_manifest, route
 from harness_delegation import prepare, record, require_join, usage_summary, validate_bindings
 from harness_state import StateError, StateStore, utc_now
@@ -490,13 +491,14 @@ FEEDBACK_RETRY_LIMIT = 3
 def _validate_typed_payload(result: dict[str, Any], target_root: Path) -> None:
     """
     역할: 패턴 검토·구현 품질 스킬의 형식 기록을 검증하고, 구현 품질 완료 시
-          코드 문서화(한글 헤더·함수 주석) 검사를 직접 다시 실행한다.
+          코드 문서화(한글 헤더·함수 주석) 검사와 코드↔문서 동기화(모듈 맵) 검사를
+          직접 다시 실행한다.
 
     입력:
         result: 제출된 스킬 결과
         target_root: 문서화 검사를 실행할 대상 프로젝트 루트
     예외:
-        RunnerError, ContractError: 기록이 없거나 계약을 어기거나 문서화 검사가 실패한 경우
+        RunnerError, ContractError: 기록이 없거나 계약을 어기거나 문서화·동기화 검사가 실패한 경우
     """
     skill_id, status = result["skill_id"], result["status"]
     if skill_id == "core.architecture-and-design-patterns":
@@ -535,6 +537,15 @@ def _validate_typed_payload(result: dict[str, Any], target_root: Path) -> None:
                 problems = [f["path"] for f in report["files"] if f["header"] != "ok" or f["function_problems"]]
                 raise RunnerError("code documentation check failed (Korean header or function comments): "
                                   + ", ".join(problems))
+            try:
+                sync = check_doc_sync(target_root, documentation["files"], documentation.get("base_revision"),
+                                      documentation.get("module_map") or DEFAULT_MAP,
+                                      documentation.get("exempt_paths", []))
+            except (OSError, ValueError, RuntimeError) as exc:
+                raise RunnerError(f"document sync check could not run: {exc}") from exc
+            if sync["status"] != "passed":
+                raise RunnerError("documents and code disagree (module map): "
+                                  + "; ".join(f"{v['kind']} {v['path']}" for v in sync["violations"][:8]))
 
 
 def _feedback_plan(state: dict[str, Any], result: dict[str, Any], manifest_path: Path) -> dict[str, Any] | None:

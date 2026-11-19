@@ -120,3 +120,9 @@ check and rejects completion on any violation. The checker uses lightweight
 parsing outside Python, so it can miss unusual signatures: it proves the
 comments exist and carry the required labels, not that their content is
 accurate. The reviewer still reads them.
+
+The Runner also runs `scripts/harness_doc_sync.py` on the same files: each
+header's `모듈:` and `컴포넌트:` must repeat a row of the project's module map
+and the file must lie under that row's path. When a change adds, removes,
+renames or moves a component, update that row in the same task. The rules and
+the map format are in [doc and code sync](../../architecture-baseline-and-design/references/doc-code-sync.md).

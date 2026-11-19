@@ -30,6 +30,8 @@ SAMPLE_SOURCE = (
     '    return a + b\n'
 )
 DOCUMENTATION_CHECK = {'files': ['src/sample.py']}
+MODULE_MAP = ('| 모듈 | 컴포넌트 | 책임 | 코드 경로 |\n| --- | --- | --- | --- |\n'
+              '| 테스트 대상 | 샘플 | 예시 | `src` |\n')
 QUALITY_RECORD = {'schema_version': 1, 'status': 'completed', 'authored_boundaries': ['src'],
     'activated_profiles': [{'id': 'core', 'depth': 'light', 'authored_boundaries': ['src'],
         'evidence_ids': ['EVD-fixture'], 'expected_outcomes': ['behavior preserved'], 'verification_ids': ['VER-fixture']}],
@@ -46,6 +48,8 @@ class GateBoundaryTests(unittest.TestCase):
         self.target = Path(temp.name)
         (self.target / 'src').mkdir()
         (self.target / 'src/sample.py').write_text(SAMPLE_SOURCE)
+        (self.target / 'docs/architecture').mkdir(parents=True)
+        (self.target / 'docs/architecture/module-map.md').write_text(MODULE_MAP)
         self.registry = ROOT / 'registry/active-skills.json'
         self.taxonomy = ROOT / 'registry/taxonomy.json'
         self.manifest_path = ROOT / 'registry/routing-gates.json'

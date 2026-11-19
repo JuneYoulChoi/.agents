@@ -164,6 +164,12 @@ class RuntimeTests(unittest.TestCase):
         source.write_text(
             '"""\n모듈: 테스트 대상\n컴포넌트: 서비스\n역할: 문서화 규칙을 만족하는 예시 파일.\n"""\n'
         )
+        module_map = self.target / "docs" / "architecture" / "module-map.md"
+        module_map.parent.mkdir(parents=True)
+        module_map.write_text(
+            "| 모듈 | 컴포넌트 | 책임 | 코드 경로 |\n| --- | --- | --- | --- |\n"
+            "| 테스트 대상 | 서비스 | 예시 | `src/service` |\n"
+        )
         self.registry = HARNESS_ROOT / "registry" / "active-skills.json"
         self.taxonomy = HARNESS_ROOT / "registry" / "taxonomy.json"
         self.manifest = HARNESS_ROOT / "registry" / "routing-gates.json"
