@@ -151,6 +151,14 @@ class RunnerGateClosureTests(unittest.TestCase):
                          ('active', PATTERNS, done))
         self.assertEqual(self.send(resumed, self.result(resumed))['status'], 'active')
 
+    def test_routing_block_is_not_resumable(self):
+        blocked = self.begin(risk='high')  # no approval evidence
+        self.assertEqual(blocked['status'], 'blocked')
+        request = self.target / 'resume.json'
+        request.write_text(json.dumps({'answer': 'go', 'decision_evidence_ids': ['EVD-x']}))
+        with self.assertRaises(ContractError):
+            resume(self.target, 'TASK-INTEGRITY', blocked['revision'], request, ROOT, REGISTRY)
+
     def test_failed_verification_reopens_only_the_responsible_gate_with_a_counted_budget(self):
         response = self.advance_to(self.begin(), VERIFY)
         queue = StateStore(self.target, harness_root=ROOT).read('TASK-INTEGRITY')['execution']['queue']
@@ -177,6 +185,43 @@ class RunnerGateClosureTests(unittest.TestCase):
         self.assert_rejected(response, self.result(response))
         done = self.send(response, self.result(response, independent_verification_evidence_ids=['EVD-fresh-context']))
         self.assertEqual(done['status'], 'complete')
+
+
+class RoutingEntryTests(unittest.TestCase):
+    def setUp(self):
+        self.manifest = _load_manifest(MANIFEST)
+
+    def route(self, **changes):
+        return route({**base_intake(), **changes}, self.manifest)
+
+    def gate(self, result, gate_id):
+        return next(g for g in result['gate_results'] if g['gate_id'] == gate_id)
+
+    def test_contradictory_scope_and_inapplicable_state_do_not_reach_code_work(self):
+        with self.assertRaises(RouterError):
+            self.route(scope='general_information')
+        blocked = self.route(project_state='not_applicable')
+        self.assertEqual(blocked['status'], 'blocked')
+        self.assertTrue(self.gate(blocked, 'G2')['blocked'])
+        self.assertEqual(self.route(project_state='not_applicable', action='investigate')['status'], 'active')
+
+    def test_high_risk_and_harness_mutation_require_recorded_approval(self):
+        for changes, reason in (({'risk': 'high'}, 'high_risk_approval_required'),
+                                ({'target': 'harness'}, 'harness_change_approval_required')):
+            blocked = self.route(**changes)
+            self.assertEqual(blocked['status'], 'blocked')
+            self.assertIn({'reason': reason}, self.gate(blocked, 'G0')['blocked'])
+            self.assertEqual(self.route(**changes, approval_evidence_ids=['EVD-approval'])['status'], 'active')
+        self.assertEqual(self.route(risk='high', action='review')['status'], 'active')
+
+    def test_manual_mode_blocks_every_workspace_write_not_only_named_actions(self):
+        unit = {'id': 'a', 'goal': 'g', 'role': 'implementer', 'mutation': 'workspace', 'input_revision': 'r',
+                'evidence_ids': ['e'], 'allowed_tools': ['edit'], 'expected_output': 'o', 'acceptance': ['x'],
+                'write_paths': ['src/a']}
+        for changes in ({'action': 'document', 'fields': ['documentation']}, {'action': 'design', 'work_units': [unit]}):
+            self.assertEqual(self.route(enforcement_mode='manual', **changes)['status'], 'blocked')
+        self.assertEqual(self.route(enforcement_mode='manual', action='design')['status'], 'active')
+
 
 
 if __name__ == '__main__':

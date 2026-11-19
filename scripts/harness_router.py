@@ -36,6 +36,8 @@ CHANGE_CHARACTERISTICS = {
     "generated_code_only",
 }
 CODE_SCOPE_ACTIONS = {"investigate", "design", "implement", "change", "verify", "review"}
+MUTATION_ACTIONS = {"implement", "change"}
+
 
 
 class RouterError(ValueError):
@@ -503,6 +505,12 @@ def route(context: dict[str, Any], manifest: dict[str, Any]) -> dict[str, Any]:
         raise RouterError("enforcement_mode must be hook, manual, or unsupported")
 
     is_software = scope in {"software_engineering", "software_related"}
+    approvals = _string_list(context, "approval_evidence_ids")
+    work_units = context.get("work_units", [])
+    writes_workspace = any(u.get("mutation") == "workspace" for u in work_units)
+    if (not is_software and target == "project" and languages
+            and language_scope == "authored_in_scope" and action in MUTATION_ACTIONS):
+        raise RouterError("an authored code change requires a software scope; reclassify the intake")
     revision = 1
     gate_results: list[dict[str, Any]] = []
     all_activated: list[str] = []
@@ -511,12 +519,16 @@ def route(context: dict[str, Any], manifest: dict[str, Any]) -> dict[str, Any]:
     if is_software and project_state == "unknown" and any(
             u.get("mutation") == "workspace" for u in context.get("work_units", [])):
         g0_blocked.append({"reason": "unknown_project_discovery_is_read_only"})
-    if enforcement == "unsupported" and action in {"implement", "change", "approve"}:
+    mutating = action in {"implement", "change", "approve", "document"} or writes_workspace
+    if enforcement == "unsupported" and mutating:
         g0_blocked.append({"reason": "unsupported_enforcement_is_read_only"})
-    if enforcement == "manual" and action in {"implement", "change", "approve"} and not context.get(
-        "manual_guard_valid", False
-    ):
+    if enforcement == "manual" and mutating and not context.get("manual_guard_valid", False):
         g0_blocked.append({"reason": "manual_guard_required_for_mutation"})
+    material_mutation = action in {"implement", "change", "approve"} or writes_workspace
+    if context.get("risk") == "high" and material_mutation and not approvals:
+        g0_blocked.append({"reason": "high_risk_approval_required"})
+    if target == "harness" and material_mutation and not approvals:
+        g0_blocked.append({"reason": "harness_change_approval_required"})
     gate_results.append(_gate_result("G0", revision, branches=[enforcement], blocked=g0_blocked, evidence=evidence))
 
     intake_skill = "core.intake-and-route"
@@ -558,6 +570,8 @@ def route(context: dict[str, Any], manifest: dict[str, Any]) -> dict[str, Any]:
         g2_skills.append("core.architecture-baseline-and-design")
         g2_branches.append("standards_applicability")
         if project_state == "unknown" and action not in {"investigate", "review"}:
+            g2_blocked.append({"reason": "project_reclassification_required_before_material_work"})
+        if project_state == "not_applicable" and (action in {"design", *MUTATION_ACTIONS} or writes_workspace):
             g2_blocked.append({"reason": "project_reclassification_required_before_material_work"})
         if architecture_status == "conflicted":
             g2_blocked.append({"reason": "architecture_baseline_conflicted"})

@@ -335,6 +335,7 @@ def validate_intake(
     _string_array(value, "evidence_ids")
     _string_array(value, "standards")
     _string_array(value, "authorized_standard_evidence_ids")
+    _string_array(value, "approval_evidence_ids")
     _require_string(
         value,
         "conformance_intent",

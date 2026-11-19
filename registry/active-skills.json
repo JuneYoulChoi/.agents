@@ -4,7 +4,7 @@
   "integrity_policy": {
     "core_entries": "harness_source_tree_manifest",
     "adapter_manifest": "registry/adapter-manifest.json",
-    "manifest_revision": "workspace-20261119-5df547fb00c8",
+    "manifest_revision": "workspace-20261119-3e687acddd08",
     "manifest_hash_scope": "canonical active-skills.json excluding integrity_policy.manifest_sha256",
     "excluded_paths": [
       ".git",
@@ -21,7 +21,7 @@
       "tools/ros-mcp-server/upstream/ros_mcp.egg-info",
       "tools/ros-mcp-server/upstream/.venv"
     ],
-    "manifest_sha256": "44b798b6132360911b780f3c5a4ba4defd37249728765ce5842c7d3b5edeb4a7"
+    "manifest_sha256": "ba84ac06aaa903b639c7df09e972b498823c2db42b80e2f3b143676c20e4981f"
   },
   "resolution_order": [
     "project_reviewed",

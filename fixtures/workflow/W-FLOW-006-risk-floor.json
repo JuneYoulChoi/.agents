@@ -39,7 +39,10 @@
     ],
     "artifacts": [],
     "feedback": [],
-    "work_type": "bugfix"
+    "work_type": "bugfix",
+    "approval_evidence_ids": [
+      "EVD-high-risk-approval"
+    ]
   },
   "expected": {
     "status": "active",

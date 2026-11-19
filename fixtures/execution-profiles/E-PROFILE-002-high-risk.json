@@ -13,13 +13,23 @@
     "depth": "standard",
     "enforcement_mode": "hook",
     "architecture_status": "accepted",
-    "fields": ["backend", "security"],
-    "languages": ["rust"],
+    "fields": [
+      "backend",
+      "security"
+    ],
+    "languages": [
+      "rust"
+    ],
     "technologies": [],
     "configuration_candidates": [],
-    "evidence_ids": ["EV-EXECUTION-HIGH-RISK"],
+    "evidence_ids": [
+      "EV-EXECUTION-HIGH-RISK"
+    ],
     "artifacts": [],
-    "feedback": []
+    "feedback": [],
+    "approval_evidence_ids": [
+      "EVD-high-risk-approval"
+    ]
   },
   "expected": {
     "status": "active",
@@ -27,7 +37,9 @@
       "policy_id": "adaptive_v1",
       "depth": "standard",
       "risk": "high",
-      "escalation_triggers_exact": ["high_risk"],
+      "escalation_triggers_exact": [
+        "high_risk"
+      ],
       "gate_reasoning": {
         "G0": "low",
         "G1": "medium",
