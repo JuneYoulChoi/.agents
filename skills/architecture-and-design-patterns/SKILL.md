@@ -171,6 +171,14 @@ transition:
   entry_conditions: []
 ```
 
+## Runner result
+
+Submit the decision as `pattern_review` (one object or an array) in the skill
+result, using `schema_version: 1` and `pattern_id`. The Runner validates it. A
+`user_decision_required` decision must be returned with status `waiting_user`;
+after the user's answer, continue the same skill through Runner `resume` and
+submit the `user_selected` record. `completed` without a record is rejected.
+
 ## Exit gate
 
 Material execution may continue when the result is an evidenced selection or

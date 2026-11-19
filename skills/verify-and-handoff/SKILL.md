@@ -8,6 +8,19 @@ description: Verify that a software, design, documentation, or operational task 
 Use this skill before declaring a task complete. Verification is evidence, not a
 summary of intent.
 
+## Runner closure rules
+
+A gate closes only with matching evidence. `completed` needs artifact and
+evidence IDs; `not_applicable` needs a `reason` and evidence, and cannot skip
+an activated baseline or impact skill for a mutation. A result whose
+`transition.next_stage` is clarification, backward_feedback, blocked or failed
+must use the matching non-advancing status. When verification fails for a
+routed cause, submit `status: failed` with `feedback: {"kind": "<signal>"}`
+using a `backward_routes` signal: the Runner reopens only the responsible gate,
+keeps earlier results, counts attempts itself and asks the user at the third
+attempt. When the route sets `independent_context`, G7 completion requires
+`independent_verification_evidence_ids` from a fresh-context verifier.
+
 ## Entry gate
 
 Require the intake record, task acceptance contract, and applicable architecture

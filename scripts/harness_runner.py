@@ -291,6 +291,7 @@ def submit(
     result_path: Path,
     harness_root: Path,
     registry_path: Path,
+    manifest_path: Path | None = None,
 ) -> dict[str, Any]:
     verify_source(harness_root, registry_path)
     approved = active_skill_ids(registry_path)
@@ -361,6 +362,8 @@ def submit(
     if result["skill_id"] == "core.verify-and-handoff" and result["status"] == "not_applicable":
         raise RunnerError("verify-and-handoff cannot be marked not_applicable")
 
+    rewind = _feedback_plan(current, result, manifest_path or harness_root / "registry/routing-gates.json")
+
     def mutate(state: dict[str, Any]) -> None:
         if updated_plan is not None:
             state["route"]["work_plan"] = updated_plan
@@ -388,16 +391,34 @@ def submit(
         elif result["status"] == "waiting_user":
             state["status"] = "waiting_user"
             state["stage"] = "clarification"
+            state["suspended_by"] = result["skill_id"]
             state["pending_question"] = {
                 "question_id": f"QUESTION-{result['skill_id'].upper().replace('.', '-')}",
                 "prompt": result.get("error") or "A user decision is required to continue.",
             }
         elif result["status"] == "blocked":
             state["status"] = "blocked"
+            state["suspended_by"] = result["skill_id"]
             state["blocker"] = {
                 "reason": result["error"],
                 "owner": "user_or_project_owner",
                 "recovery": "Resolve the reported blocker and resume with a new validated result.",
+            }
+        elif rewind is not None and rewind["action"] == "rewind":
+            # Bounded backward feedback: reopen the responsible gate, keep earlier results.
+            execution.setdefault("feedback_attempts", {})[rewind["target_gate"]] = rewind["attempt"]
+            execution.setdefault("feedback_log", []).append(rewind["record"])
+            execution["cursor"] = rewind["cursor"]
+            state["stage"] = execution["skill_stages"][execution["queue"][rewind["cursor"]]]
+        elif rewind is not None:
+            execution.setdefault("feedback_attempts", {})[rewind["target_gate"] or "unrouted"] = rewind["attempt"]
+            execution.setdefault("feedback_log", []).append(rewind["record"])
+            state["status"] = "waiting_user"
+            state["stage"] = "clarification"
+            state["suspended_by"] = result["skill_id"]
+            state["pending_question"] = {
+                "question_id": "QUESTION-FEEDBACK-ESCALATION",
+                "prompt": rewind["reason"],
             }
         else:
             state["status"] = "failed"
@@ -441,6 +462,9 @@ def submit(
 
 
 
+FEEDBACK_RETRY_LIMIT = 3
+
+
 def _validate_typed_payload(result: dict[str, Any]) -> None:
     """Bind the skill-specific contracts to the gate transition they justify."""
     skill_id, status = result["skill_id"], result["status"]
@@ -471,6 +495,76 @@ def _validate_typed_payload(result: dict[str, Any]) -> None:
         if quality["status"] != status:
             raise RunnerError("implementation_quality status must match the skill result status")
 
+
+def _feedback_plan(state: dict[str, Any], result: dict[str, Any], manifest_path: Path) -> dict[str, Any] | None:
+    """Plan a bounded in-task reopen for a failed result that names a routed signal."""
+    feedback = result.get("feedback")
+    if feedback is None:
+        return None
+    if result["status"] != "failed" or not isinstance(feedback, dict) or not isinstance(feedback.get("kind"), str):
+        raise RunnerError("feedback requires a failed result and a signal kind")
+    routes = {item["signal"]: item["target_gate"] for item in read_object(manifest_path)["backward_routes"]}
+    target_gate = routes.get(feedback["kind"])
+    execution = state["execution"]
+    attempts = execution.get("feedback_attempts", {})
+    attempt = attempts.get(target_gate or "unrouted", 0) + 1  # counted here, never self-reported
+    cursor = execution["cursor"]
+    record_item = {"kind": feedback["kind"], "source_skill": result["skill_id"],
+                   "target_gate": target_gate, "attempt": attempt, "error": result["error"]}
+    plan = {"target_gate": target_gate, "attempt": attempt, "record": record_item}
+    if target_gate is None:
+        return {**plan, "action": "escalate", "reason": "Unrouted feedback signal requires a user decision."}
+    if attempt >= FEEDBACK_RETRY_LIMIT:
+        return {**plan, "action": "escalate",
+                "reason": f"Feedback to {target_gate} reached the retry limit; a user decision is required."}
+    gates = execution["skill_gates"]
+    index = next((i for i, skill in enumerate(execution["queue"][:cursor + 1])
+                  if int(gates[skill][1:]) >= int(target_gate[1:])), None)
+    if index is None:
+        return {**plan, "action": "escalate",
+                "reason": f"{target_gate} has no queued owner; correct the intake through a linked restart."}
+    reopened = set(execution["queue"][index:])
+    if any(item.get("skill_id") in reopened for item in execution.get("work_records", {}).values()):
+        return {**plan, "action": "escalate",
+                "reason": "Recorded work units belong to the reopened gates; recover through a linked restart."}
+    return {**plan, "action": "rewind", "cursor": index}
+
+
+def resume(target_root: Path, task_id: str, expected_revision: int, request_path: Path,
+           harness_root: Path, registry_path: Path) -> dict[str, Any]:
+    """Continue a task that a skill suspended, at the same skill, after a recorded decision."""
+    verify_source(harness_root, registry_path)
+    request = read_object(request_path)
+    evidence = request.get("decision_evidence_ids")
+    answer = request.get("answer")
+    if (not isinstance(answer, str) or not answer.strip() or not isinstance(evidence, list) or not evidence
+            or any(not isinstance(v, str) or not v.strip() for v in evidence)):
+        raise RunnerError("resume requires the recorded answer and decision evidence IDs")
+    store = StateStore(target_root, harness_root=harness_root)
+    current = store.read(task_id)
+    if current["status"] not in {"waiting_user", "blocked"} or not current.get("suspended_by"):
+        raise RunnerError("only a task suspended by a skill result can resume; a routing block needs a linked restart")
+    if any(r["status"] == "running" for r in current["execution"].get("work_records", {}).values()):
+        raise RunnerError("record worker termination before resuming")
+
+    def mutate(state: dict[str, Any]) -> None:
+        execution = state["execution"]
+        pending = execution["queue"][execution["cursor"]]
+        execution.setdefault("decisions", []).append({
+            "skill_id": state["suspended_by"], "previous_status": state["status"],
+            "answer": answer, "decision_evidence_ids": evidence, "at": utc_now()})
+        previous_stage = state["stage"]
+        state["status"] = "active"
+        state["stage"] = execution["skill_stages"][pending]
+        state["pending_question"] = None
+        state.pop("blocker", None)
+        state.pop("suspended_by", None)
+        state["last_transition"] = {"from": previous_stage, "to": state["stage"],
+                                    "reason": "user decision recorded; skill resumed",
+                                    "actor": "harness_runner", "at": utc_now()}
+
+    updated = store.update(task_id, expected_revision, "task_resumed", mutate, {"decision_evidence_ids": evidence})
+    return _response(updated, _registry_entries(registry_path), harness_root)
 
 
 def work_event(target_root: Path, task_id: str, expected_revision: int,
@@ -517,7 +611,7 @@ def main(argv: Iterable[str] | None = None) -> int:
     submit_parser.add_argument("--expected-revision", required=True, type=int)
     submit_parser.add_argument("--result", required=True, type=Path)
 
-    for command in ("prepare-work", "record-work"):
+    for command in ("prepare-work", "record-work", "resume"):
         work_parser = subparsers.add_parser(command)
         work_parser.add_argument("--target-root", required=True, type=Path)
         work_parser.add_argument("--task-id", required=True)
@@ -539,6 +633,9 @@ def main(argv: Iterable[str] | None = None) -> int:
                 taxonomy,
                 manifest,
             )
+        elif args.command == "resume":
+            result = resume(args.target_root, args.task_id, args.expected_revision,
+                            args.request, harness_root, registry)
         elif args.command in {"prepare-work", "record-work"}:
             result = work_event(args.target_root, args.task_id, args.expected_revision,
                                 args.request, args.command, harness_root, registry)

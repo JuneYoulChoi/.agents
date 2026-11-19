@@ -10,7 +10,7 @@ import unittest
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'scripts'))
 from harness_router import route, _load_manifest, RouterError
-from harness_runner import start, submit
+from harness_runner import resume, start, submit
 from harness_state import StateStore
 from harness_validator import ContractError
 
@@ -133,6 +133,43 @@ class RunnerGateClosureTests(unittest.TestCase):
         self.assert_rejected(response, missing)
         self.assert_rejected(response, self.result(
             response, implementation_quality={**QUALITY_RECORD, 'status': 'not_applicable'}))
+
+    def test_user_decision_resumes_the_same_skill_without_replaying_earlier_gates(self):
+        response = self.advance_to(self.begin(), PATTERNS)
+        done = response['queue_progress']['completed']
+        waiting = self.send(response, self.result(response, 'waiting_user', transition={'next_stage': 'clarification'},
+                                                  pattern_review=pattern_review('user_decision_required'),
+                                                  artifact_ids=[], evidence_ids=[]))
+        self.assertEqual(waiting['status'], 'waiting_user')
+        request = self.target / 'resume.json'
+        request.write_text(json.dumps({'answer': 'OPT-A'}))
+        with self.assertRaises(ContractError):
+            resume(self.target, 'TASK-INTEGRITY', waiting['revision'], request, ROOT, REGISTRY)
+        request.write_text(json.dumps({'answer': 'OPT-A', 'decision_evidence_ids': ['EVD-user-choice']}))
+        resumed = resume(self.target, 'TASK-INTEGRITY', waiting['revision'], request, ROOT, REGISTRY)
+        self.assertEqual((resumed['status'], resumed['next']['skill_id'], resumed['queue_progress']['completed']),
+                         ('active', PATTERNS, done))
+        self.assertEqual(self.send(resumed, self.result(resumed))['status'], 'active')
+
+    def test_failed_verification_reopens_only_the_responsible_gate_with_a_counted_budget(self):
+        response = self.advance_to(self.begin(), VERIFY)
+        queue = StateStore(self.target, harness_root=ROOT).read('TASK-INTEGRITY')['execution']['queue']
+        failure = dict(status='failed', error='regression failed', transition={'next_stage': 'backward_feedback'},
+                       feedback={'kind': 'implementation_or_assembly_defect', 'attempt': 99})
+        for attempt in (1, 2):
+            reopened = self.send(response, self.result(response, **failure))
+            self.assertEqual((reopened['status'], reopened['next']['skill_id']), ('active', QUALITY))
+            self.assertEqual(reopened['queue_progress']['completed'], queue.index(QUALITY))
+            state = StateStore(self.target, harness_root=ROOT).read('TASK-INTEGRITY')
+            self.assertEqual(state['execution']['feedback_attempts'], {'G6': attempt})
+            response = self.advance_to(reopened, VERIFY)
+        escalated = self.send(response, self.result(response, **failure))
+        self.assertEqual(escalated['status'], 'waiting_user')
+
+    def test_unrouted_feedback_escalates_and_plain_failure_stays_failed(self):
+        response = self.advance_to(self.begin(), VERIFY)
+        unknown = self.result(response, status='failed', error='x', feedback={'kind': 'not-a-signal'})
+        self.assertEqual(self.send(response, unknown)['status'], 'waiting_user')
 
     def test_deep_route_requires_independent_verification_evidence(self):
         response = self.advance_to(self.begin(depth='deep'), VERIFY)
