@@ -1004,3 +1004,12 @@ State: `suspended_by` (the skill whose result suspended the task),
 Runner command: `resume --target-root <project> --task-id <id>
 --expected-revision <n> --request <file>` with
 `{"answer": "...", "decision_evidence_ids": ["..."]}`.
+
+## Implementation-quality documentation fields (2026-11-19)
+
+`implementation_quality` adds, when `status` is `completed`:
+`readability_standard` (non-empty string) and `documentation_check`
+(`files`: unique project-relative code paths; `base_revision`: optional Git
+revision). The Runner executes `scripts/harness_code_docs.py --target-root
+<project> [--base <rev>] <files>`; a `failed` report blocks completion. The
+checker's own CLI exits 0 on pass, 1 on violations and 2 on usage errors.

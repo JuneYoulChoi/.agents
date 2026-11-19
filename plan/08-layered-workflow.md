@@ -332,3 +332,24 @@ time; token savings remain `not_measured` until a comparable serial run is
 measured; `allowed_tools` remain requirements checked by the adapter; evidence
 hashes prove identity, not truth. `tests/test_gate_integrity.py` covers the new
 rules.
+
+## Readable, documented code (2026-11-19)
+
+User-approved requirement: authored code must follow a recorded readability
+standard and be documented in Korean. The implementation-quality `core` profile
+now always loads
+[readability and documentation](../skills/implementation-quality/references/readability-and-documentation.md):
+a Korean file header (`모듈:`, `컴포넌트:`, `역할:`) on every created or modified
+code file and a Korean comment (`역할:`, `입력:`, `출력:`, `예외:` when
+relevant) on every created or modified named function, public or private.
+Module and component names come from the architecture baseline. Generated,
+vendored and comment-less files are exempt with a recorded reason. Existing
+files are brought into line when they are next modified; untouched functions
+are not retrofitted.
+
+A completed implementation-quality record requires `readability_standard` and
+`documentation_check` (`files`, optional `base_revision`). The Runner runs
+`scripts/harness_code_docs.py` on those files itself and rejects completion on
+any violation. Python is parsed with `ast`; other languages use line-based
+detection, so the check proves presence and labels, not the accuracy of the
+comments. `tests/test_code_docs.py` covers the checker.

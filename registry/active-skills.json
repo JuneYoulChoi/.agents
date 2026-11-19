@@ -4,7 +4,7 @@
   "integrity_policy": {
     "core_entries": "harness_source_tree_manifest",
     "adapter_manifest": "registry/adapter-manifest.json",
-    "manifest_revision": "workspace-20261119-9a2240308c4c",
+    "manifest_revision": "workspace-20261119-3a15cc473e77",
     "manifest_hash_scope": "canonical active-skills.json excluding integrity_policy.manifest_sha256",
     "excluded_paths": [
       ".git",
@@ -21,7 +21,7 @@
       "tools/ros-mcp-server/upstream/ros_mcp.egg-info",
       "tools/ros-mcp-server/upstream/.venv"
     ],
-    "manifest_sha256": "f52c2f6c3db2d3e3149ff0793c531bfae2901f12e1caa469cde8fb5ed3c73263"
+    "manifest_sha256": "579e2f6374a3d0aab4dbd52967c7ad81bb61ab487a1d08ef6c9ae2d581e7a7c8"
   },
   "resolution_order": [
     "project_reviewed",
@@ -70,7 +70,7 @@
     },
     {
       "id": "core.architecture-baseline-and-design",
-      "version": "0.4.0",
+      "version": "0.5.0",
       "entry": "skills/architecture-baseline-and-design/SKILL.md",
       "trust": "approved",
       "capabilities": [
@@ -170,7 +170,7 @@
     },
     {
       "id": "core.language-engineering",
-      "version": "0.3.0",
+      "version": "0.4.0",
       "entry": "skills/language-engineering/SKILL.md",
       "trust": "approved",
       "capabilities": [

@@ -56,6 +56,12 @@ only for genuinely mixed authored code or a public HTML/CSS boundary. Generated
 gRPC/ROS/schema output is not hand-edited; load the producer language and
 generator contract instead.
 
+Write file headers and function comments in Korean with the language's own
+comment syntax, as defined in implementation-quality's
+[readability and documentation](../implementation-quality/references/readability-and-documentation.md)
+reference. Use the language profile for idiomatic doc-comment form (docstring,
+JSDoc, Javadoc, Doxygen, `///`); keep identifiers in the project's language.
+
 ## 3. Reconcile ecosystem and language rules
 
 Use this precedence:

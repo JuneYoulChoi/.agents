@@ -111,7 +111,8 @@ identify:
 - HLD boundaries and dependencies;
 - technology capabilities, existing/candidate ecosystems, versions/bindings,
   and integration/compatibility boundaries;
-- LLD/module candidates and ownership;
+- LLD/module candidates and ownership, with module and component names that
+  code file headers will cite (`모듈:` / `컴포넌트:`);
 - relevant layer, infrastructure, C&C, runtime, class, and sequence views;
 - stakeholders, concerns, viewpoints, model kinds, and correspondence rules
   needed to explain why each architecture view exists;

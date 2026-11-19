@@ -1,16 +1,16 @@
 {
   "schema_version": 1,
   "manifest_id": "adapter-template-manifest-v1",
-  "source_revision": "workspace-20261119-9a2240308c4c",
-  "source_tree_sha256": "9a2240308c4c74353b195ef3a4b6e9eb2b82002073f4891d7b740f9cef0a31dd",
+  "source_revision": "workspace-20261119-3a15cc473e77",
+  "source_tree_sha256": "3a15cc473e77faa3ef3fa5b04b0732f20e825f6161199b08b0ff22cadad80089",
   "templates": [
     {
       "id": "codex.bootstrap",
       "platform": "codex",
       "path": "adapters/codex/AGENTS.md.tmpl",
       "rendered_name": "AGENTS.md",
-      "version": "0.10.0",
-      "sha256": "d36f73b83121baac28aaba38757744bfb3455a8783f158929624f25c9252c04c",
+      "version": "0.11.0",
+      "sha256": "9cf58bd574eb65f1ed811f4a3516d6d1256e2f9e218e42411ddf9f1f1e8bea84",
       "max_bytes": 32768
     },
     {
@@ -18,8 +18,8 @@
       "platform": "claude",
       "path": "adapters/claude/CLAUDE.md.tmpl",
       "rendered_name": "CLAUDE.md",
-      "version": "0.10.0",
-      "sha256": "c2d383a306645f0b8518694b10d5607272bf0eac15eb1c1c4cba850233d9aece",
+      "version": "0.11.0",
+      "sha256": "4621c4a823870f342a804997b513a405c0f299349aaa1a152e31c7cedc15b371",
       "max_bytes": 32768
     }
   ],
@@ -47,7 +47,8 @@
       "fixture_root": "fixtures",
       "transport": "json_files_with_input_output_arguments",
       "workflow": "scripts/harness_workflow.py",
-      "delegation": "scripts/harness_delegation.py"
+      "delegation": "scripts/harness_delegation.py",
+      "code_docs": "scripts/harness_code_docs.py"
     },
     "execution_profile": {
       "policy_id": "adaptive_v1",

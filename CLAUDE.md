@@ -93,3 +93,14 @@ with `feedback.kind` so only the responsible gate reopens. High-risk and
 harness mutations need `approval_evidence_ids` at intake.
 
 For native work on Claude follow `adapters/claude/native-dispatch.md`.
+
+## Readable, documented code
+
+Every authored code file created or modified starts with a Korean header
+comment with `모듈:`, `컴포넌트:` and `역할:` taken from the architecture
+baseline, and every created or modified function carries a Korean comment with
+`역할:`, plus `입력:` and `출력:` when it has parameters or a result. Record the
+readability standard first (project formatter/linter, else the language guide
+plus the harness defaults). Run `scripts/harness_code_docs.py` before
+completing G6; the Runner re-runs it. See
+`skills/implementation-quality/references/readability-and-documentation.md`.
