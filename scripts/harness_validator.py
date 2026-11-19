@@ -52,6 +52,14 @@ STAGES = {
     "handoff",
 }
 SKILL_RESULT_STATUSES = {"completed", "not_applicable", "waiting_user", "blocked", "failed"}
+NON_ADVANCING_STAGES = {"clarification", "backward_feedback", "blocked", "failed"}
+# Baseline and impact skills cannot be skipped once the Router activated them for a mutation.
+MUTATION_ACTIONS = {"implement", "change"}
+NON_SKIPPABLE_FOR_MUTATION = {
+    "core.architecture-baseline-and-design",
+    "core.brownfield-impact-analysis",
+    "core.greenfield-planning",
+}
 REASONING_LEVELS = {"low", "medium", "high"}
 PATTERN_CANDIDATE_STATUSES = {
     "existing",
@@ -545,6 +553,19 @@ def validate_skill_result(value: dict[str, Any], approved_skills: set[str]) -> d
     _string_array(resolution, "evidence_ids")
     if resolution_status == "unavailable" and status not in {"blocked", "failed"}:
         raise ContractError("unavailable execution capability requires a blocked or failed result")
+    if resolution_status == "degraded" and not resolution["evidence_ids"]:
+        raise ContractError("degraded execution resolution requires evidence IDs")
+    # A gate may close only with a result that matches its own claimed transition.
+    if status == "completed" and (not value["artifact_ids"] or not value["evidence_ids"]):
+        raise ContractError("completed skill result requires artifact and evidence IDs")
+    if status == "not_applicable":
+        reason = value.get("reason")
+        if not isinstance(reason, str) or not reason.strip() or not value["evidence_ids"]:
+            raise ContractError("not_applicable skill result requires a reason and evidence IDs")
+    if status in {"completed", "not_applicable"} and transition["next_stage"] in NON_ADVANCING_STAGES:
+        raise ContractError(
+            "a result that needs clarification, feedback, or recovery cannot be completed or not_applicable"
+        )
     return value
 
 

@@ -22,7 +22,11 @@ from harness_validator import (
     sha256_bytes,
     validate_intake,
     validate_acceptance_evidence,
+    validate_implementation_quality,
+    validate_pattern_review,
     validate_resolution_binding,
+    MUTATION_ACTIONS,
+    NON_SKIPPABLE_FOR_MUTATION,
     validate_route_result,
     validate_skill_result,
     write_object,
@@ -310,6 +314,16 @@ def submit(
         if not result['artifact_ids'] or not result['evidence_ids']:
             raise RunnerError('completion requires artifact and evidence IDs')
         validate_acceptance_evidence(result.get('verification'), current['intent']['success_criteria'], target_root)
+    if result['skill_id'] == 'core.verify-and-handoff' and result['status'] == 'completed' \
+            and next_item['execution_profile'].get('independent_context'):
+        independent = result.get('independent_verification_evidence_ids')
+        if (not isinstance(independent, list) or not independent
+                or any(not isinstance(v, str) or not v.strip() for v in independent)):
+            raise RunnerError('this route requires independent-context verification evidence')
+    if (result['status'] == 'not_applicable' and result['skill_id'] in NON_SKIPPABLE_FOR_MUTATION
+            and current['classification']['action'] in MUTATION_ACTIONS):
+        raise RunnerError('an activated baseline or impact skill cannot be skipped for a mutation')
+    _validate_typed_payload(result)
     if (current['project_state'] == 'unknown'
             and result['skill_id'] == 'core.architecture-baseline-and-design'
             and result['status'] in {'completed', 'not_applicable'}):
@@ -424,6 +438,38 @@ def submit(
             ),
         )
     return _response(updated, _registry_entries(registry_path), harness_root)
+
+
+
+def _validate_typed_payload(result: dict[str, Any]) -> None:
+    """Bind the skill-specific contracts to the gate transition they justify."""
+    skill_id, status = result["skill_id"], result["status"]
+    if skill_id == "core.architecture-and-design-patterns":
+        review = result.get("pattern_review")
+        if review is None:
+            if status == "completed":
+                raise RunnerError("completed pattern review requires a pattern_review record")
+            return
+        reviews = review if isinstance(review, list) else [review]
+        if not reviews:
+            raise RunnerError("pattern_review must not be empty")
+        for item in reviews:
+            if not isinstance(item, dict):
+                raise RunnerError("pattern_review must be an object or an array of objects")
+            validate_pattern_review(item)
+            if status == "completed" and item["decision"]["status"] == "user_decision_required":
+                raise RunnerError("an open pattern decision must be returned as waiting_user")
+    elif skill_id == "core.implementation-quality":
+        quality = result.get("implementation_quality")
+        if quality is None:
+            if status == "completed":
+                raise RunnerError("completed implementation quality requires its typed record")
+            return
+        if not isinstance(quality, dict):
+            raise RunnerError("implementation_quality must be an object")
+        validate_implementation_quality(quality)
+        if quality["status"] != status:
+            raise RunnerError("implementation_quality status must match the skill result status")
 
 
 

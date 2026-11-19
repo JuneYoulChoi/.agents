@@ -112,6 +112,10 @@ transition:
   entry_conditions: []
 ```
 
+Submit this record as `implementation_quality` (with `schema_version: 1`) in
+the Runner skill result; its `status` must equal the result status. The Runner
+rejects a `completed` result without it.
+
 ## Exit gate
 
 Continue when every activated profile has bounded evidence and verification,

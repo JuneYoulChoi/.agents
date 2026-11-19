@@ -219,6 +219,13 @@ class RuntimeTests(unittest.TestCase):
                     "schema_version": 1,
                     "skill_id": skill_id,
                     "status": "completed",
+                    "implementation_quality": {
+                        "schema_version": 1, "status": "completed", "authored_boundaries": ["src"],
+                        "activated_profiles": [{"id": "core", "depth": "light", "authored_boundaries": ["src"],
+                            "evidence_ids": ["EV-Q"], "expected_outcomes": ["behavior preserved"],
+                            "verification_ids": ["VER-Q"]}],
+                        "suppressed_profiles": [], "findings": [], "changes_or_recommendations": [],
+                        "residual_risks": [], "open_points": []},
                     "verification": [{"criterion": criterion, "status": "passed", "evidence": [
                         {"path": "verification.txt", "sha256": hashlib.sha256(proof.read_bytes()).hexdigest()}]}
                         for criterion in intake()['intent']['success_criteria']],
@@ -258,8 +265,8 @@ class RuntimeTests(unittest.TestCase):
                 "schema_version": 1,
                 "skill_id": started["next"]["skill_id"],
                 "status": "completed",
-                "artifact_ids": [],
-                "evidence_ids": [],
+                "artifact_ids": ["ART-001"],
+                "evidence_ids": ["EV-001"],
                 "transition": {"next_stage": "impact"},
                 "execution_resolution": execution_resolution("low", "upgraded"),
                 "error": None,

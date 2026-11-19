@@ -18,6 +18,12 @@ from harness_validator import (ContractError, canonical_json_bytes, validate_acc
                                validate_intake)
 
 
+QUALITY_RECORD = {'schema_version': 1, 'status': 'completed', 'authored_boundaries': ['src'],
+    'activated_profiles': [{'id': 'core', 'depth': 'light', 'authored_boundaries': ['src'],
+        'evidence_ids': ['EVD-fixture'], 'expected_outcomes': ['behavior preserved'], 'verification_ids': ['VER-fixture']}],
+    'suppressed_profiles': [], 'findings': [], 'changes_or_recommendations': [], 'residual_risks': [], 'open_points': []}
+
+
 class GateBoundaryTests(unittest.TestCase):
     def setUp(self):
         temp = tempfile.TemporaryDirectory(); self.addCleanup(temp.cleanup)
@@ -44,6 +50,7 @@ class GateBoundaryTests(unittest.TestCase):
         return {'schema_version': 1, 'skill_id': response['next']['skill_id'], 'status': status,
             'artifact_ids': ['ART-fixture'], 'evidence_ids': ['EVD-fixture'],
             'transition': {'next_stage': 'verification'},
+            'implementation_quality': QUALITY_RECORD,
             'verification': [{'criterion': c, 'status': 'passed', 'evidence': self.evidence()}
                              for c in self.intake['intent']['success_criteria']],
             'execution_resolution': {'adapter': 'codex', 'model': 'fixture',

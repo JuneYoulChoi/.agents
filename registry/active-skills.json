@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-15",
+  "generated_at": "2026-11-19",
   "integrity_policy": {
     "core_entries": "harness_source_tree_manifest",
     "adapter_manifest": "registry/adapter-manifest.json",
-    "manifest_revision": "workspace-20261115-437fcc904c1a",
+    "manifest_revision": "workspace-20261119-c8c0eb467585",
     "manifest_hash_scope": "canonical active-skills.json excluding integrity_policy.manifest_sha256",
     "excluded_paths": [
       ".git",
@@ -21,7 +21,7 @@
       "tools/ros-mcp-server/upstream/ros_mcp.egg-info",
       "tools/ros-mcp-server/upstream/.venv"
     ],
-    "manifest_sha256": "0ad7ab6f99556301abfdbbf7d667f90be0ba4c74d43795a918e072f67152f5ba"
+    "manifest_sha256": "24aed34f75cac1fddbd655e8dc79e500c37d6b342fac53ca425a8b373603771a"
   },
   "resolution_order": [
     "project_reviewed",
@@ -209,7 +209,7 @@
     },
     {
       "id": "core.implementation-quality",
-      "version": "0.3.0",
+      "version": "0.4.0",
       "entry": "skills/implementation-quality/SKILL.md",
       "trust": "approved",
       "capabilities": [
