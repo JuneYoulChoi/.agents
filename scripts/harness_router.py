@@ -40,7 +40,10 @@ MUTATION_ACTIONS = {"implement", "change"}
 QUALITY_ACTIONS = CODE_SCOPE_ACTIONS - {"investigate"}
 PATTERN_ARCHITECTURE_ACTIONS = {"define", "plan", "design", "review"}
 FIELD_QUALITY_PROFILES = {"security": "security", "performance": "performance"}
-
+COMPACT_EXCLUDED_FIELDS = {
+    "architecture", "design_patterns", "api", "database", "security", "privacy",
+    "configuration", "technology_selection", "compliance", "devops_release", "operations",
+}
 
 
 class RouterError(ValueError):
@@ -615,6 +618,20 @@ def route(context: dict[str, Any], manifest: dict[str, Any]) -> dict[str, Any]:
     config_candidates = context.get("configuration_candidates", [])
     if not isinstance(config_candidates, list):
         raise RouterError("configuration_candidates must be an array")
+    # A small local Brownfield change keeps its baseline, impact and verification gates
+    # but does not need a separate composition step for one coherent slice.
+    compact = (
+        target == "project" and is_software and project_state == "brownfield"
+        and context.get("depth", "standard") == "light" and context.get("risk", "medium") == "low"
+        and str(architecture_status) == "confirmed"
+        and characteristics <= {"authored_code"}
+        and not pattern_scopes and not work_units and not tech_selected and not tech_candidates
+        and not config_candidates and not fields & COMPACT_EXCLUDED_FIELDS
+        and context.get("delegation", {}).get("requested") is not True
+        and context.get("work_type", "standard") in {"standard", "bugfix"}
+        and not context.get("feedback")
+    )
+    g3_suppressed: list[dict[str, Any]] = []
     g3_skills: list[str] = []
     if target == "harness":
         g3_skills.append("core.harness-upgrade-analysis")
@@ -628,14 +645,21 @@ def route(context: dict[str, Any], manifest: dict[str, Any]) -> dict[str, Any]:
     if action == "document" or "documentation" in fields:
         g3_skills.append("core.document-purpose")
     if target == "project" and (is_software or action == "document"):
-        g3_skills.append("core.workflow-composition")
+        if compact and action != "document" and "documentation" not in fields:
+            g3_suppressed.append({
+                "skill_id": "core.workflow-composition",
+                "reason": "compact_local_change_single_slice",
+            })
+        else:
+            g3_skills.append("core.workflow-composition")
     g3_skills = list(dict.fromkeys(g3_skills))
     all_activated.extend(g3_skills)
     gate_results.append(_gate_result(
         "G3",
         revision,
         g3_skills,
-        [project_state],
+        [project_state, *(["compact_route"] if g3_suppressed else [])],
+        suppressed=g3_suppressed,
         evidence=evidence,
         application_depths=_depths_for_skills(
             g3_skills,
@@ -862,7 +886,7 @@ def route(context: dict[str, Any], manifest: dict[str, Any]) -> dict[str, Any]:
         },
         "gate_results": gate_results,
         "activated_skills": list(dict.fromkeys(all_activated)),
-        "suppressed_skills": [*g5_suppressed, *g6_suppressed],
+        "suppressed_skills": [*g3_suppressed, *g5_suppressed, *g6_suppressed],
         "feedback_results": feedback,
         "events": events,
     }

@@ -239,6 +239,19 @@ class RoutingEntryTests(unittest.TestCase):
         self.assertIn('implementation_quality:security', branches)
         self.assertIn('implementation_quality:performance', branches)
 
+    def test_compact_local_change_skips_only_composition(self):
+        compact = self.route(depth='light', architecture_status='confirmed')
+        self.assertEqual(compact['activated_skills'], [
+            'core.intake-and-route', 'core.architecture-baseline-and-design', 'core.brownfield-impact-analysis',
+            'core.language-engineering', QUALITY, VERIFY])
+        self.assertIn({'skill_id': 'core.workflow-composition', 'reason': 'compact_local_change_single_slice'},
+                      compact['suppressed_skills'])
+        for changes in ({'risk': 'medium'}, {'depth': 'standard'}, {'architecture_status': 'draft'},
+                        {'change_characteristics': ['authored_code', 'api_data_contract']},
+                        {'fields': ['implementation', 'security']}, {'project_state': 'greenfield'}):
+            full = self.route(**{'depth': 'light', 'architecture_status': 'confirmed', **changes})
+            self.assertIn('core.workflow-composition', full['activated_skills'], changes)
+
     def test_read_only_investigation_does_not_run_the_authoring_quality_gate(self):
         result = self.route(action='investigate')
         self.assertNotIn(QUALITY, result['activated_skills'])
