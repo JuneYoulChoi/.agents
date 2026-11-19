@@ -272,6 +272,44 @@ class ClaudeAdapterAssetTests(unittest.TestCase):
             tools = next(line for line in text.splitlines() if line.startswith('tools:'))
             self.assertEqual('Edit' in tools, role in {'implementer', 'documenter'}, role)
 
+    def test_edit_guard_requires_an_active_task_for_project_files_only(self):
+        sys.path.insert(0, str(ROOT / 'adapters/claude/hooks'))
+        from harness_guard import decide
+        with tempfile.TemporaryDirectory() as name:
+            root = Path(name).resolve()
+            edit = {'tool_name': 'Edit', 'tool_input': {'file_path': str(root / 'src/app.py')}}
+            self.assertFalse(decide(edit, root)[0])
+            self.assertTrue(decide({'tool_name': 'Read', 'tool_input': {}}, root)[0])
+            self.assertTrue(decide({'tool_name': 'Write', 'tool_input': {'file_path': '/elsewhere/x'}}, root)[0])
+            self.assertTrue(decide({'tool_name': 'Write', 'tool_input': {
+                'file_path': str(root / '.agents/state/TASK-1/intake.json')}}, root)[0])
+            self.assertFalse(decide({'tool_name': 'Write', 'tool_input': {}}, root)[0])
+            task = root / '.agents/state/TASK-1'; task.mkdir(parents=True)
+            (task / 'state.json').write_text(json.dumps({'task_id': 'TASK-1', 'status': 'waiting_user'}))
+            self.assertFalse(decide(edit, root)[0])
+            (task / 'state.json').write_text(json.dumps({'task_id': 'TASK-1', 'status': 'active'}))
+            self.assertTrue(decide(edit, root)[0])
+
+    def test_edit_guard_exempts_only_listed_project_paths(self):
+        sys.path.insert(0, str(ROOT / 'adapters/claude/hooks'))
+        from harness_guard import decide
+        def edit(path):
+            return {'tool_name': 'Edit', 'tool_input': {'file_path': str(path)}}
+        with tempfile.TemporaryDirectory() as name:
+            root = Path(name).resolve()
+            config = root / '.claude/harness-guard.json'; config.parent.mkdir()
+            config.write_text(json.dumps({'exempt_paths': ['legacy', 'notes.md']}))
+            self.assertTrue(decide(edit(root / 'legacy/module/app.py'), root)[0])
+            self.assertTrue(decide(edit(root / 'notes.md'), root)[0])
+            self.assertFalse(decide(edit(root / 'legacy2/app.py'), root)[0])
+            self.assertFalse(decide(edit(root / 'new_project/app.py'), root)[0])
+            self.assertFalse(decide(edit(config), root)[0])
+            for bad in ({'exempt_paths': ['../outside']}, {'exempt_paths': ['.']}, {'exempt_paths': 'all'},
+                        {'exempt_paths': ['/abs']}):
+                config.write_text(json.dumps(bad))
+                self.assertFalse(decide(edit(root / 'legacy/module/app.py'), root)[0], bad)
+            config.write_text('{broken')
+            self.assertFalse(decide(edit(root / 'notes.md'), root)[0])
 
 
 if __name__ == '__main__':

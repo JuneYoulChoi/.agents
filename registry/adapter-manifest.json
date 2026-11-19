@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "manifest_id": "adapter-template-manifest-v1",
-  "source_revision": "workspace-20261119-6d0fd1a4d02a",
-  "source_tree_sha256": "6d0fd1a4d02a0ed6e1b0ce1abeb68e1b6b6b55206e41a2aa627c72fcf863295a",
+  "source_revision": "workspace-20261119-8cf345704aef",
+  "source_tree_sha256": "8cf345704aef2ba804e94a4a06798f9bc1047f0235dc4b9f53b5190e4bd7f600",
   "templates": [
     {
       "id": "codex.bootstrap",
@@ -96,6 +96,8 @@
   },
   "claude_native_assets": {
     "agents": "adapters/claude/agents",
-    "dispatch": "adapters/claude/native-dispatch.md"
+    "dispatch": "adapters/claude/native-dispatch.md",
+    "hook": "adapters/claude/hooks/harness_guard.py",
+    "hook_enabled_by_default": false
   }
 }

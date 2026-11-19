@@ -71,3 +71,24 @@ record it as `usage.status: reported` with that source, otherwise
 `unavailable`. Worker totals are not task totals. To claim a saving, run the
 same acceptance scope once serially and once delegated and compare parent plus
 worker usage; until then the Runner reports `savings: not_measured`.
+
+## Lifecycle hook (opt-in)
+
+`adapters/claude/hooks/harness_guard.py` is a PreToolUse hook for Edit, Write
+and NotebookEdit. It denies a project file edit unless the target has an
+active Runner task, and always allows writes under `.agents/state/` and outside
+the project. Enable it by merging `hooks/settings.example.json` into the
+target's `.claude/settings.json`, replacing `<harness-source>` with the path of
+this harness on that machine (the shared source never records a project path); only then may intake record
+`enforcement_mode: hook`. Without it the mode is `manual` and mutation needs a
+manual guard. The hook checks task existence, not the correctness of the edit.
+
+A project may exempt existing material that is not harness-managed by listing
+literal project-relative files or directories in
+`.claude/harness-guard.json` (`{"exempt_paths": ["legacy", "notes.md"]}`).
+Exempt paths are edited freely; everything else still needs an active task.
+Globs, absolute paths and paths outside the project are rejected, an unreadable
+list denies edits instead of allowing them, and the agent cannot edit the list
+itself through the guarded tools. When the shared harness is nested in the
+project, exempt its directory: harness changes are governed by their own
+approval gate and the source is not a task store.
