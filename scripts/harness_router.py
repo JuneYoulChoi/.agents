@@ -37,6 +37,9 @@ CHANGE_CHARACTERISTICS = {
 }
 CODE_SCOPE_ACTIONS = {"investigate", "design", "implement", "change", "verify", "review"}
 MUTATION_ACTIONS = {"implement", "change"}
+QUALITY_ACTIONS = CODE_SCOPE_ACTIONS - {"investigate"}
+PATTERN_ARCHITECTURE_ACTIONS = {"define", "plan", "design", "review"}
+FIELD_QUALITY_PROFILES = {"security": "security", "performance": "performance"}
 
 
 
@@ -604,6 +607,14 @@ def route(context: dict[str, Any], manifest: dict[str, Any]) -> dict[str, Any]:
         ),
     ))
 
+    tech_selected, suppressed = _technology_selection(context, manifest)
+    tech_candidates = any(
+        item.get("status") == "candidate" and item.get("material", True)
+        for item in context.get("technologies", [])
+    )
+    config_candidates = context.get("configuration_candidates", [])
+    if not isinstance(config_candidates, list):
+        raise RouterError("configuration_candidates must be an array")
     g3_skills: list[str] = []
     if target == "harness":
         g3_skills.append("core.harness-upgrade-analysis")
@@ -635,10 +646,6 @@ def route(context: dict[str, Any], manifest: dict[str, Any]) -> dict[str, Any]:
         ),
     ))
 
-    tech_selected, suppressed = _technology_selection(context, manifest)
-    config_candidates = context.get("configuration_candidates", [])
-    if not isinstance(config_candidates, list):
-        raise RouterError("configuration_candidates must be an array")
     g4_skills: list[str] = []
     g4_branches = sorted(fields & {
         "testing",
@@ -650,7 +657,7 @@ def route(context: dict[str, Any], manifest: dict[str, Any]) -> dict[str, Any]:
         "compliance",
         "quality_attributes",
     })
-    if tech_selected or "technology_selection" in fields:
+    if tech_selected or tech_candidates or "technology_selection" in fields:
         g4_skills.append("core.technology-selection-and-integration")
         g4_branches.append("technology_selection")
     if config_candidates or "configuration" in fields:
@@ -681,7 +688,10 @@ def route(context: dict[str, Any], manifest: dict[str, Any]) -> dict[str, Any]:
     )
     if "design_patterns" in fields:
         pattern_scopes.add("design")
-    if "architecture" in fields and action in {"design", "review"}:
+    if "architecture" in fields and action in PATTERN_ARCHITECTURE_ACTIONS:
+        pattern_scopes.add("architecture")
+    if project_state == "greenfield" and action == "design":
+        # A new system's design always decides structure; the review may still end not_applicable.
         pattern_scopes.add("architecture")
 
     pattern_suppressed: list[dict[str, Any]] = []
@@ -736,7 +746,7 @@ def route(context: dict[str, Any], manifest: dict[str, Any]) -> dict[str, Any]:
 
     implementation_profiles: list[str] = []
     g6_suppressed: list[dict[str, Any]] = []
-    if language_in_scope:
+    if language_in_scope and action in QUALITY_ACTIONS:
         implementation_profiles.append("core")
         profile_map = manifest["selectors"]["implementation_quality_profiles"]
         implementation_profiles.extend(
@@ -744,7 +754,15 @@ def route(context: dict[str, Any], manifest: dict[str, Any]) -> dict[str, Any]:
             for item in sorted(characteristics)
             if item in profile_map
         )
+        implementation_profiles.extend(
+            FIELD_QUALITY_PROFILES[item] for item in sorted(fields) if item in FIELD_QUALITY_PROFILES
+        )
         implementation_profiles = list(dict.fromkeys(implementation_profiles))
+    elif language_in_scope:
+        g6_suppressed.append({
+            "skill_id": "core.implementation-quality",
+            "reason": "read_only_investigation_has_no_authored_change",
+        })
     elif target == "project" and is_software and action in CODE_SCOPE_ACTIONS:
         g6_suppressed.append({
             "skill_id": "core.implementation-quality",

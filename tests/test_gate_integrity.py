@@ -205,6 +205,11 @@ class RoutingEntryTests(unittest.TestCase):
         self.assertTrue(self.gate(blocked, 'G2')['blocked'])
         self.assertEqual(self.route(project_state='not_applicable', action='investigate')['status'], 'active')
 
+    def test_unselected_technology_candidate_activates_selection(self):
+        result = self.route(technologies=[{'name': 'gRPC', 'status': 'candidate', 'material': True}])
+        self.assertIn('core.technology-selection-and-integration', result['activated_skills'])
+        self.assertNotIn('core.grpc-engineering', result['activated_skills'])
+
     def test_high_risk_and_harness_mutation_require_recorded_approval(self):
         for changes, reason in (({'risk': 'high'}, 'high_risk_approval_required'),
                                 ({'target': 'harness'}, 'harness_change_approval_required')):
@@ -222,6 +227,22 @@ class RoutingEntryTests(unittest.TestCase):
             self.assertEqual(self.route(enforcement_mode='manual', **changes)['status'], 'blocked')
         self.assertEqual(self.route(enforcement_mode='manual', action='design')['status'], 'active')
 
+    def test_architecture_planning_and_greenfield_design_enter_pattern_review(self):
+        for changes in ({'action': 'plan', 'fields': ['architecture']}, {'action': 'define', 'fields': ['architecture']},
+                        {'action': 'design', 'project_state': 'greenfield'}):
+            self.assertIn(PATTERNS, self.route(**changes)['activated_skills'], changes)
+        self.assertNotIn(PATTERNS, self.route()['activated_skills'])
+        self.assertNotIn(PATTERNS, self.route(action='implement', fields=['architecture', 'implementation'])['activated_skills'])
+
+    def test_security_and_performance_fields_select_their_quality_profiles(self):
+        branches = self.gate(self.route(fields=['implementation', 'security', 'performance']), 'G6')['activated_branches']
+        self.assertIn('implementation_quality:security', branches)
+        self.assertIn('implementation_quality:performance', branches)
+
+    def test_read_only_investigation_does_not_run_the_authoring_quality_gate(self):
+        result = self.route(action='investigate')
+        self.assertNotIn(QUALITY, result['activated_skills'])
+        self.assertIn('core.language-engineering', result['activated_skills'])
 
 
 if __name__ == '__main__':

@@ -18,8 +18,9 @@ change. Do not mutate code in this skill. Return to clarification when a choice
 depends on product priorities or an unconfirmed UC/FA/QAS/module boundary.
 
 This is a G5 specialist review. Activate it for an explicit pattern scope,
-`architecture_structure`, `design_interaction`, or an explicit architecture
-design/review request. Action `implement` or `change` alone is insufficient.
+`architecture_structure`, `design_interaction`, an architecture
+define/plan/design/review request, or any Greenfield design. Action `implement`
+or `change` alone is insufficient. The review may still end `not_applicable`.
 Use scope `architecture`, `design`, or both. A pattern failure reopens G5; a requirements
 or architecture-driver contradiction reopens G2/G3 instead.
 
