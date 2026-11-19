@@ -74,3 +74,22 @@ For declared units, use the Runner's prepare-work/record-work boundary and the
 native-work reference under workflow-composition. Send only focused packets to
 fresh worker contexts. Confirm termination and verified joins before advancing;
 report token counters as unavailable when the provider does not expose them.
+
+## Application depth and gate closure
+
+`next.application_depth` bounds every skill the same way: `light` checks only
+the changed boundary and records a compact result with reasons for omitted
+optional steps; `standard` runs the skill's normal procedure; `deep` also
+examines alternatives, boundary failures and independent evidence. Depth never
+removes acceptance criteria, required checks or approvals.
+
+A gate closes only on evidence. `completed` needs artifact and evidence IDs
+(plus the typed `pattern_review` / `implementation_quality` record for those
+skills); `not_applicable` needs a reason and evidence and cannot skip an
+activated baseline or impact skill for a mutation. Return `waiting_user`,
+`blocked` or `failed` when that is the real state, continue a suspended skill
+with Runner `resume`, and report a routed verification failure as `failed`
+with `feedback.kind` so only the responsible gate reopens. High-risk and
+harness mutations need `approval_evidence_ids` at intake.
+
+For native work on Claude follow `adapters/claude/native-dispatch.md`.

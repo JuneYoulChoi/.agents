@@ -984,3 +984,23 @@ and minimal_sufficient. Composition refinement preserves identical completed
 prepared units and receipts while validating only unprepared future changes.
 Budgeted plans show serial admission consistent with the execution guard. See
 [the canonical work contract](08-layered-workflow.md#evidence-driven-expert-assessment-2026-11-15).
+
+## Result, intake and command additions (2026-11-19)
+
+Intake: optional `approval_evidence_ids` (string array), required at G0 for a
+high-risk mutation or a harness mutation.
+
+Skill result: `reason` (required for `not_applicable`); `pattern_review`
+(object or array, required for a completed pattern skill);
+`implementation_quality` (required for a completed quality skill, status equal
+to the result status); `feedback: {"kind": "<backward_routes signal>"}`
+(allowed only with `failed`); `independent_verification_evidence_ids`
+(required at G7 when the gate profile sets `independent_context`).
+
+State: `suspended_by` (the skill whose result suspended the task),
+`execution.decisions`, `execution.feedback_attempts` and
+`execution.feedback_log`. Old states without them remain readable.
+
+Runner command: `resume --target-root <project> --task-id <id>
+--expected-revision <n> --request <file>` with
+`{"answer": "...", "decision_evidence_ids": ["..."]}`.

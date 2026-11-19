@@ -273,3 +273,62 @@ Report essential omissions, unnecessary questions, scope additions and supported
 new findings; compare acceptance-matched runs before claiming quality or cost
 improvements. Parent plus worker provider usage is needed for token savings;
 packet bytes, role names and passing unit tests are not substitutes.
+
+## Gate integrity, routing entry and native dispatch (2026-11-19)
+
+User-approved after a routing/gating review that reproduced gates closing
+without work. The graph, skills and serial Runner are unchanged; closure and
+entry conditions are tightened and two Runner commands are added.
+
+Closure. A `completed` skill result requires artifact and evidence IDs; a
+`not_applicable` result requires a `reason` and evidence, and an activated
+architecture-baseline, Brownfield-impact or Greenfield-planning skill cannot be
+skipped when the action is `implement` or `change`. A result whose
+`transition.next_stage` is `clarification`, `backward_feedback`, `blocked` or
+`failed` cannot advance. The pattern and implementation-quality skills submit
+their typed records (`pattern_review`, `implementation_quality`), which the
+Runner validates; an open `user_decision_required` pattern decision cannot be
+`completed`. A `degraded` execution resolution needs evidence IDs. When the
+route sets `independent_context`, G7 completion requires
+`independent_verification_evidence_ids`.
+
+Continuation. `resume` returns a task that a skill result suspended
+(`waiting_user` or `blocked`) to the same skill after recording the answer and
+decision evidence; earlier gates are not replayed. A routing-level block still
+needs a corrected linked intake. A `failed` result may carry
+`feedback: {"kind": <backward_routes signal>}`: the Runner rewinds the cursor
+to the first queued skill at or after the target gate, keeps earlier results,
+counts attempts per target gate itself and escalates to the user at the third
+attempt, for an unrouted signal, for a gate without a queued owner, or when
+recorded work units belong to the reopened gates. A `failed` result without
+feedback remains terminal.
+
+Routing entry. An authored code change under a non-software scope is rejected;
+`not_applicable` project state blocks design or mutation at G2. A material
+technology with status `candidate` activates technology selection. High-risk
+mutation and harness mutation block at G0 without `approval_evidence_ids`.
+Manual and unsupported enforcement block every workspace write, including
+`document` actions and workspace-mutating work units. Pattern review is entered
+for an `architecture` field with define/plan/design/review and for any
+Greenfield design; `security` and `performance` fields select their quality
+profiles. Read-only investigation does not activate implementation quality.
+A compact route (Brownfield, light depth, low risk, confirmed baseline, only
+`authored_code`, no units, technologies, configuration candidates or sensitive
+fields) suppresses `workflow-composition` with a reason; baseline, impact,
+language, quality and verification gates remain.
+
+Roles and dispatch. Unit roles carry fuller responsibility guidance and are
+bound to the current gate's portable role; `prepare-work` rejects a role that
+gate does not allow. The Claude adapter supplies one agent definition per role,
+a dispatch procedure, a reasoning-to-model mapping and an opt-in edit guard
+hook ([Claude dispatch](../adapters/claude/native-dispatch.md)).
+SOLID/GRASP now have one checkable
+[reference](../skills/architecture-and-design-patterns/references/solid-grasp.md)
+used at G2 responsibility assignment, G5 pattern decisions and the G6
+object-oriented profile.
+
+Not changed: a configured `worker_token_budget` still admits one worker at a
+time; token savings remain `not_measured` until a comparable serial run is
+measured; `allowed_tools` remain requirements checked by the adapter; evidence
+hashes prove identity, not truth. `tests/test_gate_integrity.py` covers the new
+rules.

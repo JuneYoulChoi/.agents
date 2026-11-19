@@ -264,3 +264,14 @@ at intake and each current skill, recording dispatch or a concrete fallback for
 material triggers. G1 assessments precede Runner start and are read-only; G1 is
 not a queued worker owner. Deliver optional reasoning_lens guidance without
 changing portable effort, authority or acceptance.
+
+## Claude native assets (2026-11-19)
+
+The Claude adapter additionally ships `adapters/claude/agents/harness-*.md`
+(one bounded agent per unit role), `adapters/claude/native-dispatch.md`
+(dispatch, gate-role binding, reasoning-to-model mapping, usage recording) and
+`adapters/claude/hooks/` (an opt-in PreToolUse edit guard with a settings
+example). Installation copies the agents to the target `.claude/agents/`. The
+hook is enabled only by an explicit project decision; without it enforcement
+stays `manual`. These assets change presentation and loading only; packets,
+receipts, gate results and completion rules are the portable ones.
