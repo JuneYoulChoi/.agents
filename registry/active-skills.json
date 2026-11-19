@@ -4,7 +4,7 @@
   "integrity_policy": {
     "core_entries": "harness_source_tree_manifest",
     "adapter_manifest": "registry/adapter-manifest.json",
-    "manifest_revision": "workspace-20261119-2c28442ad51c",
+    "manifest_revision": "workspace-20261119-9a2240308c4c",
     "manifest_hash_scope": "canonical active-skills.json excluding integrity_policy.manifest_sha256",
     "excluded_paths": [
       ".git",
@@ -21,7 +21,7 @@
       "tools/ros-mcp-server/upstream/ros_mcp.egg-info",
       "tools/ros-mcp-server/upstream/.venv"
     ],
-    "manifest_sha256": "5174603bf25b3d336f46266d2fd69e45a9deefca173c2c514aadf48b64ba1eb8"
+    "manifest_sha256": "f52c2f6c3db2d3e3149ff0793c531bfae2901f12e1caa469cde8fb5ed3c73263"
   },
   "resolution_order": [
     "project_reviewed",
@@ -210,14 +210,15 @@
     },
     {
       "id": "core.implementation-quality",
-      "version": "0.4.0",
+      "version": "0.5.0",
       "entry": "skills/implementation-quality/SKILL.md",
       "trust": "approved",
       "capabilities": [
         "implementation_applicability",
         "language_neutral_code_quality",
         "selective_quality_profiles",
-        "implementation_verification"
+        "implementation_verification",
+        "code_documentation_check"
       ],
       "network_access": "none",
       "data_access": "workspace",
@@ -227,7 +228,8 @@
         "claude"
       ],
       "required_worker_references": [
-        "skills/implementation-quality/references/core.md"
+        "skills/implementation-quality/references/core.md",
+        "skills/implementation-quality/references/readability-and-documentation.md"
       ]
     },
     {

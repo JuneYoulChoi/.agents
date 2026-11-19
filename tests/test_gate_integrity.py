@@ -1,4 +1,8 @@
-"""Gate closure, skip, resume, bounded feedback and routing-entry regressions (2026-11-19 review)."""
+"""
+모듈: 하네스 테스트 (tests)
+컴포넌트: 게이트 무결성 회귀 테스트
+역할: 게이트 완료·건너뛰기·재개·되돌림·라우팅 진입 규칙과 코드 문서화 검사 연결을 검증한다.
+"""
 import copy
 import hashlib
 import json
@@ -49,16 +53,30 @@ def pattern_review(decision_status):
                          'decision_evidence_ids': ['EVD-user-choice'] if selected else []}}
 
 
+SAMPLE_SOURCE = (
+    '"""\n모듈: 테스트 대상\n컴포넌트: 샘플\n역할: 문서화 규칙을 만족하는 예시 파일.\n"""\n\n\n'
+    'def add(a, b):\n'
+    '    """\n    역할: 두 수를 더한다.\n\n    입력:\n        a: 첫 번째 수\n        b: 두 번째 수\n'
+    '    출력:\n        합계\n    """\n'
+    '    return a + b\n'
+)
+DOCUMENTATION_CHECK = {'files': ['src/sample.py']}
 QUALITY_RECORD = {'schema_version': 1, 'status': 'completed', 'authored_boundaries': ['src'],
     'activated_profiles': [{'id': 'core', 'depth': 'light', 'authored_boundaries': ['src'],
         'evidence_ids': ['EVD-q'], 'expected_outcomes': ['behavior preserved'], 'verification_ids': ['VER-q']}],
-    'suppressed_profiles': [], 'findings': [], 'changes_or_recommendations': [], 'residual_risks': [], 'open_points': []}
+    'suppressed_profiles': [], 'findings': [], 'changes_or_recommendations': [], 'residual_risks': [], 'open_points': [],
+    'readability_standard': 'PEP 8', 'documentation_check': DOCUMENTATION_CHECK}
 
 
 class RunnerGateClosureTests(unittest.TestCase):
     def setUp(self):
+        """
+        역할: 임시 대상 루트에 증거 파일과 문서화 규칙을 만족하는 샘플 소스를 준비한다.
+        """
         temp = tempfile.TemporaryDirectory(); self.addCleanup(temp.cleanup)
         self.target = Path(temp.name)
+        (self.target / 'src').mkdir()
+        (self.target / 'src/sample.py').write_text(SAMPLE_SOURCE)
         self.intake = base_intake()
         self.intake['change_characteristics'] = ['authored_code', 'architecture_structure']
         self.proof = self.target / 'proof.txt'
@@ -133,6 +151,20 @@ class RunnerGateClosureTests(unittest.TestCase):
         self.assert_rejected(response, missing)
         self.assert_rejected(response, self.result(
             response, implementation_quality={**QUALITY_RECORD, 'status': 'not_applicable'}))
+
+    def test_quality_completion_requires_standard_and_passing_documentation(self):
+        """
+        역할: 구현 품질 완료가 가독성 기준과 Runner의 문서화 재검사 통과를 요구하는지 확인한다.
+        """
+        response = self.advance_to(self.begin(), QUALITY)
+        for key in ('readability_standard', 'documentation_check'):
+            record = dict(QUALITY_RECORD); del record[key]
+            self.assert_rejected(response, self.result(response, implementation_quality=record))
+        (self.target / 'src/undocumented.py').write_text('def add(a, b):\n    return a + b\n')
+        for files in (['src/undocumented.py'], ['../outside.py'], ['src/missing.py']):
+            record = {**QUALITY_RECORD, 'documentation_check': {'files': files}}
+            self.assert_rejected(response, self.result(response, implementation_quality=record))
+        self.assertEqual(self.send(response, self.result(response))['next']['skill_id'], VERIFY)
 
     def test_user_decision_resumes_the_same_skill_without_replaying_earlier_gates(self):
         response = self.advance_to(self.begin(), PATTERNS)

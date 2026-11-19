@@ -1,4 +1,8 @@
-"""Reproduced guide/runtime gaps: concrete evidence, trust, ordering and restart."""
+"""
+모듈: 하네스 테스트 (tests)
+컴포넌트: 게이트 경계 회귀 테스트
+역할: 증거 파일, 소스 신뢰, 실행 순서, 재시작 경계에서 재현된 문제가 다시 생기지 않는지 검증한다.
+"""
 import copy
 import hashlib
 import json
@@ -18,16 +22,30 @@ from harness_validator import (ContractError, canonical_json_bytes, validate_acc
                                validate_intake)
 
 
+SAMPLE_SOURCE = (
+    '"""\n모듈: 테스트 대상\n컴포넌트: 샘플\n역할: 문서화 규칙을 만족하는 예시 파일.\n"""\n\n\n'
+    'def add(a, b):\n'
+    '    """\n    역할: 두 수를 더한다.\n\n    입력:\n        a: 첫 번째 수\n        b: 두 번째 수\n'
+    '    출력:\n        합계\n    """\n'
+    '    return a + b\n'
+)
+DOCUMENTATION_CHECK = {'files': ['src/sample.py']}
 QUALITY_RECORD = {'schema_version': 1, 'status': 'completed', 'authored_boundaries': ['src'],
     'activated_profiles': [{'id': 'core', 'depth': 'light', 'authored_boundaries': ['src'],
         'evidence_ids': ['EVD-fixture'], 'expected_outcomes': ['behavior preserved'], 'verification_ids': ['VER-fixture']}],
-    'suppressed_profiles': [], 'findings': [], 'changes_or_recommendations': [], 'residual_risks': [], 'open_points': []}
+    'suppressed_profiles': [], 'findings': [], 'changes_or_recommendations': [], 'residual_risks': [], 'open_points': [],
+    'readability_standard': 'PEP 8', 'documentation_check': DOCUMENTATION_CHECK}
 
 
 class GateBoundaryTests(unittest.TestCase):
     def setUp(self):
+        """
+        역할: 임시 대상 루트, 레지스트리 경로, 기본 intake, 증거 파일과 문서화된 샘플 소스를 준비한다.
+        """
         temp = tempfile.TemporaryDirectory(); self.addCleanup(temp.cleanup)
         self.target = Path(temp.name)
+        (self.target / 'src').mkdir()
+        (self.target / 'src/sample.py').write_text(SAMPLE_SOURCE)
         self.registry = ROOT / 'registry/active-skills.json'
         self.taxonomy = ROOT / 'registry/taxonomy.json'
         self.manifest_path = ROOT / 'registry/routing-gates.json'

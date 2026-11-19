@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-"""Small standard-library validators for the portable harness contracts."""
+"""
+모듈: 하네스 런타임 (scripts)
+컴포넌트: 계약 검증기
+역할: intake, 라우팅 결과, 스킬 결과, 패턴 검토, 구현 품질, 작업 상태, 설치 설정 등
+      하네스의 이식 가능한 계약을 표준 라이브러리만으로 검증한다.
+"""
 
 from __future__ import annotations
 
@@ -703,7 +708,17 @@ def validate_pattern_review(value: dict[str, Any]) -> dict[str, Any]:
 
 
 def validate_implementation_quality(value: dict[str, Any]) -> dict[str, Any]:
-    """Validate selective G6 implementation-quality applicability evidence."""
+    """
+    역할: G6 구현 품질 기록의 프로파일 적용 근거와, 완료 시 필요한 가독성 기준·
+          코드 문서화 검사 대상을 검증한다.
+
+    입력:
+        value: implementation_quality 기록
+    출력:
+        검증을 통과한 같은 기록
+    예외:
+        ContractError: 형식이나 완료 조건을 어긴 경우
+    """
     if value.get("schema_version") != 1:
         raise ContractError("implementation quality schema_version must be 1")
     status = _require_string(
@@ -774,6 +789,17 @@ def validate_implementation_quality(value: dict[str, Any]) -> dict[str, Any]:
             raise ContractError("completed implementation quality requires authored boundaries")
         if "core" not in active_ids:
             raise ContractError("applicable implementation quality requires the core profile")
+        _require_string(value, "readability_standard")
+        documentation = value.get("documentation_check")
+        if not isinstance(documentation, dict):
+            raise ContractError("completed implementation quality requires a documentation_check")
+        files = _string_array(documentation, "files")
+        if not files or len(set(files)) != len(files) or any(not f.strip() for f in files):
+            raise ContractError("documentation_check.files must list the authored code files")
+        for index, path in enumerate(files):
+            safe_relative_path(path, f"documentation_check.files[{index}]")
+        if "base_revision" in documentation and documentation["base_revision"] is not None:
+            _require_string(documentation, "base_revision")
     return value
 
 

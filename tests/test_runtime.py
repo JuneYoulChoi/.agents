@@ -1,4 +1,8 @@
-"""Focused regression tests for the minimal reference runtime."""
+"""
+모듈: 하네스 테스트 (tests)
+컴포넌트: 런타임 회귀 테스트
+역할: 라우터·Runner·상태 저장소·계약 검증기의 기본 동작을 좁은 단위로 검증한다.
+"""
 
 from __future__ import annotations
 
@@ -116,6 +120,12 @@ def undecided_pattern_review() -> dict:
 
 
 def implementation_quality_result() -> dict:
+    """
+    역할: 완료 상태의 유효한 구현 품질 기록 예시를 만든다.
+
+    출력:
+        core 프로파일, 가독성 기준, 문서화 검사 대상을 갖춘 기록
+    """
     return {
         "schema_version": 1,
         "status": "completed",
@@ -137,13 +147,23 @@ def implementation_quality_result() -> dict:
         "changes_or_recommendations": [],
         "residual_risks": [],
         "open_points": [],
+        "readability_standard": "PEP 8",
+        "documentation_check": {"files": ["src/service/handler.py"]},
     }
 
 
 class RuntimeTests(unittest.TestCase):
     def setUp(self) -> None:
+        """
+        역할: 임시 대상 루트와 레지스트리 경로를 준비하고, 문서화 규칙을 만족하는 샘플 소스를 둔다.
+        """
         self.temp_owner = tempfile.TemporaryDirectory(prefix="harness-runtime-test-")
         self.target = Path(self.temp_owner.name)
+        source = self.target / "src" / "service" / "handler.py"
+        source.parent.mkdir(parents=True)
+        source.write_text(
+            '"""\n모듈: 테스트 대상\n컴포넌트: 서비스\n역할: 문서화 규칙을 만족하는 예시 파일.\n"""\n'
+        )
         self.registry = HARNESS_ROOT / "registry" / "active-skills.json"
         self.taxonomy = HARNESS_ROOT / "registry" / "taxonomy.json"
         self.manifest = HARNESS_ROOT / "registry" / "routing-gates.json"
@@ -204,6 +224,9 @@ class RuntimeTests(unittest.TestCase):
         self.assertEqual("core.brownfield-impact-analysis", advanced["next"]["skill_id"])
 
     def test_completion_requires_successful_verification_and_writes_handoff(self) -> None:
+        """
+        역할: 모든 스킬을 순서대로 완료하면 검증 통과 상태와 handoff 파일이 남는지 확인한다.
+        """
         response = self.start_task()
         result_path = self.target / "skill-result.json"
         proof = self.target / 'verification.txt'
@@ -219,13 +242,7 @@ class RuntimeTests(unittest.TestCase):
                     "schema_version": 1,
                     "skill_id": skill_id,
                     "status": "completed",
-                    "implementation_quality": {
-                        "schema_version": 1, "status": "completed", "authored_boundaries": ["src"],
-                        "activated_profiles": [{"id": "core", "depth": "light", "authored_boundaries": ["src"],
-                            "evidence_ids": ["EV-Q"], "expected_outcomes": ["behavior preserved"],
-                            "verification_ids": ["VER-Q"]}],
-                        "suppressed_profiles": [], "findings": [], "changes_or_recommendations": [],
-                        "residual_risks": [], "open_points": []},
+                    "implementation_quality": implementation_quality_result(),
                     "verification": [{"criterion": criterion, "status": "passed", "evidence": [
                         {"path": "verification.txt", "sha256": hashlib.sha256(proof.read_bytes()).hexdigest()}]}
                         for criterion in intake()['intent']['success_criteria']],

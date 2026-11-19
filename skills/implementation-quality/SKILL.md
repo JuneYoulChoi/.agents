@@ -29,8 +29,12 @@ profile merely because its principle is generally desirable.
 
 ## 1. Load only applicable profiles
 
-Always read [core](references/core.md) for an applicable authored-code task.
-Read additional references only for matching evidence:
+Always read [core](references/core.md) and
+[readability and documentation](references/readability-and-documentation.md)
+for an applicable authored-code task. The second fixes the readability standard
+and requires a Korean file header (모듈·컴포넌트·역할) on every created or
+modified code file and a Korean comment (역할·입력·출력) on every created or
+modified function. Read additional references only for matching evidence:
 
 - [object-oriented](references/object-oriented.md) for changed class,
   interface, polymorphism, or responsibility boundaries;
@@ -106,6 +110,10 @@ implementation_quality:
   changes_or_recommendations: []
   residual_risks: []
   open_points: []
+  readability_standard: ''        # required when completed
+  documentation_check:            # required when completed; the Runner re-runs it
+    files: []                     # authored code files created or modified
+    base_revision: null           # optional Git revision limiting function checks
 transition:
   next_stage: clarification | execution | verification
   next_skill: ''
@@ -114,7 +122,9 @@ transition:
 
 Submit this record as `implementation_quality` (with `schema_version: 1`) in
 the Runner skill result; its `status` must equal the result status. The Runner
-rejects a `completed` result without it.
+rejects a `completed` result without it, without a `readability_standard`, or
+when `scripts/harness_code_docs.py` reports a missing or incomplete Korean
+header or function comment in `documentation_check.files`.
 
 ## Exit gate
 

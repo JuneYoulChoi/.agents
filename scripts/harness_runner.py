@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-"""Fixed-stage workflow coordinator for the portable harness reference runtime."""
+"""
+모듈: 하네스 런타임 (scripts)
+컴포넌트: Runner
+역할: 라우팅 결과를 스킬 실행 큐로 만들고, 스킬 결과 제출·재개·되돌림·작업 단위 기록을
+      검증한 뒤 작업 상태를 한 단계씩 진행한다. (Fixed-stage workflow coordinator.)
+"""
 
 from __future__ import annotations
 
@@ -10,6 +15,7 @@ from pathlib import Path
 from typing import Any, Iterable
 
 from harness_bootstrap import verify_source
+from harness_code_docs import check as check_code_docs
 from harness_router import _load_manifest, route
 from harness_delegation import prepare, record, require_join, usage_summary, validate_bindings
 from harness_state import StateError, StateStore, utc_now
@@ -293,6 +299,22 @@ def submit(
     registry_path: Path,
     manifest_path: Path | None = None,
 ) -> dict[str, Any]:
+    """
+    역할: 현재 차례 스킬의 결과를 검증하고, 통과하면 작업 상태를 다음 단계로 진행한다.
+
+    입력:
+        target_root: 작업 상태를 보관하는 대상 프로젝트 루트
+        task_id: 진행할 작업 ID
+        expected_revision: 호출자가 읽은 상태 리비전(동시 수정 방지)
+        result_path: 스킬 결과 JSON 파일 경로
+        harness_root: 하네스 소스 루트
+        registry_path: 승인된 스킬 레지스트리 경로
+        manifest_path: 라우팅 매니페스트 경로(생략 시 하네스 기본값)
+    출력:
+        갱신된 작업 상태 요약과 다음 스킬 안내
+    예외:
+        RunnerError, ContractError: 결과가 계약·순서·증거 규칙을 어긴 경우
+    """
     verify_source(harness_root, registry_path)
     approved = active_skill_ids(registry_path)
     result = validate_skill_result(read_object(result_path), approved)
@@ -324,7 +346,7 @@ def submit(
     if (result['status'] == 'not_applicable' and result['skill_id'] in NON_SKIPPABLE_FOR_MUTATION
             and current['classification']['action'] in MUTATION_ACTIONS):
         raise RunnerError('an activated baseline or impact skill cannot be skipped for a mutation')
-    _validate_typed_payload(result)
+    _validate_typed_payload(result, target_root)
     if (current['project_state'] == 'unknown'
             and result['skill_id'] == 'core.architecture-baseline-and-design'
             and result['status'] in {'completed', 'not_applicable'}):
@@ -465,8 +487,17 @@ def submit(
 FEEDBACK_RETRY_LIMIT = 3
 
 
-def _validate_typed_payload(result: dict[str, Any]) -> None:
-    """Bind the skill-specific contracts to the gate transition they justify."""
+def _validate_typed_payload(result: dict[str, Any], target_root: Path) -> None:
+    """
+    역할: 패턴 검토·구현 품질 스킬의 형식 기록을 검증하고, 구현 품질 완료 시
+          코드 문서화(한글 헤더·함수 주석) 검사를 직접 다시 실행한다.
+
+    입력:
+        result: 제출된 스킬 결과
+        target_root: 문서화 검사를 실행할 대상 프로젝트 루트
+    예외:
+        RunnerError, ContractError: 기록이 없거나 계약을 어기거나 문서화 검사가 실패한 경우
+    """
     skill_id, status = result["skill_id"], result["status"]
     if skill_id == "core.architecture-and-design-patterns":
         review = result.get("pattern_review")
@@ -494,6 +525,16 @@ def _validate_typed_payload(result: dict[str, Any]) -> None:
         validate_implementation_quality(quality)
         if quality["status"] != status:
             raise RunnerError("implementation_quality status must match the skill result status")
+        if status == "completed":
+            documentation = quality["documentation_check"]
+            try:
+                report = check_code_docs(target_root, documentation["files"], documentation.get("base_revision"))
+            except (OSError, ValueError, RuntimeError) as exc:
+                raise RunnerError(f"documentation check could not run: {exc}") from exc
+            if report["status"] != "passed":
+                problems = [f["path"] for f in report["files"] if f["header"] != "ok" or f["function_problems"]]
+                raise RunnerError("code documentation check failed (Korean header or function comments): "
+                                  + ", ".join(problems))
 
 
 def _feedback_plan(state: dict[str, Any], result: dict[str, Any], manifest_path: Path) -> dict[str, Any] | None:
