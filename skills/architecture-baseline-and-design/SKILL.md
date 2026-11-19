@@ -207,8 +207,14 @@ baseline and before implementation. Architecture records required capability
 and integration constraints; the technology skill selects products and
 specialist procedures.
 
-Route through `$architecture-and-design-patterns` at G5 only when an explicit
-pattern scope, architecture-structure change, or design-interaction change is
+When this skill creates or changes LLD module responsibilities, assign them
+with the [SOLID and GRASP checks](../architecture-and-design-patterns/references/solid-grasp.md)
+and record violated or traded-off items in the LLD entry. This is a bounded
+reference read; it does not load the pattern catalogs.
+
+Route through `$architecture-and-design-patterns` at G5 when an explicit
+pattern scope, architecture-structure change, design-interaction change,
+architecture define/plan/design/review request, or Greenfield design is
 evidenced. The architecture baseline supplies drivers and constraints; an
 ordinary local implementation can record no pattern impact and continue
 without loading the pattern catalogs.

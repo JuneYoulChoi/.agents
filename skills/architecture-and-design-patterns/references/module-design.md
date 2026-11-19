@@ -15,7 +15,8 @@ not activate pattern review for every bugfix.
 - Test at the boundary that exposes the relevant behavior. Inject dependencies
   where control of effects is needed; do not demand an interface for every class
   or a second implementation before any dependency boundary is legitimate.
-- Preserve applicable SOLID/GRASP, idiomatic language rules and accepted ADRs.
+- Apply the [SOLID and GRASP checks](solid-grasp.md) that fit the boundary,
+  and preserve idiomatic language rules and accepted ADRs.
   A small public surface does not justify a giant implementation with unrelated
   responsibilities or hidden errors.
 

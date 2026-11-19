@@ -176,12 +176,23 @@ ecosystem or language skills merely because they are registered.
 For code-related work record `language_scope` as `authored_in_scope`,
 `detected_only`, `generated_only`, or `none`. Record only evidenced
 `change_characteristics`; at minimum distinguish `authored_code`,
-`architecture_structure`, `design_interaction`, `api_data_contract`,
+`architecture_structure`, `design_interaction`, `object_oriented`,
+`functional`, `data_oriented`, `api_data_contract`,
 `concurrency`, `distributed`, `security`, `performance`, `realtime_embedded`,
 `configuration`, `documentation_only`, and `generated_code_only` as applicable.
 Do not infer every project language or quality practice from repository-wide
 detection. An activation requires scope overlap, evidence, an expected output,
 and a verification method; otherwise suppress it with a reason.
+
+Record `object_oriented` whenever a class, interface or responsibility
+boundary is created or changed; it selects the SOLID/GRASP quality profile.
+Record `approval_evidence_ids` for a high-risk or harness mutation; without it
+G0 blocks. A material technology still being chosen is recorded with status
+`candidate`, which activates technology selection. A contradictory record
+(authored code change under a non-software scope, or `not_applicable` project
+state with design or mutation) is rejected or blocked for reclassification.
+A low-risk, light, confirmed-baseline Brownfield change with only
+`authored_code` is routed compactly without a separate composition step.
 
 ## 5. Return a transition, not a hidden conclusion
 

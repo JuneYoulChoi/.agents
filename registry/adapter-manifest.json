@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "manifest_id": "adapter-template-manifest-v1",
-  "source_revision": "workspace-20261119-0386d41d5d4e",
-  "source_tree_sha256": "0386d41d5d4e5a70bd84822d20785fb394439ae1e5d51cd096f83b5e58dacc58",
+  "source_revision": "workspace-20261119-ad51ccafa8c0",
+  "source_tree_sha256": "ad51ccafa8c058cbc4d263bba36216ff5b2ee01b831395c5058bd934ccac3135",
   "templates": [
     {
       "id": "codex.bootstrap",

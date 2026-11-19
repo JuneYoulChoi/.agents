@@ -4,7 +4,7 @@
   "integrity_policy": {
     "core_entries": "harness_source_tree_manifest",
     "adapter_manifest": "registry/adapter-manifest.json",
-    "manifest_revision": "workspace-20261119-0386d41d5d4e",
+    "manifest_revision": "workspace-20261119-ad51ccafa8c0",
     "manifest_hash_scope": "canonical active-skills.json excluding integrity_policy.manifest_sha256",
     "excluded_paths": [
       ".git",
@@ -21,7 +21,7 @@
       "tools/ros-mcp-server/upstream/ros_mcp.egg-info",
       "tools/ros-mcp-server/upstream/.venv"
     ],
-    "manifest_sha256": "2864a8d75ddf17c2e3d282473e145d7bc4126fd31d71efdf686313b3de75e1fb"
+    "manifest_sha256": "5127afff3e44a57f02a38d366a037d4c1e004d56a3c7c074c87aaf0e1c3746b3"
   },
   "resolution_order": [
     "project_reviewed",
@@ -32,7 +32,7 @@
   "skills": [
     {
       "id": "core.intake-and-route",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "entry": "skills/intake-and-route/SKILL.md",
       "trust": "approved",
       "capabilities": [
@@ -70,7 +70,7 @@
     },
     {
       "id": "core.architecture-baseline-and-design",
-      "version": "0.3.0",
+      "version": "0.4.0",
       "entry": "skills/architecture-baseline-and-design/SKILL.md",
       "trust": "approved",
       "capabilities": [
@@ -197,7 +197,8 @@
         "design_pattern_selection",
         "pattern_tradeoff_analysis",
         "pattern_decision_support",
-        "brownfield_pattern_assessment"
+        "brownfield_pattern_assessment",
+        "responsibility_assignment_checks"
       ],
       "network_access": "none",
       "data_access": "workspace",

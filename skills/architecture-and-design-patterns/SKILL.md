@@ -50,6 +50,11 @@ seams when they fit. Do not impose an upstream vocabulary, exactly-one-interface
 rule, mandatory parallel design contest or fixed number of adapters. Keep
 domain language and the project's accepted architecture authoritative.
 
+When a responsibility boundary is created or changed, apply the applicable
+[SOLID and GRASP checks](references/solid-grasp.md) to the boundaries in scope
+and record them in the PATTERN record. Each selected or rejected candidate
+names the checks it improves and worsens.
+
 Read [architecture patterns](references/architecture-patterns.md) only for
 system/module/deployment structure. Read [design patterns](references/design-patterns.md)
 only for concrete object, component, collaboration, state, integration, or
@@ -163,6 +168,7 @@ pattern_review:
   quality_attribute_effects: []
   decision_ids: []
   implementation_constraints: []
+  responsibility_checks: []
   migration_and_rollback: []
   verification: []
   open_points: []
