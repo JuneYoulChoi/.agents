@@ -8,6 +8,14 @@ description: Verify that a software, design, documentation, or operational task 
 Use this skill before declaring a task complete. Verification is evidence, not a
 summary of intent.
 
+## Advisory finish
+
+At the advisory level there is no Runner task. Finish with one run of
+`scripts/harness_finish.py --target-root <project> --base <start revision>`:
+exit 0 passes, 1 lists comment or module-map violations to fix, 3 means the
+diff looks like a major change and the user must approve enforcement or decline
+it. Report the enforcement level and any waiver in the handoff.
+
 ## Runner closure rules
 
 A gate closes only with matching evidence. `completed` needs artifact and

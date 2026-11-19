@@ -16,6 +16,7 @@ Rules: [doc and code sync](../../skills/architecture-baseline-and-design/referen
 | 하네스 런타임 (scripts) | 픽스처 실행기 | 픽스처를 라우터·설치기에 넣어 기대 결과와 비교한다 | `scripts/fixture_runner.py` |
 | 하네스 런타임 (scripts) | 코드 문서화 검사기 | 한글 파일 헤더와 함수 주석을 검사한다 | `scripts/harness_code_docs.py` |
 | 하네스 런타임 (scripts) | 문서 동기화 검사기 | 코드 헤더와 모듈 맵, 문서의 코드 경로 인용을 대조한다 | `scripts/harness_doc_sync.py` |
+| 하네스 런타임 (scripts) | 마무리 검사 | 훅 없는 일반 변경의 주석·문서 동기화 검사와 큰 변경 신호 감지 | `scripts/harness_finish.py` |
 | 하네스 런타임 (scripts) | 개요 스탬프 | 개요가 설명하는 소스의 지문을 계산·기록한다 | `scripts/harness_overview.py` |
 | Claude 어댑터 (adapters/claude) | 편집 가드 훅 | 활성 작업 없는 프로젝트 파일 편집을 거부한다 | `adapters/claude/hooks/harness_guard.py` |
 | 하네스 테스트 (tests) | 런타임 회귀 테스트 | 라우터·Runner·상태·검증기의 기본 동작 | `tests/test_runtime.py` |
@@ -23,4 +24,5 @@ Rules: [doc and code sync](../../skills/architecture-baseline-and-design/referen
 | 하네스 테스트 (tests) | 게이트 무결성 회귀 테스트 | 게이트 완료·재개·되돌림·라우팅 진입 | `tests/test_gate_integrity.py` |
 | 하네스 테스트 (tests) | 코드 문서화 검사기 테스트 | 헤더·함수 주석 검사기 | `tests/test_code_docs.py` |
 | 하네스 테스트 (tests) | 문서 동기화 테스트 | 문서 동기화 검사기, 하네스 자체의 맵·개요 일치 | `tests/test_doc_sync.py` |
+| 하네스 테스트 (tests) | 강제 수준 테스트 | 큰 변경 판정, 권고 모드, 편집 가드 훅, 마무리 검사 | `tests/test_enforcement.py` |
 | 하네스 테스트 (tests) | 기존 회귀 테스트 | 위임·워크플로·intake 결정·전문가 워크플로·문서·ROS MCP | `tests/test_delegation.py`, `tests/test_workflow.py`, `tests/test_intake_decisions.py`, `tests/test_expert_workflow.py`, `tests/test_documentation.py`, `tests/test_ros2_mcp.py` |
