@@ -132,9 +132,10 @@ fail if any bootstrap file exceeds 32 KiB; never truncate or leave unresolved
 placeholders.
 
 Prompt files alone cannot enforce MUST rules. Record the adapter enforcement
-level as `hook`, `manual`, or `unsupported`. `manual` permits durable state and
-limited reversible workspace mutation only with a fresh manual guard/action
-record; `unsupported` is ephemeral/read-only and cannot claim resume. All modes
+level as `hook`, `manual`, or `unsupported`. `manual` permits durable state only
+with a fresh manual guard/action record and otherwise runs at the advisory or
+requested [enforcement level](../../plan/06-platform-adapters.md#enforcement-levels);
+`unsupported` is ephemeral/read-only and cannot claim resume. All modes
 block external, destructive, high-risk, approval-bypassing, or unsafe state
 actions. Validate source-relative paths, realpath containment, symlink/permission
 policy, LF-normalized UTF-8 bytes (32 KiB hard cap), canonical self-excluded

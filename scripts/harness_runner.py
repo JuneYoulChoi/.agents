@@ -176,6 +176,23 @@ def start(
     taxonomy_path: Path,
     manifest_path: Path,
 ) -> dict[str, Any]:
+    """
+    역할: intake를 검증·라우팅하고, 강제 가능한 경우(훅 또는 유효한 수동 가드) 작업 상태를 만든다.
+          권고 모드나 훅 요청 상태면 상태를 저장하지 않고 요약만 돌려준다.
+
+    입력:
+        target_root: 대상 프로젝트 루트(공용 하네스를 담은 폴더는 거부)
+        task_id: 새 작업 ID
+        intake_path: intake JSON 파일 경로
+        adapter: 실행 어댑터 이름(codex 또는 claude)
+        harness_revision: 호출자가 준 리비전 표시(신뢰하지 않고 검증된 값을 기록)
+        harness_root: 하네스 소스 루트
+        registry_path, taxonomy_path, manifest_path: 고정된 레지스트리·분류·라우팅 파일 경로
+    출력:
+        저장된 작업의 상태 요약과 다음 스킬, 또는 저장하지 않은 라우팅 요약(durable: False)
+    예외:
+        RunnerError, ContractError, StateError: 입력·무결성·대상 위치가 잘못된 경우
+    """
     verified_revision = verify_source(harness_root, registry_path)
     if (taxonomy_path.resolve() != (harness_root / 'registry/taxonomy.json').resolve()
             or manifest_path.resolve() != (harness_root / 'registry/routing-gates.json').resolve()):
@@ -196,12 +213,21 @@ def start(
         intake.get("enforcement_mode", "manual") == "manual" and intake.get("manual_guard_valid") is True
     )
     if not durable_allowed:
+        level = route_result["enforcement"]["level"]
+        reasons = {
+            "advisory": "advisory_route_follow_skills_then_run_harness_finish",
+            "requested": "ask_user_for_temporary_enforcement_or_record_a_waiver",
+        }
         return {
             "schema_version": 1,
             "status": route_result["status"],
             "durable": False,
-            "reason": "state_write_requires_hook_or_valid_manual_guard",
-            "route": route_result,
+            "reason": reasons.get(level, "state_write_requires_hook_or_valid_manual_guard"),
+            "enforcement": route_result["enforcement"],
+            "activated_skills": route_result["activated_skills"],
+            "suppressed_skills": route_result["suppressed_skills"],
+            "blocked": [{"gate_id": gate["gate_id"], **item}
+                        for gate in route_result["gate_results"] for item in gate["blocked"]],
             "next": None,
         }
     queue, stages, gates = _execution_queue(route_result)

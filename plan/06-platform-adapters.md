@@ -107,12 +107,24 @@ The installer uses this policy:
    a separately approved upgrade action. Reject `incoming`, deprecated,
    unverified, or escaping symlink sources.
 
-Hook modes are `hook`, `manual`, and `unsupported`. `manual` allows task-state
-writes and a limited reversible workspace mutation only with a non-expired
-manual guard (approval/action ID, actor/time, exact paths/actions, before/after
-state, verifier, rollback); external/destructive/high-risk actions, approval
-bypass, and unsafe state writes remain blocked. `unsupported` is ephemeral and
-read-only, so it cannot claim cross-session resume. The adapter records the
+### Enforcement levels
+
+Modes are `hook`, `manual`, and `unsupported`; the Router derives one level
+from the mode and the change, and this section owns the rule.
+
+| Level | When | Effect |
+| --- | --- | --- |
+| `enforced` | `hook`, or `manual` with a non-expired manual guard (approval/action ID, actor/time, exact paths/actions, before/after state, verifier, rollback) | durable task state; the Runner checks every gate |
+| `advisory` | `manual` without a guard, for an ordinary change or a major change the user waived | no task state; follow the skills, then run `scripts/harness_finish.py` once |
+| `requested` | `manual` without a guard, mutating major change | G0 waits for the user: approve temporary enforcement or record `enforcement_waiver_evidence_ids` |
+| `read_only` | `unsupported` | ephemeral; mutation blocked, no cross-session resume |
+
+A major change has `use_case_change`, `interface_change`, `concept_change` or
+`architecture_structure`, or high risk. High-risk and harness mutation still
+need `approval_evidence_ids` at every level; external, destructive and
+approval-bypassing actions and unsafe state writes remain blocked. The finish
+check escalates when the diff itself shows a major change (a component added
+or removed, or an architecture document changed). The adapter records the
 probe evidence and selected mode before routing.
 
 The config's `adapter_mapping` makes loading explicit: Codex uses its native
@@ -273,5 +285,5 @@ The Claude adapter additionally ships `adapters/claude/agents/harness-*.md`
 `adapters/claude/hooks/` (an opt-in PreToolUse edit guard with a settings
 example). Installation copies the agents to the target `.claude/agents/`. The
 hook is enabled only by an explicit project decision; without it enforcement
-stays `manual`. These assets change presentation and loading only; packets,
+stays `manual` and the level `advisory`. These assets change presentation and loading only; packets,
 receipts, gate results and completion rules are the portable ones.

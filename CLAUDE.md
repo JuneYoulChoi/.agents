@@ -48,9 +48,13 @@ This is a self-hosted source-repository entrypoint. Target projects use the
 canonical templates under `adapters/`; this repository is not a target project
 and its own `.agents/state/` is not a task store.
 
-If the plan, registry, bootstrap configuration, or deterministic guard is
-missing or stale, read-only diagnosis may continue, but material mutation and
-external/destructive actions must stop until the user approves a safe path.
+If the plan, registry or bootstrap configuration is missing or stale, read-only
+diagnosis may continue, but material mutation and external/destructive actions
+must stop until the user approves a safe path. Without a hook or manual guard,
+work runs at the advisory level: an ordinary change follows the skills and
+ends with one `scripts/harness_finish.py` run; a major change (use case,
+interface, concept or structure change, or high risk) stops until the user
+approves temporary enforcement or declines it. See `plan/06-platform-adapters.md`.
 
 ## Work composition
 

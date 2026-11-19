@@ -307,8 +307,9 @@ Routing entry. An authored code change under a non-software scope is rejected;
 `not_applicable` project state blocks design or mutation at G2. A material
 technology with status `candidate` activates technology selection. High-risk
 mutation and harness mutation block at G0 without `approval_evidence_ids`.
-Manual and unsupported enforcement block every workspace write, including
-`document` actions and workspace-mutating work units. Pattern review is entered
+Unsupported enforcement blocks every workspace write, including `document`
+actions and workspace-mutating work units; manual enforcement follows the
+[enforcement levels](06-platform-adapters.md#enforcement-levels). Pattern review is entered
 for an `architecture` field with define/plan/design/review and for any
 Greenfield design; `security` and `performance` fields select their quality
 profiles. Read-only investigation does not activate implementation quality.

@@ -57,10 +57,12 @@ Before material work:
    preserve unaffected branches and never rewrite user intent as a weight.
 
 The bootstrap cannot enforce MUST rules by itself. Follow the configured
-`hook`, `manual`, or `unsupported` enforcement mode. In `manual` mode, task
-state and a limited reversible workspace edit require a non-expired manual
-guard with an approval/action record, exact paths, pre/post state, verifier,
-and rollback. `unsupported` is ephemeral/read-only and cannot claim resume;
+`hook`, `manual`, or `unsupported` enforcement mode. In `manual` mode without a
+manual guard no task state is kept: an ordinary change follows the skills and
+ends with one `scripts/harness_finish.py` run, while a major change (use case,
+interface, concept or structure change, or high risk) stops at G0 until the
+user approves temporary enforcement or declines it. `unsupported` is
+ephemeral/read-only and cannot claim resume;
 external, destructive, high-risk, approval-bypassing, and unsafe state actions
 remain blocked.
 

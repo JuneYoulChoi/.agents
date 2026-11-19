@@ -307,6 +307,18 @@ def _validate_artifact_graph(artifacts: Any) -> None:
 def validate_intake(
     value: dict[str, Any], taxonomy_path: Path, require_intent: bool = False
 ) -> dict[str, Any]:
+    """
+    역할: intake 기록의 필수 항목, 허용 값, 변경 특성, 승인·강제 면제 증거 목록의 형식을 검증한다.
+
+    입력:
+        value: intake 기록
+        taxonomy_path: 허용 필드 목록(taxonomy.json) 경로
+        require_intent: True면 위험도·깊이·의도·성공 기준까지 요구한다(상태를 저장하는 실행용)
+    출력:
+        검증을 통과한 같은 기록
+    예외:
+        ContractError: 형식이나 허용 값을 어긴 경우
+    """
     try:
         validate_workflow_input(value)
     except WorkflowError as exc:
@@ -341,6 +353,7 @@ def validate_intake(
     _string_array(value, "standards")
     _string_array(value, "authorized_standard_evidence_ids")
     _string_array(value, "approval_evidence_ids")
+    _string_array(value, "enforcement_waiver_evidence_ids")
     _require_string(
         value,
         "conformance_intent",
@@ -371,6 +384,9 @@ def validate_intake(
         "configuration",
         "documentation_only",
         "generated_code_only",
+        "use_case_change",
+        "interface_change",
+        "concept_change",
     }
     unknown_characteristics = set(characteristics) - allowed_characteristics
     if unknown_characteristics:

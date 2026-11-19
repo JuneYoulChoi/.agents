@@ -4,7 +4,7 @@
   "integrity_policy": {
     "core_entries": "harness_source_tree_manifest",
     "adapter_manifest": "registry/adapter-manifest.json",
-    "manifest_revision": "workspace-20261119-f5855d97aa8f",
+    "manifest_revision": "workspace-20261119-e5b2b36e5d10",
     "manifest_hash_scope": "canonical active-skills.json excluding integrity_policy.manifest_sha256",
     "excluded_paths": [
       ".git",
@@ -21,7 +21,7 @@
       "tools/ros-mcp-server/upstream/ros_mcp.egg-info",
       "tools/ros-mcp-server/upstream/.venv"
     ],
-    "manifest_sha256": "cb04007732068ee07b9a242ccde1b0d6fd0da66247ae6118a5f36039bc319d4d"
+    "manifest_sha256": "8b381ddbfd441d7532fb31a521f3ae3c43af59c929e5d453a3b42e06b9ca1922"
   },
   "resolution_order": [
     "project_reviewed",
@@ -32,7 +32,7 @@
   "skills": [
     {
       "id": "core.intake-and-route",
-      "version": "0.7.0",
+      "version": "0.8.0",
       "entry": "skills/intake-and-route/SKILL.md",
       "trust": "approved",
       "capabilities": [
@@ -523,7 +523,7 @@
     },
     {
       "id": "core.harness-upgrade-analysis",
-      "version": "0.2.0",
+      "version": "0.3.0",
       "entry": "skills/harness-upgrade-analysis/SKILL.md",
       "trust": "approved",
       "capabilities": [

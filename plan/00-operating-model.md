@@ -234,8 +234,9 @@ templates live under `adapters/`; a target project receives managed root
 `AGENTS.md`/`CLAUDE.md` wrappers plus `.agents/harness.json`. Automatic MUST
 guarantees require the Router, state store, validators, and an adapter
 capability probe. When those are unavailable, read-only intake and discovery
-may continue, but material mutation and high-risk actions are blocked or
-require a recorded manual guard. Git-root discovery is a path heuristic and
+may continue, an ordinary change proceeds at the advisory level, and a major
+or high-risk change waits for the user (see
+[enforcement levels](06-platform-adapters.md#enforcement-levels)). Git-root discovery is a path heuristic and
 never determines Greenfield/Brownfield state.
 
 For every software-related task, `architecture-baseline-and-design` is a

@@ -234,9 +234,10 @@ self-excluded config hash, but no secrets or absolute machine paths.
 `harness.json.example` contains `PIN_REQUIRED` sentinels and is not installable
 until real revisions and 64-hex hashes are rendered.
 
-When the adapter reports `manual` enforcement, the harness can classify,
-persist task state, and perform a limited reversible workspace change only with
-an unexpired manual guard and action record. `unsupported` is ephemeral and
+When the adapter reports `manual` enforcement, the harness persists task state
+only with an unexpired manual guard. Without one an ordinary change proceeds
+and ends with one finish check, and a major change asks you to approve
+temporary enforcement or decline it ([enforcement levels](06-platform-adapters.md#enforcement-levels)). `unsupported` is ephemeral and
 read-only: it cannot claim cross-session resume. All modes pause or block
 external/destructive/high-risk actions, approval bypasses, and unsafe state
 writes. This limitation is shown in the intake summary and handoff rather than

@@ -92,10 +92,10 @@ paths and accidental selection of the shared harness repository.
 
 Adapters declare `hook`, `manual`, or `unsupported` enforcement. Capability
 loss is a compatibility event requiring fixture coverage and a documented
-fallback. Read-only diagnosis may remain available, but material mutation,
-external/destructive actions, approval bypass, and state-integrity operations
-are not permitted without deterministic enforcement or a recorded safe manual
-guard. Update the cross-platform parity fixtures whenever either adapter
+fallback. Without deterministic enforcement or a recorded manual guard, work
+runs at the advisory level and a major change waits for the user
+([enforcement levels](06-platform-adapters.md#enforcement-levels)); external/destructive actions, approval bypass, and
+state-integrity operations are not permitted. Update the cross-platform parity fixtures whenever either adapter
 changes.
 
 ## Authoring rules for an adapted skill

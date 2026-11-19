@@ -261,14 +261,6 @@ class RoutingEntryTests(unittest.TestCase):
             self.assertEqual(self.route(**changes, approval_evidence_ids=['EVD-approval'])['status'], 'active')
         self.assertEqual(self.route(risk='high', action='review')['status'], 'active')
 
-    def test_manual_mode_blocks_every_workspace_write_not_only_named_actions(self):
-        unit = {'id': 'a', 'goal': 'g', 'role': 'implementer', 'mutation': 'workspace', 'input_revision': 'r',
-                'evidence_ids': ['e'], 'allowed_tools': ['edit'], 'expected_output': 'o', 'acceptance': ['x'],
-                'write_paths': ['src/a']}
-        for changes in ({'action': 'document', 'fields': ['documentation']}, {'action': 'design', 'work_units': [unit]}):
-            self.assertEqual(self.route(enforcement_mode='manual', **changes)['status'], 'blocked')
-        self.assertEqual(self.route(enforcement_mode='manual', action='design')['status'], 'active')
-
     def test_architecture_planning_and_greenfield_design_enter_pattern_review(self):
         for changes in ({'action': 'plan', 'fields': ['architecture']}, {'action': 'define', 'fields': ['architecture']},
                         {'action': 'design', 'project_state': 'greenfield'}):

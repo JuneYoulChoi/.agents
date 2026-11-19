@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-"""Atomic target-local task state store for the reference harness runtime."""
+"""
+모듈: 하네스 런타임 (scripts)
+컴포넌트: 상태 저장소
+역할: 대상 프로젝트의 .agents/state 아래에 작업 상태·이벤트·handoff를 잠금과 리비전으로
+      원자적으로 저장한다. (Atomic target-local task state store.)
+"""
 
 from __future__ import annotations
 
@@ -37,6 +42,16 @@ class StateStore:
         state_root: str = ".agents/state",
         harness_root: Path | None = None,
     ) -> None:
+        """
+        역할: 대상 루트와 하네스 루트를 확인하고 상태 폴더 위치를 정한다.
+
+        입력:
+            target_root: 작업 상태를 둘 대상 프로젝트 루트
+            state_root: 대상 기준 상태 폴더(참조 구현은 .agents/state 만 지원)
+            harness_root: 하네스 소스 루트(생략 시 이 스크립트의 상위 폴더)
+        예외:
+            StateError: 루트가 없거나, 대상의 .agents 가 공용 하네스 폴더 자체인 경우
+        """
         try:
             self.target_root = target_root.resolve(strict=True)
         except OSError as exc:
@@ -53,6 +68,10 @@ class StateStore:
             raise StateError(f"harness root cannot be resolved: {exc}") from exc
         if not self.harness_root.is_dir():
             raise StateError("harness root must be an existing directory")
+        if (self.target_root / ".agents").resolve() == self.harness_root:
+            raise StateError(
+                "target root holds the shared harness; choose the project folder so task state stays outside it"
+            )
 
     def task_dir(self, task_id: str) -> Path:
         validate_identifier(task_id, "task_id")

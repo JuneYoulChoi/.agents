@@ -49,6 +49,67 @@ def intake(**changes) -> dict:
     return value
 
 
+class EnforcementRoutingTests(unittest.TestCase):
+    def setUp(self):
+        """
+        역할: 라우팅 매니페스트를 한 번 읽어 둔다.
+        """
+        self.manifest = _load_manifest(MANIFEST)
+
+    def test_ordinary_change_is_advisory_and_only_major_change_requests_enforcement(self):
+        """
+        역할: 수동 모드에서 일반 변경은 권고 모드로 통과하고, 유즈케이스·인터페이스·컨셉·구조 변경과 고위험만 훅을 요청하는지 확인한다.
+        """
+        ordinary = route(intake(), self.manifest)
+        self.assertEqual((ordinary['status'], ordinary['enforcement']['level']), ('active', 'advisory'))
+        self.assertTrue(ordinary['enforcement']['finish_check_required'])
+        for signal in ('use_case_change', 'interface_change', 'concept_change', 'architecture_structure'):
+            major = route(intake(change_characteristics=['authored_code', signal]), self.manifest)
+            self.assertEqual((major['status'], major['enforcement']['level']), ('waiting_user', 'requested'), signal)
+            blocked = next(g for g in major['gate_results'] if g['gate_id'] == 'G0')['blocked']
+            self.assertEqual(blocked, [{'reason': 'temporary_enforcement_requested', 'signals': [signal]}])
+        risky = route(intake(risk='high', approval_evidence_ids=['EVD-approval']), self.manifest)
+        self.assertEqual(risky['enforcement']['major_change_signals'], ['high_risk'])
+        self.assertEqual(risky['status'], 'waiting_user')
+
+    def test_user_can_approve_enforcement_or_waive_it(self):
+        """
+        역할: 큰 변경이 훅 모드에서는 강제 수준으로 진행되고, 사용자가 거절해 면제 증거를 남기면 권고 모드로 진행되는지 확인한다.
+        """
+        major = dict(change_characteristics=['authored_code', 'use_case_change'])
+        enforced = route(intake(enforcement_mode='hook', **major), self.manifest)
+        self.assertEqual((enforced['status'], enforced['enforcement']['level']), ('active', 'enforced'))
+        waived = route(intake(enforcement_waiver_evidence_ids=['EVD-user-declined'], **major), self.manifest)
+        self.assertEqual((waived['status'], waived['enforcement']['level']), ('active', 'advisory'))
+        review = route(intake(action='review', **major), self.manifest)
+        self.assertEqual(review['status'], 'active')  # 읽기 전용 작업은 요청하지 않는다
+        unsupported = route(intake(enforcement_mode='unsupported'), self.manifest)
+        self.assertEqual((unsupported['status'], unsupported['enforcement']['level']), ('blocked', 'read_only'))
+
+    def test_advisory_start_is_not_durable_and_returns_a_compact_summary(self):
+        """
+        역할: 권고 모드의 Runner start가 상태를 저장하지 않고, 전체 라우팅 대신 짧은 요약과 다음 행동을 돌려주는지 확인한다.
+        """
+        with tempfile.TemporaryDirectory() as name:
+            target = Path(name)
+            path = target / 'intake.json'
+            path.write_text(json.dumps(intake(intent={'goal': 'g', 'success_criteria': ['works'], 'constraints': []})))
+            result = start(target, 'TASK-ADVISORY', path, 'claude', 'label', ROOT, REGISTRY, TAXONOMY, MANIFEST)
+            self.assertEqual((result['durable'], result['status']), (False, 'active'))
+            self.assertEqual(result['reason'], 'advisory_route_follow_skills_then_run_harness_finish')
+            self.assertIn('core.implementation-quality', result['activated_skills'])
+            self.assertNotIn('route', result)
+            self.assertLess(len(json.dumps(result)), 1500)
+            self.assertFalse((target / '.agents').exists())
+
+    def test_task_state_is_never_stored_inside_the_shared_harness(self):
+        """
+        역할: 대상 루트의 .agents 가 공용 하네스 폴더 자체이면 상태 저장소가 거부하는지 확인한다.
+        """
+        with self.assertRaises(StateError):
+            StateStore(ROOT.parent, harness_root=ROOT)
+
+
 class EditGuardTests(unittest.TestCase):
     def setUp(self):
         """

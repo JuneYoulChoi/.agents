@@ -853,10 +853,10 @@ default; a symlink is accepted only if explicitly approved,
 contained, and hash-pinned.
 
 `hook` means deterministic capability checks are available. `manual` means
-read-only work is always available; task-state writes and a limited reversible
-workspace mutation are allowed only with a non-expired `manual_guard` containing
-approval/action ID, actor/time, exact paths/actions, pre/post state, verifier,
-and rollback. External, destructive, high-risk, approval-bypassing, and unsafe
+task-state writes need a non-expired `manual_guard` containing approval/action
+ID, actor/time, exact paths/actions, pre/post state, verifier, and rollback;
+without it the route is advisory or requests temporary enforcement
+([enforcement levels](06-platform-adapters.md#enforcement-levels)). External, destructive, high-risk, approval-bypassing, and unsafe
 state changes remain blocked. `unsupported` permits read-only diagnostics only;
 it cannot claim cross-session persistence or write task state.
 
@@ -988,7 +988,14 @@ Budgeted plans show serial admission consistent with the execution guard. See
 ## Result, intake and command additions (2026-11-19)
 
 Intake: optional `approval_evidence_ids` (string array), required at G0 for a
-high-risk mutation or a harness mutation.
+high-risk mutation or a harness mutation; optional
+`enforcement_waiver_evidence_ids` (string array) recording that the user
+declined temporary enforcement for a major change. The route result carries
+`enforcement` (`mode`, `level`, `major_change_signals`,
+`finish_check_required`); a non-durable `start` returns that summary with the
+activated and suppressed skills instead of the full route.
+`scripts/harness_finish.py` exits 0 passed, 1 violations, 2 usage error,
+3 major change needing a user decision.
 
 Skill result: `reason` (required for `not_applicable`); `pattern_review`
 (object or array, required for a completed pattern skill);

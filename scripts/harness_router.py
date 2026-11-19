@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-"""Dependency-free reference provider for the portable gated Router contract."""
+"""
+모듈: 하네스 런타임 (scripts)
+컴포넌트: 라우터
+역할: 구조화된 intake를 결정적 G0–G7 게이트로 평가해 활성 스킬·차단 사유·강제 수준을 돌려준다.
+      (Dependency-free reference provider for the portable gated Router contract.)
+"""
 
 from __future__ import annotations
 
@@ -34,7 +39,13 @@ CHANGE_CHARACTERISTICS = {
     "configuration",
     "documentation_only",
     "generated_code_only",
+    "use_case_change",
+    "interface_change",
+    "concept_change",
 }
+# 큰 변경: 유즈케이스·인터페이스·컨셉·구조가 바뀌는 변경. 훅 없이 진행하려면 사용자 확인이 필요하다.
+MAJOR_CHANGE_CHARACTERISTICS = {"use_case_change", "interface_change", "concept_change", "architecture_structure"}
+ENFORCEMENT_REQUEST = "temporary_enforcement_requested"
 CODE_SCOPE_ACTIONS = {"investigate", "design", "implement", "change", "verify", "review"}
 MUTATION_ACTIONS = {"implement", "change"}
 QUALITY_ACTIONS = CODE_SCOPE_ACTIONS - {"investigate"}
@@ -445,7 +456,18 @@ def _execution_profile(
 
 
 def route(context: dict[str, Any], manifest: dict[str, Any]) -> dict[str, Any]:
-    """Evaluate one structured routing context and return a portable result."""
+    """
+    역할: 구조화된 intake 하나를 G0–G7 게이트로 평가해 활성 스킬, 차단 사유, 강제 수준을 정한다.
+
+    입력:
+        context: 검증 전 intake 기록(범위, 프로젝트 상태, 동작, 위험도, 변경 특성 등)
+        manifest: 라우팅 매니페스트(routing-gates.json)
+    출력:
+        상태(active/waiting_user/blocked), 게이트별 결과, 활성·억제 스킬, 실행 프로파일,
+        강제 수준(enforcement), 작업 계획을 담은 이식 가능한 라우팅 결과
+    예외:
+        RouterError: intake 값이 허용 범위를 벗어나거나 서로 모순될 때
+    """
 
     try:
         validate_workflow_input(context)
@@ -528,8 +550,18 @@ def route(context: dict[str, Any], manifest: dict[str, Any]) -> dict[str, Any]:
     mutating = action in {"implement", "change", "approve", "document"} or writes_workspace
     if enforcement == "unsupported" and mutating:
         g0_blocked.append({"reason": "unsupported_enforcement_is_read_only"})
-    if enforcement == "manual" and mutating and not context.get("manual_guard_valid", False):
-        g0_blocked.append({"reason": "manual_guard_required_for_mutation"})
+    # 수동 모드: 큰 변경만 임시 강제(훅)를 사용자에게 요청하고, 그 밖의 변경은 권고 모드로 진행한다.
+    major_signals = sorted(characteristics & MAJOR_CHANGE_CHARACTERISTICS)
+    if context.get("risk") == "high":
+        major_signals.append("high_risk")
+    waiver = _string_list(context, "enforcement_waiver_evidence_ids")
+    enforcement_level = "enforced" if enforcement == "hook" else "read_only"
+    if enforcement == "manual":
+        enforcement_level = "enforced" if context.get("manual_guard_valid", False) else "advisory"
+        if (enforcement_level == "advisory" and mutating and major_signals
+                and target == "project" and not waiver):
+            enforcement_level = "requested"
+            g0_blocked.append({"reason": ENFORCEMENT_REQUEST, "signals": major_signals})
     material_mutation = action in {"implement", "change", "approve"} or writes_workspace
     if context.get("risk") == "high" and material_mutation and not approvals:
         g0_blocked.append({"reason": "high_risk_approval_required"})
@@ -838,9 +870,12 @@ def route(context: dict[str, Any], manifest: dict[str, Any]) -> dict[str, Any]:
     feedback, final_revision, feedback_requires_user = _feedback_results(context, manifest, revision)
     execution_profile = _execution_profile(context, manifest, str(architecture_status), feedback)
     blocked = any(result["blocked"] for result in gate_results)
-    if g0_blocked or (blocked and not g1_blocked):
+    enforcement_requested = any(item["reason"] == ENFORCEMENT_REQUEST for item in g0_blocked)
+    hard_g0 = [item for item in g0_blocked if item["reason"] != ENFORCEMENT_REQUEST]
+    later_blocked = any(result["blocked"] for result in gate_results if result["gate_id"] not in {"G0", "G1"})
+    if hard_g0 or (later_blocked and not g1_blocked):
         status = "blocked"
-    elif feedback_requires_user or g1_blocked:
+    elif feedback_requires_user or g1_blocked or enforcement_requested:
         status = "waiting_user"
     else:
         status = "active"
@@ -876,6 +911,12 @@ def route(context: dict[str, Any], manifest: dict[str, Any]) -> dict[str, Any]:
         "status": status,
         "forward_revision": final_revision,
         "execution_profile": execution_profile,
+        "enforcement": {
+            "mode": enforcement,
+            "level": enforcement_level,
+            "major_change_signals": major_signals,
+            "finish_check_required": enforcement_level == "advisory" and mutating,
+        },
         "work_plan": compose_work_plan(context, status),
         "ros2_mcp_profile": {
             "applicable": ros2_mcp_applicable,

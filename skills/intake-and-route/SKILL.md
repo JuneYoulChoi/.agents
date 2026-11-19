@@ -180,6 +180,9 @@ For code-related work record `language_scope` as `authored_in_scope`,
 `functional`, `data_oriented`, `api_data_contract`,
 `concurrency`, `distributed`, `security`, `performance`, `realtime_embedded`,
 `configuration`, `documentation_only`, and `generated_code_only` as applicable.
+Record `use_case_change`, `interface_change` or `concept_change` when a use
+case, a module or component interface, or the original concept changes; with
+`architecture_structure` and high risk these mark a major change.
 Do not infer every project language or quality practice from repository-wide
 detection. An activation requires scope overlap, evidence, an expected output,
 and a verification method; otherwise suppress it with a reason.
@@ -193,6 +196,14 @@ G0 blocks. A material technology still being chosen is recorded with status
 state with design or mutation) is rejected or blocked for reclassification.
 A low-risk, light, confirmed-baseline Brownfield change with only
 `authored_code` is routed compactly without a separate composition step.
+
+Without a hook or manual guard the route is advisory: follow the activated
+skills and finish with `scripts/harness_finish.py`. A major change instead
+waits at G0. Ask the user once, with the signals, whether to approve temporary
+enforcement; on approval bind the task in the project's guard file and record
+`enforcement_mode: hook`, on refusal record `enforcement_waiver_evidence_ids`.
+If an ordinary change grows into a major one, stop and ask before continuing.
+The rule lives in [enforcement levels](../../plan/06-platform-adapters.md#enforcement-levels).
 
 ## 5. Return a transition, not a hidden conclusion
 

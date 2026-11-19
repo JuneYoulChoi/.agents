@@ -192,9 +192,10 @@ fingerprint and redaction policy. State files containing sensitive
 evidence stay outside Git or are redacted according to project policy. The
 default state directory is `<target-project>/.agents/state/`. A `hook`,
 `manual`, or `unsupported` enforcement capability is recorded in `harness.json`;
-`manual` permits task-state writes and limited reversible workspace edits only
-with a valid manual guard, while `unsupported` is ephemeral/read-only and does
-not claim cross-session persistence. External, destructive, high-risk,
+`manual` writes task state only with a valid manual guard and is otherwise
+advisory or waits for the user on a major change ([enforcement levels](06-platform-adapters.md#enforcement-levels)),
+while `unsupported` is ephemeral/read-only and does not claim cross-session
+persistence. External, destructive, high-risk,
 approval-bypassing, and unsafe state operations remain blocked.
 
 Project `overrides/` are not implicitly trusted or loaded in the bootstrap MVP.
@@ -235,8 +236,8 @@ but it MUST follow this order:
    metadata, and existing task state.
 2. Probe adapter enforcement. If `manual` has no valid manual guard, or the
    capability is `unsupported`, create only an ephemeral run/intake summary;
-   do not write task state/events and keep the route read-only until a safe
-   guard is recorded. A valid `hook` or `manual_guard` permits the durable
+   do not write task state/events. An `unsupported` route stays read-only; a
+   `manual` route is advisory or requests temporary enforcement. A valid `hook` or `manual_guard` permits the durable
    state contract.
 3. Create task_id/run_id and append `intake_started` only when the state-write
    condition from step 2 passes.
