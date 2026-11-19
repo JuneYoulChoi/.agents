@@ -47,12 +47,36 @@ def usage_summary(state: dict) -> dict:
 
 
 ROLE_GUIDANCE = {
-    'analyst': 'Collect scoped evidence and distinguish observations from hypotheses.',
-    'designer': 'Explain scoped contracts and trade-offs; preserve user-owned decisions.',
-    'implementer': 'Implement accepted behavior only within owned paths; verify the change.',
-    'reviewer': 'Check correctness and necessary complexity against current evidence.',
-    'verifier': 'Check acceptance independently on the pinned revision; report failed or missing checks.',
-    'documenter': 'Write clear source-grounded documentation; preserve uncertainty and traceability.',
+    'analyst': ('You are the analyst for this unit. Collect scoped evidence from the named paths: callers, behavior, '
+                'data and failure cases. Distinguish observations from hypotheses, keep competing explanations until '
+                'evidence separates them, and report what you could not check. Do not design or edit.'),
+    'designer': ('You are the designer for this unit. Explain scoped contracts, ownership and coupling, and compare only '
+                 'alternatives that decide the same boundary, with trade-offs and the applicable SOLID/GRASP checks. '
+                 'Recommend with evidence; preserve user-owned decisions. Do not edit code.'),
+    'implementer': ('You are the implementer for this unit. Implement accepted behavior only within owned paths, in the '
+                    'smallest coherent slice, following the supplied skill and project conventions. Verify the change '
+                    'against every acceptance criterion and report commands, results and anything left undone.'),
+    'reviewer': ('You are the reviewer for this unit. Check correctness and necessary complexity against current '
+                 'evidence: contract and boundary failures, error and lifecycle handling, and unjustified abstraction. '
+                 'Separate defects from optional improvements and cite the file and behavior for each finding. '
+                 'Do not edit.'),
+    'verifier': ('You are the verifier for this unit. Check acceptance independently on the pinned revision, without '
+                 'relying on the producer\'s own tests or claims. Run or inspect the stated proof for each criterion and '
+                 'report failed or missing checks plainly. Do not fix what you find.'),
+    'documenter': ('You are the documenter for this unit. Write clear source-grounded documentation for the stated '
+                   'audience and purpose; every claim traces to a cited source. Preserve uncertainty and traceability, '
+                   'and do not invent behavior that the sources do not show.'),
+}
+
+# Portable gate roles (routing-gates.json execution_policy.gate_roles) mapped to the unit
+# roles a worker may hold while that gate's skill is current. Guard and classifier are never workers.
+GATE_ROLE_UNITS = {
+    'architect': ('analyst', 'designer', 'reviewer', 'documenter'),
+    'analyst': ('analyst', 'reviewer'),
+    'planner': ('analyst', 'designer', 'reviewer'),
+    'specialist': ('analyst', 'designer', 'implementer', 'reviewer'),
+    'implementer': ('analyst', 'implementer', 'reviewer', 'documenter'),
+    'verifier': ('verifier', 'reviewer', 'documenter'),
 }
 
 LENS_GUIDANCE = {
@@ -89,10 +113,13 @@ def skill_context(state: dict, unit: dict, harness_root: Path, registry_path: Pa
     gate_id = state['execution']['skill_gates'][skill]
     gate = next(g for g in state['route']['gate_results'] if g['gate_id'] == gate_id)
     profile = next(p for p in state['route']['execution_profile']['gate_profiles'] if p['gate_id'] == gate_id)
+    if unit['role'] not in GATE_ROLE_UNITS.get(profile['role'], ()):
+        raise ContractError(f"unit role {unit['role']} is not available at the {profile['role']} gate")
     return {'entry': entry, 'path': str(path), 'sha256': hashlib.sha256(body).hexdigest(),
             'instructions': body.decode('utf-8'), 'references': references,
             'application_depth': gate.get('application_depths', {}).get(skill, state['classification']['depth']),
             'execution_profile': profile,
+            'gate_role': profile['role'],
             'role_guidance': ROLE_GUIDANCE[unit['role']],
             'lens_guidance': LENS_GUIDANCE.get(unit.get('reasoning_lens')),
             'application_rule': 'Apply these instructions only to the unit scope. Read and verify selected references before work; stop if required context is missing. Do not run another skill or expand authority. Record actual model/reasoning resolution and instruction evidence in the result artifact.'}

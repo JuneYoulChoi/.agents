@@ -89,6 +89,12 @@ write/read/resource conflicts and path containment. Symlink aliases must first
 be replaced with canonical target-relative paths. The host still needs actual
 permission/worktree isolation. Do not run future-skill units early.
 
+On Claude, start each prepared unit as the matching `harness-<role>` agent with
+the packet as its whole prompt, one batch per message, following the adapter's
+`adapters/claude/native-dispatch.md` in the harness source. The packet's
+`gate_role` names the current gate's portable role; a unit role that gate does
+not allow is rejected at preparation.
+
 ## Stop, verify and record
 
 The adapter supervises the deadline. On timeout/failure, stop the worker and

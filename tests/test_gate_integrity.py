@@ -258,5 +258,21 @@ class RoutingEntryTests(unittest.TestCase):
         self.assertIn('core.language-engineering', result['activated_skills'])
 
 
+class ClaudeAdapterAssetTests(unittest.TestCase):
+    def test_every_unit_role_has_a_bounded_agent_and_a_gate_binding(self):
+        from harness_delegation import GATE_ROLE_UNITS, ROLE_GUIDANCE
+        from harness_workflow import ROLES
+        self.assertEqual(set(ROLE_GUIDANCE), ROLES)
+        gate_roles = set(json.loads(MANIFEST.read_text())['execution_policy']['gate_roles'].values())
+        self.assertEqual(set(GATE_ROLE_UNITS), gate_roles - {'guard', 'classifier'})
+        self.assertEqual({r for roles in GATE_ROLE_UNITS.values() for r in roles}, ROLES)
+        for role in ROLES:
+            text = (ROOT / f'adapters/claude/agents/harness-{role}.md').read_text()
+            self.assertIn(f'name: harness-{role}', text)
+            tools = next(line for line in text.splitlines() if line.startswith('tools:'))
+            self.assertEqual('Edit' in tools, role in {'implementer', 'documenter'}, role)
+
+
+
 if __name__ == '__main__':
     unittest.main()

@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "manifest_id": "adapter-template-manifest-v1",
-  "source_revision": "workspace-20261119-ad51ccafa8c0",
-  "source_tree_sha256": "ad51ccafa8c058cbc4d263bba36216ff5b2ee01b831395c5058bd934ccac3135",
+  "source_revision": "workspace-20261119-6d0fd1a4d02a",
+  "source_tree_sha256": "6d0fd1a4d02a0ed6e1b0ce1abeb68e1b6b6b55206e41a2aa627c72fcf863295a",
   "templates": [
     {
       "id": "codex.bootstrap",
@@ -93,5 +93,9 @@
     "copy_default": true,
     "no_silent_overwrite": true,
     "transactional_install": true
+  },
+  "claude_native_assets": {
+    "agents": "adapters/claude/agents",
+    "dispatch": "adapters/claude/native-dispatch.md"
   }
 }

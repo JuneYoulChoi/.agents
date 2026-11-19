@@ -65,7 +65,9 @@ Do not infer token savings from parallel execution or invent usage counters.
 Keep clear local work on one agent. For independent work, define bounded units with goal,
 input revision, dependencies, read/write paths, shared resources, evidence,
 allowed tools, output and acceptance. Personas are responsibilities:
-analyst, designer, implementer, reviewer, verifier, documenter. A single agent
+analyst, designer, implementer, reviewer, verifier, documenter. A unit's role
+must be one the owning skill's gate allows (see the adapter dispatch table);
+preparation rejects any other pairing. A single agent
 may perform several roles sequentially. A simplicity reviewer checks justified
 complexity; it must preserve required ownership, error and lifecycle boundaries.
 
