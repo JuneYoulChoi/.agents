@@ -72,6 +72,12 @@ changing them.
 
 ## 4. Finish with a document record
 
+For Korean prose intended for people to read, use
+[Korean prose review](references/korean-prose-review.md) on the affected text
+after drafting and before final source and claim verification. When delegating
+this review within the current skill, include the reference in
+`skill_references` for the applicable unit.
+
 For a project document workflow, pass purpose, sources and output boundaries to
 `$workflow-composition`. Document-only work uses source/link/claim verification
 and does not activate authored-code quality or every detected language. Preserve
