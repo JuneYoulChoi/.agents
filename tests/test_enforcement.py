@@ -205,6 +205,21 @@ class EditGuardTests(unittest.TestCase):
             self.assertFalse(self.allowed('app/src/a.py'), bad)
 
 
+    def test_active_task_waiting_for_user_gate_cannot_edit(self):
+        """역할: 사용자가 게이트를 열기 전에는 활성 작업의 편집 도구도 기다리는지 확인한다."""
+        self.configure({'enforce': {'task_id': 'TASK-1', 'target_root': 'app'}})
+        self.set_status('active')
+        path = self.root / 'app/.agents/state/TASK-1/state.json'
+        state = json.loads(path.read_text())
+        state['execution'] = {'operator': {'opened': None}}
+        path.write_text(json.dumps(state))
+        self.assertFalse(self.allowed('app/src/a.py'))
+        state['execution']['operator']['opened'] = {'user_decision': 'open G6'}
+        path.write_text(json.dumps(state))
+        self.assertTrue(self.allowed('app/src/a.py'))
+
+
+
 class FinishCheckTests(unittest.TestCase):
     def setUp(self):
         """

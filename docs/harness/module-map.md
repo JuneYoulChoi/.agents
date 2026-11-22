@@ -17,8 +17,10 @@ Rules: [doc and code sync](../../skills/architecture-baseline-and-design/referen
 | 하네스 런타임 (scripts) | 코드 문서화 검사기 | 한글 파일 헤더와 함수 주석을 검사한다 | `scripts/harness_code_docs.py` |
 | 하네스 런타임 (scripts) | 문서 동기화 검사기 | 코드 헤더와 모듈 맵, 문서의 코드 경로 인용을 대조한다 | `scripts/harness_doc_sync.py` |
 | 하네스 런타임 (scripts) | 마무리 검사 | 훅 없는 일반 변경의 주석·문서 동기화 검사와 큰 변경 신호 감지 | `scripts/harness_finish.py` |
+| 하네스 런타임 (scripts) | 편집 가드 정책 | 두 어댑터의 작업 연동과 편집 판정 | `scripts/harness_edit_guard.py` |
 | 하네스 런타임 (scripts) | 개요 스탬프 | 개요가 설명하는 소스의 지문을 계산·기록한다 | `scripts/harness_overview.py` |
 | Claude 어댑터 (adapters/claude) | 편집 가드 훅 | 활성 작업 없는 프로젝트 파일 편집을 거부한다 | `adapters/claude/hooks/harness_guard.py` |
+| Codex 어댑터 (adapters/codex) | 편집 가드 훅 | apply_patch 편집을 작업 상태에 따라 제한한다 | `adapters/codex/hooks/harness_codex_guard.py` |
 | 하네스 테스트 (tests) | 런타임 회귀 테스트 | 라우터·Runner·상태·검증기의 기본 동작 | `tests/test_runtime.py` |
 | 하네스 테스트 (tests) | 게이트 경계 회귀 테스트 | 증거·신뢰·순서·재시작 경계 | `tests/test_gate_boundaries.py` |
 | 하네스 테스트 (tests) | 게이트 무결성 회귀 테스트 | 게이트 완료·재개·되돌림·라우팅 진입 | `tests/test_gate_integrity.py` |
