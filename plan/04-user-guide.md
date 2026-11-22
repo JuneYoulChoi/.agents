@@ -153,9 +153,9 @@ projects do not need Python.
 
 ### Reference runtime for a target project
 
-The optional reference provider installs only thin wrappers and portable
-configuration into an existing target that is separate from the shared harness
-source:
+The optional reference provider installs thin wrappers, both project-local
+`jydlc` launchers, Claude role agents and portable configuration into an
+existing target that is separate from the shared harness source:
 
 ```sh
 python3 -B scripts/harness_bootstrap.py install \
@@ -173,9 +173,48 @@ same step in a later session.
 An unreadable or copied task state is preserved and rejected; the runtime does
 not guess a repair. This is a small fail-safe for interrupted writes or manual
 edits, not an autonomous recovery system. A valid hook or task-scoped manual
-guard is required before durable state or material execution.
+guard is required for durable state. Follow the
+[enforcement levels](06-platform-adapters.md#enforcement-levels) for advisory
+work.
 
 ## Common user commands
+
+### Run one gate at a time with jydlc
+
+If the project does not yet have a `jydlc` launcher, run [the bootstrap command](#reference-runtime-for-a-target-project)
+from the approved shared harness source to install it for both platforms. Open
+or reload the target project in Codex or Claude Code, then invoke `$jydlc` or
+`/jydlc`, respectively.
+Calling `jydlc` automatically checks the workspace and adapter before asking
+for a request. Enter a request with the first call to also preview its
+classification, architecture document gaps and gate order. `start <request>`
+opens the same preview. Setup and guard actions still follow the approval rules.
+Use `stages` for the list of stage names and `inspect requirements-analysis`
+for the inputs and expected evidence before running that stage.
+
+After the preview, call `/jydlc intake` in Claude Code or `$jydlc intake` in
+Codex. Use `workspace-detection` to recheck the startup environment when needed.
+Call later stages by name, for example `/jydlc requirements-analysis`.
+For the full order, see the [stage table](../adapters/jydlc/SKILL.md#게이트별-확인).
+Calls such as `run preflight` and `run G0` remain valid.
+Each invocation reports the result and stops. Even a gate with no queued
+skill can be checked and recorded as applicable or inapplicable through the
+adapter. Use `status` to see the current position and `resume <decision or
+recovery evidence>` to resolve a paused gate. Call the next stage explicitly.
+Advisory progress is tracked in the current conversation. An enforced task
+uses the normal Runner for durable skill results.
+
+Bootstrap adds both launchers from the [same source](../adapters/jydlc/SKILL.md).
+The launcher may ask for the approved harness source path the first time if
+your adapter has no locator mapping. Check both the project installation and
+the resolved source pins with:
+
+```sh
+python3 -B scripts/harness_bootstrap.py check \
+  --target-root /path/to/project --harness-root /path/to/shared-harness
+```
+
+### Natural-language commands
 
 These are natural-language intents, not mandatory commands:
 
@@ -224,10 +263,19 @@ installation. Git-root detection does not decide whether the project is
 Greenfield or Brownfield.
 
 The normal install is a copy. Re-running with the same managed hashes is safe.
-An existing unknown or user-edited `AGENTS.md`, `CLAUDE.md`, or
-`harness.json` is never silently overwritten; review the reported diff and
-request an explicit upgrade. Installation is a recorded, atomic change and
-can be rolled back without discarding user edits. The configuration contains
+For a previously bootstrapped project, use the explicit upgrade from the
+approved shared source to install current launchers and role agents and
+refresh the managed file pins:
+
+```sh
+python3 -B scripts/harness_bootstrap.py upgrade --target-root /path/to/project
+```
+
+Upgrade keeps the selected adapter and local project configuration. Supply
+`--adapter` only when switching the default. The installer reports conflicts
+for edited managed files or different files at launcher paths. Installation
+rolls back its own changes after a handled failure and preserves files
+changed by the user. The configuration contains
 portable source locator/revisions, template and registry hashes, adapter
 mappings, state root, registry order, enforcement probe/guard, and a canonical
 self-excluded config hash, but no secrets or absolute machine paths.

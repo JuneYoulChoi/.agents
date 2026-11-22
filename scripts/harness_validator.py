@@ -65,6 +65,14 @@ NON_SKIPPABLE_FOR_MUTATION = {
     "core.brownfield-impact-analysis",
     "core.greenfield-planning",
 }
+JYDLC_LAUNCHERS = (
+    ".agents/skills/jydlc/SKILL.md",
+    ".claude/skills/jydlc/SKILL.md",
+)
+CLAUDE_ROLE_ASSETS = tuple(
+    f".claude/agents/harness-{role}.md"
+    for role in ("analyst", "designer", "documenter", "implementer", "reviewer", "verifier")
+)
 REASONING_LEVELS = {"low", "medium", "high"}
 PATTERN_CANDIDATE_STATUSES = {
     "existing",
@@ -949,6 +957,11 @@ def validate_state(
 
 
 def validate_config(value: dict[str, Any], target_root: Path) -> dict[str, Any]:
+    """
+    역할: 대상 프로젝트의 이식 가능한 부트스트랩 설정과 관리 파일 무결성을 확인한다.
+    입력: value는 설정, target_root는 대상 프로젝트 루트다.
+    출력: 검증된 설정
+    """
     if value.get("schema_version") != 1 or value.get("protocol_version") != 1:
         raise ContractError("harness config requires schema/protocol version 1")
     if value.get("harness_root_mode") != "separate":
@@ -1043,14 +1056,18 @@ def validate_config(value: dict[str, Any], target_root: Path) -> dict[str, Any]:
     if bootstrap.get("line_endings") != "LF" or bootstrap.get("max_bytes") != 32768:
         raise ContractError("bootstrap encoding or byte-limit policy is invalid")
     managed = bootstrap.get("managed_files")
-    if sorted(managed or []) != ["AGENTS.md", "CLAUDE.md"]:
-        raise ContractError("managed_files must contain AGENTS.md and CLAUDE.md")
+    wrappers = {"AGENTS.md", "CLAUDE.md"}
+    launchers = wrappers | set(JYDLC_LAUNCHERS)
+    if (not isinstance(managed, list) or any(not isinstance(name, str) for name in managed)
+            or len(set(managed)) != len(managed)
+            or set(managed) not in (wrappers, launchers, launchers | set(CLAUDE_ROLE_ASSETS))):
+        raise ContractError("managed_files must contain a supported bootstrap file set")
     hashes = bootstrap.get("file_hashes")
     if not isinstance(hashes, dict) or set(hashes) != set(managed):
         raise ContractError("file_hashes must exactly match managed_files")
     for name, expected in hashes.items():
         raw_path = target_root.resolve(strict=True) / name
-        if raw_path.is_symlink():
+        if raw_path.resolve() != raw_path:
             raise ContractError(f"managed file must not be a symlink: {name}")
         path = contained_path(target_root, name, f"managed file {name}", must_exist=True)
         if not path.is_file():

@@ -766,6 +766,10 @@ Router asks the user and records the gap.
 
 ## Project bootstrap configuration contract
 
+Fresh installations include both project-local `jydlc` launchers in
+`bootstrap.managed_files` and `bootstrap.file_hashes`, in addition to the
+two root wrappers. The validator also accepts legacy installations that
+record only the root wrappers.
 
 The target project's `.agents/harness.json` pins the source and runtime
 boundary. It is portable configuration and MUST NOT contain secrets, absolute
@@ -902,7 +906,7 @@ runner prints durable temporary result paths unless an explicit
 | Family | Executable cases | Required result |
 | --- | ---: | --- |
 | `F-017` routing | 4 | composite MIMO selection, architecture conflict, unknown feedback, and third-attempt escalation agree with the gate/feedback contract |
-| `B-CONFLICT` bootstrap | 4 | fresh install, idempotent reinstall, user/edited wrapper preservation, and symlink refusal are deterministic |
+| `B-CONFLICT` bootstrap | 5 | fresh install, idempotent reinstall, user/edited wrapper preservation, symlink refusal, and user-owned jydlc preservation are deterministic |
 | `C-CONFIG` configuration | 5 | compiled/runtime/Shell/public-web/secret candidates activate the common configuration concern and only affected language/ecosystem branches; invalid secret and port contracts are rejected by unit validation |
 | `T-TECH` technology composition | 6 | all 11 mappings resolve, meaningful robotics/simulation/web/platform/gRPC compositions activate, and unevidenced adjacent technologies remain suppressed |
 | `E-PROFILE` execution profiles | 3 | light work remains bounded, high risk raises G2–G7, and repeated feedback raises only the responsible gate plus G7 without a model binding |

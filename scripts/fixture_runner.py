@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""Run portable harness fixtures against a replaceable Router adapter command."""
+"""
+모듈: 하네스 런타임 (scripts)
+컴포넌트: 픽스처 실행기
+역할: JSON 입력으로 라우터와 설치기를 실행하고 기대 결과를 검증한다.
+"""
 
 from __future__ import annotations
 
@@ -12,7 +16,7 @@ import tempfile
 from pathlib import Path
 from typing import Any
 
-from harness_validator import ContractError, validate_intake
+from harness_validator import ContractError, JYDLC_LAUNCHERS, validate_intake
 
 
 class FixtureError(ValueError):
@@ -225,7 +229,13 @@ def _invoke_adapter(
 def _invoke_bootstrap_fixture(
     command: list[str], fixture: dict[str, Any], artifact_path: Path, timeout_seconds: float
 ) -> dict[str, Any]:
-    allowed_files = {"AGENTS.md", "CLAUDE.md"}
+    """
+    역할: 임시 프로젝트의 설치·충돌·보존 결과를 수집한다.
+    입력: command는 설치 명령, fixture는 입력 사례, artifact_path는 결과 경로,
+          timeout_seconds는 설치 호출의 제한 시간이다.
+    출력: 설치 상태와 최종 관리 파일을 담은 결과
+    """
+    allowed_files = ("AGENTS.md", "CLAUDE.md", *JYDLC_LAUNCHERS)
     setup_files = fixture.get("setup_files", {})
     setup_symlinks = fixture.get("setup_symlinks", [])
     attempts = fixture.get("attempts", [])
@@ -245,12 +255,16 @@ def _invoke_bootstrap_fixture(
         target = Path(temp_dir) / "target"
         target.mkdir()
         for name, content in setup_files.items():
-            with (target / name).open("w", encoding="utf-8", newline="\n") as stream:
+            path = target / name
+            path.parent.mkdir(parents=True, exist_ok=True)
+            with path.open("w", encoding="utf-8", newline="\n") as stream:
                 stream.write(content)
         for name in setup_symlinks:
-            source = target / f".{name}.source"
+            path = target / name
+            path.parent.mkdir(parents=True, exist_ok=True)
+            source = path.with_name(f".{path.name}.source")
             source.write_text("symlink-owned\n", encoding="utf-8")
-            (target / name).symlink_to(source.name)
+            path.symlink_to(source.name)
         statuses: list[str] = []
         results: list[dict[str, Any]] = []
         for attempt_number, attempt in enumerate(attempts, start=1):
@@ -296,7 +310,7 @@ def _invoke_bootstrap_fixture(
                 with path.open("w", encoding="utf-8", newline="\n") as stream:
                     stream.write(content)
         final_files: dict[str, str] = {}
-        for relative in ("AGENTS.md", "CLAUDE.md", ".agents/harness.json"):
+        for relative in (*allowed_files, ".agents/harness.json"):
             path = target / relative
             if path.is_file() and not path.is_symlink():
                 final_files[relative] = path.read_text(encoding="utf-8")

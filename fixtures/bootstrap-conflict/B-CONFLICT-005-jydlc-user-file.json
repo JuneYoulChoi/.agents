@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "fixture_type": "bootstrap",
+  "id": "B-CONFLICT-005-jydlc-user-file",
+  "description": "An existing project-local jydlc skill stays in place when installation reports a conflict.",
+  "setup_files": {
+    ".claude/skills/jydlc/SKILL.md": "user-owned jydlc skill\n"
+  },
+  "attempts": [
+    {"adapter": "claude"}
+  ],
+  "expected": {
+    "bootstrap_statuses": ["conflict"],
+    "preserved_files": {
+      ".claude/skills/jydlc/SKILL.md": "user-owned jydlc skill\n"
+    }
+  }
+}

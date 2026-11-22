@@ -9,6 +9,12 @@
   ],
   "expected": {
     "bootstrap_statuses": ["installed", "idempotent"],
-    "files_present": ["AGENTS.md", "CLAUDE.md", ".agents/harness.json"]
+    "files_present": [
+      "AGENTS.md",
+      "CLAUDE.md",
+      ".agents/harness.json",
+      ".agents/skills/jydlc/SKILL.md",
+      ".claude/skills/jydlc/SKILL.md"
+    ]
   }
 }

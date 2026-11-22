@@ -25,6 +25,7 @@ Rules: [doc and code sync](../../skills/architecture-baseline-and-design/referen
 | 하네스 테스트 (tests) | 런타임 회귀 테스트 | 라우터·Runner·상태·검증기의 기본 동작 | `tests/test_runtime.py` |
 | 하네스 테스트 (tests) | 게이트 경계 회귀 테스트 | 증거·신뢰·순서·재시작 경계 | `tests/test_gate_boundaries.py` |
 | 하네스 테스트 (tests) | 게이트 무결성 회귀 테스트 | 게이트 완료·재개·되돌림·라우팅 진입 | `tests/test_gate_integrity.py` |
+| 하네스 테스트 (tests) | 설치기 회귀 테스트 | 첫 설치와 이전 관리 파일 갱신 경계 | `tests/test_bootstrap_operator.py` |
 | 하네스 테스트 (tests) | 코드 문서화 검사기 테스트 | 헤더·함수 주석 검사기 | `tests/test_code_docs.py` |
 | 하네스 테스트 (tests) | 문서 동기화 테스트 | 문서 동기화 검사기, 하네스 자체의 맵·개요 일치 | `tests/test_doc_sync.py` |
 | 하네스 테스트 (tests) | 강제 수준 테스트 | 큰 변경 판정, 권고 모드, 편집 가드 훅, 마무리 검사 | `tests/test_enforcement.py` |

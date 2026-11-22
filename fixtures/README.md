@@ -34,7 +34,7 @@ platform-native runtime. It passes only when it implements the same JSON file
 transport and observable routing semantics. Do not put secrets or live
 production endpoints in fixture inputs.
 
-Current executable coverage is 37 cases: four F-017 routing cases, four
+Current executable coverage includes 38 cases: four F-017 routing cases, five
 Bootstrap-conflict cases, five configuration-routing cases, six
 technology-composition cases, three adaptive execution-profile cases, and six
 international-standard/pattern-routing cases, plus three selective-routing

@@ -94,8 +94,8 @@ The installer uses this policy:
 2. canonicalize symlinks and reject conflicting/outside roots, accidental
    shared-harness selection (by pinned source fingerprint/marker), and source/
    target collisions;
-3. copy approved templates; do not silently replace unknown or user-edited
-   `AGENTS.md`, `CLAUDE.md`, or `harness.json` files;
+3. copy approved templates and the platform-local `jydlc` launchers; preserve
+   unknown or user-edited managed files and report installation conflicts;
 4. require an explicit upgrade for divergent managed hashes; exclusively
    create a journal/lock, atomically replace each new file, and roll back only
    unchanged files created by a caught failed transaction; a crash journal
@@ -162,6 +162,16 @@ root is a conflict requiring user review; the wrapper does not assume it
 automatically outranks platform-native instructions.
 
 ## Cross-platform invariants
+
+The [jydlc operator entrypoint](../adapters/jydlc/SKILL.md) is copied from one
+source into both native skill directories. The entrypoint automatically checks the
+workspace and adapter on startup. Intake reuses the check and records any
+required approvals and evidence before closing the startup checkpoints.
+An explicit stage invocation, such as `/jydlc requirements-analysis` or
+`$jydlc requirements-analysis`, executes one eligible gate and returns control
+to the user. G0/G1 and gates with no
+queued skill are adapter checkpoints. The existing Router and Runner remain
+the authorities for branch selection, skill ordering and durable evidence.
 
 For the same fixture input and project snapshot, both adapters MUST produce:
 

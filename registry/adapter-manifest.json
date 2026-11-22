@@ -1,16 +1,16 @@
 {
   "schema_version": 1,
   "manifest_id": "adapter-template-manifest-v1",
-  "source_revision": "workspace-20261122-14a08e578401",
-  "source_tree_sha256": "14a08e578401aac4fd8a3d90c39669504792ed8cd0509054b390f9f2b70d4ce7",
+  "source_revision": "workspace-20261122-6906ac4321a2",
+  "source_tree_sha256": "6906ac4321a20feee00985c1c0b26b4b4b7bef53cc01f8adf71fa5929d984aff",
   "templates": [
     {
       "id": "codex.bootstrap",
       "platform": "codex",
       "path": "adapters/codex/AGENTS.md.tmpl",
       "rendered_name": "AGENTS.md",
-      "version": "0.13.0",
-      "sha256": "c8ce5b4aa094ec90a16df10e942b9a7733e593b1c230537e75f1da5ee79a03ed",
+      "version": "0.14.0",
+      "sha256": "215d89fe82b393a7742b15d7757da2d3dd221016c2906d3b00895e9f732efe28",
       "max_bytes": 32768
     },
     {
@@ -18,8 +18,8 @@
       "platform": "claude",
       "path": "adapters/claude/CLAUDE.md.tmpl",
       "rendered_name": "CLAUDE.md",
-      "version": "0.13.0",
-      "sha256": "16ed268ed87e85b25a2d888d1db2d1e1a792818482aaa31bc54f7d61fc17e918",
+      "version": "0.14.0",
+      "sha256": "8231010bade429e1d78a37d8b72a3e5bb3e944a747e5c6ad684f44d83f6dadda",
       "max_bytes": 32768
     }
   ],
@@ -51,7 +51,8 @@
       "code_docs": "scripts/harness_code_docs.py",
       "doc_sync": "scripts/harness_doc_sync.py",
       "overview_stamp": "scripts/harness_overview.py",
-      "finish_check": "scripts/harness_finish.py"
+      "finish_check": "scripts/harness_finish.py",
+      "edit_guard": "scripts/harness_edit_guard.py"
     },
     "execution_profile": {
       "policy_id": "adaptive_v1",
@@ -103,6 +104,25 @@
     "dispatch": "adapters/claude/native-dispatch.md",
     "hook": "adapters/claude/hooks/harness_guard.py",
     "hook_enabled_by_default": false,
-    "hook_mode": "dormant_until_task_bound"
+    "hook_mode": "dormant_until_task_bound",
+    "role_sha256": {
+      "harness-analyst.md": "06f54bc89ac791359a6d7b6d9c3b781d3f1c4b77f963f1f9d1f5c0bb23b8d656",
+      "harness-designer.md": "b98f955f66b65d29501cf980841a3f61aa684153b4e7f93d70112c229bc40279",
+      "harness-documenter.md": "681dff4df2bfa817a24edfcfa01424a5908ba5acf15e54e1288e1e6174bdc9b5",
+      "harness-implementer.md": "cc1ab3039a480ea4e3446fdd76cbc3b538ecf5450ec3fea29b9ff910991c92cb",
+      "harness-reviewer.md": "c33db3480fa36538622b171b2af974b8c9c5e5d677d36d168178b3eb5b51aa0a",
+      "harness-verifier.md": "f075ec09cc0086d6215eaa951a5de7faf3b5c8e5f8b50d2e4ac93541826a2bf1"
+    }
+  },
+  "manual_gate_skill": {
+    "source": "adapters/jydlc/SKILL.md",
+    "sha256": "1b22e6378fbbfbb0145a24351d72125570b7ea0651bd8c02509c25cb78b8e087",
+    "destinations": {
+      "codex": ".agents/skills/jydlc/SKILL.md",
+      "claude": ".claude/skills/jydlc/SKILL.md"
+    }
+  },
+  "codex_native_assets": {
+    "dispatch": "adapters/codex/native-dispatch.md"
   }
 }

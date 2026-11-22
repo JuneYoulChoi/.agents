@@ -4,7 +4,7 @@
   "integrity_policy": {
     "core_entries": "harness_source_tree_manifest",
     "adapter_manifest": "registry/adapter-manifest.json",
-    "manifest_revision": "workspace-20261122-14a08e578401",
+    "manifest_revision": "workspace-20261122-6906ac4321a2",
     "manifest_hash_scope": "canonical active-skills.json excluding integrity_policy.manifest_sha256",
     "excluded_paths": [
       ".git",
@@ -21,7 +21,7 @@
       "tools/ros-mcp-server/upstream/ros_mcp.egg-info",
       "tools/ros-mcp-server/upstream/.venv"
     ],
-    "manifest_sha256": "bf9db824ff85f984ddface65f5ad8ba0c5bf78b372f93536113ac4faee2bd3be"
+    "manifest_sha256": "e54d10982bb393793695487cfbf0885ff77bb538a5d34bef8e8cb146b5ecefad"
   },
   "resolution_order": [
     "project_reviewed",
@@ -32,7 +32,7 @@
   "skills": [
     {
       "id": "core.intake-and-route",
-      "version": "0.8.0",
+      "version": "0.10.0",
       "entry": "skills/intake-and-route/SKILL.md",
       "trust": "approved",
       "capabilities": [
@@ -500,7 +500,7 @@
     },
     {
       "id": "core.verify-and-handoff",
-      "version": "0.11.0",
+      "version": "0.13.0",
       "entry": "skills/verify-and-handoff/SKILL.md",
       "trust": "approved",
       "capabilities": [
@@ -561,7 +561,7 @@
     },
     {
       "id": "core.workflow-composition",
-      "version": "0.7.0",
+      "version": "0.8.0",
       "entry": "skills/workflow-composition/SKILL.md",
       "trust": "approved",
       "capabilities": [
