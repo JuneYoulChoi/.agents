@@ -10,12 +10,13 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 from collections import deque
 from pathlib import Path
 from typing import Any
 
-from harness_validator import ContractError, validate_intake_fields
+from harness_validator import ContractError, validate_hook_guard, validate_intake_fields
 from harness_workflow import (
     WorkflowError,
     compose_work_plan,
@@ -126,6 +127,11 @@ def _string_list(context: dict[str, Any], key: str) -> list[str]:
 
 
 def _load_manifest(path: Path) -> dict[str, Any]:
+    """
+    역할: 게이트 순서, 사용자 명령 이름과 함께 라우팅 정책의 형식을 검증한다.
+    입력: path는 라우팅 매니페스트 경로다.
+    출력: 검증된 라우팅 매니페스트
+    """
     manifest = _read_json(path)
     if manifest.get("ros2_mcp_reference") not in (
         None, "skills/ros2-engineering/references/mcp-inspection.md"
@@ -135,10 +141,18 @@ def _load_manifest(path: Path) -> dict[str, Any]:
     edges = manifest.get("forward_edges")
     if manifest.get("model") != "layered_gated_skill_graph":
         raise RouterError("routing manifest model is unsupported")
-    if not isinstance(gates, list) or {g.get("id") for g in gates if isinstance(g, dict)} != {
-        f"G{i}" for i in range(8)
-    }:
+    if (not isinstance(gates, list) or len(gates) != 8
+            or any(not isinstance(gate, dict) or not isinstance(gate.get("id"), str) for gate in gates)
+            or {gate["id"] for gate in gates} != {f"G{i}" for i in range(8)}):
         raise RouterError("routing manifest must define G0 through G7 exactly once")
+    if any("operator_name" in gate for gate in gates):
+        names = [gate.get("operator_name") for gate in gates]
+        if (any(not isinstance(name, str) or not re.fullmatch(r"[a-z][a-z0-9]*(?:-[a-z0-9]+)*", name)
+                                   for name in names)
+                or len(set(names)) != len(names)
+                or any(not isinstance(gate.get("operator_label"), str) or not gate["operator_label"].strip()
+                       for gate in gates)):
+            raise RouterError("each gate needs a unique operator name and a short label")
     if not isinstance(edges, list):
         raise RouterError("routing manifest forward_edges must be an array")
     expected = [[f"G{i}", f"G{i + 1}"] for i in range(7)]
@@ -645,7 +659,14 @@ def route(
     if context.get("risk") == "high":
         major_signals.append("high_risk")
     waiver = _string_list(context, "enforcement_waiver_evidence_ids")
-    enforcement_level = "enforced" if enforcement == "hook" else "read_only"
+    enforcement_level = "read_only"
+    if enforcement == "hook":
+        try:
+            validate_hook_guard(context.get("hook_guard"))
+        except ContractError as exc:
+            g0_blocked.append({"reason": "hook_guard_evidence_required", "detail": str(exc)})
+        else:
+            enforcement_level = "enforced"
     if enforcement == "manual":
         enforcement_level = "enforced" if context.get("manual_guard_valid", False) else "advisory"
         if (enforcement_level == "advisory" and mutating and major_signals
@@ -967,6 +988,12 @@ def route(
         ),
     ))
 
+    names = {gate["id"]: gate for gate in manifest["gates"]}
+    for result in gate_results:
+        declared = names[result["gate_id"]]
+        for key in ("operator_name", "operator_label"):
+            if key in declared:
+                result[key] = declared[key]
     feedback, final_revision, feedback_requires_user = _feedback_results(context, manifest, revision)
     execution_profile = _execution_profile(context, manifest, str(architecture_status), feedback)
     blocked = any(result["blocked"] for result in gate_results)

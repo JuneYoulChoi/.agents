@@ -1,4 +1,8 @@
-"""ROS MCP selection stays conditional and never authorizes tool execution."""
+"""
+모듈: 하네스 테스트 (tests)
+컴포넌트: 기존 회귀 테스트
+역할: ROS MCP 승인 범위와 프로필 연결을 확인한다.
+"""
 
 import copy
 import json
@@ -11,16 +15,21 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 from harness_router import RouterError, _load_manifest, route
 from harness_runner import start, submit
+from test_runtime import fixture_hook_guard
 from harness_validator import write_object
 from harness_bootstrap import source_tree_hash
 
 
 def intake():
+    """
+    역할: ROS 2 조회에 대한 라우팅 시험 입력을 구성한다.
+    출력: 시험용 intake
+    """
     return {
         "schema_version": 1, "request_id": "REQ-ROS-MCP", "target": "project",
         "scope": "software_engineering", "project_state": "brownfield",
         "action": "investigate", "risk": "medium", "depth": "standard",
-        "confidence": "high", "enforcement_mode": "hook",
+        "confidence": "high", "enforcement_mode": "hook", "hook_guard": fixture_hook_guard(),
         "architecture_status": "confirmed", "fields": ["robotics"],
         "language_scope": "none", "languages": [],
         "intent": {"goal": "Inspect the selected ROS2 graph", "success_criteria":
@@ -95,10 +104,11 @@ class RosMcpRoutingTests(unittest.TestCase):
                     _load_manifest(path)
 
     def test_runner_exposes_profile_only_at_ros_skill_and_preserves_it_on_disk(self):
+        """역할: 대상에 연동된 가드로 Runner를 시작하고 ROS 스킬에만 도구 프로필이 표시되는지 확인한다."""
         with tempfile.TemporaryDirectory() as directory:
             target = Path(directory)
             path = target / "intake.json"
-            write_object(path, intake())
+            write_object(path, {**intake(), "hook_guard": fixture_hook_guard(target, "TASK-ROS-MCP")})
             response = start(target, "TASK-ROS-MCP", path, "codex", "test", ROOT,
                              ROOT / "registry/active-skills.json", ROOT / "registry/taxonomy.json",
                              ROOT / "registry/routing-gates.json")

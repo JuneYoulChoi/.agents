@@ -1,4 +1,8 @@
-"""Behavioral regression coverage for work composition and adapter boundaries."""
+"""
+모듈: 하네스 테스트 (tests)
+컴포넌트: 기존 회귀 테스트
+역할: 작업 구성과 어댑터 실행 경계의 동작을 검증한다.
+"""
 
 import copy
 import hashlib
@@ -17,6 +21,7 @@ from harness_state import StateStore
 from harness_bootstrap import source_tree_hash
 from harness_workflow import WorkflowError, compose_work_plan, validate_work_plan, validate_workflow_input
 from harness_validator import ContractError, active_skill_ids, validate_intake, validate_route_result
+from test_runtime import fixture_hook_guard
 
 
 def context():
@@ -126,10 +131,11 @@ class WorkflowTests(unittest.TestCase):
         self.assertEqual(stages["core.workflow-composition"], "assembly")
 
     def test_runner_exposes_the_persisted_plan_without_spawning(self):
+        """역할: Runner가 워커 실행 없이 저장된 작업 계획을 반환하는지 확인한다."""
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             p = root / "input.json"
-            p.write_text(json.dumps(context()))
+            p.write_text(json.dumps({**context(), "hook_guard": fixture_hook_guard(root, "TASK-WORKFLOW")}))
             response = start(root, "TASK-WORKFLOW", p, "codex", "test-revision", ROOT,
                              ROOT / "registry/active-skills.json", ROOT / "registry/taxonomy.json",
                              ROOT / "registry/routing-gates.json")
@@ -138,13 +144,14 @@ class WorkflowTests(unittest.TestCase):
             self.assertEqual(response["next"]["skill_id"], "core.architecture-baseline-and-design")
 
     def test_composition_refines_units_without_expanding_authority(self):
+        """역할: 작업 구성 스킬이 기존 권한 안에서 작업 단위를 보완하는지 확인한다."""
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             c = context()
             c["work_units"] = []
             c["delegation"]["authorized"] = False
             p = root / "input.json"
-            p.write_text(json.dumps(c))
+            p.write_text(json.dumps({**c, "hook_guard": fixture_hook_guard(root, "TASK-REFINE")}))
             response = start(root, "TASK-REFINE", p, "codex", "test-revision", ROOT,
                              ROOT / "registry/active-skills.json", ROOT / "registry/taxonomy.json",
                              ROOT / "registry/routing-gates.json")
@@ -232,6 +239,7 @@ class WorkflowRefinementTests(unittest.TestCase):
     """Refine future work through real Runner transitions and durable receipts."""
 
     def setUp(self):
+        """역할: 작업 단위 보완 테스트에 필요한 임시 프로젝트와 Runner 상태를 준비한다."""
         temp = tempfile.TemporaryDirectory()
         self.addCleanup(temp.cleanup)
         self.root = Path(temp.name)
@@ -248,7 +256,7 @@ class WorkflowRefinementTests(unittest.TestCase):
         future.pop('skill_id')  # Composition binds provisional future work.
         for unit in self.ctx['work_units']:
             unit['context_artifacts'] = [self.proof]
-        self.file.write_text(json.dumps(self.ctx))
+        self.file.write_text(json.dumps({**self.ctx, 'hook_guard': fixture_hook_guard(self.root, self.task)}))
         self.response = start(self.root, self.task, self.file, 'codex', 'test', ROOT,
                               self.registry, ROOT / 'registry/taxonomy.json', ROOT / 'registry/routing-gates.json')
         self.store = StateStore(self.root, harness_root=ROOT)

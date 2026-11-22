@@ -26,7 +26,9 @@ must use the matching non-advancing status. When verification fails for a
 routed cause, submit `status: failed` with `feedback: {"kind": "<signal>"}`
 using a `backward_routes` signal: the Runner reopens only the responsible gate,
 keeps earlier results, counts attempts itself and asks the user at the third
-attempt. When the route sets `independent_context`, G7 completion requires
+attempt. Authority or capability failure holds at G0 until the recovery
+decision and refreshed guard evidence are recorded. When the route sets
+`independent_context`, G7 completion requires
 `independent_verification_evidence_ids` from a fresh-context verifier.
 
 ## Entry gate

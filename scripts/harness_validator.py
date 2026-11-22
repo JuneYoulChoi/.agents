@@ -13,7 +13,7 @@ import hashlib
 import json
 import re
 import sys
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Iterable
 
@@ -304,6 +304,42 @@ def _validate_artifact_graph(artifacts: Any) -> None:
         visit(artifact_id)
 
 
+def validate_hook_guard(value: Any, target_root: Path | None = None,
+                        task_id: str | None = None, adapter: str | None = None) -> dict[str, Any]:
+    """
+    역할: 어댑터가 관찰한 편집 가드 거부 증거의 형식과 실행 시 작업 연동·유효 시간을 확인한다.
+    입력: value는 증거 객체, target_root·task_id·adapter는 실제 실행 대상이다.
+    출력: 검증된 증거 객체
+    """
+    if not isinstance(value, dict):
+        raise ContractError("hook_guard requires an observed host edit denial")
+    for key in ("task_id", "approval_id", "session_id", "tool_use_id", "tool", "observed_at"):
+        _require_string(value, key)
+    validate_identifier(value["task_id"], "hook_guard.task_id")
+    _require_string(value, "adapter", {"codex", "claude"})
+    fingerprint = value.get("target_root_fingerprint")
+    if not isinstance(fingerprint, str) or not re.fullmatch(r"sha256:[0-9a-f]{64}", fingerprint):
+        raise ContractError("hook_guard target fingerprint is invalid")
+    _require_string(value, "decision", {"denied"})
+    _require_string(value, "task_status", {"not_started", "blocked", "waiting_user"})
+    revision = value.get("task_revision")
+    if type(revision) is not int or revision < 0 or (revision == 0) != (value["task_status"] == "not_started"):
+        raise ContractError("hook_guard.task_revision does not match its observed task status")
+    try:
+        observed = datetime.fromisoformat(value["observed_at"].replace("Z", "+00:00"))
+    except ValueError as exc:
+        raise ContractError("hook_guard.observed_at must be an ISO-8601 timestamp") from exc
+    if observed.tzinfo is None:
+        raise ContractError("hook_guard.observed_at must include a timezone")
+    if target_root is not None:
+        if (fingerprint, value["task_id"], value["adapter"]) != (root_fingerprint(target_root), task_id, adapter):
+            raise ContractError("hook_guard belongs to a different target, task, or adapter")
+        age = datetime.now(timezone.utc) - observed
+        if not timedelta(0) <= age <= timedelta(minutes=10):
+            raise ContractError("hook_guard observation must be current (within ten minutes)")
+    return value
+
+
 def validate_intake_fields(value: dict[str, Any], taxonomy_path: Path) -> set[str]:
     """
     역할: 미리보기와 실행에 동일한 필드 분류 규칙을 적용한다.
@@ -358,6 +394,8 @@ def validate_intake(
     if any(not decision.strip() for decision in _string_array(value, "open_decisions")):
         raise ContractError("open_decisions must contain non-empty strings")
     validate_intake_fields(value, taxonomy_path)
+    if "operator_mode" in value:
+        _require_string(value, "operator_mode", {"jydlc"})
     _string_array(value, "languages")
     _string_array(value, "evidence_ids")
     _string_array(value, "standards")
@@ -413,6 +451,10 @@ def validate_intake(
     enforcement = value.get("enforcement_mode", "manual")
     if enforcement not in {"hook", "manual", "unsupported"}:
         raise ContractError("enforcement_mode must be hook, manual, or unsupported")
+    if "hook_guard" in value:
+        if enforcement != "hook":
+            raise ContractError("hook_guard is only valid in hook mode")
+        validate_hook_guard(value["hook_guard"])
     if require_intent and enforcement == "manual" and value.get("manual_guard_valid") is True:
         guard = value.get("manual_guard")
         if not isinstance(guard, dict):

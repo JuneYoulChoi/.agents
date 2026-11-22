@@ -114,7 +114,7 @@ from the mode and the change, and this section owns the rule.
 
 | Level | When | Effect |
 | --- | --- | --- |
-| `enforced` | `hook`, or `manual` with a non-expired manual guard (approval/action ID, actor/time, exact paths/actions, before/after state, verifier, rollback) | durable task state; the Runner checks every gate |
+| `enforced` | `hook` with a current task-bound host edit denial, or `manual` with a non-expired manual guard (approval/action ID, actor/time, exact paths/actions, before/after state, verifier, rollback) | durable task state; the Runner checks every gate |
 | `advisory` | `manual` without a guard, for an ordinary change or a major change the user waived | no task state; follow the skills, then run `scripts/harness_finish.py` once |
 | `requested` | `manual` without a guard, mutating major change | G0 waits for the user: approve temporary enforcement or record `enforcement_waiver_evidence_ids` |
 | `read_only` | `unsupported` | ephemeral; mutation blocked, no cross-session resume |
@@ -126,6 +126,22 @@ approval-bypassing actions and unsafe state writes remain blocked. The finish
 check escalates when the diff itself shows a major change (a component added
 or removed, or an architecture document changed). The adapter records the
 probe evidence and selected mode before routing.
+
+The host adapter records the actual denial from its native edit tool as
+`hook_guard`. The Runner binds that observation to its adapter, task ID,
+target fingerprint and expected task revision. A hook-mode start without
+evidence blocks at G0 and creates no state. The common policy covers Claude's
+Edit, Write and NotebookEdit tools and Codex's apply_patch tool. Shell writes
+and other tools remain subject to host permissions. Configure the native hook
+only with project approval. See [the Claude setup](../adapters/claude/native-dispatch.md#edit-guard-hook-dormant-until-a-task-is-bound)
+and [the Codex setup](../adapters/codex/hooks/README.md).
+
+When G7 reports an authority or capability failure, the Runner holds at G0
+and preserves the skill cursor. Resume requires a recorded recovery decision
+and a fresh guard observation for the held revision, or a revalidated manual
+guard for a manual-mode task. The Runner validates the adapter's observation
+as local evidence. The host and adapter are responsible for its authenticity
+and ongoing registration.
 
 The config's `adapter_mapping` makes loading explicit: Codex uses its native
 instruction scope with skills resolved relative to the harness source, while

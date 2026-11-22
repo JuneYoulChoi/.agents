@@ -14,9 +14,11 @@ import unittest
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'scripts'))
 from harness_router import route, _load_manifest, RouterError
-from harness_runner import resume, start, submit
+from harness_runner import checkpoint, resume, start, submit
+from harness_gate_evidence import test_plan, verify_results, verify_tdd
 from harness_state import StateStore
 from harness_validator import ContractError
+from test_runtime import fixture_hook_guard
 
 REGISTRY = ROOT / 'registry/active-skills.json'
 TAXONOMY = ROOT / 'registry/taxonomy.json'
@@ -87,7 +89,12 @@ class RunnerGateClosureTests(unittest.TestCase):
         self.proof.write_text('Contract fixture evidence, not product validation.')
 
     def begin(self, **changes):
-        intake = {**self.intake, **changes}
+        """
+        역할: 대상에 연동된 가드 증거와 함께 테스트 작업을 시작한다.
+        입력: changes는 시작 조건을 덮어쓰는 intake 항목이다.
+        출력: Runner 시작 응답
+        """
+        intake = {**self.intake, 'hook_guard': fixture_hook_guard(self.target, 'TASK-INTEGRITY', 'claude'), **changes}
         path = self.target / 'intake.json'; path.write_text(json.dumps(intake))
         return start(self.target, 'TASK-INTEGRITY', path, 'claude', 'label', ROOT, REGISTRY, TAXONOMY, MANIFEST)
 
@@ -221,12 +228,123 @@ class RunnerGateClosureTests(unittest.TestCase):
         unknown = self.result(response, status='failed', error='x', feedback={'kind': 'not-a-signal'})
         self.assertEqual(self.send(response, unknown)['status'], 'waiting_user')
 
+    def test_g0_feedback_requires_a_current_guard_and_preserves_progress(self):
+        """역할: G0 피드백은 다음 스킬을 숨기고 현재 리비전의 가드 증거로만 재개하는지 확인한다."""
+        response = self.advance_to(self.begin(), VERIFY)
+        failure = self.result(response, status='failed', error='guard no longer confirmed',
+                              feedback={'kind': 'authority_or_capability_failure'})
+        blocked = self.send(response, failure)
+        self.assertEqual((blocked['status'], blocked['stage'], blocked['next']), ('blocked', 'intake', None))
+        self.assertEqual(blocked['queue_progress'], response['queue_progress'])
+        request = self.target / 'resume.json'
+        base = {'answer': 'guard restored', 'decision_evidence_ids': ['EVD-RESTORED']}
+        for revision in (None, 0, blocked['revision'] - 1):
+            value = dict(base)
+            if revision is not None:
+                value['hook_guard'] = fixture_hook_guard(self.target, 'TASK-INTEGRITY', 'claude', revision)
+            request.write_text(json.dumps(value))
+            with self.assertRaises(ContractError):
+                resume(self.target, 'TASK-INTEGRITY', blocked['revision'], request, ROOT, REGISTRY)
+        base['hook_guard'] = fixture_hook_guard(self.target, 'TASK-INTEGRITY', 'claude', blocked['revision'])
+        request.write_text(json.dumps(base))
+        restored = resume(self.target, 'TASK-INTEGRITY', blocked['revision'], request, ROOT, REGISTRY)
+        self.assertEqual((restored['status'], restored['next']['skill_id']), ('active', VERIFY))
+        self.assertEqual(restored['queue_progress'], response['queue_progress'])
+
     def test_deep_route_requires_independent_verification_evidence(self):
         response = self.advance_to(self.begin(depth='deep'), VERIFY)
         self.assertTrue(response['next']['execution_profile']['independent_context'])
         self.assert_rejected(response, self.result(response))
         done = self.send(response, self.result(response, independent_verification_evidence_ids=['EVD-fresh-context']))
         self.assertEqual(done['status'], 'complete')
+
+    def test_user_gate_persists_even_without_a_queued_skill(self):
+        """역할: 사용자 호출 없는 실행을 거부하고 스킬 없는 G4를 정확히 다시 여는지 확인한다."""
+        evidence = [{'path': self.proof.name, 'sha256': hashlib.sha256(self.proof.read_bytes()).hexdigest()}]
+        confirmation = {'user_decision': 'fixture user confirmed this gate', 'evidence': evidence}
+        current = self.begin(action='review', operator_mode='jydlc', fields=['backend', 'operations', 'testing'],
+                             change_characteristics=['authored_code'],
+                             initial_checkpoints={'G0': confirmation, 'G1': confirmation})
+        request = self.target / 'checkpoint.json'
+
+        def step(response, gate, operation):
+            """
+            역할: 현재 리비전에 대해 테스트 사용자의 게이트 요청을 기록한다.
+            입력: response는 상태, gate는 대상 게이트, operation은 열기 또는 닫기다.
+            출력: 갱신된 Runner 응답
+            """
+            request.write_text(json.dumps({'gate': gate, 'operation': operation, 'confirmation': confirmation}))
+            return checkpoint(self.target, response['task_id'], response['revision'], request, ROOT, REGISTRY)
+
+        self.assertIsNone(current['next'])
+        self.assertEqual(current['operator']['gate_name'], 'architecture-baseline')
+        self.assertEqual(current['operator']['gate_label'], '아키텍처 기준선 확인')
+        with self.assertRaisesRegex(ContractError, 'current active user checkpoint'):
+            step(current, 'implementation', 'open')
+        for number in range(2, 7):
+            gate = f'G{number}'
+            current = step(current, current['operator']['gate_name'], 'open')
+            if gate == 'G4':
+                self.assertIsNone(current['next'])
+            while current['next']:
+                self.assertEqual(current['next']['execution_profile']['gate_id'], gate)
+                current = self.send(current, self.result(current))
+            current = step(current, gate, 'close')
+        current = step(current, 'G7', 'open')
+        store = StateStore(self.target, harness_root=ROOT)
+
+        def record_surrogate_receipts(state):
+            """
+            역할: 되돌림에서 보존할 이전 영수증과 만료시킬 후속 영수증을 구성한다.
+            입력: state는 테스트 상태의 사본이다.
+            """
+            state['execution']['work_records'] = {
+                'baseline': {'skill_id': 'core.architecture-baseline-and-design', 'status': 'completed'},
+                'implementation': {'skill_id': QUALITY, 'status': 'completed'},
+            }
+
+        stored = store.update(current['task_id'], current['revision'], 'fixture_receipts', record_surrogate_receipts)
+        current['revision'] = stored['revision']
+        failed = self.result(current, status='failed', error='missing observable operation plan',
+                             feedback={'kind': 'technology_configuration_or_cross_cutting_gap'})
+        current = self.send(current, failed)
+        self.assertEqual(current['operator']['gate'], 'G4')
+        self.assertEqual(current['operator']['gate_name'], 'test-planning')
+        self.assertEqual(set(current['operator']['completed']), {'G0', 'G1', 'G2', 'G3'})
+        self.assertIsNone(current['next'])
+        execution = store.read(current['task_id'])['execution']
+        self.assertEqual(set(execution['work_records']), {'baseline'})
+        self.assertEqual(set(execution['invalidated_work_records'][-1]['records']), {'implementation'})
+
+    def test_selected_realtime_profile_cannot_be_omitted_or_skipped(self):
+        """역할: 선택된 성능·실시간 품질 검사가 생략되면 G6을 완료할 수 없는지 확인한다."""
+        current = self.advance_to(self.begin(fields=['testing', 'performance'],
+                                            change_characteristics=['authored_code', 'realtime_embedded']), QUALITY)
+        self.assert_rejected(current, self.result(current))
+        self.assert_rejected(current, self.result(current, 'not_applicable', reason='no result'))
+
+    def test_test_records_require_observed_threshold_and_tdd_result(self):
+        """역할: 허용 범위의 실측과 동일 시험의 실패·통과만 구조화된 증거로 사용하는지 확인한다."""
+        evidence = [{'path': self.proof.name, 'sha256': hashlib.sha256(self.proof.read_bytes()).hexdigest()}]
+        check = {'id': 'TEST-1', 'requirement_id': 'QAS-1', 'kind': 'deadline_measurement', 'method': 'measurement',
+                 'command': 'measure sample', 'tool_version': '1', 'environment': 'simulation',
+                 'threshold': {'value': 1, 'unit': 'ms', 'comparison': '<='}}
+        planned = test_plan({'evidence': evidence, 'checks': [check]}, {'QAS-1': {'method': 'measurement'}},
+                            {'deadline_measurement'}, self.target)
+        run = {**{key: check[key] for key in ('command', 'tool_version', 'environment')},
+               'target_revision': 'revision-2', 'exit_code': 0, 'value': 0.6, 'unit': 'ms'}
+        observation = self.target / 'measurement.json'
+        observation.write_text(json.dumps(run))
+        run.update(evidence=evidence, observation={'path': observation.name,
+                   'sha256': hashlib.sha256(observation.read_bytes()).hexdigest()})
+        result = {'target_revision': 'revision-2', 'subject_files': evidence, 'runs': {'TEST-1': run}}
+        verify_results(result, planned, [], self.target)
+        run['value'] = 2
+        with self.assertRaisesRegex(ContractError, 'observation file'):
+            verify_results(result, planned, [], self.target)
+        planned['TEST-1']['method'] = 'tdd'
+        with self.assertRaisesRegex(ContractError, 'TDD results'):
+            verify_tdd({}, planned, self.target)
 
 
 class RoutingEntryTests(unittest.TestCase):

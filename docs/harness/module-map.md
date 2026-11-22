@@ -12,6 +12,7 @@ Rules: [doc and code sync](../../skills/architecture-baseline-and-design/referen
 | 하네스 런타임 (scripts) | 위임 기록기 | 워커 패킷과 영수증을 준비·기록한다 | `scripts/harness_delegation.py` |
 | 하네스 런타임 (scripts) | 상태 저장소 | 작업 상태와 이벤트를 잠금과 리비전으로 저장한다 | `scripts/harness_state.py` |
 | 하네스 런타임 (scripts) | 계약 검증기 | 이식 가능한 계약의 형식을 검증한다 | `scripts/harness_validator.py` |
+| 하네스 런타임 (scripts) | 게이트 증거 검증기 | 요구사항, 검증 계획과 실제 관찰의 연결을 확인한다 | `scripts/harness_gate_evidence.py` |
 | 하네스 런타임 (scripts) | 설치기 | 대상 프로젝트에 진입 파일과 설정을 설치하고 소스 무결성을 확인한다 | `scripts/harness_bootstrap.py` |
 | 하네스 런타임 (scripts) | 픽스처 실행기 | 픽스처를 라우터·설치기에 넣어 기대 결과와 비교한다 | `scripts/fixture_runner.py` |
 | 하네스 런타임 (scripts) | 코드 문서화 검사기 | 한글 파일 헤더와 함수 주석을 검사한다 | `scripts/harness_code_docs.py` |

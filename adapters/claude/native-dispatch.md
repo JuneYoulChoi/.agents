@@ -84,16 +84,23 @@ Temporary enforcement for a major change:
 
 1. Intake routes the change to `waiting_user` with
    `temporary_enforcement_requested`. Ask the user.
-2. On approval, add `"enforce": {"task_id": "<id>", "target_root": "<project
-   folder>"}` to `.claude/harness-guard.json`, record `enforcement_mode: hook`
-   and start the task with the Runner. On refusal, record
-   `enforcement_waiver_evidence_ids` and continue at the advisory level.
+2. On approval, set `enforce` in `.claude/harness-guard.json` with
+   `task_id`, `approval_id`, and the project-relative `target_root` (`.`
+   for the project itself). Use a disposable edit inside the bound target
+   to confirm the current session denies it. Copy the JSON from
+   `HARNESS_GUARD_OBSERVED` in that tool denial into intake's `hook_guard`.
+   Record `enforcement_mode: hook` and start the task with the Runner.
+   On refusal, record `enforcement_waiver_evidence_ids` and continue at the
+   advisory level.
 3. While the task is bound, edits under the target are allowed only while it is
    `active`; `waiting_user`, `blocked`, `failed` or a task not yet started deny
    them. Task-state writes, exempt paths and files outside the target pass, and
    the guard file itself cannot be edited.
 4. When the task is `complete` or `cancelled` the guard is dormant again without
    any cleanup. Only the project owner can clear a binding earlier.
+
+If G0 holds the task, observe a new denial in the current session before
+`resume`. Use its `hook_guard` with the recorded recovery decision.
 
 `exempt_paths` in the same file lists literal project-relative files or
 directories that stay editable under enforcement (generated, vendored or

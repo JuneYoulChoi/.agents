@@ -217,8 +217,9 @@ A low-risk, light, confirmed-baseline Brownfield change with only
 Without a hook or manual guard the route is advisory: follow the activated
 skills and finish with `scripts/harness_finish.py`. A major change instead
 waits at G0. Ask the user once, with the signals, whether to approve temporary
-enforcement; on approval bind the task in the project's guard file and record
-`enforcement_mode: hook`, on refusal record `enforcement_waiver_evidence_ids`.
+enforcement. On approval, bind the task with the platform adapter and record
+the observed host denial as `hook_guard` with `enforcement_mode: hook`. On
+refusal record `enforcement_waiver_evidence_ids`.
 If an ordinary change grows into a major one, stop and ask before continuing.
 The rule lives in [enforcement levels](../../plan/06-platform-adapters.md#enforcement-levels).
 

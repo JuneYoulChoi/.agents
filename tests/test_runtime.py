@@ -6,6 +6,7 @@
 
 from __future__ import annotations
 
+from datetime import datetime, timezone
 import json
 import hashlib
 import sys
@@ -22,6 +23,7 @@ from harness_router import _load_manifest, route  # noqa: E402
 from harness_state import StateError, StateStore  # noqa: E402
 from harness_validator import (  # noqa: E402
     ContractError,
+    root_fingerprint,
     validate_intake,
     validate_implementation_quality,
     validate_pattern_review,
@@ -29,7 +31,27 @@ from harness_validator import (  # noqa: E402
 )
 
 
+def fixture_hook_guard(root: Path = HARNESS_ROOT, task_id: str = "TASK-FIXTURE",
+                       adapter: str = "codex", revision: int = 0) -> dict:
+    """
+    역할: 런타임 테스트 전용 가드 관찰 데이터를 구성한다.
+    입력: root·task_id·adapter는 시험하는 작업 연동, revision은 중단된 작업 리비전이다.
+    출력: 합성 가드 관찰 객체
+    """
+    return {
+        "adapter": adapter, "task_id": task_id, "target_root_fingerprint": root_fingerprint(root),
+        "approval_id": "APPROVAL-FIXTURE", "session_id": "SESSION-FIXTURE",
+        "tool_use_id": f"TOOL-FIXTURE-{revision}", "tool": "apply_patch" if adapter == "codex" else "Edit",
+        "decision": "denied", "task_status": "blocked" if revision else "not_started",
+        "task_revision": revision, "observed_at": datetime.now(timezone.utc).isoformat(),
+    }
+
+
 def intake() -> dict:
+    """
+    역할: 런타임 회귀 테스트의 기본 intake를 구성한다.
+    출력: 테스트 기본 intake
+    """
     return {
         "schema_version": 1,
         "request_id": "REQ-RUNTIME-TEST",
@@ -46,6 +68,7 @@ def intake() -> dict:
             "constraints": ["Preserve existing behavior"],
         },
         "enforcement_mode": "hook",
+        "hook_guard": fixture_hook_guard(),
         "architecture_status": "accepted",
         "fields": ["backend", "configuration", "testing"],
         "languages": ["python"],
@@ -178,8 +201,12 @@ class RuntimeTests(unittest.TestCase):
         self.temp_owner.cleanup()
 
     def start_task(self) -> dict:
+        """
+        역할: 임시 프로젝트에 연동한 가드 관찰로 Runner 테스트 작업을 시작한다.
+        출력: Runner의 시작 응답
+        """
         intake_path = self.target / "intake.json"
-        write_object(intake_path, intake())
+        write_object(intake_path, {**intake(), "hook_guard": fixture_hook_guard(self.target, "TASK-RUNTIME")})
         return start(
             self.target,
             "TASK-RUNTIME",

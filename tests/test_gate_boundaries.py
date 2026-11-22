@@ -20,6 +20,7 @@ from harness_runner import start, submit
 from harness_state import StateStore
 from harness_validator import (ContractError, canonical_json_bytes, validate_acceptance_evidence,
                                validate_intake)
+from test_runtime import fixture_hook_guard
 
 
 SAMPLE_SOURCE = (
@@ -64,7 +65,14 @@ class GateBoundaryTests(unittest.TestCase):
         return [{'path': 'proof.txt', 'sha256': hashlib.sha256(self.proof.read_bytes()).hexdigest()}]
 
     def begin(self, name='TASK-GATES', intake=None):
-        p = self.target / 'intake.json'; p.write_text(json.dumps(intake or self.intake))
+        """
+        역할: 테스트 intake를 대상과 작업 ID에 연동한 뒤 Runner를 시작한다.
+        입력: name은 작업 ID, intake는 선택적인 시험 조건이다.
+        출력: Runner 시작 응답
+        """
+        value = dict(intake or self.intake)
+        value['hook_guard'] = fixture_hook_guard(self.target, name)
+        p = self.target / 'intake.json'; p.write_text(json.dumps(value))
         return start(self.target, name, p, 'codex', 'untrusted-caller-label', ROOT,
                      self.registry, self.taxonomy, self.manifest_path)
 

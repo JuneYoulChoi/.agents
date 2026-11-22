@@ -237,7 +237,8 @@ but it MUST follow this order:
 2. Probe adapter enforcement. If `manual` has no valid manual guard, or the
    capability is `unsupported`, create only an ephemeral run/intake summary;
    do not write task state/events. An `unsupported` route stays read-only; a
-   `manual` route is advisory or requests temporary enforcement. A valid `hook` or `manual_guard` permits the durable
+   `manual` route is advisory or requests temporary enforcement. An observed
+   task-bound `hook_guard` or a valid `manual_guard` permits the durable
    state contract.
 3. Create task_id/run_id and append `intake_started` only when the state-write
    condition from step 2 passes.

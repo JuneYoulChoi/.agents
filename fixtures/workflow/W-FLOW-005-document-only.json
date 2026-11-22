@@ -12,6 +12,19 @@
     "risk": "low",
     "depth": "light",
     "enforcement_mode": "hook",
+    "hook_guard": {
+      "adapter": "codex",
+      "task_id": "TASK-FIXTURE",
+      "target_root_fingerprint": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "approval_id": "APPROVAL-FIXTURE",
+      "session_id": "SESSION-FIXTURE",
+      "tool_use_id": "TOOL-W-FLOW-005-document-only",
+      "tool": "apply_patch",
+      "decision": "denied",
+      "task_status": "not_started",
+      "task_revision": 0,
+      "observed_at": "2026-11-19T00:00:00Z"
+    },
     "architecture_status": "confirmed",
     "fields": [
       "documentation"

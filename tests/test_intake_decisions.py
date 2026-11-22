@@ -1,6 +1,7 @@
-"""Calendar scenario regressions for minimal clarification and serial defaults.
-
-These are annotated structured inputs, not a natural-language classifier test.
+"""
+모듈: 하네스 테스트 (tests)
+컴포넌트: 기존 회귀 테스트
+역할: 캘린더 시나리오의 사용자 결정 대기 및 직렬 기본값을 검증한다.
 """
 import json
 from pathlib import Path
@@ -13,6 +14,7 @@ sys.path.insert(0, str(ROOT / 'scripts'))
 from harness_router import RouterError, _load_manifest, route
 from harness_runner import start
 from harness_validator import ContractError, validate_intake
+from test_runtime import fixture_hook_guard
 
 
 class IntakeDecisionTests(unittest.TestCase):
@@ -28,6 +30,7 @@ class IntakeDecisionTests(unittest.TestCase):
         return context
 
     def test_recorded_calendar_decisions_wait_without_legacy_ambiguity_flag(self):
+        """역할: 별도 플래그가 없어도 사용자 결정이 남아 있으면 Runner가 대기하는지 확인한다."""
         context = self.calendar()
         self.assertNotIn('material_ambiguity', context)
         result = route(context, _load_manifest(ROOT / 'registry/routing-gates.json'))
@@ -37,7 +40,7 @@ class IntakeDecisionTests(unittest.TestCase):
         self.assertEqual(result['work_plan']['mode'], 'single')
         with tempfile.TemporaryDirectory() as directory:
             target = Path(directory); intake = target / 'intake.json'
-            intake.write_text(json.dumps(context))
+            intake.write_text(json.dumps({**context, 'hook_guard': fixture_hook_guard(target, 'TASK-CALENDAR-OPEN')}))
             response = start(target, 'TASK-CALENDAR-OPEN', intake, 'codex', 'test', ROOT,
                              ROOT / 'registry/active-skills.json', ROOT / 'registry/taxonomy.json',
                              ROOT / 'registry/routing-gates.json')

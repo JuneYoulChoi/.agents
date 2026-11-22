@@ -766,6 +766,7 @@ Router asks the user and records the gap.
 
 ## Project bootstrap configuration contract
 
+
 The target project's `.agents/harness.json` pins the source and runtime
 boundary. It is portable configuration and MUST NOT contain secrets, absolute
 machine paths, task state, or a trust grant:
@@ -994,6 +995,12 @@ declined temporary enforcement for a major change. The route result carries
 `enforcement` (`mode`, `level`, `major_change_signals`,
 `finish_check_required`); a non-durable `start` returns that summary with the
 activated and suppressed skills instead of the full route.
+For hook mode, `hook_guard` records `adapter`, `task_id`,
+`target_root_fingerprint`, `approval_id`, `session_id`, `tool_use_id`,
+`tool`, `decision: denied`, `task_status`, `task_revision` and `observed_at`
+(ISO-8601 with timezone). A start requires `not_started` and revision 0. A G0
+resume requires the held task's current status and revision plus a new tool
+observation. The Runner accepts observations up to ten minutes old.
 `scripts/harness_finish.py` exits 0 passed, 1 violations, 2 usage error,
 3 major change needing a user decision.
 
@@ -1011,6 +1018,8 @@ State: `suspended_by` (the skill whose result suspended the task),
 Runner command: `resume --target-root <project> --task-id <id>
 --expected-revision <n> --request <file>` with
 `{"answer": "...", "decision_evidence_ids": ["..."]}`.
+When G0 holds the task, supply the fresh `hook_guard` or `manual_guard` in
+that request. Recovery keeps the pending skill and prior evidence.
 
 ## Implementation-quality documentation fields (2026-11-19)
 
@@ -1022,3 +1031,46 @@ optional generated or vendored prefixes). The Runner executes
 `scripts/harness_code_docs.py` and `scripts/harness_doc_sync.py` with those
 values; a `failed` report from either blocks completion. Both CLIs exit 0 on
 pass, 1 on violations and 2 on usage errors.
+
+## jydlc operator evidence
+
+The adapter records `operator_mode: "jydlc"` in the intake. For durable start,
+`initial_checkpoints` contains G0 and G1 confirmations. Each confirmation
+contains `user_decision` and nonempty `evidence` (target-relative file paths
+with SHA-256). A guard and the ordinary routing approvals are still required.
+
+For G2–G7 use `harness_runner.py checkpoint --target-root <path> --task-id <id>
+--expected-revision <revision> --request <json>`. The request has `gate`,
+`operation` (`open` or `close`), and `confirmation`. The request's `gate`
+accepts a G2–G7 ID or its `operator_name` from the routing manifest.
+The Runner returns `operator.gate_name` and `operator.gate_label` for display
+and exposes only
+the open gate's next skill. Close after its queued work and result evidence
+are complete. Skill-less gates still have an explicit open and close. G7
+rechecks the pinned proof and closes the task. G4 feedback reopens G4 and
+invalidates its plan and later operator results. Terminal receipts from the
+reopened gates remain in the history and must be prepared again. Earlier
+accepted results and receipts are preserved.
+
+For a user-driven software change:
+
+| Gate | Data and proof |
+| --- | --- |
+| G2 | The architecture skill result has `architecture_baseline` with `status: confirmed` and hashed `evidence`. A formal conformance route also needs a `standards_assessment` evidence record. |
+| G3 | The Greenfield/Brownfield skill result has `requirements` with `evidence` and `items`. Each item has a unique REQ-/QAS- `id`, an intake `criterion` and `method` (`inspection`, `test`, `tdd`, or `measurement`). Hybrid results agree on IDs and criteria. |
+| G4 | The close request has `test_plan` with `evidence` and `checks`. Each check has a unique TEST- `id`, `requirement_id`, `kind`, `method`, `command`, `tool_version` and `environment`. Record the routed capabilities in `capabilities`. For a measurement, include `threshold: {comparison, value, unit}`. |
+| G5 | Applicable pattern review drivers link to accepted requirements. An object-oriented pattern review records SOLID/GRASP `responsibility_review` with evidence and checks. |
+| G6 | The quality result includes every routed profile. Supply `tdd_results` keyed by planned TEST- ID, with `red` and `green` observations for the same `test_revision`. Red includes `failed_assertion`. |
+| G7 | `verified_checks` contains `target_revision`, hashed `subject_files`, and `runs` keyed by TEST- ID. The snapshot includes the changed code checked in G6. |
+
+Each test run supplies the planned command, tool version, environment,
+`target_revision`, `exit_code`, hashed `evidence`, and `observation` (a hashed
+JSON run result with matching fields). Measurement observations include
+`value` and `unit`. Keep the underlying logs with the evidence. The adapter
+is responsible for executing the approved command or measurement and recording
+the actual observation. Formal conformance assessment still requires authorized
+normative criteria and a responsible assessor.
+
+Legacy tasks retain their original command sequence. G6 requires the routed
+profiles. A legacy task with routed timing or performance measurements supplies
+`requirements`, `test_plan`, and `verified_checks` with its G7 result.

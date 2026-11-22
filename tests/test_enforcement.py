@@ -7,6 +7,7 @@
 import contextlib
 import io
 import json
+import os
 from pathlib import Path
 import subprocess
 import sys
@@ -21,6 +22,8 @@ from harness_guard import decide
 from harness_router import route, _load_manifest
 from harness_runner import start
 from harness_state import StateError, StateStore
+from harness_validator import ContractError
+from test_runtime import fixture_hook_guard
 
 REGISTRY = ROOT / 'registry/active-skills.json'
 TAXONOMY = ROOT / 'registry/taxonomy.json'
@@ -42,6 +45,7 @@ def intake(**changes) -> dict:
         intake 딕셔너리
     """
     value = json.loads((ROOT / 'templates/workflow-intake.json.example').read_text())
+    value.pop('hook_guard', None)
     value.update(work_units=[], delegation={}, technologies=[], languages=['python'], fields=['implementation'],
                  project_state='brownfield', action='change', risk='low', depth='standard', work_type='standard',
                  change_characteristics=['authored_code'], enforcement_mode='manual')
@@ -77,7 +81,12 @@ class EnforcementRoutingTests(unittest.TestCase):
         역할: 큰 변경이 훅 모드에서는 강제 수준으로 진행되고, 사용자가 거절해 면제 증거를 남기면 권고 모드로 진행되는지 확인한다.
         """
         major = dict(change_characteristics=['authored_code', 'use_case_change'])
-        enforced = route(intake(enforcement_mode='hook', **major), self.manifest)
+        unobserved = route(intake(enforcement_mode='hook', **major), self.manifest)
+        self.assertEqual((unobserved['status'], unobserved['enforcement']['level']), ('blocked', 'read_only'))
+        malformed = {**fixture_hook_guard(), 'task_status': []}
+        invalid = route(intake(enforcement_mode='hook', hook_guard=malformed, **major), self.manifest)
+        self.assertEqual(invalid['status'], 'blocked')
+        enforced = route(intake(enforcement_mode='hook', hook_guard=fixture_hook_guard(), **major), self.manifest)
         self.assertEqual((enforced['status'], enforced['enforcement']['level']), ('active', 'enforced'))
         waived = route(intake(enforcement_waiver_evidence_ids=['EVD-user-declined'], **major), self.manifest)
         self.assertEqual((waived['status'], waived['enforcement']['level']), ('active', 'advisory'))
@@ -108,6 +117,47 @@ class EnforcementRoutingTests(unittest.TestCase):
         """
         with self.assertRaises(StateError):
             StateStore(ROOT.parent, harness_root=ROOT)
+
+    def test_runner_starts_only_with_a_bound_observation(self):
+        """역할: 두 호스트의 가드 출력으로 작업을 시작하고 상태에 따라 같은 편집이 허용되는지 검증한다."""
+        for adapter, filename, tool, tool_input in (
+            ('claude', 'harness_guard.py', 'Edit', {'file_path': 'sample.txt'}),
+            ('codex', 'harness_codex_guard.py', 'apply_patch',
+             {'command': '*** Begin Patch\n*** Add File: sample.txt\n+sample\n*** End Patch'}),
+        ):
+            with self.subTest(adapter=adapter), tempfile.TemporaryDirectory() as temp:
+                target = Path(temp)
+                task_id = 'TASK-GUARD'
+                path = target / 'intake.json'
+                value = intake(enforcement_mode='hook', intent={'goal': 'g', 'success_criteria': ['works'], 'constraints': []})
+                path.write_text(json.dumps(value))
+                result = start(target, task_id, path, adapter, 'label', ROOT, REGISTRY, TAXONOMY, MANIFEST)
+                self.assertEqual((result['status'], result['durable']), ('blocked', False))
+                self.assertFalse((target / '.agents/state').exists())
+
+                config = target / f'.{adapter}/harness-guard.json'
+                config.parent.mkdir()
+                config.write_text(json.dumps({'enforce': {
+                    'task_id': task_id, 'target_root': '.', 'approval_id': 'APPROVAL-FIXTURE',
+                }}))
+                command = [sys.executable, '-B', str(ROOT / 'adapters' / adapter / 'hooks' / filename)]
+                if adapter == 'codex':
+                    command += ['--project-root', temp]
+                event = json.dumps({'tool_name': tool, 'tool_input': tool_input, 'cwd': temp,
+                                    'session_id': 'SESSION-FIXTURE', 'tool_use_id': 'TOOL-FIXTURE'})
+                environment = {**os.environ, 'CLAUDE_PROJECT_DIR': temp}
+                probe = subprocess.run(command, input=event, text=True, capture_output=True,
+                                       env=environment)
+                self.assertEqual(probe.returncode, 2, probe.stderr)
+                guard = json.loads(probe.stderr.split('HARNESS_GUARD_OBSERVED=', 1)[1])
+                path.write_text(json.dumps({**value, 'hook_guard': guard}))
+                with self.assertRaisesRegex(ContractError, 'different target, task, or adapter'):
+                    start(target, 'TASK-DIFFERENT', path, adapter, 'label', ROOT, REGISTRY, TAXONOMY, MANIFEST)
+                result = start(target, task_id, path, adapter, 'label', ROOT, REGISTRY, TAXONOMY, MANIFEST)
+                self.assertEqual(result['status'], 'active')
+                allowed = subprocess.run(command, input=event, text=True, capture_output=True,
+                                         env=environment)
+                self.assertEqual(allowed.returncode, 0, allowed.stderr)
 
 
 class EditGuardTests(unittest.TestCase):
@@ -173,6 +223,19 @@ class EditGuardTests(unittest.TestCase):
         self.assertTrue(self.allowed('.claude/harness-guard.json'))
         self.assertTrue(decide({'tool_name': 'Read', 'tool_input': {}}, self.root)[0])
 
+    def test_active_task_waiting_for_user_gate_cannot_edit(self):
+        """역할: 사용자가 게이트를 열기 전에는 활성 작업의 편집 도구도 기다리는지 확인한다."""
+        self.configure({'enforce': {'task_id': 'TASK-1', 'target_root': 'app'}})
+        self.set_status('active')
+        path = self.root / 'app/.agents/state/TASK-1/state.json'
+        state = json.loads(path.read_text())
+        state['execution'] = {'operator': {'opened': None}}
+        path.write_text(json.dumps(state))
+        self.assertFalse(self.allowed('app/src/a.py'))
+        state['execution']['operator']['opened'] = {'user_decision': 'open G6'}
+        path.write_text(json.dumps(state))
+        self.assertTrue(self.allowed('app/src/a.py'))
+
     def test_bound_task_controls_target_edits_and_expires_when_finished(self):
         """
         역할: 작업이 묶이면 대상 폴더 편집이 작업 상태를 따르고, 완료·취소되면 저절로 휴면으로 돌아가는지 확인한다.
@@ -203,21 +266,6 @@ class EditGuardTests(unittest.TestCase):
                     {'enforce': {'task_id': 'TASK-1', 'target_root': '../outside'}}, []):
             self.configure(bad)
             self.assertFalse(self.allowed('app/src/a.py'), bad)
-
-
-    def test_active_task_waiting_for_user_gate_cannot_edit(self):
-        """역할: 사용자가 게이트를 열기 전에는 활성 작업의 편집 도구도 기다리는지 확인한다."""
-        self.configure({'enforce': {'task_id': 'TASK-1', 'target_root': 'app'}})
-        self.set_status('active')
-        path = self.root / 'app/.agents/state/TASK-1/state.json'
-        state = json.loads(path.read_text())
-        state['execution'] = {'operator': {'opened': None}}
-        path.write_text(json.dumps(state))
-        self.assertFalse(self.allowed('app/src/a.py'))
-        state['execution']['operator']['opened'] = {'user_decision': 'open G6'}
-        path.write_text(json.dumps(state))
-        self.assertTrue(self.allowed('app/src/a.py'))
-
 
 
 class FinishCheckTests(unittest.TestCase):
