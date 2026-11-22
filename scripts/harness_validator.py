@@ -304,6 +304,19 @@ def _validate_artifact_graph(artifacts: Any) -> None:
         visit(artifact_id)
 
 
+def validate_intake_fields(value: dict[str, Any], taxonomy_path: Path) -> set[str]:
+    """
+    역할: 미리보기와 실행에 동일한 필드 분류 규칙을 적용한다.
+    입력: value는 intake, taxonomy_path는 승인된 분류 파일이다.
+    출력: 분류에서 확인한 필드 집합
+    """
+    fields = set(_string_array(value, "fields"))
+    unknown_fields = fields - field_ids(taxonomy_path)
+    if unknown_fields:
+        raise ContractError(f"unknown classification fields: {sorted(unknown_fields)}")
+    return fields
+
+
 def validate_intake(
     value: dict[str, Any], taxonomy_path: Path, require_intent: bool = False
 ) -> dict[str, Any]:
@@ -344,10 +357,7 @@ def validate_intake(
         _string_array(intent, "constraints")
     if any(not decision.strip() for decision in _string_array(value, "open_decisions")):
         raise ContractError("open_decisions must contain non-empty strings")
-    fields = _string_array(value, "fields")
-    unknown_fields = set(fields) - field_ids(taxonomy_path)
-    if unknown_fields:
-        raise ContractError(f"unknown classification fields: {sorted(unknown_fields)}")
+    validate_intake_fields(value, taxonomy_path)
     _string_array(value, "languages")
     _string_array(value, "evidence_ids")
     _string_array(value, "standards")

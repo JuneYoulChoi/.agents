@@ -15,7 +15,12 @@ from collections import deque
 from pathlib import Path
 from typing import Any
 
-from harness_workflow import WorkflowError, compose_work_plan, validate_workflow_input
+from harness_validator import ContractError, validate_intake_fields
+from harness_workflow import (
+    WorkflowError,
+    compose_work_plan,
+    validate_workflow_input,
+)
 
 
 SELECTED_TECH_STATUSES = {"required_by_user", "detected_existing", "selected"}
@@ -51,13 +56,28 @@ MUTATION_ACTIONS = {"implement", "change"}
 QUALITY_ACTIONS = CODE_SCOPE_ACTIONS - {"investigate"}
 PATTERN_ARCHITECTURE_ACTIONS = {"define", "plan", "design", "review"}
 FIELD_QUALITY_PROFILES = {"security": "security", "performance": "performance"}
+DEFAULT_TAXONOMY = Path(__file__).resolve().parents[1] / "registry" / "taxonomy.json"
+RELIABILITY_CONCERNS = {"availability", "fault_tolerance", "recoverability"}
+QUALITY_CONTEXT_VALUES = {
+    "timing": {"soft", "hard"},
+    "control": {"observation", "simulation", "actuation"},
+    "environment": {"local", "simulation", "representative_hardware", "hardware_in_the_loop", "live_hardware"},
+}
+VERIFICATION_CAPABILITIES = {
+    "behavior_test": "project_test_runner",
+    "performance_measurement": "workload_measurement",
+    "reliability_scenario": "reliability_testing",
+    "deadline_measurement": "target_timing_measurement",
+    "control_verification": "control_environment_test",
+    "operations_recovery": "recovery_test",
+}
 COMPACT_EXCLUDED_FIELDS = {
     "architecture", "design_patterns", "api", "database", "security", "privacy",
     "configuration", "technology_selection", "compliance", "devops_release", "operations",
 }
 
 
-class RouterError(ValueError):
+class RouterError(ContractError):
     """Raised when the portable input or manifest contract is invalid."""
 
 
@@ -455,16 +475,78 @@ def _execution_profile(
     }
 
 
-def route(context: dict[str, Any], manifest: dict[str, Any]) -> dict[str, Any]:
+def _quality_context(context: dict[str, Any], evidence: list[str]) -> dict[str, Any]:
+    """
+    역할: 신뢰성·시간 제약·제어 범위와 검증 환경을 intake의 근거에 연결한다.
+    입력: context는 intake 기록, evidence는 intake에 등록된 근거 ID다.
+    출력: 검증된 품질 조건 또는 입력이 없을 때 빈 객체
+    """
+    if "quality_context" not in context:
+        return {}
+    value = context["quality_context"]
+    if not isinstance(value, dict) or set(value) - {"evidence_ids", "reliability", *QUALITY_CONTEXT_VALUES}:
+        raise RouterError("quality_context must be an object with supported members")
+    if set(value) == {"evidence_ids"}:
+        raise RouterError("quality_context requires a reliability, timing, control, or environment signal")
+    references = value.get("evidence_ids")
+    if (not isinstance(references, list) or not references
+            or any(not isinstance(item, str) or not item.strip() for item in references)
+            or len(set(references)) != len(references) or not set(references) <= set(evidence)):
+        raise RouterError("quality_context.evidence_ids must contain unique registered intake evidence IDs")
+    if "reliability" in value:
+        reliability = value["reliability"]
+        if (not isinstance(reliability, list) or not reliability
+                or any(not isinstance(item, str) or item not in RELIABILITY_CONCERNS for item in reliability)
+                or len(set(reliability)) != len(reliability)):
+            raise RouterError("quality_context.reliability must contain unique supported concerns")
+    for member, choices in QUALITY_CONTEXT_VALUES.items():
+        if member in value:
+            _require_string(value, member, choices)
+    return value
+
+
+def _verification_plan(
+    fields: set[str], quality: dict[str, Any], evidence: list[str]
+) -> dict[str, Any]:
+    """
+    역할: 분류와 품질 조건에 맞는 G4 검증 항목과 필요한 도구 능력을 정한다.
+    입력: fields는 영향받는 필드, quality는 품질 조건, evidence는 분류 근거다.
+    출력: 검증 항목과 도구 능력 요구. 장비나 환경의 실행 권한은 포함하지 않는다.
+    """
+    checks = [
+        check
+        for check, applies in (
+            ("behavior_test", "testing" in fields),
+            ("performance_measurement", "performance" in fields),
+            ("reliability_scenario", bool(quality.get("reliability"))),
+            ("deadline_measurement", bool(quality.get("timing"))),
+            ("control_verification", bool(quality.get("control"))),
+            ("operations_recovery", "operations" in fields and "recoverability" in quality.get("reliability", [])),
+        )
+        if applies
+    ]
+    return {
+        "required_checks": checks,
+        "capabilities_by_check": {check: VERIFICATION_CAPABILITIES[check] for check in checks},
+        "evidence_ids": evidence if checks else [],
+        **quality,
+        "execution_authorized": False,
+    }
+
+
+def route(
+    context: dict[str, Any], manifest: dict[str, Any], taxonomy_path: Path = DEFAULT_TAXONOMY
+) -> dict[str, Any]:
     """
     역할: 구조화된 intake 하나를 G0–G7 게이트로 평가해 활성 스킬, 차단 사유, 강제 수준을 정한다.
 
     입력:
         context: 검증 전 intake 기록(범위, 프로젝트 상태, 동작, 위험도, 변경 특성 등)
         manifest: 라우팅 매니페스트(routing-gates.json)
+        taxonomy_path: 미리보기와 Runner가 공유하는 필드 분류 경로
     출력:
         상태(active/waiting_user/blocked), 게이트별 결과, 활성·억제 스킬, 실행 프로파일,
-        강제 수준(enforcement), 작업 계획을 담은 이식 가능한 라우팅 결과
+        강제 수준(enforcement), 작업 계획과 G4 검증 요구를 담은 이식 가능한 라우팅 결과
     예외:
         RouterError: intake 값이 허용 범위를 벗어나거나 서로 모순될 때
     """
@@ -497,9 +579,13 @@ def route(context: dict[str, Any], manifest: dict[str, Any]) -> dict[str, Any]:
         "action",
         {"investigate", "define", "plan", "design", "implement", "change", "verify", "review", "document", "approve", "handoff"},
     )
-    fields = set(_string_list(context, "fields"))
+    try:
+        fields = validate_intake_fields(context, taxonomy_path)
+    except ContractError as exc:
+        raise RouterError(str(exc)) from exc
     languages = _string_list(context, "languages")
     evidence = _string_list(context, "evidence_ids")
+    quality = _quality_context(context, evidence)
     requested_standards = _string_list(context, "standards")
     authorized_standard_evidence = _string_list(context, "authorized_standard_evidence_ids")
     conformance_intent = context.get("conformance_intent", "guidance")
@@ -523,6 +609,11 @@ def route(context: dict[str, Any], manifest: dict[str, Any]) -> dict[str, Any]:
         raise RouterError(
             f"change_characteristics has unsupported values: {sorted(unknown_characteristics)}"
         )
+    is_software = scope in {"software_engineering", "software_related"}
+    if quality and (target != "project" or not is_software):
+        raise RouterError("quality_context applies only to software project work")
+    if quality.get("timing") or quality.get("control") == "actuation":
+        characteristics.add("realtime_embedded")
     language_scope = context.get("language_scope", "authored_in_scope" if languages else "none")
     if language_scope not in LANGUAGE_SCOPES:
         raise RouterError(f"language_scope has unsupported value: {language_scope}")
@@ -532,7 +623,6 @@ def route(context: dict[str, Any], manifest: dict[str, Any]) -> dict[str, Any]:
     if enforcement not in {"hook", "manual", "unsupported"}:
         raise RouterError("enforcement_mode must be hook, manual, or unsupported")
 
-    is_software = scope in {"software_engineering", "software_related"}
     approvals = _string_list(context, "approval_evidence_ids")
     work_units = context.get("work_units", [])
     writes_workspace = any(u.get("mutation") == "workspace" for u in work_units)
@@ -659,6 +749,7 @@ def route(context: dict[str, Any], manifest: dict[str, Any]) -> dict[str, Any]:
         and characteristics <= {"authored_code"}
         and not pattern_scopes and not work_units and not tech_selected and not tech_candidates
         and not config_candidates and not fields & COMPACT_EXCLUDED_FIELDS
+        and not quality
         and context.get("delegation", {}).get("requested") is not True
         and context.get("work_type", "standard") in {"standard", "bugfix"}
         and not context.get("feedback")
@@ -713,6 +804,15 @@ def route(context: dict[str, Any], manifest: dict[str, Any]) -> dict[str, Any]:
         "compliance",
         "quality_attributes",
     })
+    verification_plan = _verification_plan(
+        fields if target == "project" and is_software and action in CODE_SCOPE_ACTIONS | {"define", "plan"} else set(),
+        quality,
+        evidence,
+    )
+    if quality:
+        g4_branches.append("quality_attributes")
+    if verification_plan["required_checks"]:
+        g4_branches.append("testing")
     if tech_selected or tech_candidates or "technology_selection" in fields:
         g4_skills.append("core.technology-selection-and-integration")
         g4_branches.append("technology_selection")
@@ -918,6 +1018,7 @@ def route(context: dict[str, Any], manifest: dict[str, Any]) -> dict[str, Any]:
             "finish_check_required": enforcement_level == "advisory" and mutating,
         },
         "work_plan": compose_work_plan(context, status),
+        "verification_plan": verification_plan,
         "ros2_mcp_profile": {
             "applicable": ros2_mcp_applicable,
             "reason": "selected_ros2_and_ros_mcp_server" if ros2_mcp_applicable else "not_selected_or_route_not_ready",

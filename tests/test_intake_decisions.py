@@ -87,3 +87,47 @@ class IntakeDecisionTests(unittest.TestCase):
         context['material_ambiguity'] = True
         self.assertEqual(route(context, _load_manifest(ROOT / 'registry/routing-gates.json'))['status'],
                          'waiting_user')
+
+    def test_preview_and_intake_reject_the_same_invalid_fields(self):
+        """역할: 잘못된 분류에 미리보기와 실행 검증이 같은 진단을 반환하는지 확인한다."""
+        manifest = _load_manifest(ROOT / 'registry/routing-gates.json')
+        taxonomy = ROOT / 'registry/taxonomy.json'
+        for fields in (['backend', 'reliability'], ['frontend', 'frontend'], [''], [False]):
+            with self.subTest(fields=fields):
+                context = {**self.calendar(), 'fields': fields}
+                with self.assertRaises(ContractError) as intake_error:
+                    validate_intake(context, taxonomy)
+                with self.assertRaises(RouterError) as route_error:
+                    route(context, manifest)
+                self.assertEqual(str(route_error.exception), str(intake_error.exception))
+
+    def test_evidenced_control_routes_g4_checks_and_only_evidenced_g6_profiles(self):
+        """역할: 제어·데드라인·신뢰성 근거가 필요한 시험 능력과 실시간 품질로 이어지는지 확인한다."""
+        manifest = _load_manifest(ROOT / 'registry/routing-gates.json')
+        context = {
+            **self.calendar(), 'fields': ['industrial_integration', 'testing'],
+            'project_state': 'brownfield', 'architecture_status': 'confirmed', 'action': 'change',
+            'languages': ['cpp'], 'language_scope': 'authored_in_scope',
+            'change_characteristics': ['authored_code'], 'open_decisions': [],
+            'evidence_ids': ['EVD-control-qas'],
+        }
+        kind = {'evidence_ids': ['EVD-control-qas'], 'timing': 'hard', 'control': 'actuation',
+                'environment': 'hardware_in_the_loop', 'reliability': ['recoverability']}
+        ordinary = route(context, manifest)
+        evidenced = route({**context, 'quality_context': kind}, manifest)
+        observation = route({**context, 'fields': ['operations', 'testing']}, manifest)
+        plan = evidenced['verification_plan']
+        self.assertEqual(ordinary['verification_plan']['required_checks'], ['behavior_test'])
+        self.assertEqual(observation['verification_plan']['required_checks'], ['behavior_test'])
+        self.assertEqual(plan['required_checks'],
+                         ['behavior_test', 'reliability_scenario', 'deadline_measurement', 'control_verification'])
+        self.assertEqual(plan['capabilities_by_check']['deadline_measurement'], 'target_timing_measurement')
+        self.assertEqual(plan['environment'], 'hardware_in_the_loop')
+        self.assertFalse(plan['execution_authorized'])
+        legacy_gate = next(gate for gate in ordinary['gate_results'] if gate['gate_id'] == 'G6')
+        active_gate = next(gate for gate in evidenced['gate_results'] if gate['gate_id'] == 'G6')
+        self.assertEqual(legacy_gate['activated_branches'], ['implementation_quality:core'])
+        self.assertEqual(active_gate['activated_branches'],
+                         ['implementation_quality:core', 'implementation_quality:realtime_embedded'])
+        with self.assertRaisesRegex(RouterError, 'registered intake evidence'):
+            route({**context, 'quality_context': {**kind, 'evidence_ids': ['EVD-unknown']}}, manifest)

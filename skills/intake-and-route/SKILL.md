@@ -59,6 +59,23 @@ structure decision. Record requested international standards as canonical
 `standards` plus `conformance_intent: guidance | alignment | conformance`; do
 not convert an ordinary best-practice request into a formal conformance claim.
 
+Keep quality and environment constraints separate from the field list. For a
+software target, add `quality_context` only when a requirement, confirmed
+decision, or observed system behavior supports it. Include at least one of
+these signals and cite one or more IDs already registered in `evidence_ids`.
+
+| Member | Recorded values |
+| --- | --- |
+| `reliability` | List of applicable `availability`, `fault_tolerance`, `recoverability` concerns |
+| `timing` | `soft` or `hard` deadline, as required by the target |
+| `control` | `observation`, `simulation`, or `actuation` |
+| `environment` | `local`, `simulation`, `representative_hardware`, `hardware_in_the_loop`, or `live_hardware` |
+
+Use the Router's G4 `verification_plan` to choose a test method and a tool
+with the required capabilities in the recorded environment. Follow the task's
+authority checks before running any tool or using live hardware. Plan results
+describe a need for verification. Record executed checks separately.
+
 Use `unknown` only when software context is insufficient. It permits read-only
 discovery, not material mutation. Use `not_applicable` for non-software scope.
 
