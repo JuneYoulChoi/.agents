@@ -130,7 +130,8 @@ Do not drop unresolved material findings merely because a review budget expired.
 Confirm that material requirements link to tests or explicit waivers, decisions
 link to their rationale, and changed behavior has fit-for-purpose documentation
 or a recorded reason not to create it. Do not update protected documents without
-approval.
+approval. Check the reported locations for new target-project gate documents
+against the [gate document contract](../../plan/03-contracts-and-fixtures.md#gate-document-locations).
 
 Use `REQ/QAS -> STD -> ADR/PATTERN -> TECH -> IMPL -> CONFIG -> TASK -> TEST -> DOC` for
 material technology work, omitting only non-applicable entities with an

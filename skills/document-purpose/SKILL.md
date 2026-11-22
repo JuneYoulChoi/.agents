@@ -43,7 +43,10 @@ Inspect existing documents, code/contracts, tests, approved decisions, and
 subject-matter sources. Mark facts as observed, inferred, or assumed. When a
 needed document is absent or stale, create or update the smallest
 fit-for-purpose artifact only if type, purpose, audience, location, and owner
-are known. Otherwise record the gap and ask.
+are known. Resolve a target-project gate document's default location with the
+[gate document contract](../../plan/03-contracts-and-fixtures.md#gate-document-locations).
+Respect an existing owner or approved path. Otherwise record the gap and ask
+when a material decision is still required.
 
 For a document that describes code, follow
 [doc and code sync](../architecture-baseline-and-design/references/doc-code-sync.md):

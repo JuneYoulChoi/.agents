@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="ko">
-<head><meta name="harness-overview-sources" content="897067936fc758fa89f92db939ad757b494e22aaeb6d5bf417019de6c91c8ef5">
+<head><meta name="harness-overview-sources" content="843c85ddddbc90403a22cc320b3391ec33667c206c3585357e886b325d4ae499">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="color-scheme" content="dark light">
@@ -50,6 +50,8 @@
   --target-root /explicit/project \
   --harness-root /shared/.agents \
   --adapter codex</div></article><article class="card"><h3>Enforcement</h3><p><span class="tag">hook</span><span class="tag">manual</span><span class="tag">unsupported</span></p><p>manual은 유효한 guard가 필요하고 unsupported는 read-only/ephemeral이며 resume을 주장하지 않습니다.</p></article><article class="card"><h3>Target-local state</h3><p><code>.agents/state/TASK-id/</code></p><p>state.json<br>events.ndjson<br>artifacts.json<br>handoff.md</p></article><article class="card s8"><h3>Harness upgrade</h3><p><code>intake → upgrade analysis → user approval → bounded change → verify → overview sync → handoff</code></p><p>plan, Registry, skills, adapters, contracts, fixtures를 먼저 대조하고 unchanged / patch / extend / wrapper / replace / deprecate / new로 분류합니다.</p></article></div></div></section>
+
+    <section id="outputs"><div class="shell"><h2>게이트 문서 찾기</h2><p>대상 프로젝트의 <code>docs/&lt;게이트 ID&gt;-&lt;operator_name&gt;/</code>에서 해당 단계의 문서를 찾습니다. G6 코드와 테스트는 프로젝트가 빌드하는 경로에 둡니다.</p><p><a href="../../plan/03-contracts-and-fixtures.md#gate-document-locations">게이트별 문서 경로</a></p></div></section>
 
     <section id="use"><div class="shell"><div class="section-head"><div class="chapter">11 · How to use</div><div><h2>사용자는 목표를 말합니다. 하네스가 구조를 묻습니다.</h2><p class="lead">JSON이나 스킬 이름을 외울 필요가 없습니다. 제품 방향, material pattern, 승인과 waiver는 사용자가 소유합니다.</p></div></div><div class="grid"><article class="card s6 accent"><span class="num">A GOOD REQUEST</span><h3>“기존 ROS 2 제어 서비스에…”</h3><p>gRPC API를 추가하고 endpoint는 YAML과 환경변수로 바꿀 수 있게 해줘. 기존 UC와 latency QA는 유지하고 C++ 관례를 따르며 테스트와 아키텍처 문서도 갱신해줘.</p></article><article class="card s6"><span class="num">THE HARNESS DERIVES</span><h3>Intent → branches → proof</h3><p>Brownfield · backend/API/config/testing · ROS 2/gRPC · C++ authored scope · distributed/API quality · architecture and regression evidence.</p></article><article class="card"><h3>1 · Clarify</h3><p>성공 기준이나 방향이 material하게 불명확할 때만 질문합니다.</p></article><article class="card"><h3>2 · Inspect</h3><p>문서, 코드, 테스트와 설정에서 관찰·추론·가정을 분리합니다.</p></article><article class="card"><h3>3 · Decide</h3><p>복수 설계안의 이유·trade-off·권장안을 보여주고 선택을 기다립니다.</p></article><article class="card"><h3>4 · Execute</h3><p>선택된 스킬만 적용해 코드·테스트·문서를 같은 trace에서 변경합니다.</p></article><article class="card"><h3>5 · Verify</h3><p>수락 기준과 영향 범위를 검증하고 실패는 원인 게이트로 보냅니다.</p></article><article class="card"><h3>6 · Resume</h3><p>다음 세션은 handoff, state revision, artifacts와 evidence부터 이어갑니다.</p></article></div></div></section>
 

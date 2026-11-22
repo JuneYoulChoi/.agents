@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "manifest_id": "adapter-template-manifest-v1",
-  "source_revision": "workspace-20261122-6906ac4321a2",
-  "source_tree_sha256": "6906ac4321a20feee00985c1c0b26b4b4b7bef53cc01f8adf71fa5929d984aff",
+  "source_revision": "workspace-20261122-04b746d691ae",
+  "source_tree_sha256": "04b746d691aed2a6b932f91d9fb9c32d9a49aa73cca4b92655742c9e0fc6c71c",
   "templates": [
     {
       "id": "codex.bootstrap",
@@ -116,7 +116,7 @@
   },
   "manual_gate_skill": {
     "source": "adapters/jydlc/SKILL.md",
-    "sha256": "1b22e6378fbbfbb0145a24351d72125570b7ea0651bd8c02509c25cb78b8e087",
+    "sha256": "14b93737d26ced5b7e009f7a2e2d7d1ce385b4e89264454638b2f63bc7771550",
     "destinations": {
       "codex": ".agents/skills/jydlc/SKILL.md",
       "claude": ".claude/skills/jydlc/SKILL.md"

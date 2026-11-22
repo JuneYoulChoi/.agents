@@ -204,6 +204,14 @@ recovery evidence>` to resolve a paused gate. Call the next stage explicitly.
 Advisory progress is tracked in the current conversation. An enforced task
 uses the normal Runner for durable skill results.
 
+Find written gate outputs under `docs/G0-preflight/` through
+`docs/G7-verification-and-handoff/`. G6 accepts `code-generation` as a
+launcher command and writes its implementation summary to
+`docs/G6-implementation/implementation.md` when the work needs one. Source
+and tests go in the project's build paths. Use `status` for current progress
+and see the [gate document paths](03-contracts-and-fixtures.md#gate-document-locations)
+for the default filenames and collision handling.
+
 Bootstrap adds both launchers from the [same source](../adapters/jydlc/SKILL.md).
 The launcher may ask for the approved harness source path the first time if
 your adapter has no locator mapping. Check both the project installation and

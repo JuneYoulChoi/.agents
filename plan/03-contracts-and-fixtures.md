@@ -764,6 +764,43 @@ Supported types are `report`, `seminar`, `manual`, `guide`, `history`,
 the type, purpose, audience, location, and owner are known; otherwise the
 Router asks the user and records the gap.
 
+### Gate document locations
+
+For a target project, resolve a needed, human-readable gate document before
+writing it. Use `docs/<gate_id>-<operator_name>/<filename>` relative to the
+target root. Read the exact `id` and `operator_name` from
+[the routing manifest](../registry/routing-gates.json). Launcher aliases such
+as `code-generation` run the same gate and share its canonical directory.
+
+| Gate | Directory | Default Markdown filenames when applicable |
+| --- | --- | --- |
+| G0 | `docs/G0-preflight/` | `preflight.md` |
+| G1 | `docs/G1-intake/` | `intake.md` |
+| G2 | `docs/G2-architecture-baseline/` | `baseline-review.md` |
+| G3 | `docs/G3-requirements-and-impact/` | `requirements.md`, `impact-analysis.md`, `work-plan.md` |
+| G4 | `docs/G4-test-planning/` | `test-plan.md`, `technology-review.md` |
+| G5 | `docs/G5-design-review/` | `design-review.md` |
+| G6 | `docs/G6-implementation/` | `implementation.md` |
+| G7 | `docs/G7-verification-and-handoff/` | `verification.md`, `handoff.md` |
+
+Use the default name for a gate document with no existing owner or approved
+location. When another change already owns that path, preserve the file and
+use `docs/<gate_id>-<operator_name>/<change-topic>/<filename>` with a stable,
+lowercase kebab-case topic. Resolve a topic collision before writing. Reuse the
+same path for updates to that document. Create directories only for documents
+the active route needs and authorizes. Report the actual locations with the
+gate result. Use `jydlc status` or the current task record for progress.
+
+Keep canonical architecture and approved requirements in their existing
+owned locations, with `docs/architecture/` and `docs/requirements/` as the
+defaults for new project-wide documents. Link them from gate documents.
+G6 saves authored source, generated source and tests in the project's normal
+build paths, and `implementation.md` can link those files. The Runner keeps its
+[state, evidence index and resumable handoff](#state-contract) under
+`.agents/state/<task_id>/`. The shared harness's human guide and reviews live
+under `docs/harness/`. The executing agent applies these document paths under
+the current write authority, including in advisory mode.
+
 ## Project bootstrap configuration contract
 
 Fresh installations include both project-local `jydlc` launchers in
