@@ -1,4 +1,8 @@
-"""Small, deterministic work-plan projection; never spawns agents or grants tools."""
+"""
+모듈: 하네스 런타임 (scripts)
+컴포넌트: 작업 계획기
+역할: 범위가 제한된 작업 단위, 의존성 및 실행 방식을 계산한다.
+"""
 
 from __future__ import annotations
 
@@ -18,10 +22,28 @@ PROFILES = {
 }
 ROLES = {"analyst", "designer", "implementer", "reviewer", "verifier", "documenter"}
 REASONING_LENSES = {"meticulous", "minimal_sufficient"}
+NATIVE_DEVELOPMENT_ROLES = ("implementer", "verifier")
 
 
 class WorkflowError(ValueError):
     pass
+
+
+def native_development_required(context: dict[str, Any]) -> bool:
+    """
+    역할: 사용자 주도 개발 경로에 독립 실행 작업자가 필요한지 판정한다.
+    입력: context는 검증된 작업 분류와 실행 방식이다.
+    출력: G6 구현자와 G7 검증자의 실제 실행이 필요한 경우 True
+    """
+    return (
+        context.get("operator_mode") == "jydlc"
+        and context.get("target") == "project"
+        and context.get("scope") in ("software_engineering", "software_related")
+        and context.get("action") in ("implement", "change")
+        and (context.get("language_scope") == "authored_in_scope"
+             or "authored_code" in context.get("change_characteristics", [])
+             or (bool(context.get("languages")) and "language_scope" not in context))
+    )
 
 
 def _strings(obj: dict, key: str, required: bool = False) -> list[str]:
@@ -46,6 +68,12 @@ def _paths(unit: dict, key: str) -> list[str]:
 
 
 def validate_workflow_input(context: dict[str, Any]) -> None:
+    """
+    역할: 스코프, 작업 분류, 위임 권한과 작업 단위의 구조를 검증한다.
+    입력: context는 라우팅에 제출할 작업 구성이다.
+    """
+    if context.get("operator_mode") not in (None, "jydlc"):
+        raise WorkflowError("operator_mode must be jydlc when specified")
     profile = context.get("work_type", "standard")
     if not isinstance(profile, str) or profile not in PROFILES:
         raise WorkflowError(f"unsupported work_type: {profile}")
@@ -115,7 +143,10 @@ def validate_workflow_input(context: dict[str, Any]) -> None:
 
 
 def validate_work_plan(plan: Any, route_status: str) -> None:
-    """Validate externally supplied projections without granting dispatch authority."""
+    """
+    역할: 작업 계획에 포함된 역할·의존성·실행 수와 권한 경계를 검증한다.
+    입력: plan은 작업 계획이며 route_status는 현재 라우팅 상태다.
+    """
     if not isinstance(plan, dict) or plan.get("schema_version") != 1:
         raise WorkflowError("work_plan must be a versioned object")
     validate_workflow_input({"work_type": plan.get("work_type"), "work_units": plan.get("units")})
@@ -127,6 +158,9 @@ def validate_work_plan(plan: Any, route_status: str) -> None:
         raise WorkflowError("work_plan steps do not match work type")
     if plan.get("depth") not in {"light", "standard", "deep"}:
         raise WorkflowError("invalid work_plan depth")
+    required_native = plan.get("required_native_roles", [])
+    if required_native not in ([], list(NATIVE_DEVELOPMENT_ROLES)):
+        raise WorkflowError("invalid required native worker roles")
     units = {u["id"]: u for u in plan["units"]}
     done: set[str] = set()
     batches = plan.get("batches")
@@ -177,6 +211,11 @@ def _conflict(a: dict, b: dict) -> bool:
 
 
 def compose_work_plan(context: dict[str, Any], route_status: str) -> dict[str, Any]:
+    """
+    역할: 작업 의존성을 배열하고 실행 가능 인원과 필수 실제 작업자 역할을 표시한다.
+    입력: context는 작업 분류와 후보 작업 단위이며 route_status는 현재 라우팅 상태다.
+    출력: 바인딩·배치·위임 조건을 담은 작업 계획
+    """
     validate_workflow_input(context)
     target, action = context.get("target"), context.get("action")
     profile = context.get("work_type", "standard")
@@ -223,7 +262,7 @@ def compose_work_plan(context: dict[str, Any], route_status: str) -> dict[str, A
     parallel = any(len(batch) > 1 for batch in batches)
     if not parallel and not reasons:
         reasons.append("dependencies_ownership_or_capacity_require_serial")
-    return {
+    projected = {
         "schema_version": 1,
         "work_type": profile,
         "depth": context.get("depth", "standard"),
@@ -241,3 +280,6 @@ def compose_work_plan(context: dict[str, Any], route_status: str) -> dict[str, A
         "timeout_seconds": delegation.get("timeout_seconds"),
         "out_of_scope": "No skill promotion, tool permission, deployment, or agent spawn is implied.",
     }
+    if native_development_required(context):
+        projected["required_native_roles"] = list(NATIVE_DEVELOPMENT_ROLES)
+    return projected

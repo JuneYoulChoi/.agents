@@ -1,6 +1,6 @@
 ---
 name: workflow-composition
-description: Compose a bounded delivery path after baseline and impact analysis, including task dependencies, persona responsibilities, skill and tool needs, and conditional parallel work. Use for project workflows and documentation; keep small work single-agent and never treat a work plan as execution permission.
+description: Compose a bounded delivery path after baseline and impact analysis, including task dependencies, persona responsibilities, skill and tool needs, required jydlc workers, and conditional parallel work. Use for project workflows and documentation.
 ---
 
 # Workflow Composition
@@ -54,15 +54,16 @@ G1 assessment is adapter-owned read-only reasoning before the structured intake;
 the Runner skips intake and does not execute G1 work units. Never bind units to
 that skipped owner. G2 onward uses current-skill preparation and checked joins.
 
-Keep one small coherent slice (including ordinary greeting/calendar CRUD), a
-local fix or a text change on one agent; leave `delegation.requested` false.
+Outside the explicit jydlc development path, keep one small coherent slice
+(including ordinary greeting/calendar CRUD), a local fix or a text change on one
+agent and leave `delegation.requested` false.
 Several fields or persona labels alone do not justify splitting. Delegate only
 bounded independent investigations, work with settled contracts and exclusive
 ownership, or an explicitly needed independent review/test. Explain the benefit
 against sequential work in the existing benefit evidence; merge duplicate checks.
 Do not infer token savings from parallel execution or invent usage counters.
 
-Keep clear local work on one agent. For independent work, define bounded units with goal,
+For independent work, define bounded units with goal,
 input revision, dependencies, read/write paths, shared resources, evidence,
 allowed tools, output and acceptance. Personas are responsibilities:
 analyst, designer, implementer, reviewer, verifier, documenter. A unit's role
@@ -93,18 +94,33 @@ contracts first when implementation depends on them. Use isolated worktrees or
 verified exclusive path ownership for writers. Recheck realpath/symlink scope
 and tool permissions at dispatch; the planner's lexical checks are insufficient.
 
-Use fresh focused context, not the entire conversation. Preserve requirements,
+Use fresh focused context with only the task and relevant evidence. Preserve requirements,
 constraints, assumptions, uncertainty and evidence in concise reports. A role
 name cannot create a missing tool or permission. No recursive delegation unless
 the coordinator's explicit scope/budget permits it. The reference Runner stays
 serial; native adapters may execute approved units within a current skill and
-must join them before submitting one skill result. No adapter capability means
-sequential work, not an invented multi-agent success.
+must join them before submitting one skill result.
 
 For declared units, follow [native work receipts](references/native-work.md):
 bind owners and only needed skill references, clamp to observed worker capacity,
 prepare a focused packet with the current skill instructions and role, and record
 verified terminal results. Parallel batches must share the current skill owner.
+
+## Required workers for jydlc development
+
+When the work plan lists `required_native_roles`, G3 binds one workspace-writing
+implementer to G6 `core.implementation-quality` and one read-only verifier to
+G7 `core.verify-and-handoff`. Give the verifier the accepted task criteria, a
+direct dependency on the implementer, and `input_revision: after_implementation`.
+The verifier receives the observed integrated revision from the implementer's
+native receipt. Run both through the host in distinct contexts with verified
+receipts. A single available slot can execute them in order. If a required
+worker cannot be started, record the capability or authority blocker.
+
+For a larger change, use an analyst or designer only when requirements or a
+boundary decision need independent evidence. Map each added perspective to
+the stakeholder concern and its owned artifact. Keep the user's decision
+authority explicit, including approval of acceptance criteria and design choices.
 
 ## Join and hand off
 

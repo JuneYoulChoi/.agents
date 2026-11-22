@@ -42,7 +42,8 @@ Recheck these facts against current tools, actual file revisions and ownership;
 booleans are attestations, not proof produced by the Runner. Include uncommitted
 changes in the snapshot evidence. A plan never authorizes dispatch. Missing
 native delegation authority/capability uses `mode: serial` with current local
-execution authority. Serial execution still records each declared unit.
+execution authority for optional units. Required jydlc roles use native mode
+and report a blocker when the host lacks proven capability or authority.
 
 Each unit must provide nonempty `context_artifacts`: target-relative path/SHA-256
 pairs for the compact current baseline, accepted decisions and necessary prior
@@ -94,6 +95,8 @@ the packet as its whole prompt, one batch per message, following the adapter's
 `adapters/claude/native-dispatch.md` in the harness source. The packet's
 `gate_role` names the current gate's portable role; a unit role that gate does
 not allow is rejected at preparation.
+See the [Codex procedure](../../../adapters/codex/native-dispatch.md) for the
+equivalent fresh-context dispatch and checked receipt.
 
 ## Stop, verify and record
 
@@ -131,6 +134,37 @@ uncertainty and failure evidence. A stale hash/revision or duplicate receipt is
 rejected. Missing, failed or timed-out units block owning-skill completion and G7.
 Running units block every skill transition until termination is recorded.
 
+### Required native implementation and verification
+
+For the explicit jydlc development path, G3 binds the required G6 implementer
+and G7 verifier. The verifier depends directly on that implementer and uses
+`after_implementation` as its planned revision. After the implementation is
+joined, the coordinator observes the integrated worktree snapshot, including
+uncommitted changes. Use that revision for G6's `output_revision` and as G7's
+native preparation request `input_revision`. The packet carries the resolved
+revision. Keep the snapshot stable during verification.
+
+For either required completed worker, add `native_execution` to the normal
+result with the observed provider `worker_id` and a receipt path/hash. G6 also
+reports `output_revision`:
+
+```json
+{
+  "native_execution": {
+    "worker_id": "<observed provider worker ID>",
+    "receipt": {"path": "<local host receipt file>", "sha256": "<actual bytes SHA-256>"}
+  }
+}
+```
+
+Save the adapter's observed terminal host event as a JSON receipt containing
+`adapter`, `task_id`, `unit_id`, `worker_id`, `input_revision`, `packet_hash`,
+`status: completed`, and a nonempty `host_completion` that identifies the
+observed host result. The implementer receipt also includes `output_revision`.
+The Runner checks the receipt data and hash. The adapter verifies the observed
+event came from the real host tool and confirms termination. The verifier
+must have a distinct worker ID and cover the complete accepted task criteria.
+
 ## Usage and limits
 
 When provider counters exist, report per-unit incremental input/output counts:
@@ -144,8 +178,8 @@ character-count estimates or cumulative session usage. If counters are absent,
 use unavailable without numbers. Runner worker_usage sums reported worker counts
 and exposes unavailable_or_pending; it excludes parent context, hidden host
 context, tool charges and currency. The summary explicitly reports parent_usage as unavailable and total_task_tokens
-as null. It is not proof of total savings. Keep small CRUD/local changes and
-short documents single-agent; no benchmark or extra reviewer runs by default.
+as null. Keep small CRUD/local changes outside the jydlc development path and
+short documents single-agent. Benchmark only when comparing workflow cost.
 A savings claim requires a separately observed comparable single-agent baseline
 and total parent+worker usage for the same acceptance scope; include repeated
 context and integration effort. Without those counters, report not_measured.

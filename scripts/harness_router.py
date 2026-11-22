@@ -20,6 +20,7 @@ from harness_validator import ContractError, validate_hook_guard, validate_intak
 from harness_workflow import (
     WorkflowError,
     compose_work_plan,
+    native_development_required,
     validate_workflow_input,
 )
 
@@ -770,7 +771,7 @@ def route(
         and characteristics <= {"authored_code"}
         and not pattern_scopes and not work_units and not tech_selected and not tech_candidates
         and not config_candidates and not fields & COMPACT_EXCLUDED_FIELDS
-        and not quality
+        and not quality and not native_development_required(context)
         and context.get("delegation", {}).get("requested") is not True
         and context.get("work_type", "standard") in {"standard", "bugfix"}
         and not context.get("feedback")

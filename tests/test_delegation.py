@@ -17,9 +17,62 @@ from harness_delegation import prepare, record, require_join, usage_summary
 from harness_runner import start, submit, work_event
 from harness_state import StateStore
 from harness_validator import ContractError
+from test_runtime import fixture_hook_guard
 
 
 class DelegationTests(unittest.TestCase):
+    def test_jydlc_native_workers_bind_the_independent_revision(self):
+        """역할: 실제 작업자 영수증과 서로 다른 컨텍스트의 구현 리비전 연결을 확인한다."""
+        produce = 'core.implementation-quality'
+        verify = 'core.verify-and-handoff'
+        execution = self.state['execution']
+        execution['queue'] = [produce, verify]
+        execution['skill_gates'] = {produce: 'G6', verify: 'G7'}
+        plan = self.state['route']['work_plan']
+        seed = plan['units'][0]
+        producer = {**seed, 'role': 'implementer', 'skill_id': produce, 'mutation': 'workspace',
+                    'write_paths': ['src'], 'depends_on': []}
+        verifier = {**seed, 'id': 'b', 'role': 'verifier', 'skill_id': verify, 'mutation': 'none',
+                    'write_paths': [], 'depends_on': ['a'], 'input_revision': 'after_implementation',
+                    'acceptance': self.state['intent']['success_criteria']}
+        plan.update(units=[producer, verifier], required_native_roles=['implementer', 'verifier'], max_workers=1)
+
+        def evidence_for(packet, unit, worker_id, output=None):
+            """
+            역할: 호스트가 반환한 형식의 모의 작업자 결과와 영수증을 임시 파일로 작성한다.
+            입력: packet은 준비 결과, unit과 worker_id는 역할 식별자, output은 통합 리비전이다.
+            출력: 기록 테스트용 종료 결과
+            """
+            result = self.result(packet, unit)
+            result['input_revision'] = packet['packet']['unit']['input_revision']
+            receipt = {key: result[key] for key in ('unit_id', 'packet_hash', 'input_revision', 'status')}
+            receipt.update(adapter='codex', task_id=self.state['task_id'], worker_id=worker_id,
+                           host_completion='synthetic host return for schema test')
+            native = {'worker_id': worker_id}
+            if output is not None:
+                native['output_revision'] = receipt['output_revision'] = output
+            path = self.target / f'{unit}.receipt.json'
+            path.write_text(json.dumps(receipt))
+            native['receipt'] = {'path': path.name, 'sha256': hashlib.sha256(path.read_bytes()).hexdigest()}
+            result['native_execution'] = native
+            return result
+
+        with self.assertRaisesRegex(ContractError, 'native worker'):
+            prepare(self.state, self.request(mode='serial'), self.target, 0)
+        a = prepare(self.state, self.request(), self.target, 0)
+        with self.assertRaisesRegex(ContractError, 'native execution receipt'):
+            self.record(self.result(a), 1)
+        self.record(evidence_for(a, 'a', 'worker-A', 'joined-2'), 1)
+        require_join(self.state, produce, self.target)
+        execution['cursor'] = 1
+        with self.assertRaisesRegex(ContractError, 'input revision mismatch'):
+            prepare(self.state, self.request('b'), self.target, 2)
+        b = prepare(self.state, {**self.request('b'), 'input_revision': 'joined-2'}, self.target, 2)
+        with self.assertRaisesRegex(ContractError, 'different host worker'):
+            self.record(evidence_for(b, 'b', 'worker-A'), 3)
+        self.record(evidence_for(b, 'b', 'worker-B'), 3)
+        require_join(self.state, verify, self.target)
+
     def test_lenses_reach_worker_without_changing_acceptance_or_authority(self):
         packets = []
         for lens in ('meticulous', 'minimal_sufficient'):
@@ -43,6 +96,7 @@ class DelegationTests(unittest.TestCase):
         self.assertNotIn('reasoning_lens', packet['unit'])
 
     def setUp(self):
+        """역할: 실제 Runner의 위임 테스트에 필요한 임시 작업과 가드 관찰을 준비한다."""
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
         self.target = Path(self.temp.name)
@@ -57,7 +111,7 @@ class DelegationTests(unittest.TestCase):
             unit['context_artifacts'] = [self.context_file]
             unit['skill_id'] = 'core.architecture-baseline-and-design'
         f = self.target / 'intake.json'
-        f.write_text(json.dumps(self.ctx))
+        f.write_text(json.dumps({**self.ctx, 'hook_guard': fixture_hook_guard(self.target, 'TASK-RECEIPTS')}))
         self.response = start(self.target, 'TASK-RECEIPTS', f, 'codex', 'test', ROOT,
                               self.registry, ROOT / 'registry/taxonomy.json', ROOT / 'registry/routing-gates.json')
         self.store = StateStore(self.target, harness_root=ROOT)

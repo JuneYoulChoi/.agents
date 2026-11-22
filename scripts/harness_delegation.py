@@ -1,4 +1,8 @@
-"""Bounded native-worker receipts. Does not spawn, cancel, or contact providers."""
+"""
+모듈: 하네스 런타임 (scripts)
+컴포넌트: 위임 기록기
+역할: 작업자 패킷과 실제 작업을 입증하는 영수증을 검증하고 합류를 확인한다.
+"""
 from __future__ import annotations
 
 import hashlib
@@ -8,12 +12,18 @@ from pathlib import Path
 from typing import Any
 
 from harness_validator import (ContractError, active_skill_ids, read_object,
+                               contained_path,
                                validate_evidence_files, validate_acceptance_evidence, validate_skill_result,
                                validate_resolution_binding)
 from harness_workflow import _conflict
 
 CONTEXT_BYTES = 16384
 RESULT_BYTES = 8192
+NATIVE_ROLE_OWNERS = {
+    "implementer": "core.implementation-quality",
+    "verifier": "core.verify-and-handoff",
+}
+IMPLEMENTATION_OUTPUT = "after_implementation"
 
 
 def digest(value: Any) -> str:
@@ -21,14 +31,29 @@ def digest(value: Any) -> str:
 
 
 def current_skill(state: dict) -> str:
+    """
+    역할: 작업자가 준비되거나 기록될 수 있는 현재 스킬을 확인한다.
+    입력: state는 작업 상태다.
+    출력: 현재 대기 중인 스킬 ID
+    """
     if state['status'] != 'active':
         raise ContractError('work requires an active task')
     execution = state['execution']
+    if execution['cursor'] >= len(execution['queue']):
+        raise ContractError('work requires a pending skill')
     return execution['queue'][execution['cursor']]
 
 
 def usage_summary(state: dict) -> dict:
-    records = list(state['execution'].get('work_records', {}).values())
+    """
+    역할: 현재 및 되돌림으로 무효화된 작업자 사용량과 관측 범위를 집계한다.
+    입력: state는 작업 상태와 현재·이전 작업 기록이다.
+    출력: 작업자 사용량과 관측 한계
+    """
+    execution = state['execution']
+    records = list(execution.get('work_records', {}).values())
+    for invalidated in execution.get('invalidated_work_records', []):
+        records.extend(invalidated['records'].values())
     totals = {'input_tokens': 0, 'output_tokens': 0}
     unknown = 0
     for record in records:
@@ -125,9 +150,83 @@ def skill_context(state: dict, unit: dict, harness_root: Path, registry_path: Pa
             'application_rule': 'Apply these instructions only to the unit scope. Read and verify selected references before work; stop if required context is missing. Do not run another skill or expand authority. Record actual model/reasoning resolution and instruction evidence in the result artifact.'}
 
 
+def _native_role(plan: dict, unit: dict) -> str | None:
+    """
+    역할: 소유 스킬과 요구 역할에 따라 실제 작업자 기록이 필요한 작업 단위를 식별한다.
+    입력: plan은 작업 계획이며 unit은 책임과 소유 스킬을 포함한 작업 단위다.
+    출력: 필수 작업자의 역할 또는 None
+    """
+    role = unit.get("role")
+    if role in plan.get("required_native_roles", []) and unit.get("skill_id") == NATIVE_ROLE_OWNERS[role]:
+        return role
+    return None
+
+
+def _native_units(plan: dict) -> tuple[dict, dict]:
+    """
+    역할: 구현과 검증의 역할, 쓰기 범위 및 의존성을 검사한다.
+    입력: plan은 필수 실제 작업자를 선언한 바인딩 완료 작업 계획이다.
+    출력: 구현자 작업 단위와 검증자 작업 단위
+    """
+    groups = {role: [unit for unit in plan.get("units", []) if _native_role(plan, unit) == role]
+              for role in NATIVE_ROLE_OWNERS}
+    if any(len(units) != 1 for units in groups.values()):
+        raise ContractError("jydlc development requires one G6 implementer and one G7 verifier")
+    implementer, verifier = (groups[role][0] for role in NATIVE_ROLE_OWNERS)
+    if implementer.get("mutation") != "workspace" or verifier.get("mutation") != "none":
+        raise ContractError("jydlc implementer must own writes and the verifier must be read-only")
+    if (implementer["id"] not in verifier.get("depends_on", [])
+            or verifier.get("input_revision") != IMPLEMENTATION_OUTPUT
+            or implementer.get("input_revision") == IMPLEMENTATION_OUTPUT):
+        raise ContractError("jydlc verifier must depend on the G6 implementer and use after_implementation")
+    return implementer, verifier
+
+
+def _native_proof(state: dict, item: dict, result: dict, target: Path, role: str) -> dict:
+    """
+    역할: 실제 실행·종료를 관찰한 호스트 영수증을 작업자·패킷·리비전에 연결한다.
+    입력: state는 작업 상태, item은 준비 기록, result는 결과, target은 프로젝트 루트, role은 필수 역할이다.
+    출력: 검증한 실제 작업자 증거
+    """
+    proof = result.get("native_execution")
+    if item.get("mode") != "native" or not isinstance(proof, dict):
+        raise ContractError("jydlc completion requires a native execution receipt")
+    worker_id = proof.get("worker_id")
+    if not isinstance(worker_id, str) or not worker_id.strip():
+        raise ContractError("native execution receipt requires an observed host worker ID")
+    evidence = validate_evidence_files([proof.get("receipt")], target)[0]
+    path = contained_path(target, evidence["path"], "native execution receipt", must_exist=True)
+    receipt = read_object(path)
+    expected = {
+        "adapter": state["selected_adapter"],
+        "task_id": state["task_id"],
+        "unit_id": item["unit_id"],
+        "worker_id": worker_id,
+        "input_revision": item["input_revision"],
+        "packet_hash": item["packet_hash"],
+        "status": "completed",
+    }
+    if role == "implementer":
+        output = proof.get("output_revision")
+        if not isinstance(output, str) or not output.strip() or output == IMPLEMENTATION_OUTPUT:
+            raise ContractError("native implementer receipt requires the integrated output revision")
+        expected["output_revision"] = output
+    if any(receipt.get(key) != value for key, value in expected.items()):
+        raise ContractError("native execution receipt does not match the host worker, task, packet or revision")
+    completion = receipt.get("host_completion")
+    if not isinstance(completion, str) or not completion.strip():
+        raise ContractError("native execution receipt requires observed host completion evidence")
+    return proof
+
+
 def prepare(state: dict, request: dict, target: Path, now: float | None = None,
             harness_root: Path | None = None, registry_path: Path | None = None) -> dict:
-    """Mutate a locked state copy and return the only context to send a worker."""
+    """
+    역할: 현재 게이트의 작업자 패킷을 준비하고 락을 보유한 상태 사본에 등록한다.
+    입력: state와 request는 현재 작업과 준비 요청, target은 프로젝트 루트, now는 관측 시각,
+          harness_root와 registry_path는 승인 하네스 소스와 레지스트리 위치다.
+    출력: 준비된 작업자 패킷과 그 해시
+    """
     now = time.time() if now is None else now
     skill = current_skill(state)
     plan = state['route']['work_plan']
@@ -142,6 +241,13 @@ def prepare(state: dict, request: dict, target: Path, now: float | None = None,
         raise ContractError('unit already prepared; retry requires a newly reviewed work unit')
     if any(records.get(dep, {}).get('status') != 'completed' for dep in unit.get('depends_on', [])):
         raise ContractError('work dependencies have not joined')
+    role = _native_role(plan, unit)
+    if role == "verifier":
+        implementer, _ = _native_units(plan)
+        integrated_revision = records.get(implementer["id"], {}).get("result", {}).get("native_execution", {}).get("output_revision")
+        if not integrated_revision:
+            raise ContractError("jydlc verifier requires the observed G6 integrated output revision")
+        unit = {**unit, "input_revision": integrated_revision}
     if request.get('input_revision') != unit['input_revision']:
         raise ContractError('work input revision mismatch')
     checks = request.get('checks', {})
@@ -154,6 +260,8 @@ def prepare(state: dict, request: dict, target: Path, now: float | None = None,
     mode = request.get('mode')
     if mode not in ('native', 'serial'):
         raise ContractError('work mode must be native or serial')
+    if role is not None and mode != "native":
+        raise ContractError("required jydlc role needs a native worker in a separate context")
     delegation = state['intake'].get('delegation', {})
     if mode == 'native' and (any(delegation.get(k) is not True for k in
             ('requested', 'authorized', 'available')) or any(not delegation.get(k) for k in
@@ -211,7 +319,10 @@ def prepare(state: dict, request: dict, target: Path, now: float | None = None,
 
 
 def record(state: dict, result: dict, now: float | None = None, target: Path | None = None) -> None:
-    """Record one terminal result; timed-out work can never become successful."""
+    """
+    역할: 검증한 작업자 종료 결과를 저장하고 제한 시간이 지난 완료 요청을 거부한다.
+    입력: state는 작업 상태, result는 종료 기록, now는 관측 시각, target은 증거가 속한 프로젝트다.
+    """
     now = time.time() if now is None else now
     skill = current_skill(state)
     records = state['execution'].get('work_records', {})
@@ -244,6 +355,14 @@ def record(state: dict, result: dict, now: float | None = None, target: Path | N
         if target is None:
             raise ContractError('completion requires the target root for evidence validation')
         unit = next(u for u in state['route']['work_plan']['units'] if u['id'] == item['unit_id'])
+        role = _native_role(state["route"]["work_plan"], unit)
+        if role is not None:
+            proof = _native_proof(state, item, result, target, role)
+            if role == "verifier":
+                implementer, _ = _native_units(state["route"]["work_plan"])
+                producer = records[implementer["id"]]["result"]["native_execution"]
+                if proof["worker_id"] == producer["worker_id"]:
+                    raise ContractError("jydlc verifier must run in a different host worker")
         validate_evidence_files(item['context_artifacts'], target)
         validate_acceptance_evidence(result.get('verification'), unit['acceptance'], target)
         instruction = result.get('instruction_evidence', {})
@@ -272,17 +391,41 @@ def record(state: dict, result: dict, now: float | None = None, target: Path | N
     item.update(status=status, finished_at=now, result={**result, 'status': status})
 
 
-def require_join(state: dict, skill: str) -> None:
-    units = state['route'].get('work_plan', {}).get('units', [])
+def require_join(state: dict, skill: str, target: Path | None = None) -> None:
+    """
+    역할: 현재 스킬의 작업자 합류와 사용자 주도 개발의 실제 역할 증거를 확인한다.
+    입력: state는 작업 상태, skill은 제출 대상 스킬, target은 증거 파일이 속한 프로젝트다.
+    """
+    plan = state["route"].get("work_plan", {})
+    units = plan.get("units", [])
     records = state['execution'].get('work_records', {})
     required = units if skill == 'core.verify-and-handoff' else [u for u in units if u.get('skill_id') == skill]
     if any(records.get(u['id'], {}).get('status') != 'completed' for u in required):
         raise ContractError('required work units have not successfully joined')
+    if not plan.get("required_native_roles") or skill not in NATIVE_ROLE_OWNERS.values():
+        return
+    if target is None:
+        raise ContractError("jydlc join requires the target root to recheck native execution receipts")
+    implementer, verifier = _native_units(plan)
+    implementation = records[implementer["id"]]
+    proof = _native_proof(state, implementation, implementation["result"], target, "implementer")
+    if skill == NATIVE_ROLE_OWNERS["verifier"]:
+        verification = records[verifier["id"]]
+        independent = _native_proof(state, verification, verification["result"], target, "verifier")
+        if independent["worker_id"] == proof["worker_id"] or verification["input_revision"] != proof["output_revision"]:
+            raise ContractError("jydlc verification requires a separate worker and the joined implementation revision")
+        validate_acceptance_evidence(verification["result"].get("verification"), state["intent"]["success_criteria"], target)
 
 
 def validate_bindings(plan: dict, queue: list[str], cursor: int = 0,
                       records: dict | None = None, allow_unbound: bool = False) -> None:
-    """Unbound intake units are provisional until composition, never dispatchable."""
+    """
+    역할: 작업 단위가 도달 가능한 스킬과 서로 호환되는 선행 작업에 바인딩됐는지 확인한다.
+    입력: plan과 queue는 계획·실행 순서, cursor는 현재 위치, records는 기존 작업 기록이며
+          allow_unbound는 초기 분류에서 스킬이 미정인 작업의 허용 여부다.
+    """
+    if not allow_unbound and plan.get("required_native_roles"):
+        _native_units(plan)
     records = records or {}
     units = {u['id']: u for u in plan.get('units', [])}
     for unit in units.values():

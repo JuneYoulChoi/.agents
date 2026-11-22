@@ -244,11 +244,16 @@ def start(
             "advisory": "advisory_route_follow_skills_then_run_harness_finish",
             "requested": "ask_user_for_temporary_enforcement_or_record_a_waiver",
         }
+        native_required = bool(route_result.get("work_plan", {}).get("required_native_roles"))
+        advisory_status = route_result["status"]
+        if native_required and advisory_status == "active":
+            advisory_status = "waiting_user"
         return {
             "schema_version": 1,
-            "status": route_result["status"],
+            "status": advisory_status,
             "durable": False,
-            "reason": ("hook_guard_evidence_required" if intake.get("enforcement_mode") == "hook"
+            "reason": ("native_receipts_need_durable_execution" if native_required and route_result["status"] == "active"
+                       else "hook_guard_evidence_required" if intake.get("enforcement_mode") == "hook"
                        else reasons.get(level, "state_write_requires_hook_or_valid_manual_guard")),
             "enforcement": route_result["enforcement"],
             "activated_skills": route_result["activated_skills"],
@@ -404,13 +409,14 @@ def submit(
     if any(r["status"] == "running" for r in current["execution"].get("work_records", {}).values()):
         raise RunnerError("record worker termination before any skill transition")
     if result["status"] in {"completed", "not_applicable"}:
-        require_join(current, result["skill_id"])
+        require_join(current, result["skill_id"], target_root)
     if result['skill_id'] == 'core.verify-and-handoff' and result['status'] == 'completed':
         if not result['artifact_ids'] or not result['evidence_ids']:
             raise RunnerError('completion requires artifact and evidence IDs')
         validate_acceptance_evidence(result.get('verification'), current['intent']['success_criteria'], target_root)
     if result['skill_id'] == 'core.verify-and-handoff' and result['status'] == 'completed' \
-            and next_item['execution_profile'].get('independent_context'):
+            and next_item['execution_profile'].get('independent_context') \
+            and not current["route"]["work_plan"].get("required_native_roles"):
         independent = result.get('independent_verification_evidence_ids')
         if (not isinstance(independent, list) or not independent
                 or any(not isinstance(v, str) or not v.strip() for v in independent)):
@@ -697,6 +703,12 @@ def validate_engineering_result(state: dict, result: dict, target: Path) -> None
             documentation = quality.get("documentation_check")
             verification = result.get("verified_checks")
             verify_results(verification, planned, _documentation_targets(target, documentation) if documentation else [], target)
+            plan = state["route"]["work_plan"]
+            if plan.get("required_native_roles"):
+                verifier = next(item for item in plan["units"] if item["role"] == "verifier" and item["skill_id"] == skill)
+                receipt = state["execution"]["work_records"][verifier["id"]]
+                if verification["target_revision"] != receipt["input_revision"]:
+                    raise RunnerError("verification snapshot must match the independent worker input revision")
     elif skill == "core.verify-and-handoff":
         kinds = _required_check_kinds(state) & {"performance_measurement", "deadline_measurement"}
         if kinds:
@@ -784,7 +796,7 @@ def checkpoint(target_root: Path, task_id: str, expected_revision: int, request_
                 verified = operator["results"].get("core.verify-and-handoff")
                 if verified is None:
                     raise RunnerError("G7 requires accepted verification")
-                require_join(state, "core.verify-and-handoff")
+                require_join(state, "core.verify-and-handoff", target_root)
                 validate_acceptance_evidence(verified.get("verification"), state["intent"]["success_criteria"], target_root)
                 validate_engineering_result(state, verified, target_root)
                 state.update(status="complete", validation_status="passed", stage="handoff")

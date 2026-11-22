@@ -1061,7 +1061,7 @@ For a user-driven software change:
 | G4 | The close request has `test_plan` with `evidence` and `checks`. Each check has a unique TEST- `id`, `requirement_id`, `kind`, `method`, `command`, `tool_version` and `environment`. Record the routed capabilities in `capabilities`. For a measurement, include `threshold: {comparison, value, unit}`. |
 | G5 | Applicable pattern review drivers link to accepted requirements. An object-oriented pattern review records SOLID/GRASP `responsibility_review` with evidence and checks. |
 | G6 | The quality result includes every routed profile. Supply `tdd_results` keyed by planned TEST- ID, with `red` and `green` observations for the same `test_revision`. Red includes `failed_assertion`. |
-| G7 | `verified_checks` contains `target_revision`, hashed `subject_files`, and `runs` keyed by TEST- ID. The snapshot includes the changed code checked in G6. |
+| G7 | `verified_checks` contains `target_revision`, hashed `subject_files`, and `runs` keyed by TEST- ID. The snapshot includes the changed code checked in G6, and native verification uses the implementation worker's output revision. |
 
 Each test run supplies the planned command, tool version, environment,
 `target_revision`, `exit_code`, hashed `evidence`, and `observation` (a hashed

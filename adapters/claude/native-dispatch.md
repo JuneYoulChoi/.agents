@@ -9,6 +9,9 @@ The Runner still never starts a worker; this file says how Claude does it.
 Installation copies `adapters/claude/agents/harness-*.md` to the target's
 `.claude/agents/`. There is one agent per unit role (analyst, designer,
 implementer, reviewer, verifier, documenter). Read-only roles have no edit tool.
+If an existing installation lacks a packaged role, use the base Agent with
+the prepared role packet if the host provides a fresh context under the same
+tool and authority bounds. Record the actual host path.
 A unit's role must be allowed at the current gate's portable role:
 
 | Gate role | Unit roles that may run there |
@@ -30,21 +33,25 @@ current skill:
 
 1. Count free worker slots and call `prepare-work` once per unit with
    `mode: native` and that fresh `native_worker_capacity`. Use `mode: serial`
-   and do the unit yourself when delegation is not authorized or no slot exists.
+   for optional units when delegation is unavailable. Required jydlc roles
+   wait for an authorized native slot.
 2. Start every prepared unit of the batch in one message, one Agent call each,
    with `subagent_type: harness-<unit.role>` and the returned packet JSON as the
    whole prompt, plus the evidence file path the worker must write. Do not add
    conversation history. Units of one batch run concurrently; the next batch
    starts only after this one is recorded.
 3. When each agent returns, read its evidence file, check every acceptance
-   string yourself, then call `record-work`. A worker that did not return by the
+   string yourself, then call `record-work`. For a required jydlc role, retain
+   its observed Agent ID and completion event in the native execution receipt.
+   A worker that did not return by the
    unit timeout is stopped and recorded `timed_out`.
 4. Submit the single joined skill result only after every unit of the skill is
    recorded `completed`.
 
-When the route sets `independent_context` for G7, run verification as a
-`harness-verifier` agent on the pinned revision and submit its evidence IDs as
-`independent_verification_evidence_ids`.
+For jydlc development, G6 dispatches the workspace implementer and G7 dispatches
+a separate verifier on that implementer's integrated revision. Follow the
+[native receipt contract](../../skills/workflow-composition/references/native-work.md#required-native-implementation-and-verification).
+For other G7 routes, follow the independent-context requirement when present.
 
 ## Reasoning resolution
 
